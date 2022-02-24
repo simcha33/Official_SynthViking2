@@ -99,7 +99,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     [Header("DASH ATTACK")]
     #region
     public float dashAttackForce;
-    public GameObject attackTarget; 
+    [HideInInspector] public GameObject dashAttackTarget; 
     #endregion
 
     [Header("WALLRUNNING")] //Wallrunning; 
@@ -634,8 +634,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     public void DoDashAttack()
     {
-        BasicEnemyScript script = attackTarget.transform.GetComponent<BasicEnemyScript>();
-        script.LaunchEnemy(transform.forward, dashAttackForce);
+        BasicEnemyScript script = dashAttackTarget.transform.GetComponentInParent<BasicEnemyScript>();
+        script.LaunchEnemy(transform.forward, dashAttackForce); 
     }
 
     public void ResetDash()
@@ -708,6 +708,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             //Handle Jump animations
             if (hasJumped)
             {                          
+             //   transform.rotation = Quaternion.LookRotation(mainca);
                 DoJump();
                // playerAnim.ResetTrigger("WallRunEndTrigger");
                // playerAnim.ResetTrigger("WallRunPauseTrigger");

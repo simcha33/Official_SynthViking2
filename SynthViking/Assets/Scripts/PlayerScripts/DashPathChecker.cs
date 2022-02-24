@@ -28,9 +28,8 @@ public class DashPathChecker : MonoBehaviour
                 playerController.playerRb.velocity = new Vector3(0, 0, 0);
                 // playerRb.transform.LookAt(new Vector3(m_Hit.transform.position.x, m_Hit.transform.position.y, transform.forward.z));  
                 playerController.playerAnim.SetTrigger("DashAttackTrigger");
-                playerController.attackTarget = other.gameObject; 
+                playerController.dashAttackTarget = other.gameObject; 
                 playerController.DashAttackFeeback?.PlayFeedbacks();
-                Debug.Log("TriggerAMt"); 
             }
         }
     }
