@@ -59,6 +59,11 @@ public class PlayerInputCheck : MonoBehaviour
         sprintButtonPressed = value.isPressed;
     }
 
+    private void OnMeleeAttack(InputValue value)
+    {
+        meleeButtonPressed = value.isPressed;
+    }
+
 
     private void OnRestartScene(InputValue value)
     {

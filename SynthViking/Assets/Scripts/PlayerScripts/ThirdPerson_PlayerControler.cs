@@ -9,19 +9,6 @@ using System;
 
 public class ThirdPerson_PlayerControler : MonoBehaviour
 {
-    /*
-    public float m_MaxDistance = 300f;
-    public Vector3 dashCheckerSize;
-    bool m_HitDetect;
-    RaycastHit m_Hit;
-   
-
-    public float m_MaxDistance2 = 300f;
-    public Vector3 dashCheckerSize2;
-    bool m_HitDetect2;
-    RaycastHit m_Hit2;
-    */
-
     [Header("GROUND MOVEMENT")] //GROUND MOVEMENT
     #region
 
@@ -93,13 +80,28 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     private bool dashEndMove;
     private Vector3 dashDirection;
     public Transform dashChecker;
+    public Image dashChargeIndicator;
+    public Image dashChargeBackground;
+    public Vector3 originalIndicatorSize; 
 
     #endregion
 
     [Header("DASH ATTACK")]
     #region
     public float dashAttackForce;
-    [HideInInspector] public GameObject dashAttackTarget; 
+    [HideInInspector] public GameObject dashAttackTarget;
+    #endregion
+
+    [Header("MELEE ATTACK")]
+    #region   
+    public float nextAttackDuration;
+    public float nextAttackTimer;
+    public float maxTimeBetweenAttacks; 
+    public int currentComboLength; 
+    public int totalComboLength;
+    public float attackMoveSpeed;
+    public bool attackTargetNearby;
+     
     #endregion
 
     [Header("WALLRUNNING")] //Wallrunning; 
@@ -108,17 +110,11 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public float wallRunUpSpeed;
     public float frontWallCheckDist;
     public float sideWallCheckDist;
-    //private float wallRunEndTimer;
-   // private float wallRunEndDuration;
 
     public Transform frontWallChecker;
-    public Transform leftWallChecker;
-    public Transform RightWallChecker;
-
     private LayerMask EnvorinmentLayer = 6;
 
     #endregion
-
 
     [Header("Animation")]  //ANIMATION
     #region  
@@ -129,29 +125,29 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public AnimationClip noMoveLandingClip;
     public AnimationClip VerticalWallRunClip;
     public AnimationClip VerticalWallRunEndClip;
-    //public AnimationClip VerticalWall
     int velocityHash;
     #endregion
-
 
     [Header("Camera")] //CAMERA
     #region
     public Camera playerCamera;
-
+    public Transform aimPoint; 
     #endregion
-
 
     [Header("Scripts")] //SCRIPTS
     #region
     public PlayerInputCheck input;
     public PlayerState playerState;
+    public AttackTargetScript attackTargetScript; 
     #endregion
-
 
     [Header("Components")] //COMPONENTS
     #region
     public Animator playerAnim;
     public Rigidbody playerRb;
+    public SkinnedMeshRenderer meshR;
+    public Material[] holoSkinMat;
+    public Material[] defaultSkinMat;
     #endregion
 
     [Header("FEEDBACK")]
@@ -160,6 +156,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public MMFeedbacks LandingFeedback;
     public MMFeedbacks DashStartFeeback;
     public MMFeedbacks DashAttackFeeback;
+    public MMFeedbacks LightAttackFeedback; 
     #endregion
 
     [Header("Switch Case")] //SWITCH CASE
@@ -177,7 +174,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     }
     #endregion
 
-
     [Header("States")]  //STATES
     #region
     public bool canMove = true;
@@ -188,10 +184,12 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public bool canStartWallrun = true;
     public bool canDash = true;
     public bool canDashAttack = true;
+    public bool canStartNewAttack; 
     //public bool canPauseWallrun = true;
     public bool canEndDash = false;
 
     public bool isMoving;
+    public bool isAttacking; 
    // public bool isPausingWallrun;
     public bool isWallRunning;
     public bool isLanding;
@@ -235,10 +233,14 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         velocityHash = Animator.StringToHash("MoveVelocity");
         //dashChecker.position, dashChecker.position + dashChecker.forward * 2f
 
+        defaultSkinMat = meshR.materials; 
+        //meshR.materials = holoSkinMat; 
+
         //Set default values
         currentMoveSpeed = maxMoveSpeed;
         currentDashTime = minDashTime;
         dashCooldownTimer = dashCooldownDuration;
+        originalIndicatorSize = dashChargeIndicator.transform.localScale; 
 
         fixedControllerState = (int)currentState.NOTHING;
         controllerState = (int)currentState.MOVING;
@@ -262,6 +264,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 CheckForMoveInput();
                 CheckForJump();
                 CheckForWall();
+                CheckForAttack(); 
+                CheckForDamage();
                 HandleDrag();
                 CheckForDash();
                 break;
@@ -269,6 +273,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             case (int)currentState.WALLRUNNING:
                 CheckForJump();
                 CheckForWall();
+                CheckForDamage();
+                CheckForDash(); 
                 HandleMoveSpeed();
                 CheckForMoveInput();
                 HandleWallRunning();
@@ -276,6 +282,13 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 break;
 
             case (int)currentState.ATTACKING:
+                //HandleMoveSpeed();
+                CheckForAttack();
+               // CheckForMoveInput(); 
+                GroundCheck();               
+                HandleRotation();
+                CheckForDamage();
+                HandleMoveSpeed(); 
                 break;
 
             case (int)currentState.DASHING:
@@ -300,6 +313,10 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             case (int)currentState.DASHING:
                 DoDash();
                 break;
+            case (int)currentState.ATTACKING:
+              //  MovePlayer(); 
+                break;
+
         }
     }
 
@@ -313,13 +330,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     void HandleAnimations()
     {
         playerAnim.SetFloat(velocityHash, moveVelocity);
-
-
-        //Ground Movement    
-
-        //Jump
-        // playerAnim.SetInteger("JumpCount", jumpCount);
-
         playerAnim.SetFloat("JumpCount", jumpCount);
 
         //States
@@ -329,6 +339,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         playerAnim.SetBool("IsLanding", isLanding);
         playerAnim.SetBool("IsSprinting", isSprinting);
         playerAnim.SetBool("IsDashing", isDashing);
+       // if(isAttacking && nextAttackTimer < nextAttackDuration) playerAnim.SetBool("IsAttacking", isAttacking); 
+       // else playerAnim.SetBool("IsAttacking", false);
 
         //Checks
         playerAnim.SetBool("CanJump", canJump);
@@ -338,6 +350,13 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         playerAnim.SetBool("CanLand", canLand);
 
     }
+
+    void CheckForDamage()
+    {
+
+    }
+
+
 
 
 
@@ -390,7 +409,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         if (isMoving && canMove)
         {
             fixedControllerState = (int)currentState.MOVING;
-            //MovePlayer(); 
 
             if (canRotate)
             {
@@ -426,7 +444,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         }
 
         //Fix weird rotation big
-        if (!isMoving && !isWallRunning && isGrounded) playerRb.isKinematic = true;
+        if (!isMoving && !isWallRunning && isGrounded && !isAttacking) playerRb.isKinematic = true;
         else playerRb.isKinematic = false;
 
 
@@ -434,10 +452,12 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         if (isRunning) currentMinMoveSpeed = minRunningMoveSpeed;
         else currentMinMoveSpeed = minWalkingMoveSpeed;
 
+
         //Set move speed 
         if (isGrounded)  //Handle ground move speed changes
         {
-            if (isSprinting) currentMoveSpeed = sprintMoveSpeed;  //Sprinting 
+            if (isAttacking && nextAttackTimer < nextAttackDuration) currentMoveSpeed = attackMoveSpeed; 
+            else if (isSprinting) currentMoveSpeed = sprintMoveSpeed;  //Sprinting 
             else if (isMoving && !isSprinting)
             {
                 if (!isRunning) currentMoveSpeed = maxMoveSpeed * moveVelocity; //Walking
@@ -466,8 +486,9 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     private Vector3 GetCameraForward(Camera playerCamera)
     {
         Vector3 forward = playerCamera.transform.forward;
-        Debug.DrawRay(playerCamera.transform.position, playerCamera.transform.forward * 10, Color.green);
+        Debug.DrawRay(playerCamera.transform.position, playerCamera.transform.forward * 10, Color.green);       
         forward.y = 0;
+        if (input.dashButtonPressed) dashDirection = playerCamera.transform.forward;
         return forward.normalized;
     }
 
@@ -485,28 +506,12 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             //Player ground rotation 
             if (isMoving && !isWallRunning)
             {
-
-
-                //if (turnLerpTimer > 0) turnLerpTimer -= Time.deltaTime;
-                //targetTurnRotation = Vector3.Lerp(targetTurnRotation, moveInput, turnLerpTimer);
                 float speed = 10f;
                 float singleStep = speed * Time.deltaTime;
 
                 Vector3 newDirection = Vector3.RotateTowards(playerRb.transform.forward, new Vector3(playerRb.velocity.x, 0, playerRb.velocity.z), singleStep, 0f);
                 transform.rotation = Quaternion.LookRotation(newDirection);
             }
-            /*
-            else if(isMoving && isWallRunning)
-            {
-                float speed = 10f;
-                float singleStep = speed * Time.deltaTime;
-
-                Vector3 newDirection = Vector3.RotateTowards(playerRb.transform.forward, new Vector3(playerRb.velocity.x, 0, playerRb.velocity.z), singleStep, 0f);
-                transform.rotation = Quaternion.LookRotation(newDirection);
-            }
-            */
-
-
         }
     }
 
@@ -516,13 +521,27 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     void CheckForDash()
     {
+        //Handle dash charge indicator UI
+        float dashIndicatorSizeModifier = 1.3f; 
+        dashChargeIndicator.fillAmount = (currentDashTime - minDashTime) / (maxDashTime - minDashTime);
 
         //Build up the dashduration on button hold
         if (input.dashButtonPressed && canDash)
         {
             isChargingDash = true;
             if (currentDashTime < maxDashTime) currentDashTime += dashBuildUpSpeed * Time.deltaTime;
-            else currentDashTime = maxDashTime;
+            else
+            {
+                //Full charged dash UI effects
+                if (dashChargeIndicator.transform.localScale == originalIndicatorSize)
+                {
+                    dashChargeIndicator.transform.localScale *= dashIndicatorSizeModifier;
+                    dashChargeBackground.transform.localScale *= dashIndicatorSizeModifier; 
+                }
+                currentDashTime = maxDashTime;
+            }
+            //dashDirection = aimPoint.forward * currentDashTime; 
+            //dashDirection = aimPoint.forward;
         }
 
         //Dash button is released
@@ -534,6 +553,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 canMove = false;
                 canLand = false; 
                 ResetAnimator();
+                transform.LookAt(aimPoint.position);
+                //dashDirection = aimPoint.forward + Vector3.right;
                 playerAnim.SetTrigger("DashStartTrigger");
             }
             dashDelayTimer -= Time.deltaTime;
@@ -545,15 +566,18 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 canDash = false;
                 isChargingDash = false;
 
-                //dashDirection = playerCamera.transform.forward; //Set dash direction 
-                dashDirection = transform.forward;
+                //dashDirection = aimPoint.forward;
                 DashStartFeeback?.PlayFeedbacks();
+                meshR.materials = holoSkinMat;
 
                 playerRb.drag = airDrag;
                 playerRb.velocity = new Vector3(0, 0, 0);
 
                 controllerState = (int)currentState.DASHING;
                 fixedControllerState = (int)currentState.DASHING;
+
+                dashChargeIndicator.transform.localScale = originalIndicatorSize;
+                dashChargeBackground.transform.localScale = originalIndicatorSize;
             }
         }
 
@@ -563,6 +587,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             playerRb.useGravity = false;
             playerRb.isKinematic = false;
             currentDashTime -= Time.deltaTime;
+            
 
             if (currentDashTime <= 0) canEndDash = true;
 
@@ -575,6 +600,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 groundCheckTimer = .05f;
                 if (jumpCount < 1) jumpCount += 1;              
                 playerAnim.SetTrigger("DashEndTrigger");
+                meshR.materials = defaultSkinMat;
             }            
         }
         else if (isDashing && currentDashTime < 0 && canEndDash) //End dash
@@ -608,25 +634,10 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         if (!enemyDashObjectReached && !solidDashObjectReached)
         {
             playerRb.AddForce(dashDirection * dashForwardForce, ForceMode.Acceleration);
+            //playerRb.AddForce(dashDirection - transform.position, ForceMode.Acceleration); 
+           // transform.position = Vector3.MoveTowards(transform.position, dashDirection, 5f * Time.deltaTime); 
+           
             dashChecker.gameObject.SetActive(true);
-            /*
-            m_HitDetect = Physics.BoxCast(dashChecker.position, dashCheckerSize, dashChecker.forward, out m_Hit, dashChecker.rotation, m_MaxDistance);
-
-            if (m_HitDetect)
-            {
-
-                //Dash collides with enemy
-                if (m_Hit.collider.gameObject.CompareTag("Enemy"))
-                {
-                    enemyDashObjectReached = true;
-                    playerRb.velocity = new Vector3(0, 0, 0);
-                   // playerRb.transform.LookAt(new Vector3(m_Hit.transform.position.x, m_Hit.transform.position.y, transform.forward.z));  
-                
-                    playerAnim.SetTrigger("DashAttackTrigger");
-                    DashAttackFeeback?.PlayFeedbacks();
-                }
-            }
-            */
         }
     }
 
@@ -635,14 +646,16 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public void DoDashAttack()
     {
         BasicEnemyScript script = dashAttackTarget.transform.GetComponentInParent<BasicEnemyScript>();
-        script.LaunchEnemy(transform.forward, dashAttackForce); 
+        script.LaunchEnemy(aimPoint.forward, dashAttackForce); 
     }
 
     public void ResetDash()
     {
+        transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0); 
         solidDashObjectReached = false;
         enemyDashObjectReached = false;
         dashChecker.gameObject.SetActive(false);
+        meshR.materials = defaultSkinMat;
 
         isDashing = false;
         canEndDash = false;
@@ -708,10 +721,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             //Handle Jump animations
             if (hasJumped)
             {                          
-             //   transform.rotation = Quaternion.LookRotation(mainca);
                 DoJump();
-               // playerAnim.ResetTrigger("WallRunEndTrigger");
-               // playerAnim.ResetTrigger("WallRunPauseTrigger");
                 hasJumped = false;                        
             }
         }
@@ -755,8 +765,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     void DoJump()
     {
-        // playerAnim.SetTrigger("JumpTrigger");
-        
+        // playerAnim.SetTrigger("JumpTrigger");     
         playerRb.isKinematic = false;
         playerRb.velocity = new Vector3(playerRb.velocity.x, 0, playerRb.velocity.z);
 
@@ -781,7 +790,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //Shortly disable groundcheck so that it won't interupt the start of the jump 
         if (jumpCount > 0 && groundCheckTimer > 0)
         {
-            //Debug.Log("Groundcheck delay works");
             groundCheckTimer -= Time.deltaTime;
 
             isGrounded = false;
@@ -825,7 +833,10 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         {
             //Start wallrun
             if (hit.collider.gameObject.layer == 6 && canStartWallrun) //Environment
+            {
+            
                 StartWallRun();
+            }
         }
         else if (isWallRunning || isWallRunning && input.jumpButtonPressed)
         {
@@ -836,9 +847,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     void StartWallRun()
     {
         playerAnim.SetTrigger("WallRunStartTrigger");
-
-        Debug.Log("StartWallrun"); 
-
         ResetStates();
         isWallRunning = true;
         canStartWallrun = false;
@@ -883,11 +891,11 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         canRotate =         true;
         canJump =           true;
         canSprint =         true;
-        canStartWallrun =        true;
+        canStartWallrun =   true;
         canDash =           true;  
-     //   canPauseWallrun =   true;
         canDashAttack =     true;
-        canEndDash = false; 
+        canEndDash =       false;
+        canStartNewAttack =         true;
 
         isMoving =          false;    
         isWalking =         false;
@@ -897,13 +905,14 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         isLanding =         false;
         isGrounded =        false;
         isWallRunning =     false;
-       // isPausingWallrun =  false;
+        isAttacking =       false; 
         isDashing =         false;
         isChargingDash =    false;
         isDashAttacking =   false; 
 
         wasSprintingBeforeJump = false;
         playerRb.isKinematic = false;
+        meshR.materials = defaultSkinMat;
 
         jumpCount = 0;      
     }
@@ -914,20 +923,117 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         {
             playerAnim.SetBool(parameter.name, false);
             playerAnim.ResetTrigger(parameter.name);
+            playerAnim.SetInteger(parameter.name, 0); 
         }
     }
 
-
-
-    //Attacking
     void CheckForAttack()
     {
+        int totalAttackTrees = 1; 
 
+        if (input.meleeButtonPressed && canStartNewAttack && !isAttacking)
+        {
+            Debug.Log("ATTACK?");
+
+            ResetAnimator();
+            ResetStates();
+            playerAnim.SetInteger("LComboType", Random.Range(1, totalAttackTrees));  //Decide which combo tree to go into
+            isAttacking = true;
+            canStartNewAttack = false;
+            playerRb.isKinematic = false;
+            controllerState = (int)currentState.ATTACKING;
+            fixedControllerState = (int)currentState.ATTACKING;
+            nextAttackTimer = 5f;
+            currentComboLength = 0;
+        }
+        else if (input.meleeButtonPressed && canStartNewAttack && isAttacking)
+        {
+            //playerAnim.SetInteger("CurrentComboLength", currentComboLength);
+            ResetStates();
+            isAttacking = true;
+            canStartNewAttack = false; 
+            nextAttackTimer = 5f; 
+            controllerState = (int)currentState.ATTACKING;
+            fixedControllerState = (int)currentState.ATTACKING;
+        }
+
+        if (isAttacking) HandleAttack();
     }
+
+    //Attacking
 
     void HandleAttack()
     {
+        float stepSpeed = .1f;
+        
+        //Set attack duration equel to current animation clip length and speed
+        nextAttackDuration = playerAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / playerAnim.GetCurrentAnimatorStateInfo(0).speed;
 
+        //Check if we can continue to the next attack
+        if (nextAttackTimer >= nextAttackDuration - (nextAttackDuration / 3f) && input.meleeButtonPressed)
+        {
+           
+            //Set attack duration equel to current animation length    
+            currentComboLength++;
+            CheckForMoveInput(); 
+            LightAttackFeedback?.PlayFeedbacks(); 
+            playerAnim.SetBool("IsAttacking", true);
+            playerAnim.SetInteger("CurrentComboLength", currentComboLength); 
+            playerAnim.SetTrigger("LightAttackTrigger");          
+            nextAttackTimer = 0f;
+
+            //Check if there is a attack target within range 
+            if (attackTargetScript.selectedTarget != null) attackTargetNearby = true;
+            else attackTargetNearby = false;
+
+            if (currentComboLength >= totalComboLength) currentComboLength = 0; //Reset combo tree
+        }
+
+        //Move towards attack target
+        if (attackTargetNearby )
+        {
+            attackTargetScript.dontRemoveTarget = attackTargetNearby;
+
+          //  if (attackTargetScript.selectedTarget != null)
+           // {
+                transform.position = Vector3.Lerp(transform.position, attackTargetScript.selectedTarget.position, stepSpeed); //Move towards attack target
+               // transform.LookAt(new Vector3(attackTargetScript.selectedTarget.position.x, attackTargetScript.selectedTarget.position.y, transform.forward.z));
+                float attackTargetDistance = Vector3.Distance(transform.position, attackTargetScript.selectedTarget.position); //Check for attackdistance 
+                if (attackTargetDistance <= 1.5f) attackTargetNearby = false;
+          //  }
+          //  else attackTargetNearby = false; 
+
+            
+            
+        }
+
+
+        //Check if the combo is broken 
+        if(nextAttackTimer >= nextAttackDuration)
+        {
+            playerAnim.SetBool("IsAttacking", false);
+           // playerAnim.ResetTrigger("LightAttackTrigger"); 
+            fixedControllerState = (int)currentState.MOVING;
+            controllerState = (int)currentState.MOVING;
+            canStartNewAttack = true;
+            attackTargetNearby = false;
+        }
+        else if(nextAttackTimer < nextAttackDuration)
+        {
+          isAttacking = true;
+        }
+
+        //Exit attack state
+        if(nextAttackTimer >= nextAttackDuration + maxTimeBetweenAttacks)
+        {     
+            isAttacking = false;
+            attackTargetNearby = false;
+            playerAnim.SetBool("IsAttacking", false);
+        }
+
+        nextAttackTimer += Time.deltaTime; 
     }
+
+    
 
 }

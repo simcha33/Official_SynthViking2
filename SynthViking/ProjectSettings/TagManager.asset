@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Enemy
   - Breakable
+  - Blade
+  - AttackTargetCheck
   layers:
   - Default
   - TransparentFX
