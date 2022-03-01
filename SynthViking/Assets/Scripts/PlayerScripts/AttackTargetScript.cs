@@ -42,7 +42,7 @@ public class AttackTargetScript : MonoBehaviour
             if (nearbyTargets.Contains(other.transform))
             {
                 nearbyTargets.Remove(other.transform);
-            }
+            } 
         }
     }
 

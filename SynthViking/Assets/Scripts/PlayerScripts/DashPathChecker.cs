@@ -15,6 +15,7 @@ public class DashPathChecker : MonoBehaviour
     void Update()
     {
         if(playerController.isDashing) CheckForEnvorinment(); 
+        if(playerController.isDashing) CheckForEnvorinment(); 
     }
 
     private void OnTriggerEnter(Collider other)
@@ -22,14 +23,17 @@ public class DashPathChecker : MonoBehaviour
         if (playerController.isDashing) {
 
             //Dash collides with enemy
-            if (other.gameObject.CompareTag("Enemy"))
+            if (other.gameObject.CompareTag("Enemy") && !playerController.enemyDashObjectReached)
             {
+                playerController.playerAnim.SetTrigger("DashAttackTrigger");
+
                 playerController.enemyDashObjectReached = true;
                 playerController.playerRb.velocity = new Vector3(0, 0, 0);
-                // playerRb.transform.LookAt(new Vector3(m_Hit.transform.position.x, m_Hit.transform.position.y, transform.forward.z));  
-                playerController.playerAnim.SetTrigger("DashAttackTrigger");
-                playerController.dashAttackTarget = other.gameObject; 
-                playerController.DashAttackFeeback?.PlayFeedbacks();
+                playerController.dashAttackTarget = other.gameObject;
+                playerController.transform.position -= Vector3.up * 1.2f;
+                playerController.transform.LookAt(other.transform.position);
+      
+                playerController.DashAttackFeedback?.PlayFeedbacks();
             }
         }
     }

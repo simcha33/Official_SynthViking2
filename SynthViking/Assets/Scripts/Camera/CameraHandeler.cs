@@ -1,17 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MoreMountains.Feedbacks; 
+using MoreMountains.Feedbacks;
+using Cinemachine; 
 
 public class CameraHandeler : MonoBehaviour
 {
-    public List <GameObject> playerCams = new List<GameObject>(); 
-    private int currentCam; 
-    ThirdPerson_PlayerControler playerController; 
+  //  public List <GameObject> playerCams = new List<GameObject>(); 
+  //  private int currentCam; 
+    public ThirdPerson_PlayerControler playerController;
+    public GameObject activeCameras; 
+    public CinemachineStateDrivenCamera camStates;
+    public CinemachineBlenderSettings defaultBlends;
+    public CinemachineBlenderSettings aimingBlends;
+
+
     PlayerState playerState; 
 
-    public MMFeedbacks airCamera;
-    public MMFeedbacks defaultCamera; 
+  //  public MMFeedbacks airCamera;
+  //  public MMFeedbacks defaultCamera; 
 
 
     // Start is called before the first frame update
@@ -23,7 +30,10 @@ public class CameraHandeler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       // if(playerController.isInAir) airCamera?.PlayFeedbacks(); 
-      //  else if(playerController.isGrounded || playerController.isLanding) defaultCamera?.PlayFeedbacks(); 
+        activeCameras = camStates.VirtualCameraGameObject; 
+        if (playerController.isChargingDash)
+        {
+            //camStates.m_CustomBlends; 
+        }
     }
 }

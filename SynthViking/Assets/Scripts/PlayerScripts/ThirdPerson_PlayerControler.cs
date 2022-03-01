@@ -67,11 +67,12 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     public float dashForwardForce;
     public float dashDelayDuration;
-    public float minDashTime;
-    public float maxDashTime;
+    public float minDashDistance;
+    public float maxDashDistance;
     private float dashDelayTimer;
     public float dashBuildUpSpeed;
-    private float currentDashTime;
+    public float currentDashDistance;
+ 
 
     private float dashCooldownTimer;
     public float dashCooldownDuration;
@@ -79,10 +80,12 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public bool enemyDashObjectReached;
     private bool dashEndMove;
     private Vector3 dashDirection;
+    public Vector3 dashOffset = Vector3.up * -1f;
+    public Vector3 originalIndicatorSize;
     public Transform dashChecker;
     public Image dashChargeIndicator;
     public Image dashChargeBackground;
-    public Vector3 originalIndicatorSize; 
+
 
     #endregion
 
@@ -131,7 +134,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     [Header("Camera")] //CAMERA
     #region
     public Camera playerCamera;
-    public Transform aimPoint; 
+    public Transform aimPoint;
+    [HideInInspector] public Vector3 camForward; 
     #endregion
 
     [Header("Scripts")] //SCRIPTS
@@ -146,8 +150,12 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public Animator playerAnim;
     public Rigidbody playerRb;
     public SkinnedMeshRenderer meshR;
+    private MeshRenderer raycastCheckMeshr;
+    public Material holoRed;
+    public Material holoGreen; 
     public Material[] holoSkinMat;
     public Material[] defaultSkinMat;
+    public Transform raycastCheck; 
     #endregion
 
     [Header("FEEDBACK")]
@@ -155,7 +163,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public MMFeedbacks JumpFeedback;
     public MMFeedbacks LandingFeedback;
     public MMFeedbacks DashStartFeeback;
-    public MMFeedbacks DashAttackFeeback;
+    public MMFeedbacks DashAttackFeedback;
+    public MMFeedbacks DashEndFeeback;
     public MMFeedbacks LightAttackFeedback; 
     #endregion
 
@@ -231,6 +240,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     private void Start()
     {
         velocityHash = Animator.StringToHash("MoveVelocity");
+        raycastCheckMeshr = raycastCheck.GetComponent<MeshRenderer>();
+        raycastCheck.gameObject.SetActive(false);
         //dashChecker.position, dashChecker.position + dashChecker.forward * 2f
 
         defaultSkinMat = meshR.materials; 
@@ -238,7 +249,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
         //Set default values
         currentMoveSpeed = maxMoveSpeed;
-        currentDashTime = minDashTime;
+        currentDashDistance = minDashDistance;
+        dashDelayTimer = dashDelayDuration;
         dashCooldownTimer = dashCooldownDuration;
         originalIndicatorSize = dashChargeIndicator.transform.localScale; 
 
@@ -249,7 +261,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         ResetStates();
 
         playerRb.drag = groundStopDrag;
-        dashDelayTimer = dashDelayDuration;
     }
 
 
@@ -339,6 +350,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         playerAnim.SetBool("IsLanding", isLanding);
         playerAnim.SetBool("IsSprinting", isSprinting);
         playerAnim.SetBool("IsDashing", isDashing);
+        playerAnim.SetBool("IsAiming", isChargingDash); 
        // if(isAttacking && nextAttackTimer < nextAttackDuration) playerAnim.SetBool("IsAttacking", isAttacking); 
        // else playerAnim.SetBool("IsAttacking", false);
 
@@ -355,7 +367,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     {
 
     }
-
 
 
 
@@ -486,10 +497,39 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     private Vector3 GetCameraForward(Camera playerCamera)
     {
         Vector3 forward = playerCamera.transform.forward;
-        Debug.DrawRay(playerCamera.transform.position, playerCamera.transform.forward * 10, Color.green);       
+        Debug.DrawRay(playerCamera.transform.position, playerCamera.transform.forward * currentDashDistance, Color.green);       
         forward.y = 0;
-        if (input.dashButtonPressed) dashDirection = playerCamera.transform.forward;
-        return forward.normalized;
+
+        //dashDirection = playerCamera.transform.forward;
+
+        if (input.dashButtonPressed && !isDashing)
+        {
+            raycastCheck.gameObject.SetActive(true); 
+            RaycastHit camForwardHit;
+            if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward.normalized, out camForwardHit, currentDashDistance))
+            {
+                Debug.Log("DashHit"); 
+                if (camForwardHit.transform.gameObject.layer == 6 || camForwardHit.transform.CompareTag("Enemy"))
+                {
+                    raycastCheck.transform.position = camForwardHit.point;
+                    dashDirection = camForwardHit.point;
+                    raycastCheckMeshr.material = holoGreen;
+                }
+            }
+            else
+            {
+                raycastCheckMeshr.material = holoRed; 
+                raycastCheck.transform.position = playerCamera.transform.position + playerCamera.transform.forward * currentDashDistance;
+                dashDirection = raycastCheck.transform.position + dashOffset;
+            }
+        }
+        else
+        {
+            //raycastCheck.gameObject.SetActive(false);
+        }
+            return forward.normalized;
+
+     
     }
 
     private Vector3 GetCameraRight(Camera playerCamera)
@@ -498,6 +538,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         right.y = 0;
         return right.normalized;
     }
+
+
 
     private void HandleRotation()
     {
@@ -523,13 +565,13 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     {
         //Handle dash charge indicator UI
         float dashIndicatorSizeModifier = 1.3f; 
-        dashChargeIndicator.fillAmount = (currentDashTime - minDashTime) / (maxDashTime - minDashTime);
+        dashChargeIndicator.fillAmount = (currentDashDistance - minDashDistance) / (maxDashDistance - minDashDistance);
 
         //Build up the dashduration on button hold
         if (input.dashButtonPressed && canDash)
         {
             isChargingDash = true;
-            if (currentDashTime < maxDashTime) currentDashTime += dashBuildUpSpeed * Time.deltaTime;
+            if (currentDashDistance < maxDashDistance) currentDashDistance += dashBuildUpSpeed * Time.deltaTime;
             else
             {
                 //Full charged dash UI effects
@@ -538,9 +580,9 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                     dashChargeIndicator.transform.localScale *= dashIndicatorSizeModifier;
                     dashChargeBackground.transform.localScale *= dashIndicatorSizeModifier; 
                 }
-                currentDashTime = maxDashTime;
+                currentDashDistance = maxDashDistance;
             }
-            //dashDirection = aimPoint.forward * currentDashTime; 
+            //dashDirection = aimPoint.forward * currentDashDistance; 
             //dashDirection = aimPoint.forward;
         }
 
@@ -553,7 +595,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 canMove = false;
                 canLand = false; 
                 ResetAnimator();
-                transform.LookAt(aimPoint.position);
+                transform.LookAt(dashDirection);
                 //dashDirection = aimPoint.forward + Vector3.right;
                 playerAnim.SetTrigger("DashStartTrigger");
             }
@@ -582,17 +624,23 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         }
 
         //The player is dashing 
-        if (isDashing && !solidDashObjectReached && !enemyDashObjectReached && currentDashTime > 0) //Maintain dash
+        if (isDashing && !solidDashObjectReached && !enemyDashObjectReached && !canEndDash) //Maintain dash
         {
-            playerRb.useGravity = false;
-            playerRb.isKinematic = false;
-            currentDashTime -= Time.deltaTime;
+            if (currentDashDistance <= .8f)
+            {    
+                canEndDash = true; //End Dash
+                return;
+            }
             
 
-            if (currentDashTime <= 0) canEndDash = true;
+            playerRb.useGravity = false;
+            playerRb.isKinematic = false;
+            currentDashDistance = Vector3.Distance(transform.position, dashDirection);
+            // currentDashDistance -= Time.deltaTime;
+
 
             //Trigger stylish move at the end of the dash
-            if (currentDashTime <= .25f && !dashEndMove)
+            if (currentDashDistance <= 15 && !dashEndMove)
             {
                 //Delay and enable landing for ground dashes 
                 canLand = true;
@@ -600,10 +648,9 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 groundCheckTimer = .05f;
                 if (jumpCount < 1) jumpCount += 1;              
                 playerAnim.SetTrigger("DashEndTrigger");
-                meshR.materials = defaultSkinMat;
             }            
         }
-        else if (isDashing && currentDashTime < 0 && canEndDash) //End dash
+        else if (isDashing && canEndDash) //End dash
         {
             ResetDash();
         }
@@ -632,11 +679,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     void DoDash()
     {
         if (!enemyDashObjectReached && !solidDashObjectReached)
-        {
-            playerRb.AddForce(dashDirection * dashForwardForce, ForceMode.Acceleration);
-            //playerRb.AddForce(dashDirection - transform.position, ForceMode.Acceleration); 
-           // transform.position = Vector3.MoveTowards(transform.position, dashDirection, 5f * Time.deltaTime); 
-           
+        { 
+            playerRb.AddForce((dashDirection - transform.position) * dashForwardForce, ForceMode.Acceleration);           
             dashChecker.gameObject.SetActive(true);
         }
     }
@@ -651,11 +695,14 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     public void ResetDash()
     {
+        DashEndFeeback?.PlayFeedbacks(); 
         transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0); 
         solidDashObjectReached = false;
         enemyDashObjectReached = false;
         dashChecker.gameObject.SetActive(false);
+        raycastCheck.gameObject.SetActive(false);
         meshR.materials = defaultSkinMat;
+        if (jumpCount > 1) jumpCount = 1; 
 
         isDashing = false;
         canEndDash = false;
@@ -663,7 +710,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         dashEndMove = false;
         playerRb.useGravity = true;
            
-        currentDashTime = minDashTime;
+        currentDashDistance = minDashDistance;
         dashDelayTimer = dashDelayDuration;
         controllerState = (int)currentState.MOVING;
         fixedControllerState = (int)currentState.MOVING;
@@ -769,6 +816,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         playerRb.isKinematic = false;
         playerRb.velocity = new Vector3(playerRb.velocity.x, 0, playerRb.velocity.z);
 
+        Debug.Log("Jump"); 
         if (!isWallRunning)
         {
             JumpFeedback?.PlayFeedbacks();       
