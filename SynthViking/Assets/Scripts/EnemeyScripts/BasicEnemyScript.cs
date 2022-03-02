@@ -53,6 +53,8 @@ public class BasicEnemyScript : MonoBehaviour
     [Header("STATES")]
     public bool isStunned;
     public bool canBeStunned;
+
+    public bool canBeTargeted; 
     public bool canAddImpactDamage; 
     public bool hasHitObject; 
     public bool canBeLaunched = true; 
@@ -66,6 +68,7 @@ public class BasicEnemyScript : MonoBehaviour
         
         enemyRb = GetComponent<Rigidbody>();
         currentHealth = maxHealth; 
+        canBeTargeted = true; 
 
         foreach(Rigidbody rb in GetComponentsInChildren<Rigidbody>())
         {
@@ -110,7 +113,13 @@ public class BasicEnemyScript : MonoBehaviour
             isStunned = true; 
 
             transform.position = playerController.transform.position + playerController.transform.forward + transform.up; 
-            EnableRagdoll(direction, force); 
+            EnableRagdoll(); 
+
+            foreach(Rigidbody rb in ragdollRbs)
+            { 
+                rb.AddForce(direction * Random.Range(force - 5, force + 5), ForceMode.VelocityChange);
+                rb.AddForce(transform.up * 5f, ForceMode.VelocityChange);  
+            }
       
             enemyState = (int)currentState.STUNNED; 
         }
@@ -120,9 +129,16 @@ public class BasicEnemyScript : MonoBehaviour
         
         currentHealth -= damgeAmount;
 
-        if(currentHealth < 0)
+        if(currentHealth > 0)
         {
-            EnemyDies(); 
+            enemyAnim.SetTrigger("DamageTrigger"); 
+        }
+
+        //Kill the enemy
+        else
+        {
+            EnableRagdoll(); 
+            enemyState = (int)currentState.DEAD; 
         }
        
     }
@@ -183,16 +199,19 @@ public class BasicEnemyScript : MonoBehaviour
         if(hasHitObject && currentVelocity > minStunnedImpactVelocity && canAddImpactDamage)
         {
             canAddImpactDamage = false; 
-            TakeDamage(2f); 
+            TakeDamage(50f); 
             Debug.Log("Add like some damage"); 
         }
+        
     }
 
   
 
     public void EnemyDies()
     {
-        Debug.Log("EnemyIsDeadNow!!"); 
+        canBeTargeted = false; 
+         transform.tag = "Dead"; 
+        transform.GetComponent<BasicEnemyScript>().enabled = false; 
     }
        
     
@@ -205,7 +224,7 @@ public class BasicEnemyScript : MonoBehaviour
         Debug.Log("Back on your feet soldier!"); 
     }
 
-    public void EnableRagdoll(Vector3 direction, float force){
+    public void EnableRagdoll(){
 
         mainCollider.isTrigger = true; 
         enemyAnim.enabled = false;
@@ -220,11 +239,13 @@ public class BasicEnemyScript : MonoBehaviour
         enemyRb.useGravity = false; 
         enemyRb.isKinematic = false; 
 
+        /*
         foreach(Rigidbody rb in ragdollRbs)
         { 
             rb.AddForce(direction * Random.Range(force - 5, force + 5), ForceMode.VelocityChange);
             rb.AddForce(transform.up * 5f, ForceMode.VelocityChange);  
         }
+        */
       
         isRagdolling = true; 
     }

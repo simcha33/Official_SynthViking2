@@ -9,6 +9,8 @@ using System;
 
 public class ThirdPerson_PlayerControler : MonoBehaviour
 {
+    public Vector3 inputDir; 
+
     [Header("GROUND MOVEMENT")] //GROUND MOVEMENT
     #region
 
@@ -25,7 +27,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     private float groundStopDrag = 8f;
 
     [HideInInspector] public Vector3 moveInput;
-    private Vector3 moveDirection;
+    [HideInInspector] public Vector3 moveDirection;
 
 
     //Rotation
@@ -57,7 +59,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     private float groundCheckHeight = .4f;
     private float landCheckHeight = 2.5f;
     private float groundCheckJumpDelay = .5f; //Temporaly turn of the groundcheck after jumping 
-    private float groundCheckTimer;
+    public float groundCheckTimer;
 
 
     #endregion
@@ -102,8 +104,16 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public float maxTimeBetweenAttacks; 
     public int currentComboLength; 
     public int totalComboLength;
-    public float attackMoveSpeed;
-    public bool attackTargetNearby;
+    private float attackMoveLerpT; 
+    private Vector3 attackStartPos; 
+
+    private float attackMoveSpeed = 1f; 
+    public bool attackTargetInRange;
+    [HideInInspector] public bool canDamageTarget; 
+    public Transform currentAttackTarget; 
+    public float swordAttackDamage = 10f; 
+    public float punchAttackDamage = 5f; 
+    [HideInInspector] public float currentAttackDamage; 
      
     #endregion
 
@@ -296,8 +306,9 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 //HandleMoveSpeed();
                 CheckForAttack();
                // CheckForMoveInput(); 
+                CheckForMoveInput(); 
                 GroundCheck();               
-                HandleRotation();
+               // HandleRotation();
                 CheckForDamage();
                 HandleMoveSpeed(); 
                 break;
@@ -389,7 +400,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
             if (isSprinting)
             {
-                if (moveVelocity < 3) moveVelocity += Time.deltaTime * 1.3f;
+                if (moveVelocity < 3) moveVelocity += Time.deltaTime * 1.4f;
             }
 
             //Set movevelocity to the highest input value 
@@ -436,6 +447,10 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
         playerRb.velocity = new Vector3(moveDirection.x, playerRb.velocity.y, moveDirection.z);
         moveDirection = Vector3.zero;
+
+        //For attack targeting
+        inputDir = GetCameraForward(playerCamera) * moveInput.y + GetCameraRight(playerCamera) * moveInput.x; 
+        inputDir = inputDir.normalized; 
 
     }
 
@@ -506,6 +521,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         {
             raycastCheck.gameObject.SetActive(true); 
             RaycastHit camForwardHit;
+
+            //Check camera forward position 
             if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward.normalized, out camForwardHit, currentDashDistance))
             {
                 Debug.Log("DashHit"); 
@@ -555,6 +572,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 transform.rotation = Quaternion.LookRotation(newDirection);
             }
         }
+
+
     }
 
 
@@ -640,7 +659,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
 
             //Trigger stylish move at the end of the dash
-            if (currentDashDistance <= 15 && !dashEndMove)
+            if (currentDashDistance <= 25 && !dashEndMove)
             {
                 //Delay and enable landing for ground dashes 
                 canLand = true;
@@ -680,17 +699,16 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     {
         if (!enemyDashObjectReached && !solidDashObjectReached)
         { 
-            playerRb.AddForce((dashDirection - transform.position) * dashForwardForce, ForceMode.Acceleration);           
+            playerRb.AddForce((dashDirection - transform.position) * dashForwardForce, ForceMode.VelocityChange);           
             dashChecker.gameObject.SetActive(true);
         }
     }
-
-    
 
     public void DoDashAttack()
     {
         BasicEnemyScript script = dashAttackTarget.transform.GetComponentInParent<BasicEnemyScript>();
         script.LaunchEnemy(aimPoint.forward, dashAttackForce); 
+        playerRb.AddForce(transform.up * 3, ForceMode.VelocityChange); 
     }
 
     public void ResetDash()
@@ -753,6 +771,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 isLanding = false;
                 hasJumped = true;
                 canJump = false;
+             
 
                 //Animation handeling
                 ResetAnimator();
@@ -912,10 +931,14 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //Give the player a small boost after wallrunning 
         playerAnim.SetTrigger("WallRunEndTrigger");
 
-        float jumpHeightDecrease = .6f;
+        float jumpHeightDecrease = .42f;
         jumpForce *= jumpHeightDecrease;
         DoJump();
         jumpForce /= jumpHeightDecrease;
+        
+        //
+        groundCheckTimer = .3f; 
+        jumpCount = 1; 
 
         isWallRunning = false;
         canStartWallrun = true;
@@ -961,6 +984,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         wasSprintingBeforeJump = false;
         playerRb.isKinematic = false;
         meshR.materials = defaultSkinMat;
+        playerAnim.speed = 1f; 
 
         jumpCount = 0;      
     }
@@ -981,7 +1005,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
         if (input.meleeButtonPressed && canStartNewAttack && !isAttacking)
         {
-            Debug.Log("ATTACK?");
 
             ResetAnimator();
             ResetStates();
@@ -989,10 +1012,13 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             isAttacking = true;
             canStartNewAttack = false;
             playerRb.isKinematic = false;
+       
+            nextAttackTimer = 5f;
+            currentAttackDamage = swordAttackDamage; 
+            currentComboLength = 0;
+
             controllerState = (int)currentState.ATTACKING;
             fixedControllerState = (int)currentState.ATTACKING;
-            nextAttackTimer = 5f;
-            currentComboLength = 0;
         }
         else if (input.meleeButtonPressed && canStartNewAttack && isAttacking)
         {
@@ -1011,9 +1037,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     //Attacking
 
     void HandleAttack()
-    {
-        float stepSpeed = .1f;
-        
+    {    
         //Set attack duration equel to current animation clip length and speed
         nextAttackDuration = playerAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / playerAnim.GetCurrentAnimatorStateInfo(0).speed;
 
@@ -1029,30 +1053,35 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             playerAnim.SetInteger("CurrentComboLength", currentComboLength); 
             playerAnim.SetTrigger("LightAttackTrigger");          
             nextAttackTimer = 0f;
+            attackMoveLerpT = 0f; 
+            attackStartPos = transform.position; 
 
             //Check if there is a attack target within range 
-            if (attackTargetScript.selectedTarget != null) attackTargetNearby = true;
-            else attackTargetNearby = false;
+            if (attackTargetScript.selectedTarget != null)
+            { 
+                attackTargetInRange = true;
+                currentAttackTarget = attackTargetScript.selectedTarget; 
+            }
+            else attackTargetInRange = false;
 
             if (currentComboLength >= totalComboLength) currentComboLength = 0; //Reset combo tree
         }
 
         //Move towards attack target
-        if (attackTargetNearby )
+        if (attackTargetInRange )
         {
-            attackTargetScript.dontRemoveTarget = attackTargetNearby;
+            float animStartDistance = 6; 
+            //Slightly delay attacks animations
+            if(Vector3.Distance(transform.position, currentAttackTarget.position) > animStartDistance) playerAnim.speed = 0f; 
+            else playerAnim.speed = 1; 
 
-          //  if (attackTargetScript.selectedTarget != null)
-           // {
-                transform.position = Vector3.Lerp(transform.position, attackTargetScript.selectedTarget.position, stepSpeed); //Move towards attack target
-               // transform.LookAt(new Vector3(attackTargetScript.selectedTarget.position.x, attackTargetScript.selectedTarget.position.y, transform.forward.z));
-                float attackTargetDistance = Vector3.Distance(transform.position, attackTargetScript.selectedTarget.position); //Check for attackdistance 
-                if (attackTargetDistance <= 1.5f) attackTargetNearby = false;
-          //  }
-          //  else attackTargetNearby = false; 
-
-            
-            
+            float timeToReach = .15f;
+            attackMoveLerpT = Time.deltaTime / timeToReach; 
+            transform.position = Vector3.Lerp(transform.position, currentAttackTarget.position, attackMoveLerpT); 
+            transform.LookAt(currentAttackTarget.position);      
+        }
+        else{
+            playerAnim.speed = 1f; 
         }
 
 
@@ -1060,11 +1089,10 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         if(nextAttackTimer >= nextAttackDuration)
         {
             playerAnim.SetBool("IsAttacking", false);
-           // playerAnim.ResetTrigger("LightAttackTrigger"); 
             fixedControllerState = (int)currentState.MOVING;
             controllerState = (int)currentState.MOVING;
             canStartNewAttack = true;
-            attackTargetNearby = false;
+            attackTargetInRange = false;
         }
         else if(nextAttackTimer < nextAttackDuration)
         {
@@ -1075,11 +1103,16 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         if(nextAttackTimer >= nextAttackDuration + maxTimeBetweenAttacks)
         {     
             isAttacking = false;
-            attackTargetNearby = false;
+            attackTargetInRange = false;
             playerAnim.SetBool("IsAttacking", false);
         }
 
         nextAttackTimer += Time.deltaTime; 
+    }
+
+    void AllowAttackDamage(){
+       
+        attackTargetScript.TargetDamageCheck(); 
     }
 
     
