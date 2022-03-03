@@ -14,6 +14,7 @@ public class AttackTargetScript : MonoBehaviour
     public Transform targetCube; 
     public Transform selectedTarget;
     public ThirdPerson_PlayerControler playerController;
+    public CheckForLimbs limbCheckerScript; 
 
     public List<GameObject> enemyTargetsInRange = new List<GameObject>();  
 
@@ -33,7 +34,8 @@ public class AttackTargetScript : MonoBehaviour
             if(hit.transform.gameObject.layer == enemyLayer && !hit.transform.CompareTag("Dead"))
             {
                 BasicEnemyScript script = hit.transform.GetComponent<BasicEnemyScript>();             
-                if(script.canBeTargeted){
+                if(script.canBeTargeted)
+                {
                     selectedTarget = hit.transform; 
                     targetCube.transform.position = selectedTarget.position + new Vector3(0,2,0); 
                 }
@@ -67,14 +69,41 @@ public class AttackTargetScript : MonoBehaviour
 
     public void TargetDamageCheck()
     {
-        if(enemyTargetsInRange.Count > 0)
+        if(enemyTargetsInRange.Count <= 0) return; 
+        
+        foreach(GameObject obj in enemyTargetsInRange)
         {
-            foreach(GameObject obj in enemyTargetsInRange)
-            {
-                BasicEnemyScript enemyScript = obj.GetComponent<BasicEnemyScript>(); 
-                enemyScript.TakeDamage(playerController.currentAttackDamage); 
+            //Deal damage to hit target
+            BasicEnemyScript enemyScript = obj.GetComponent<BasicEnemyScript>(); 
+            enemyScript.TakeDamage(playerController.currentAttackDamage); 
+
+            //Is the enemy dead after our hit?            
+            if(enemyScript.isDead)
+            { 
+                    
+                //limbCheckerScript.Limbs(); 
+                foreach(Rigidbody limb in limbCheckerScript.hitLimbs)
+                {
+                // print("Detach joint");    
+                print(limb.name); 
+                CharacterJoint joint = limb.GetComponent<CharacterJoint>();
+                    Destroy(joint);    
+                }
             }
+            else
+            {
+                enemyScript.transform.position += transform.forward * 1.3f; 
+            }
+
+            
+            
+            //else
+            //{
+               // enemyScript.transform.position += transform.forward * 1.3f; 
+           // }
         }
+            
+        
     }
 
      void OnDrawGizmos()

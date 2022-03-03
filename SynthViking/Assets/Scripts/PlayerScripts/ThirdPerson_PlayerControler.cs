@@ -1070,7 +1070,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //Move towards attack target
         if (attackTargetInRange )
         {
-            float animStartDistance = 6; 
+            float animStartDistance = 5; 
             //Slightly delay attacks animations
             if(Vector3.Distance(transform.position, currentAttackTarget.position) > animStartDistance) playerAnim.speed = 0f; 
             else playerAnim.speed = 1; 

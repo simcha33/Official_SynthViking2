@@ -9,6 +9,7 @@ TagManager:
   - Blade
   - AttackTargetCheck
   - Dead
+  - Limb
   layers:
   - Default
   - TransparentFX
