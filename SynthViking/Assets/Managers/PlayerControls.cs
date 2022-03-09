@@ -83,6 +83,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""AirSmash"",
+                    ""type"": ""Value"",
+                    ""id"": ""f5b59fd6-e1ac-435a-ab69-0c5fe17e008d"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""UltimateMove "",
                     ""type"": ""Value"",
                     ""id"": ""9a69e5bc-21dc-4562-80eb-49e19927866e"",
@@ -187,17 +195,6 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""Move"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""9c9993c4-36a3-4463-8c76-87cd9a4f8436"",
-                    ""path"": ""<Gamepad>/buttonEast"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""UltimateMove "",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
@@ -308,6 +305,28 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""MeleeAttack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9c9993c4-36a3-4463-8c76-87cd9a4f8436"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""UltimateMove "",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""7bc8e0d1-c282-407a-bf06-0dcd34cf17ec"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""AirSmash"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -406,6 +425,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Gameplay_Parry = m_Gameplay.FindAction("Parry", throwIfNotFound: true);
         m_Gameplay_Aim = m_Gameplay.FindAction("Aim", throwIfNotFound: true);
         m_Gameplay_Dash = m_Gameplay.FindAction("Dash", throwIfNotFound: true);
+        m_Gameplay_AirSmash = m_Gameplay.FindAction("AirSmash", throwIfNotFound: true);
         m_Gameplay_UltimateMove = m_Gameplay.FindAction("UltimateMove ", throwIfNotFound: true);
         m_Gameplay_RestartScene = m_Gameplay.FindAction("RestartScene", throwIfNotFound: true);
         // Test controller
@@ -470,6 +490,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_Parry;
     private readonly InputAction m_Gameplay_Aim;
     private readonly InputAction m_Gameplay_Dash;
+    private readonly InputAction m_Gameplay_AirSmash;
     private readonly InputAction m_Gameplay_UltimateMove;
     private readonly InputAction m_Gameplay_RestartScene;
     public struct GameplayActions
@@ -484,6 +505,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @Parry => m_Wrapper.m_Gameplay_Parry;
         public InputAction @Aim => m_Wrapper.m_Gameplay_Aim;
         public InputAction @Dash => m_Wrapper.m_Gameplay_Dash;
+        public InputAction @AirSmash => m_Wrapper.m_Gameplay_AirSmash;
         public InputAction @UltimateMove => m_Wrapper.m_Gameplay_UltimateMove;
         public InputAction @RestartScene => m_Wrapper.m_Gameplay_RestartScene;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
@@ -519,6 +541,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Dash.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDash;
                 @Dash.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDash;
                 @Dash.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDash;
+                @AirSmash.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAirSmash;
+                @AirSmash.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAirSmash;
+                @AirSmash.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAirSmash;
                 @UltimateMove.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnUltimateMove;
                 @UltimateMove.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnUltimateMove;
                 @UltimateMove.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnUltimateMove;
@@ -553,6 +578,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Dash.started += instance.OnDash;
                 @Dash.performed += instance.OnDash;
                 @Dash.canceled += instance.OnDash;
+                @AirSmash.started += instance.OnAirSmash;
+                @AirSmash.performed += instance.OnAirSmash;
+                @AirSmash.canceled += instance.OnAirSmash;
                 @UltimateMove.started += instance.OnUltimateMove;
                 @UltimateMove.performed += instance.OnUltimateMove;
                 @UltimateMove.canceled += instance.OnUltimateMove;
@@ -640,6 +668,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnParry(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
+        void OnAirSmash(InputAction.CallbackContext context);
         void OnUltimateMove(InputAction.CallbackContext context);
         void OnRestartScene(InputAction.CallbackContext context);
     }

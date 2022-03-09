@@ -70,6 +70,14 @@
                     "interactions": ""
                 },
                 {
+                    "name": "AirSmash",
+                    "type": "Value",
+                    "id": "f5b59fd6-e1ac-435a-ab69-0c5fe17e008d",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "UltimateMove ",
                     "type": "Value",
                     "id": "9a69e5bc-21dc-4562-80eb-49e19927866e",
@@ -174,17 +182,6 @@
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
-                },
-                {
-                    "name": "",
-                    "id": "9c9993c4-36a3-4463-8c76-87cd9a4f8436",
-                    "path": "<Gamepad>/buttonEast",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "UltimateMove ",
-                    "isComposite": false,
-                    "isPartOfComposite": false
                 },
                 {
                     "name": "",
@@ -293,6 +290,28 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "MeleeAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "9c9993c4-36a3-4463-8c76-87cd9a4f8436",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "UltimateMove ",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7bc8e0d1-c282-407a-bf06-0dcd34cf17ec",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "AirSmash",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

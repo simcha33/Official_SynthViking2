@@ -22,6 +22,7 @@ public class PlayerInputCheck : MonoBehaviour
     [HideInInspector] public bool parryButtonPressed;
     [HideInInspector] public bool ultimateButtonPressed;
     [HideInInspector] public bool jumpButtonPressed;
+    [HideInInspector] public bool airSmashButtonPressed; 
     [HideInInspector] public bool restartSceneButtonPressed; 
 
 
@@ -62,6 +63,11 @@ public class PlayerInputCheck : MonoBehaviour
     private void OnMeleeAttack(InputValue value)
     {
         meleeButtonPressed = value.isPressed;
+    }
+
+    private void OnAirSmash(InputValue value)
+    {
+        airSmashButtonPressed = value.isPressed; 
     }
 
 

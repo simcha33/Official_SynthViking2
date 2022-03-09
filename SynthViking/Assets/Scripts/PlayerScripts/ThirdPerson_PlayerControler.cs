@@ -6,9 +6,12 @@ using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 using MoreMountains.Feedbacks; 
 using System;
+using DG.Tweening;
 
 public class ThirdPerson_PlayerControler : MonoBehaviour
 {
+    public Vector3 inputDir;
+
     [Header("GROUND MOVEMENT")] //GROUND MOVEMENT
     #region
 
@@ -25,7 +28,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     private float groundStopDrag = 8f;
 
     [HideInInspector] public Vector3 moveInput;
-    private Vector3 moveDirection;
+    [HideInInspector] public Vector3 moveDirection;
 
 
     //Rotation
@@ -57,7 +60,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     private float groundCheckHeight = .4f;
     private float landCheckHeight = 2.5f;
     private float groundCheckJumpDelay = .5f; //Temporaly turn of the groundcheck after jumping 
-    private float groundCheckTimer;
+    public float groundCheckTimer;
 
 
     #endregion
@@ -72,7 +75,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     private float dashDelayTimer;
     public float dashBuildUpSpeed;
     public float currentDashDistance;
- 
+
 
     private float dashCooldownTimer;
     public float dashCooldownDuration;
@@ -99,13 +102,40 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     #region   
     public float nextAttackDuration;
     public float nextAttackTimer;
-    public float maxTimeBetweenAttacks; 
-    public int currentComboLength; 
+    public float maxTimeBetweenAttacks;
+    public int currentComboLength;
     public int totalComboLength;
-    public float attackMoveSpeed;
-    public bool attackTargetNearby;
-     
+    private float attackMoveLerpT;
+    private Vector3 attackStartPos;
+
+    private float attackMoveSpeed = 1f;
+    public bool attackTargetInRange;
+    [HideInInspector] public bool canDamageTarget;
+    public Transform currentAttackTarget;
+    public float swordAttackDamage = 10f;
+    public float punchAttackDamage = 5f;
+    [HideInInspector] public float currentAttackDamage;
+
     #endregion
+
+    [Header("AIR SMASH")]
+    public float groundSlamMinDamage;
+    public float groundSlamMaxDamage;
+    private float currentGroundSlamDamage;
+    public float groundSlamRadius;
+    public float groundSlamForwardForce;
+    public float groundSlamUpForce; 
+
+    private float airSmashCurrentDamage;
+    public float airSmashDownForce;
+    private float airSmashDelayDuration;
+    private float airSmashDelayTimer;
+    private Vector3 airSmashDirection;
+    public float airSmashMinStartHeight;
+    public float airSmashEndHeight;   
+    private float airSmashCooldownTimer;
+    public float airSmashCooldownDuration; 
+
 
     [Header("WALLRUNNING")] //Wallrunning; 
     #region
@@ -113,9 +143,9 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public float wallRunUpSpeed;
     public float frontWallCheckDist;
     public float sideWallCheckDist;
-
     public Transform frontWallChecker;
     private LayerMask EnvorinmentLayer = 6;
+    private LayerMask enemyLayer = 7;
 
     #endregion
 
@@ -128,6 +158,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public AnimationClip noMoveLandingClip;
     public AnimationClip VerticalWallRunClip;
     public AnimationClip VerticalWallRunEndClip;
+    public AnimationClip airSmashAttackStartClip;
+    public AnimationClip airSmashAttackEndClip;
     int velocityHash;
     #endregion
 
@@ -135,14 +167,14 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     #region
     public Camera playerCamera;
     public Transform aimPoint;
-    [HideInInspector] public Vector3 camForward; 
+    [HideInInspector] public Vector3 camForward;
     #endregion
 
     [Header("Scripts")] //SCRIPTS
     #region
     public PlayerInputCheck input;
     public PlayerState playerState;
-    public AttackTargetScript attackTargetScript; 
+    public AttackTargetScript attackTargetScript;
     #endregion
 
     [Header("Components")] //COMPONENTS
@@ -152,10 +184,10 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public SkinnedMeshRenderer meshR;
     private MeshRenderer raycastCheckMeshr;
     public Material holoRed;
-    public Material holoGreen; 
+    public Material holoGreen;
     public Material[] holoSkinMat;
     public Material[] defaultSkinMat;
-    public Transform raycastCheck; 
+    public Transform raycastCheck;
     #endregion
 
     [Header("FEEDBACK")]
@@ -165,7 +197,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public MMFeedbacks DashStartFeeback;
     public MMFeedbacks DashAttackFeedback;
     public MMFeedbacks DashEndFeeback;
-    public MMFeedbacks LightAttackFeedback; 
+    public MMFeedbacks LightAttackFeedback;
     #endregion
 
     [Header("Switch Case")] //SWITCH CASE
@@ -180,6 +212,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         WALLRUNNING,
         ATTACKING,
         DASHING,
+        AIRSMASHING,
     }
     #endregion
 
@@ -193,13 +226,16 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public bool canStartWallrun = true;
     public bool canDash = true;
     public bool canDashAttack = true;
-    public bool canStartNewAttack; 
+    public bool canStartNewAttack;
     //public bool canPauseWallrun = true;
     public bool canEndDash = false;
+    public bool canFall = true;
+    public bool canStartAirSmash;
+    public bool canEndAirSmash;
 
     public bool isMoving;
-    public bool isAttacking; 
-   // public bool isPausingWallrun;
+    public bool isAttacking;
+    // public bool isPausingWallrun;
     public bool isWallRunning;
     public bool isLanding;
     public bool isDashing;
@@ -209,6 +245,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public bool isSprinting;
     public bool isRunning;
     public bool isInAir;
+    public bool isAirSmashing;
+    public bool isGroundSmash;
     public bool isGrounded = true;
 
     public bool wasSprintingBeforeJump;
@@ -244,17 +282,20 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         raycastCheck.gameObject.SetActive(false);
         //dashChecker.position, dashChecker.position + dashChecker.forward * 2f
 
-        defaultSkinMat = meshR.materials; 
+        defaultSkinMat = meshR.materials;
         //meshR.materials = holoSkinMat; 
 
         //Set default values
         currentMoveSpeed = maxMoveSpeed;
         currentDashDistance = minDashDistance;
         dashDelayTimer = dashDelayDuration;
+        airSmashDelayTimer = 0f;
+        airSmashCooldownTimer = airSmashCooldownDuration;
         dashCooldownTimer = dashCooldownDuration;
-        originalIndicatorSize = dashChargeIndicator.transform.localScale; 
+      
+        originalIndicatorSize = dashChargeIndicator.transform.localScale;
 
-        fixedControllerState = (int)currentState.NOTHING;
+        fixedControllerState = (int)currentState.MOVING;
         controllerState = (int)currentState.MOVING;
 
         //Set default states
@@ -272,38 +313,49 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             case (int)currentState.MOVING:
                 GroundCheck();
                 HandleMoveSpeed();
+                HandleRotation();
                 CheckForMoveInput();
                 CheckForJump();
                 CheckForWall();
-                CheckForAttack(); 
+                CheckForAttack();
                 CheckForDamage();
                 HandleDrag();
                 CheckForDash();
+                CheckForAirSmash(); 
                 break;
 
             case (int)currentState.WALLRUNNING:
                 CheckForJump();
                 CheckForWall();
+                CheckForAirSmash(); 
                 CheckForDamage();
-                CheckForDash(); 
+                CheckForDash();
                 HandleMoveSpeed();
                 CheckForMoveInput();
                 HandleWallRunning();
                 HandleDrag();
+                CheckForAirSmash(); 
                 break;
 
             case (int)currentState.ATTACKING:
-                //HandleMoveSpeed();
                 CheckForAttack();
-               // CheckForMoveInput(); 
-                GroundCheck();               
+                CheckForAirSmash();
+                CheckForDash(); 
+                CheckForMoveInput();
+                GroundCheck();
                 HandleRotation();
                 CheckForDamage();
-                HandleMoveSpeed(); 
                 break;
 
             case (int)currentState.DASHING:
                 CheckForDash();
+                CheckForAirSmash();
+                GroundCheck(); 
+                break;
+
+            case (int)currentState.AIRSMASHING:
+                CheckForDash();
+                CheckForAirSmash();
                 break;
         }
 
@@ -325,8 +377,11 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 DoDash();
                 break;
             case (int)currentState.ATTACKING:
-              //  MovePlayer(); 
+                //  MovePlayer(); 
+                // MovePlayer();
                 break;
+            case (int)currentState.AIRSMASHING:
+                break; 
 
         }
     }
@@ -350,12 +405,13 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         playerAnim.SetBool("IsLanding", isLanding);
         playerAnim.SetBool("IsSprinting", isSprinting);
         playerAnim.SetBool("IsDashing", isDashing);
-        playerAnim.SetBool("IsAiming", isChargingDash); 
-       // if(isAttacking && nextAttackTimer < nextAttackDuration) playerAnim.SetBool("IsAttacking", isAttacking); 
-       // else playerAnim.SetBool("IsAttacking", false);
+        playerAnim.SetBool("IsAiming", isChargingDash);
+        playerAnim.SetBool("IsAirSmashing", isAirSmashing); 
 
         //Checks
         playerAnim.SetBool("CanJump", canJump);
+        playerAnim.SetBool("CanFall", canFall); 
+        playerAnim.SetBool("canStartAirSmash", canStartAirSmash); 
         playerAnim.SetBool("CanMove", canMove);
         playerAnim.SetBool("CandDash", canDash);
         playerAnim.SetBool("canStartWallrun", canStartWallrun);
@@ -389,7 +445,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
             if (isSprinting)
             {
-                if (moveVelocity < 3) moveVelocity += Time.deltaTime * 1.3f;
+                if (moveVelocity < 3) moveVelocity += Time.deltaTime * 1.4f;
             }
 
             //Set movevelocity to the highest input value 
@@ -409,24 +465,16 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             if ((moveVelocity > .7f) && canMove)
             {
                 isRunning = true;
-                canRotate = true;
+                //canRotate = true;
             }
             else isRunning = false;
         }
         else isMoving = false;
 
+        //For attack targeting
+        inputDir = GetCameraForward(playerCamera) * moveInput.y + GetCameraRight(playerCamera) * moveInput.x;
+        inputDir = inputDir.normalized;
 
-        //Move Player
-        if (isMoving && canMove)
-        {
-            fixedControllerState = (int)currentState.MOVING;
-
-            if (canRotate)
-            {
-                //turnLerpTimer = turnLerpValue;
-                HandleRotation();
-            }
-        }
     }
 
     void MovePlayer()
@@ -436,6 +484,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
         playerRb.velocity = new Vector3(moveDirection.x, playerRb.velocity.y, moveDirection.z);
         moveDirection = Vector3.zero;
+
+
 
     }
 
@@ -455,8 +505,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         }
 
         //Fix weird rotation big
-        if (!isMoving && !isWallRunning && isGrounded && !isAttacking) playerRb.isKinematic = true;
-        else playerRb.isKinematic = false;
+        //   if (!isMoving && !isWallRunning && isGrounded && !isAttacking) playerRb.isKinematic = true;
+        //  else playerRb.isKinematic = false;
 
 
         //Set min movespeed 
@@ -467,7 +517,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //Set move speed 
         if (isGrounded)  //Handle ground move speed changes
         {
-            if (isAttacking && nextAttackTimer < nextAttackDuration) currentMoveSpeed = attackMoveSpeed; 
+            if (isAttacking && nextAttackTimer < nextAttackDuration) currentMoveSpeed = attackMoveSpeed;
             else if (isSprinting) currentMoveSpeed = sprintMoveSpeed;  //Sprinting 
             else if (isMoving && !isSprinting)
             {
@@ -497,18 +547,20 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     private Vector3 GetCameraForward(Camera playerCamera)
     {
         Vector3 forward = playerCamera.transform.forward;
-        Debug.DrawRay(playerCamera.transform.position, playerCamera.transform.forward * currentDashDistance, Color.green);       
+        Debug.DrawRay(playerCamera.transform.position, playerCamera.transform.forward * currentDashDistance, Color.green);
         forward.y = 0;
 
         //dashDirection = playerCamera.transform.forward;
 
         if (input.dashButtonPressed && !isDashing)
         {
-            raycastCheck.gameObject.SetActive(true); 
+            raycastCheck.gameObject.SetActive(true);
             RaycastHit camForwardHit;
+
+            //Check camera forward position 
             if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward.normalized, out camForwardHit, currentDashDistance))
             {
-                Debug.Log("DashHit"); 
+                Debug.Log("DashHit");
                 if (camForwardHit.transform.gameObject.layer == 6 || camForwardHit.transform.CompareTag("Enemy"))
                 {
                     raycastCheck.transform.position = camForwardHit.point;
@@ -518,7 +570,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             }
             else
             {
-                raycastCheckMeshr.material = holoRed; 
+                raycastCheckMeshr.material = holoRed;
                 raycastCheck.transform.position = playerCamera.transform.position + playerCamera.transform.forward * currentDashDistance;
                 dashDirection = raycastCheck.transform.position + dashOffset;
             }
@@ -527,9 +579,9 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         {
             //raycastCheck.gameObject.SetActive(false);
         }
-            return forward.normalized;
+        return forward.normalized;
 
-     
+
     }
 
     private Vector3 GetCameraRight(Camera playerCamera)
@@ -546,12 +598,11 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         if (canRotate)
         {
             //Player ground rotation 
-            if (isMoving && !isWallRunning)
             {
                 float speed = 10f;
                 float singleStep = speed * Time.deltaTime;
 
-                Vector3 newDirection = Vector3.RotateTowards(playerRb.transform.forward, new Vector3(playerRb.velocity.x, 0, playerRb.velocity.z), singleStep, 0f);
+                Vector3 newDirection = Vector3.RotateTowards(playerRb.transform.forward, new Vector3(inputDir.x, 0, inputDir.z), singleStep, 0f);
                 transform.rotation = Quaternion.LookRotation(newDirection);
             }
         }
@@ -564,7 +615,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     void CheckForDash()
     {
         //Handle dash charge indicator UI
-        float dashIndicatorSizeModifier = 1.3f; 
+        float dashIndicatorSizeModifier = 1.3f;
         dashChargeIndicator.fillAmount = (currentDashDistance - minDashDistance) / (maxDashDistance - minDashDistance);
 
         //Build up the dashduration on button hold
@@ -578,12 +629,10 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 if (dashChargeIndicator.transform.localScale == originalIndicatorSize)
                 {
                     dashChargeIndicator.transform.localScale *= dashIndicatorSizeModifier;
-                    dashChargeBackground.transform.localScale *= dashIndicatorSizeModifier; 
+                    dashChargeBackground.transform.localScale *= dashIndicatorSizeModifier;
                 }
                 currentDashDistance = maxDashDistance;
             }
-            //dashDirection = aimPoint.forward * currentDashDistance; 
-            //dashDirection = aimPoint.forward;
         }
 
         //Dash button is released
@@ -593,7 +642,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             if (dashDelayTimer == dashDelayDuration)
             {
                 canMove = false;
-                canLand = false; 
+                canLand = false;
                 ResetAnimator();
                 transform.LookAt(dashDirection);
                 //dashDirection = aimPoint.forward + Vector3.right;
@@ -626,12 +675,12 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //The player is dashing 
         if (isDashing && !solidDashObjectReached && !enemyDashObjectReached && !canEndDash) //Maintain dash
         {
-            if (currentDashDistance <= .8f)
-            {    
+            if (currentDashDistance <= 1f)
+            {
                 canEndDash = true; //End Dash
                 return;
             }
-            
+
 
             playerRb.useGravity = false;
             playerRb.isKinematic = false;
@@ -640,15 +689,15 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
 
             //Trigger stylish move at the end of the dash
-            if (currentDashDistance <= 15 && !dashEndMove)
+            if (currentDashDistance <= 30 && !dashEndMove)
             {
                 //Delay and enable landing for ground dashes 
                 canLand = true;
                 dashEndMove = true;
                 groundCheckTimer = .05f;
-                if (jumpCount < 1) jumpCount += 1;              
+                if (jumpCount < 1) jumpCount += 1;
                 playerAnim.SetTrigger("DashEndTrigger");
-            }            
+            }
         }
         else if (isDashing && canEndDash) //End dash
         {
@@ -679,37 +728,37 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     void DoDash()
     {
         if (!enemyDashObjectReached && !solidDashObjectReached)
-        { 
-            playerRb.AddForce((dashDirection - transform.position) * dashForwardForce, ForceMode.Acceleration);           
+        {
+            playerRb.AddForce((dashDirection - transform.position) * dashForwardForce, ForceMode.VelocityChange);
             dashChecker.gameObject.SetActive(true);
         }
     }
 
-    
-
     public void DoDashAttack()
     {
         BasicEnemyScript script = dashAttackTarget.transform.GetComponentInParent<BasicEnemyScript>();
-        script.LaunchEnemy(aimPoint.forward, dashAttackForce); 
+        script.LaunchEnemy(aimPoint.forward, Random.Range( dashAttackForce -5, dashAttackForce + 5), 5f);
+        script.transform.position = transform.position + transform.forward + script.transform.up; 
+        playerRb.AddForce(transform.up * 3, ForceMode.VelocityChange);
     }
 
     public void ResetDash()
     {
-        DashEndFeeback?.PlayFeedbacks(); 
-        transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0); 
+        DashEndFeeback?.PlayFeedbacks();
+        transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
         solidDashObjectReached = false;
         enemyDashObjectReached = false;
         dashChecker.gameObject.SetActive(false);
         raycastCheck.gameObject.SetActive(false);
         meshR.materials = defaultSkinMat;
-        if (jumpCount > 1) jumpCount = 1; 
+        if (jumpCount > 1) jumpCount = 1;
 
         isDashing = false;
         canEndDash = false;
         canMove = true;
         dashEndMove = false;
         playerRb.useGravity = true;
-           
+
         currentDashDistance = minDashDistance;
         dashDelayTimer = dashDelayDuration;
         controllerState = (int)currentState.MOVING;
@@ -740,7 +789,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     //Jumping
     void CheckForJump()
-    {      
+    {
         if (jumpCount < maxJumps)
         {
             //Player presses the jump key
@@ -754,10 +803,11 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 hasJumped = true;
                 canJump = false;
 
+
                 //Animation handeling
                 ResetAnimator();
                 playerAnim.SetFloat("JumpCount", jumpCount);
-                if (jumpCount == 1) playerAnim.SetFloat("RandomJumpVar", 0f); 
+                if (jumpCount == 1) playerAnim.SetFloat("RandomJumpVar", 0f);
                 else playerAnim.SetFloat("RandomJumpVar", Random.Range(1, 5)); //Randomly select a second jump animation 
                 playerAnim.SetTrigger("JumpTrigger");
 
@@ -767,14 +817,14 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
             //Handle Jump animations
             if (hasJumped)
-            {                          
-                DoJump();
-                hasJumped = false;                        
+            {
+                DoJump(jumpForce);
+                hasJumped = false;
             }
         }
         else canJump = false;
 
-   
+
         //Land player when near ground 
         if (isLanding)
         {
@@ -782,7 +832,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             {
                 playerAnim.SetTrigger("LandingTrigger");
                 landingDelayTimer = moveLandingClip.length * .7f;
-                canLand = false; 
+                canLand = false;
             }
 
             //Setup or interupt delay for next state when landing 
@@ -794,11 +844,11 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             if (isGrounded && isInAir)
             {
                 wasSprintingBeforeJump = false;
-                isInAir = false; 
+                isInAir = false;
                 canJump = true;
 
                 groundCheckJumpDelay = .5f;
-                jumpCount = 0;                   
+                jumpCount = 0;
             }
         }
 
@@ -810,23 +860,17 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         if (playerRb.velocity.y > 0 && !input.jumpButtonPressed) playerRb.velocity += Vector3.up * Physics.gravity.y * (lowJumpGravity - 1) * Time.deltaTime;
     }
 
-    void DoJump()
-    {
-        // playerAnim.SetTrigger("JumpTrigger");     
+    void DoJump(float jumpHeight)
+    {   
         playerRb.isKinematic = false;
         playerRb.velocity = new Vector3(playerRb.velocity.x, 0, playerRb.velocity.z);
 
-        Debug.Log("Jump"); 
-        if (!isWallRunning)
+        JumpFeedback?.PlayFeedbacks();
+        playerRb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
+        
+        if (isWallRunning)
         {
-            JumpFeedback?.PlayFeedbacks();       
-            playerRb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-           
-        }
-        else if (isWallRunning)
-        {
-            playerRb.AddForce(transform.forward * -700, ForceMode.Impulse); //Move the player away from the wall so he doesn't get stuck
-            playerRb.AddForce(Vector3.up * jumpForce /5, ForceMode.Impulse);
+            playerRb.AddForce(-transform.forward * 1000, ForceMode.Impulse); //Move the player away from the wall so he doesn't get stuck
         }
     }
 
@@ -846,12 +890,13 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         }
         else
         {
+
             //Player is grounded  
             if (Physics.Raycast(ray, out hit, groundCheckHeight))
             {
                 playerRb.useGravity = false;
-                isGrounded = true;     
-                
+                isGrounded = true;
+
             }
             //Player isn't grounded 
             else
@@ -863,17 +908,26 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             }
 
             //Player can land 
-            if ((Physics.Raycast(ray, out hit, landCheckHeight)) && canLand) isLanding = true;                                       
+            if ((Physics.Raycast(ray, out hit, landCheckHeight)) && canLand) isLanding = true;
+      
         }
+
+        //Player can airSmash 
+        if ((!Physics.Raycast(ray, out hit, airSmashMinStartHeight)) && isInAir) canStartAirSmash = true;
+        else canStartAirSmash = false;
+
+
+
+
     }
 
-   
+
 
     //Wallrunnning
     void CheckForWall()
     {
         RaycastHit hit;
-        Ray frontRay = new Ray(frontWallChecker.position , frontWallChecker.forward);
+        Ray frontRay = new Ray(frontWallChecker.position, frontWallChecker.forward);
         Debug.DrawLine(frontWallChecker.position, frontWallChecker.position + frontWallChecker.forward * frontWallCheckDist, Color.red);
 
         //Check if we can enter or exit the wallrun 
@@ -882,13 +936,13 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             //Start wallrun
             if (hit.collider.gameObject.layer == 6 && canStartWallrun) //Environment
             {
-            
+
                 StartWallRun();
             }
         }
         else if (isWallRunning || isWallRunning && input.jumpButtonPressed)
         {
-            ExitWallRun(); 
+            ExitWallRun();
         }
     }
 
@@ -898,7 +952,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         ResetStates();
         isWallRunning = true;
         canStartWallrun = false;
-        isSprinting = true; 
+        isSprinting = true;
         canMove = true;
 
         playerRb.isKinematic = false;
@@ -911,58 +965,197 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     {
         //Give the player a small boost after wallrunning 
         playerAnim.SetTrigger("WallRunEndTrigger");
-
-        float jumpHeightDecrease = .6f;
-        jumpForce *= jumpHeightDecrease;
-        DoJump();
-        jumpForce /= jumpHeightDecrease;
+        groundCheckTimer = .3f;
+        jumpCount = 1;
+        DoJump(jumpForce * .05f);
 
         isWallRunning = false;
         canStartWallrun = true;
+        
         controllerState = (int)currentState.MOVING;
     }
 
     void HandleWallRunning()
-    { 
-        playerRb.velocity = new Vector3(playerRb.velocity.x, wallRunUpSpeed, playerRb.velocity.z);            
+    {
+        playerRb.velocity = new Vector3(playerRb.velocity.x, wallRunUpSpeed, playerRb.velocity.z);
     }
 
-   
+
+    //Air smashing 
+    void CheckForAirSmash()
+    {
+       
+        if (input.airSmashButtonPressed && canStartAirSmash)
+        {
+            //Air smash delay
+            if (airSmashDelayTimer <= 0)
+            {
+                ResetAnimator();
+                ResetStates(); 
+                playerRb.velocity = new Vector3(0, 0, 0);            
+                
+                canFall = false; 
+                playerAnim.SetTrigger("AirSmashStartTrigger");
+                playerRb.useGravity = false;
+                isAirSmashing = true;
+                controllerState = (int)currentState.AIRSMASHING;
+                fixedControllerState = (int)currentState.AIRSMASHING; 
+            }
+
+
+            airSmashDelayDuration = (playerAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / playerAnim.GetCurrentAnimatorStateInfo(0).speed) -.1f;
+            airSmashDelayTimer += Time.deltaTime;
+
+            if (airSmashDelayTimer >= airSmashDelayDuration)
+            {
+                //isAirSmashing = true;
+                meshR.materials = holoSkinMat;
+                canStartAirSmash = false;
+            }
+        }
+
+        //Handle air smash start and stop 
+        if (isAirSmashing && !input.airSmashButtonPressed || isGroundSmash)
+        {
+          
+            //Only do this once at the start of the end
+            if (canEndAirSmash)  
+            {
+                meshR.materials = defaultSkinMat;
+                airSmashDelayTimer = 0f;
+                playerAnim.SetTrigger("AirSmashEndTrigger");
+            }
+           
+            airSmashDelayDuration = playerAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / playerAnim.GetCurrentAnimatorStateInfo(0).speed;
+            airSmashDelayTimer += Time.deltaTime;
+
+            EndAirSmash();
+
+        }
+        else if (isAirSmashing && airSmashDelayTimer >= airSmashDelayDuration)
+        {
+            DoAirSmash();
+        }
+        
+
+        //Air smash Cooldown
+        if (airSmashCooldownTimer > 0) airSmashCooldownTimer -= Time.deltaTime;
+        if(airSmashCooldownTimer <= 0 && !input.airSmashButtonPressed && !isAirSmashing) canStartAirSmash = true; 
+        
+        
+    }
+
+    void DoAirSmash()
+    {      
+        playerRb.AddForce(-Vector3.up * airSmashDownForce, ForceMode.VelocityChange);
+        dashChecker.gameObject.SetActive(true);
+
+        //Dash has reached ground
+        RaycastHit hit;
+        Ray downRay = new Ray(transform.position, -transform.up);
+        if ((Physics.Raycast(downRay, out hit, airSmashEndHeight)))
+        {
+            if (hit.transform.gameObject.layer == EnvorinmentLayer)
+            {
+             
+                playerRb.velocity = new Vector3(0, 0, 0);            
+                isGroundSmash = true;
+
+                Collider[] colls = Physics.OverlapSphere(transform.position, groundSlamRadius);
+                foreach (Collider slamTarget in colls)
+                {
+                    if (slamTarget.gameObject.layer == enemyLayer)
+                    {
+                        BasicEnemyScript enemyScript = slamTarget.GetComponent<BasicEnemyScript>();
+                        enemyScript.TakeDamage(currentGroundSlamDamage);
+                        enemyScript.LaunchEnemy((slamTarget.transform.position - transform.position), groundSlamForwardForce, groundSlamUpForce);
+                    }
+                }
+            }
+        }
+
+    }
+
+    void EndAirSmash()
+    {
+        //Have we hit the ground with our slam?
+        if (isGroundSmash)
+        {
+         
+
+
+        }
+
+        canEndAirSmash = false; 
+     
+
+        if (airSmashDelayTimer >= airSmashDelayDuration - .05f || !isGroundSmash)
+        {
+            isAirSmashing = false;
+            isGroundSmash = false;
+            canEndAirSmash = true; 
+            canLand = true;
+            canFall = true;
+
+            playerRb.useGravity = true;
+            airSmashDelayTimer = 0f;      
+            airSmashCooldownTimer = airSmashCooldownDuration;
+            fixedControllerState = (int)currentState.MOVING;
+            controllerState = (int)currentState.MOVING;              
+        }     
+    }
+
+    void DoAirSlamAttack()
+    {
+
+    }
+
+
 
 
 
     //Resets
     void ResetStates()
     {
-        canLand =           false;
-        canMove =           true;
-        canRotate =         true;
-        canJump =           true;
-        canSprint =         true;
-        canStartWallrun =   true;
-        canDash =           true;  
-        canDashAttack =     true;
-        canEndDash =       false;
-        canStartNewAttack =         true;
 
-        isMoving =          false;    
-        isWalking =         false;
-        isSprinting =       false;
-        isRunning =         false;
-        isInAir =           false;
-        isLanding =         false;
-        isGrounded =        false;
-        isWallRunning =     false;
-        isAttacking =       false; 
-        isDashing =         false;
-        isChargingDash =    false;
-        isDashAttacking =   false; 
+        canLand = false;
+        canMove = true;
+        canRotate = true;
+        canJump = true;
+        canSprint = true;
+        canStartWallrun = true;
+        canDash = true;
+        canDashAttack = true;
+        canEndDash = false;
+        canStartNewAttack = true;
+        canStartAirSmash = true;
+        canEndAirSmash = true;
+        canFall = true;
+       
+
+        isMoving = false;
+        isWalking = false;
+        isSprinting = false;
+        isRunning = false;
+        isInAir = false;
+        isLanding = false;
+        isGrounded = false;
+        isWallRunning = false;
+        isAttacking = false;
+        isDashing = false;
+        isChargingDash = false;
+        isDashAttacking = false;
+        isAirSmashing = false;
+        isGroundSmash = false; 
 
         wasSprintingBeforeJump = false;
         playerRb.isKinematic = false;
         meshR.materials = defaultSkinMat;
+        playerAnim.speed = 1f;
 
-        jumpCount = 0;      
+        jumpCount = 0;
+
+        //ResetDash(); 
     }
 
     void ResetAnimator()
@@ -971,17 +1164,16 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         {
             playerAnim.SetBool(parameter.name, false);
             playerAnim.ResetTrigger(parameter.name);
-            playerAnim.SetInteger(parameter.name, 0); 
+            playerAnim.SetInteger(parameter.name, 0);
         }
     }
 
     void CheckForAttack()
     {
-        int totalAttackTrees = 1; 
+        int totalAttackTrees = 1;
 
         if (input.meleeButtonPressed && canStartNewAttack && !isAttacking)
         {
-            Debug.Log("ATTACK?");
 
             ResetAnimator();
             ResetStates();
@@ -989,18 +1181,21 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             isAttacking = true;
             canStartNewAttack = false;
             playerRb.isKinematic = false;
+
+            nextAttackTimer = 5f;
+            currentAttackDamage = swordAttackDamage;
+            currentComboLength = 0;
+
             controllerState = (int)currentState.ATTACKING;
             fixedControllerState = (int)currentState.ATTACKING;
-            nextAttackTimer = 5f;
-            currentComboLength = 0;
         }
         else if (input.meleeButtonPressed && canStartNewAttack && isAttacking)
         {
             //playerAnim.SetInteger("CurrentComboLength", currentComboLength);
             ResetStates();
             isAttacking = true;
-            canStartNewAttack = false; 
-            nextAttackTimer = 5f; 
+            canStartNewAttack = false;
+            nextAttackTimer = 5f;
             controllerState = (int)currentState.ATTACKING;
             fixedControllerState = (int)currentState.ATTACKING;
         }
@@ -1012,76 +1207,96 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     void HandleAttack()
     {
-        float stepSpeed = .1f;
-        
         //Set attack duration equel to current animation clip length and speed
         nextAttackDuration = playerAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / playerAnim.GetCurrentAnimatorStateInfo(0).speed;
 
         //Check if we can continue to the next attack
         if (nextAttackTimer >= nextAttackDuration - (nextAttackDuration / 3f) && input.meleeButtonPressed)
         {
-           
+
             //Set attack duration equel to current animation length    
             currentComboLength++;
-            CheckForMoveInput(); 
-            LightAttackFeedback?.PlayFeedbacks(); 
+            CheckForMoveInput();
+            LightAttackFeedback?.PlayFeedbacks();
             playerAnim.SetBool("IsAttacking", true);
-            playerAnim.SetInteger("CurrentComboLength", currentComboLength); 
-            playerAnim.SetTrigger("LightAttackTrigger");          
+            playerAnim.SetInteger("CurrentComboLength", currentComboLength);
+            playerAnim.SetTrigger("LightAttackTrigger");
             nextAttackTimer = 0f;
+            attackMoveLerpT = 0f;
+            canRotate = true;
+
+            attackStartPos = transform.position;
+            playerRb.velocity = new Vector3(0, 0, 0);
+
+            //playerRb.AddForce(transform.forward * 4f, ForceMode.VelocityChange); 
+
 
             //Check if there is a attack target within range 
-            if (attackTargetScript.selectedTarget != null) attackTargetNearby = true;
-            else attackTargetNearby = false;
+            if (attackTargetScript.selectedTarget != null)
+            {
+                attackTargetInRange = true;
+                currentAttackTarget = attackTargetScript.selectedTarget;
+            }
+            else attackTargetInRange = false;
 
             if (currentComboLength >= totalComboLength) currentComboLength = 0; //Reset combo tree
         }
 
         //Move towards attack target
-        if (attackTargetNearby )
+        if (attackTargetInRange)
         {
-            attackTargetScript.dontRemoveTarget = attackTargetNearby;
+            float animStartDistance = 5;
+            //Slightly delay attacks animations
+            if (Vector3.Distance(transform.position, currentAttackTarget.position) > animStartDistance) playerAnim.speed = 0f;
+            else playerAnim.speed = 1;
 
-          //  if (attackTargetScript.selectedTarget != null)
-           // {
-                transform.position = Vector3.Lerp(transform.position, attackTargetScript.selectedTarget.position, stepSpeed); //Move towards attack target
-               // transform.LookAt(new Vector3(attackTargetScript.selectedTarget.position.x, attackTargetScript.selectedTarget.position.y, transform.forward.z));
-                float attackTargetDistance = Vector3.Distance(transform.position, attackTargetScript.selectedTarget.position); //Check for attackdistance 
-                if (attackTargetDistance <= 1.5f) attackTargetNearby = false;
-          //  }
-          //  else attackTargetNearby = false; 
-
-            
-            
+            float timeToReach = .15f;
+            attackMoveLerpT = Time.deltaTime / timeToReach;
+            transform.position = Vector3.Lerp(transform.position, currentAttackTarget.position, attackMoveLerpT);
+            transform.LookAt(currentAttackTarget.position);
+        }
+        else
+        {
+            playerAnim.speed = 1f;
         }
 
 
         //Check if the combo is broken 
-        if(nextAttackTimer >= nextAttackDuration)
+        if (nextAttackTimer >= nextAttackDuration)
         {
             playerAnim.SetBool("IsAttacking", false);
-           // playerAnim.ResetTrigger("LightAttackTrigger"); 
             fixedControllerState = (int)currentState.MOVING;
             controllerState = (int)currentState.MOVING;
             canStartNewAttack = true;
-            attackTargetNearby = false;
+            attackTargetInRange = false;
+            canRotate = true;
+
         }
-        else if(nextAttackTimer < nextAttackDuration)
+        else if (nextAttackTimer < nextAttackDuration)
         {
-          isAttacking = true;
+            //HandleRotation();
+            isAttacking = true;
         }
 
         //Exit attack state
-        if(nextAttackTimer >= nextAttackDuration + maxTimeBetweenAttacks)
-        {     
+        if (nextAttackTimer >= nextAttackDuration + maxTimeBetweenAttacks)
+        {
             isAttacking = false;
-            attackTargetNearby = false;
+            attackTargetInRange = false;
             playerAnim.SetBool("IsAttacking", false);
         }
 
-        nextAttackTimer += Time.deltaTime; 
+        nextAttackTimer += Time.deltaTime;
     }
 
-    
+    void AllowAttackDamage()
+    {
 
+        canRotate = false;
+        attackTargetScript.TargetDamageCheck();
+        transform.DOMove(transform.position + transform.forward * 2.5f, .4f);
+    }
+
+
+    
 }

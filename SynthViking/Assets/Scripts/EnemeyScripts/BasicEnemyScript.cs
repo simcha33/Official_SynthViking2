@@ -45,7 +45,7 @@ public class BasicEnemyScript : MonoBehaviour
 
       [Header("COMPONENTS")]
     public Animator enemyAnim;
-    private Rigidbody enemyRb;
+    [HideInInspector] public Rigidbody enemyRb;
     public Collider mainCollider; 
     public ThirdPerson_PlayerControler playerController; 
     public Transform rootTransform; 
@@ -53,6 +53,9 @@ public class BasicEnemyScript : MonoBehaviour
     [Header("STATES")]
     public bool isStunned;
     public bool canBeStunned;
+    public bool isDead; 
+
+    public bool canBeTargeted; 
     public bool canAddImpactDamage; 
     public bool hasHitObject; 
     public bool canBeLaunched = true; 
@@ -63,14 +66,15 @@ public class BasicEnemyScript : MonoBehaviour
 
     void Start()
     {
-        
+        playerController = GameObject.Find("Player").GetComponent<ThirdPerson_PlayerControler>(); 
         enemyRb = GetComponent<Rigidbody>();
         currentHealth = maxHealth; 
+        canBeTargeted = true; 
 
         foreach(Rigidbody rb in GetComponentsInChildren<Rigidbody>())
         {
             if(rb != enemyRb) ragdollRbs.Add(rb); 
-            rb.detectCollisions = false; 
+            rb.GetComponent<Collider>().isTrigger = true; 
             rb.isKinematic = true; 
             rb.useGravity = false; 
             //rb.isKinematic = true; 
@@ -101,7 +105,7 @@ public class BasicEnemyScript : MonoBehaviour
     
 
 
-    public void LaunchEnemy(Vector3 direction, float force)
+    public void LaunchEnemy(Vector3 direction, float forwardForce, float upForce)
     {
         if(canBeLaunched)
         {
@@ -109,8 +113,14 @@ public class BasicEnemyScript : MonoBehaviour
             isLaunched = true; 
             isStunned = true; 
 
-            transform.position = playerController.transform.position + playerController.transform.forward + transform.up; 
-            EnableRagdoll(direction, force); 
+           // transform.position = playerController.transform.position + playerController.transform.forward + transform.up; 
+            EnableRagdoll(); 
+
+            foreach(Rigidbody rb in ragdollRbs)
+            { 
+                rb.AddForce(direction * forwardForce, ForceMode.VelocityChange);
+                rb.AddForce(Vector3.up * upForce, ForceMode.VelocityChange);  
+            }
       
             enemyState = (int)currentState.STUNNED; 
         }
@@ -120,9 +130,18 @@ public class BasicEnemyScript : MonoBehaviour
         
         currentHealth -= damgeAmount;
 
-        if(currentHealth < 0)
+        if(currentHealth > 0)
         {
-            EnemyDies(); 
+            enemyAnim.SetTrigger("DamageTrigger"); 
+        }
+
+        //Kill the enemy
+        else
+        {
+            
+            isDead = true; 
+            EnableRagdoll(); 
+            enemyState = (int)currentState.DEAD; 
         }
        
     }
@@ -183,16 +202,19 @@ public class BasicEnemyScript : MonoBehaviour
         if(hasHitObject && currentVelocity > minStunnedImpactVelocity && canAddImpactDamage)
         {
             canAddImpactDamage = false; 
-            TakeDamage(2f); 
+            TakeDamage(50f); 
             Debug.Log("Add like some damage"); 
         }
+        
     }
 
   
 
     public void EnemyDies()
     {
-        Debug.Log("EnemyIsDeadNow!!"); 
+        canBeTargeted = false; 
+         transform.tag = "Dead"; 
+        //transform.GetComponent<BasicEnemyScript>().enabled = false; 
     }
        
     
@@ -205,28 +227,37 @@ public class BasicEnemyScript : MonoBehaviour
         Debug.Log("Back on your feet soldier!"); 
     }
 
-    public void EnableRagdoll(Vector3 direction, float force){
+    public void EnableRagdoll(){
 
         mainCollider.isTrigger = true; 
         enemyAnim.enabled = false;
 
         foreach(Rigidbody rb in ragdollRbs)
         {        
-            rb.detectCollisions = true;  
+            //rb.detectCollisions = true;  
+            rb.GetComponent<Collider>().isTrigger = false;    
             rb.useGravity = true; 
-            rb.isKinematic = false;                 
+            rb.isKinematic = false; 
+            //CharacterJoint joint = rb.GetComponent<CharacterJoint>();
+           // Destroy(joint);                
         }
 
         enemyRb.useGravity = false; 
         enemyRb.isKinematic = false; 
 
+        /*
         foreach(Rigidbody rb in ragdollRbs)
         { 
             rb.AddForce(direction * Random.Range(force - 5, force + 5), ForceMode.VelocityChange);
             rb.AddForce(transform.up * 5f, ForceMode.VelocityChange);  
         }
+        */
       
         isRagdolling = true; 
+    }
+
+    public void CutOffLimbs(){
+
     }
 
     public void DisableRagdoll()
@@ -236,7 +267,8 @@ public class BasicEnemyScript : MonoBehaviour
         {
             rb.useGravity = false; 
             rb.isKinematic = true;   
-            rb.detectCollisions = false;           
+          //  rb.detectCollisions = false;        
+            rb.GetComponent<Collider>().isTrigger = true;    
         }
 
         mainCollider.isTrigger = false;  
