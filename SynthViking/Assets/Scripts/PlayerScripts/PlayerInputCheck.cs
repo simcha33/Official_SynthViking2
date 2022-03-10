@@ -23,7 +23,8 @@ public class PlayerInputCheck : MonoBehaviour
     [HideInInspector] public bool ultimateButtonPressed;
     [HideInInspector] public bool jumpButtonPressed;
     [HideInInspector] public bool airSmashButtonPressed; 
-    [HideInInspector] public bool restartSceneButtonPressed; 
+    [HideInInspector] public bool restartSceneButtonPressed;
+    [HideInInspector] public bool slowMoButtonPressed; 
 
 
     [HideInInspector] public Vector3 moveInput;
@@ -58,6 +59,11 @@ public class PlayerInputCheck : MonoBehaviour
     private void OnSprint(InputValue value)
     {
         sprintButtonPressed = value.isPressed;
+    }
+
+    private void OnSlowMo(InputValue value)
+    {
+        slowMoButtonPressed = value.isPressed;
     }
 
     private void OnMeleeAttack(InputValue value)

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening; 
 
 public class DashPathChecker : MonoBehaviour
 {
@@ -32,8 +33,7 @@ public class DashPathChecker : MonoBehaviour
                 playerController.playerRb.velocity = new Vector3(0, 0, 0);
                 playerController.dashAttackTarget = other.gameObject;
                 playerController.transform.position -= Vector3.up * .5f;
-                playerController.transform.LookAt(other.transform.position);
-      
+                playerController.transform.LookAt(other.transform.position);    
                 playerController.DashAttackFeedback?.PlayFeedbacks();
             }
         }

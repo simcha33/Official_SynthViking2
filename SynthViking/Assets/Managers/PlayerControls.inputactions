@@ -38,6 +38,14 @@
                     "interactions": ""
                 },
                 {
+                    "name": "SlowMo",
+                    "type": "Value",
+                    "id": "f1360145-004f-49c9-89c9-f528194b951c",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "Look",
                     "type": "PassThrough",
                     "id": "37bf77a6-9641-40b0-a15b-4849bf79fc59",
@@ -312,6 +320,28 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "AirSmash",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d3f8b999-d23a-46dc-af67-88361e1e8fe7",
+                    "path": "<Gamepad>/rightStickPress",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "SlowMo",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "cb6d9f80-1619-4490-ad19-5771feb45e75",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "SlowMo",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

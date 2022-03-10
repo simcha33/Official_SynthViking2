@@ -51,6 +51,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""SlowMo"",
+                    ""type"": ""Value"",
+                    ""id"": ""f1360145-004f-49c9-89c9-f528194b951c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""Look"",
                     ""type"": ""PassThrough"",
                     ""id"": ""37bf77a6-9641-40b0-a15b-4849bf79fc59"",
@@ -327,6 +335,28 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""AirSmash"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d3f8b999-d23a-46dc-af67-88361e1e8fe7"",
+                    ""path"": ""<Gamepad>/rightStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""SlowMo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cb6d9f80-1619-4490-ad19-5771feb45e75"",
+                    ""path"": ""<Mouse>/middleButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""SlowMo"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -421,6 +451,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Gameplay_MeleeAttack = m_Gameplay.FindAction("MeleeAttack", throwIfNotFound: true);
         m_Gameplay_Jump = m_Gameplay.FindAction("Jump", throwIfNotFound: true);
         m_Gameplay_Sprint = m_Gameplay.FindAction("Sprint", throwIfNotFound: true);
+        m_Gameplay_SlowMo = m_Gameplay.FindAction("SlowMo", throwIfNotFound: true);
         m_Gameplay_Look = m_Gameplay.FindAction("Look", throwIfNotFound: true);
         m_Gameplay_Parry = m_Gameplay.FindAction("Parry", throwIfNotFound: true);
         m_Gameplay_Aim = m_Gameplay.FindAction("Aim", throwIfNotFound: true);
@@ -486,6 +517,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_MeleeAttack;
     private readonly InputAction m_Gameplay_Jump;
     private readonly InputAction m_Gameplay_Sprint;
+    private readonly InputAction m_Gameplay_SlowMo;
     private readonly InputAction m_Gameplay_Look;
     private readonly InputAction m_Gameplay_Parry;
     private readonly InputAction m_Gameplay_Aim;
@@ -501,6 +533,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @MeleeAttack => m_Wrapper.m_Gameplay_MeleeAttack;
         public InputAction @Jump => m_Wrapper.m_Gameplay_Jump;
         public InputAction @Sprint => m_Wrapper.m_Gameplay_Sprint;
+        public InputAction @SlowMo => m_Wrapper.m_Gameplay_SlowMo;
         public InputAction @Look => m_Wrapper.m_Gameplay_Look;
         public InputAction @Parry => m_Wrapper.m_Gameplay_Parry;
         public InputAction @Aim => m_Wrapper.m_Gameplay_Aim;
@@ -529,6 +562,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Sprint.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSprint;
                 @Sprint.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSprint;
                 @Sprint.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSprint;
+                @SlowMo.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSlowMo;
+                @SlowMo.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSlowMo;
+                @SlowMo.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSlowMo;
                 @Look.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLook;
                 @Look.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLook;
                 @Look.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLook;
@@ -566,6 +602,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Sprint.started += instance.OnSprint;
                 @Sprint.performed += instance.OnSprint;
                 @Sprint.canceled += instance.OnSprint;
+                @SlowMo.started += instance.OnSlowMo;
+                @SlowMo.performed += instance.OnSlowMo;
+                @SlowMo.canceled += instance.OnSlowMo;
                 @Look.started += instance.OnLook;
                 @Look.performed += instance.OnLook;
                 @Look.canceled += instance.OnLook;
@@ -664,6 +703,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnMeleeAttack(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
+        void OnSlowMo(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnParry(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);

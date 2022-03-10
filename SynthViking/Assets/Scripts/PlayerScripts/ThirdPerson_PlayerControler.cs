@@ -74,17 +74,17 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public float maxDashDistance;
     private float dashDelayTimer;
     public float dashBuildUpSpeed;
-    public float currentDashDistance;
+    private float currentDashDistance;
 
 
     private float dashCooldownTimer;
     public float dashCooldownDuration;
-    public bool solidDashObjectReached;
-    public bool enemyDashObjectReached;
+    [HideInInspector] public bool solidDashObjectReached;
+    [HideInInspector] public bool enemyDashObjectReached;
     private bool dashEndMove;
     private Vector3 dashDirection;
-    public Vector3 dashOffset = Vector3.up * -1f;
-    public Vector3 originalIndicatorSize;
+    private Vector3 dashOffset = Vector3.up * -1f;
+    private Vector3 originalIndicatorSize;
     public Transform dashChecker;
     public Image dashChargeIndicator;
     public Image dashChargeBackground;
@@ -175,6 +175,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public PlayerInputCheck input;
     public PlayerState playerState;
     public AttackTargetScript attackTargetScript;
+    public CameraHandeler camHandeler;
+    public SlowMoScript slowScript; 
     #endregion
 
     [Header("Components")] //COMPONENTS
@@ -198,6 +200,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public MMFeedbacks DashAttackFeedback;
     public MMFeedbacks DashEndFeeback;
     public MMFeedbacks LightAttackFeedback;
+    public MMFeedbacks aimingFeedback;
+    public MMFeedbacks slowmoFeedback; 
     #endregion
 
     [Header("Switch Case")] //SWITCH CASE
@@ -298,6 +302,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         fixedControllerState = (int)currentState.MOVING;
         controllerState = (int)currentState.MOVING;
 
+        //mmSlowmoTime = aimingFeedback.GetComponent<MMFeedbackTimescaleModifier>(); 
+
         //Set default states
         ResetStates();
 
@@ -355,6 +361,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
             case (int)currentState.AIRSMASHING:
                 CheckForDash();
+                CheckForMoveInput(); 
                 CheckForAirSmash();
                 break;
         }
@@ -381,6 +388,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 // MovePlayer();
                 break;
             case (int)currentState.AIRSMASHING:
+                MovePlayer(); 
                 break; 
 
         }
@@ -621,8 +629,10 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //Build up the dashduration on button hold
         if (input.dashButtonPressed && canDash)
         {
+            slowScript.DoSlowmo(); 
+
             isChargingDash = true;
-            if (currentDashDistance < maxDashDistance) currentDashDistance += dashBuildUpSpeed * Time.deltaTime;
+            if (currentDashDistance < maxDashDistance) currentDashDistance += dashBuildUpSpeed * Time.unscaledDeltaTime;
             else
             {
                 //Full charged dash UI effects
@@ -675,7 +685,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //The player is dashing 
         if (isDashing && !solidDashObjectReached && !enemyDashObjectReached && !canEndDash) //Maintain dash
         {
-            if (currentDashDistance <= 1f)
+            if (currentDashDistance <= 1.2f)
             {
                 canEndDash = true; //End Dash
                 return;
@@ -739,11 +749,12 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         BasicEnemyScript script = dashAttackTarget.transform.GetComponentInParent<BasicEnemyScript>();
         script.LaunchEnemy(aimPoint.forward, Random.Range( dashAttackForce -5, dashAttackForce + 5), 5f);
         script.transform.position = transform.position + transform.forward + script.transform.up; 
-        playerRb.AddForce(transform.up * 3, ForceMode.VelocityChange);
+        playerRb.AddForce(transform.up * 5, ForceMode.VelocityChange);
     }
 
     public void ResetDash()
     {
+        playerRb.velocity = new Vector3(0, 0, 0); 
         DashEndFeeback?.PlayFeedbacks();
         transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
         solidDashObjectReached = false;
@@ -784,6 +795,16 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     }
     */
+
+    void HandleSlowmo()
+    {
+     //   aimSlowmoTimer -= Time.unscaledDeltaTime; 
+     //   if(aimSlowmoTimer > 0) slowmoFeedback?.PlayFeedbacks();
+     //   else
+
+
+    }
+
 
 
 
