@@ -1,6 +1,6 @@
 Using pre-set license
 Built from '2020.3/staging' branch; Version is '2020.3.18f1 (a7d1c678663c) revision 10998214'; Using compiler version '192528614'; Build Type 'Release'
-OS: 'Windows 10 Pro; OS build 19042.1526; Version 2009; 64bit' Language: 'en' Physical Memory: 16333 MB
+OS: 'Windows 10 Enterprise; OS build 19042.508; Version 2009; 64bit' Language: 'en' Physical Memory: 65438 MB
 BatchMode: 1, IsHumanControllingUs: 0, StartBugReporterOnCrash: 0, Is64bit: 1, IsPro: 0
 
 COMMAND LINE ARGUMENTS:
@@ -11,102 +11,99 @@ C:\Program Files\Unity\Hub\Editor\2020.3.18f1\Editor\Unity.exe
 -name
 AssetImportWorker1
 -projectPath
-D:/UnityLibary/Repos/Official_SynthViking2/SynthViking
+C:/Users/Student/Desktop/Official_SynthViking2/SynthViking
 -logFile
 Logs/AssetImportWorker1.log
 -srvPort
-49405
-Successfully changed project path to: D:/UnityLibary/Repos/Official_SynthViking2/SynthViking
-D:/UnityLibary/Repos/Official_SynthViking2/SynthViking
+60427
+Successfully changed project path to: C:/Users/Student/Desktop/Official_SynthViking2/SynthViking
+C:/Users/Student/Desktop/Official_SynthViking2/SynthViking
 Using Asset Import Pipeline V2.
-Refreshing native plugins compatible for Editor in 104.94 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 86.14 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 2020.3.18f1 (a7d1c678663c)
 [Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2020.3.18f1/Editor/Data/Resources/UnitySubsystems
-[Subsystems] Discovering subsystems at path D:/UnityLibary/Repos/Official_SynthViking2/SynthViking/Assets
+[Subsystems] Discovering subsystems at path C:/Users/Student/Desktop/Official_SynthViking2/SynthViking/Assets
 GfxDevice: creating device client; threaded=0
 Direct3D:
     Version:  Direct3D 11.0 [level 11.1]
-    Renderer: NVIDIA GeForce RTX 2060 SUPER (ID=0x1f06)
+    Renderer: NVIDIA GeForce RTX 3080 (ID=0x2206)
     Vendor:   
-    VRAM:     8031 MB
-    Driver:   30.0.15.1165
+    VRAM:     10078 MB
+    Driver:   27.21.14.5671
 Shader 'MoreMountains/MMRipple': fallback shader 'Particle/AlphaBlended' not found
 Initialize mono
 Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/2020.3.18f1/Editor/Data/Managed'
 Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/2020.3.18f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit'
 Mono config path = 'C:/Program Files/Unity/Hub/Editor/2020.3.18f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56436
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56084
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
-Register platform support module: C:/Program Files/Unity/Hub/Editor/2020.3.18f1/Editor/Data/PlaybackEngines/MacStandaloneSupport/UnityEditor.OSXStandalone.Extensions.dll
 Register platform support module: C:/Program Files/Unity/Hub/Editor/2020.3.18f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.003140 seconds.
+Registered in 0.001513 seconds.
 Native extension for WindowsStandalone target not found
-Native extension for OSXStandalone target not found
-Refreshing native plugins compatible for Editor in 101.17 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 81.90 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Mono: successfully reloaded assembly
-- Completed reload, in  2.528 seconds
+- Completed reload, in  1.033 seconds
 Domain Reload Profiling:
-	ReloadAssembly (2528ms)
-		BeginReloadAssembly (53ms)
+	ReloadAssembly (1034ms)
+		BeginReloadAssembly (40ms)
 			ExecutionOrderSort (0ms)
 			DisableScriptedObjects (0ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
 			CreateAndSetChildDomain (1ms)
-		EndReloadAssembly (454ms)
-			LoadAssemblies (50ms)
+		EndReloadAssembly (456ms)
+			LoadAssemblies (38ms)
 			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (135ms)
+			SetupTypeCache (193ms)
 			ReleaseScriptCaches (0ms)
 			RebuildScriptCaches (25ms)
-			SetupLoadedEditorAssemblies (223ms)
+			SetupLoadedEditorAssemblies (183ms)
 				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (4ms)
+				InitializePlatformSupportModulesInManaged (3ms)
 				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (101ms)
-				BeforeProcessingInitializeOnLoad (15ms)
-				ProcessInitializeOnLoadAttributes (67ms)
-				ProcessInitializeOnLoadMethodAttributes (35ms)
+				RefreshPlugins (82ms)
+				BeforeProcessingInitializeOnLoad (11ms)
+				ProcessInitializeOnLoadAttributes (62ms)
+				ProcessInitializeOnLoadMethodAttributes (25ms)
 				AfterProcessingInitializeOnLoad (0ms)
 				EditorAssembliesLoaded (0ms)
 			ExecutionOrderSort2 (0ms)
 			AwakeInstancesAfterBackupRestoration (0ms)
 Platform modules already initialized, skipping
 Registering precompiled user dll's ...
-Registered in 0.008405 seconds.
+Registered in 0.004725 seconds.
 Begin MonoManager ReloadAssembly
 Native extension for WindowsStandalone target not found
-Native extension for OSXStandalone target not found
-Refreshing native plugins compatible for Editor in 107.78 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 86.58 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Mono: successfully reloaded assembly
-- Completed reload, in  1.308 seconds
+- Completed reload, in  1.075 seconds
 Domain Reload Profiling:
-	ReloadAssembly (1309ms)
-		BeginReloadAssembly (155ms)
+	ReloadAssembly (1076ms)
+		BeginReloadAssembly (111ms)
 			ExecutionOrderSort (0ms)
 			DisableScriptedObjects (4ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (27ms)
-		EndReloadAssembly (1096ms)
-			LoadAssemblies (99ms)
+			CreateAndSetChildDomain (14ms)
+		EndReloadAssembly (917ms)
+			LoadAssemblies (74ms)
 			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (311ms)
+			SetupTypeCache (265ms)
 			ReleaseScriptCaches (1ms)
-			RebuildScriptCaches (64ms)
-			SetupLoadedEditorAssemblies (510ms)
+			RebuildScriptCaches (57ms)
+			SetupLoadedEditorAssemblies (426ms)
 				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (4ms)
+				InitializePlatformSupportModulesInManaged (3ms)
 				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (108ms)
-				BeforeProcessingInitializeOnLoad (91ms)
-				ProcessInitializeOnLoadAttributes (293ms)
+				RefreshPlugins (87ms)
+				BeforeProcessingInitializeOnLoad (80ms)
+				ProcessInitializeOnLoadAttributes (246ms)
 				ProcessInitializeOnLoadMethodAttributes (6ms)
-				AfterProcessingInitializeOnLoad (7ms)
+				AfterProcessingInitializeOnLoad (4ms)
 				EditorAssembliesLoaded (0ms)
 			ExecutionOrderSort2 (0ms)
 			AwakeInstancesAfterBackupRestoration (5ms)
@@ -115,14 +112,14 @@ Platform modules already initialized, skipping
 Worker process is ready to serve import requests
 Shader 'MoreMountains/MMRipple': fallback shader 'Particle/AlphaBlended' not found
 Launched and connected shader compiler UnityShaderCompiler.exe after 0.08 seconds
-Refreshing native plugins compatible for Editor in 1.12 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 1.08 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 3937 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 244.2 MB.
-System memory in use after: 244.4 MB.
+Unloading 3948 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 244.7 MB.
+System memory in use after: 244.9 MB.
 
-Unloading 38 unused Assets to reduce memory usage. Loaded Objects now: 4367.
-Total: 3.684100 ms (FindLiveObjects: 0.335200 ms CreateObjectMapping: 0.093600 ms MarkObjects: 3.168700 ms  DeleteObjects: 0.085600 ms)
+Unloading 38 unused Assets to reduce memory usage. Loaded Objects now: 4378.
+Total: 3.524300 ms (FindLiveObjects: 0.361400 ms CreateObjectMapping: 0.159500 ms MarkObjects: 2.875500 ms  DeleteObjects: 0.127200 ms)
 
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
@@ -136,116 +133,89 @@ AssetImportParameters requested are different than current active one (requested
   custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
 ========================================================================
 Received Import Request.
-  path: Assets/Managers/PlayerControls.inputactions
-  artifactKey: Guid(f9050c9fba66f7e418455c79e6167514) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Managers/PlayerControls.inputactions using Guid(f9050c9fba66f7e418455c79e6167514) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7ff1a8313d6bea43e7900de8a1d2a431') in 0.076457 seconds 
-  Import took 0.102961 seconds .
+  path: Assets/KriptoFX
+  artifactKey: Guid(18a417cb8ba93554496a29c92a5b4d15) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX using Guid(18a417cb8ba93554496a29c92a5b4d15) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'dd00200aa5119d9316345b297b7245be') in 0.009649 seconds 
+  Import took 0.014875 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000300 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX
+  artifactKey: Guid(a81a92ecd18c9bf4d9b42f2ca2be595e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX using Guid(a81a92ecd18c9bf4d9b42f2ca2be595e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cf859d9ff0ca8b1f3366732917012370') in 0.007049 seconds 
+  Import took 0.012841 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000194 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/PostProcess Profile.asset
+  artifactKey: Guid(59d5328e27fb25c47a4dbeab6be42ffb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/PostProcess Profile.asset using Guid(59d5328e27fb25c47a4dbeab6be42ffb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9012fb93d44ac43a78ebeb614447f2cd') in 0.021787 seconds 
+  Import took 0.026142 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000179 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/URP and HDRP Patches
+  artifactKey: Guid(5503991f3a81a9640acad857f03781cc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/URP and HDRP Patches using Guid(5503991f3a81a9640acad857f03781cc) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1973cfaeecfa2e104ad92e9026918cc8') in 0.005173 seconds 
+  Import took 0.009440 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.337354 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/URP and HDRP Patches/URP.unitypackage
+  artifactKey: Guid(f9c4994d3756fef4c97c1687cccfb63a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/URP and HDRP Patches/URP.unitypackage using Guid(f9c4994d3756fef4c97c1687cccfb63a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a69a329b881a68a5b73d39144ff4ec94') in 0.027901 seconds 
+  Import took 0.033109 seconds .
 
 ========================================================================
 Received Prepare
 Registering precompiled user dll's ...
-Registered in 0.008884 seconds.
+Registered in 0.004707 seconds.
 Begin MonoManager ReloadAssembly
 Native extension for WindowsStandalone target not found
-Native extension for OSXStandalone target not found
-Refreshing native plugins compatible for Editor in 1.14 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 1.25 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Mono: successfully reloaded assembly
-- Completed reload, in  1.027 seconds
+- Completed reload, in  0.874 seconds
 Domain Reload Profiling:
-	ReloadAssembly (1028ms)
-		BeginReloadAssembly (110ms)
+	ReloadAssembly (874ms)
+		BeginReloadAssembly (99ms)
 			ExecutionOrderSort (0ms)
-			DisableScriptedObjects (4ms)
+			DisableScriptedObjects (3ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (31ms)
-		EndReloadAssembly (857ms)
-			LoadAssemblies (97ms)
+			CreateAndSetChildDomain (30ms)
+		EndReloadAssembly (728ms)
+			LoadAssemblies (75ms)
 			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (301ms)
+			SetupTypeCache (261ms)
 			ReleaseScriptCaches (1ms)
-			RebuildScriptCaches (43ms)
-			SetupLoadedEditorAssemblies (315ms)
+			RebuildScriptCaches (37ms)
+			SetupLoadedEditorAssemblies (265ms)
 				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (4ms)
+				InitializePlatformSupportModulesInManaged (3ms)
 				SetLoadedEditorAssemblies (0ms)
 				RefreshPlugins (1ms)
-				BeforeProcessingInitializeOnLoad (83ms)
-				ProcessInitializeOnLoadAttributes (212ms)
+				BeforeProcessingInitializeOnLoad (78ms)
+				ProcessInitializeOnLoadAttributes (173ms)
 				ProcessInitializeOnLoadMethodAttributes (5ms)
-				AfterProcessingInitializeOnLoad (8ms)
+				AfterProcessingInitializeOnLoad (5ms)
 				EditorAssembliesLoaded (0ms)
 			ExecutionOrderSort2 (0ms)
-			AwakeInstancesAfterBackupRestoration (8ms)
+			AwakeInstancesAfterBackupRestoration (7ms)
 Platform modules already initialized, skipping
 Shader 'MoreMountains/MMRipple': fallback shader 'Particle/AlphaBlended' not found
-Refreshing native plugins compatible for Editor in 1.28 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 1.02 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 3798 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 234.2 MB.
-System memory in use after: 234.5 MB.
+Unloading 3807 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 238.0 MB.
+System memory in use after: 238.3 MB.
 
-Unloading 31 unused Assets to reduce memory usage. Loaded Objects now: 4369.
-Total: 3.458300 ms (FindLiveObjects: 0.343300 ms CreateObjectMapping: 0.092200 ms MarkObjects: 3.000100 ms  DeleteObjects: 0.021700 ms)
-
-AssetImportParameters requested are different than current active one (requested -> active):
-  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
-  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
-  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
-  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
-  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
-  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
-  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
-  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-========================================================================
-Received Prepare
-Registering precompiled user dll's ...
-Registered in 0.007859 seconds.
-Begin MonoManager ReloadAssembly
-Native extension for WindowsStandalone target not found
-Native extension for OSXStandalone target not found
-Refreshing native plugins compatible for Editor in 1.14 ms, found 3 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Mono: successfully reloaded assembly
-- Completed reload, in  1.018 seconds
-Domain Reload Profiling:
-	ReloadAssembly (1019ms)
-		BeginReloadAssembly (112ms)
-			ExecutionOrderSort (0ms)
-			DisableScriptedObjects (4ms)
-			BackupInstance (0ms)
-			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (32ms)
-		EndReloadAssembly (846ms)
-			LoadAssemblies (97ms)
-			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (293ms)
-			ReleaseScriptCaches (1ms)
-			RebuildScriptCaches (43ms)
-			SetupLoadedEditorAssemblies (313ms)
-				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (4ms)
-				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (1ms)
-				BeforeProcessingInitializeOnLoad (84ms)
-				ProcessInitializeOnLoadAttributes (209ms)
-				ProcessInitializeOnLoadMethodAttributes (7ms)
-				AfterProcessingInitializeOnLoad (7ms)
-				EditorAssembliesLoaded (0ms)
-			ExecutionOrderSort2 (0ms)
-			AwakeInstancesAfterBackupRestoration (8ms)
-Platform modules already initialized, skipping
-Shader 'MoreMountains/MMRipple': fallback shader 'Particle/AlphaBlended' not found
-Refreshing native plugins compatible for Editor in 1.18 ms, found 3 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 3798 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 234.3 MB.
-System memory in use after: 234.5 MB.
-
-Unloading 31 unused Assets to reduce memory usage. Loaded Objects now: 4371.
-Total: 3.546100 ms (FindLiveObjects: 0.329000 ms CreateObjectMapping: 0.095800 ms MarkObjects: 3.100400 ms  DeleteObjects: 0.019700 ms)
+Unloading 31 unused Assets to reduce memory usage. Loaded Objects now: 4382.
+Total: 3.173700 ms (FindLiveObjects: 0.356900 ms CreateObjectMapping: 0.172600 ms MarkObjects: 2.594100 ms  DeleteObjects: 0.049500 ms)
 
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
@@ -259,59 +229,458 @@ AssetImportParameters requested are different than current active one (requested
   custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
 ========================================================================
 Received Import Request.
-  Time since last request: 174.669758 seconds.
-  path: Assets/Managers/PlayerControls.inputactions
-  artifactKey: Guid(f9050c9fba66f7e418455c79e6167514) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Managers/PlayerControls.inputactions using Guid(f9050c9fba66f7e418455c79e6167514) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '28fac4ec239b1b871906e9a197854d83') in 0.055440 seconds 
-  Import took 0.082679 seconds .
+  Time since last request: 19.020212 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs
+  artifactKey: Guid(2312e9f2265cd8645b4c7ba6ecb8ba75) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs using Guid(2312e9f2265cd8645b4c7ba6ecb8ba75) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd44543433bc7e334f7172b42b80e7c3b') in 0.008958 seconds 
+  Import took 0.014326 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.026453 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/AttachedBloodDecal.prefab
+  artifactKey: Guid(45eef0a861a8a8946b4c23fb9f4f779a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/AttachedBloodDecal.prefab using Guid(45eef0a861a8a8946b4c23fb9f4f779a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c58403f42df851713533426422d1125f') in 0.150520 seconds 
+  Import took 0.155656 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000159 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood6.prefab
+  artifactKey: Guid(70ead61ff20b23b4e97b90d8e8997ecd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood6.prefab using Guid(70ead61ff20b23b4e97b90d8e8997ecd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c70df7a80bd66ff9e093190622fdf7fa') in 0.085695 seconds 
+  Import took 0.091162 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000123 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood4.prefab
+  artifactKey: Guid(bb596cd440832554089a7125852e836f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood4.prefab using Guid(bb596cd440832554089a7125852e836f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '408a85f1c25fee5b08cc94f0fbee4c7e') in 0.021931 seconds 
+  Import took 0.027265 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000144 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood9.prefab
+  artifactKey: Guid(52d94bfe44b09ff4b9e9788e9a86a778) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood9.prefab using Guid(52d94bfe44b09ff4b9e9788e9a86a778) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c51100c108495d9b06d6675647f1e24e') in 0.041756 seconds 
+  Import took 0.047357 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000195 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood15.prefab
+  artifactKey: Guid(f9e099178c81bee439a79eecec91dacb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood15.prefab using Guid(f9e099178c81bee439a79eecec91dacb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1c7466e30058d02e0e10446e6236ff77') in 0.053393 seconds 
+  Import took 0.059730 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000135 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood14.prefab
+  artifactKey: Guid(db51fe09adf27d640b4e10018c2d76ba) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood14.prefab using Guid(db51fe09adf27d640b4e10018c2d76ba) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7b3eda4092bf1a792b5c8904807ca41e') in 0.045296 seconds 
+  Import took 0.051921 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000168 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood2.prefab
+  artifactKey: Guid(42a28376f729c864a81abf66add7a418) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood2.prefab using Guid(42a28376f729c864a81abf66add7a418) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0c7e035b4ed13e041b2c838ba088391d') in 0.020655 seconds 
+  Import took 0.026218 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000142 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood2_Right.prefab
+  artifactKey: Guid(e822d59151d3597428b0b63bf25355e7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood2_Right.prefab using Guid(e822d59151d3597428b0b63bf25355e7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '305779c6f22b2e54a4b01bfb6835a94b') in 0.020524 seconds 
+  Import took 0.025437 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000153 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood7.prefab
+  artifactKey: Guid(7b88f11816abaa34c9e02cbaa8485321) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood7.prefab using Guid(7b88f11816abaa34c9e02cbaa8485321) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f12b57e9b772ac3beface0fad497bbf4') in 0.044991 seconds 
+  Import took 0.051216 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000137 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood3.prefab
+  artifactKey: Guid(c3f8938673a07704e93ac52eee18f410) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood3.prefab using Guid(c3f8938673a07704e93ac52eee18f410) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5a02806d33cc6d8ab17f7817a5b3878f') in 0.017329 seconds 
+  Import took 0.022490 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000130 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood5.prefab
+  artifactKey: Guid(6d3629f845b40e24fb51d381e84bbc77) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood5.prefab using Guid(6d3629f845b40e24fb51d381e84bbc77) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4e3bbd9798a2690fc0898b18f140a4da') in 0.015907 seconds 
+  Import took 0.020476 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000128 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood10.prefab
+  artifactKey: Guid(730678b8a5330c449ada55bde83402ce) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood10.prefab using Guid(730678b8a5330c449ada55bde83402ce) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a31f19a2619d37ba50ef78a097ed9d89') in 0.030488 seconds 
+  Import took 0.036625 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000193 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood8.prefab
+  artifactKey: Guid(5776aed3bb070e54cb09a11c8a6a5831) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood8.prefab using Guid(5776aed3bb070e54cb09a11c8a6a5831) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '768e638f648704c569dd5822e8b93301') in 0.031993 seconds 
+  Import took 0.037832 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000138 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood2_Left.prefab
+  artifactKey: Guid(4a322f29a9e1fa54f90223de8bcf3a28) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood2_Left.prefab using Guid(4a322f29a9e1fa54f90223de8bcf3a28) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'bde149a90795e2e80f6e4b0eb30b7359') in 0.018849 seconds 
+  Import took 0.023997 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000143 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood12.prefab
+  artifactKey: Guid(097a30048e9007141899f834041a5ac7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood12.prefab using Guid(097a30048e9007141899f834041a5ac7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '664cd0e4c5622cd8a6517f4d98316819') in 0.048503 seconds 
+  Import took 0.055991 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000164 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood1.prefab
+  artifactKey: Guid(a78e9ef18b366424b84e0c7410d2fe72) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood1.prefab using Guid(a78e9ef18b366424b84e0c7410d2fe72) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd3a25b37e16c806b2d76f34b29a303fa') in 0.018843 seconds 
+  Import took 0.023890 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000152 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood11.prefab
+  artifactKey: Guid(c3ed06559a66b724b91c3124e75ddec9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood11.prefab using Guid(c3ed06559a66b724b91c3124e75ddec9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '25d04f3c3d270b0e62d51d500d27d561') in 0.039679 seconds 
+  Import took 0.046533 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000178 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/blood13.prefab
+  artifactKey: Guid(cb58ece77d11ef945aecd072f2e46a8d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/blood13.prefab using Guid(cb58ece77d11ef945aecd072f2e46a8d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '317f14c4c71606a375a338e019edcd15') in 0.042221 seconds 
+  Import took 0.049744 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 5.743270 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene
+  artifactKey: Guid(e31cada73db82d34c8581bd69a0274cb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene using Guid(e31cada73db82d34c8581bd69a0274cb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6da7f079f2df44b3dca097668861c967') in 0.005995 seconds 
+  Import took 0.010972 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.040611 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/Ground 1.mat
+  artifactKey: Guid(d710869fb1d69b34fba1c4955512f3fe) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/Ground 1.mat using Guid(d710869fb1d69b34fba1c4955512f3fe) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f734070d7384976732b1e05a7ba60885') in 0.046502 seconds 
+  Import took 0.051581 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000157 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/Scene_AO.png
+  artifactKey: Guid(efadaa1a6170b5e44821bd9a62d0284f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/Scene_AO.png using Guid(efadaa1a6170b5e44821bd9a62d0284f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'dda32b4c290ce093786eabf1107cd882') in 0.045216 seconds 
+  Import took 0.049784 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000239 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/Ground.mat
+  artifactKey: Guid(a5ed84a14199de747bb4daa55621e68f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/Ground.mat using Guid(a5ed84a14199de747bb4daa55621e68f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '92dc000b2b4ad3d8e5beb94059628345') in 0.020634 seconds 
+  Import took 0.025355 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000197 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/Scene_Normal.png
+  artifactKey: Guid(9a6f0bdf79632c04d85e088decab49eb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/Scene_Normal.png using Guid(9a6f0bdf79632c04d85e088decab49eb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '95bb466129681691f3738813fff493bc') in 0.016168 seconds 
+  Import took 0.021197 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000182 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/Scene.fbx
+  artifactKey: Guid(178427ae6241f9b4cae4eb4539efac57) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/Scene.fbx using Guid(178427ae6241f9b4cae4eb4539efac57) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '26706a0059c8684ac9dcce7787319d4e') in 0.039837 seconds 
+  Import took 0.044423 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000174 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/SceneAlbedo.png
+  artifactKey: Guid(befe4f47718093947ac8d4beb973ff9c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/SceneAlbedo.png using Guid(befe4f47718093947ac8d4beb973ff9c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '11c9227cda653569e5240f3d546f8350') in 0.010861 seconds 
+  Import took 0.016043 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000152 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/VR ui.mat
+  artifactKey: Guid(30c711c7782a65d4d9527922453eb612) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/VR ui.mat using Guid(30c711c7782a65d4d9527922453eb612) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b8349e570cd45424b916b41a871da5aa') in 0.010211 seconds 
+  Import took 0.015008 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.004393 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/VR ui.mat
+  artifactKey: Guid(30c711c7782a65d4d9527922453eb612) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/VR ui.mat using Guid(30c711c7782a65d4d9527922453eb612) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b8349e570cd45424b916b41a871da5aa') in 0.007141 seconds 
+  Import took 0.012408 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 1.199484 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character
+  artifactKey: Guid(8864acf8554d81d4e8116399141f07af) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character using Guid(8864acf8554d81d4e8116399141f07af) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '554732ad079a312a8001c792987f7dcf') in 0.007146 seconds 
+  Import took 0.012564 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.027298 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Chal_Rig2.fbx
+  artifactKey: Guid(a8202eb7029354843b311df81ca75268) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Chal_Rig2.fbx using Guid(a8202eb7029354843b311df81ca75268) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '45d80610af7cdc8314126ac27f68c78f') in 0.109459 seconds 
+  Import took 0.115515 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 3.361231 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character
+  artifactKey: Guid(9312d7f57f15a06419a2732870e4a6a6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character using Guid(9312d7f57f15a06419a2732870e4a6a6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ba2d23e9f5599f650f56c5aa0122f5e5') in 0.003213 seconds 
+  Import took 0.008376 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.193877 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/Beard.mat
+  artifactKey: Guid(7006a73e1e2c92d4f9b8495b23ed491d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/Beard.mat using Guid(7006a73e1e2c92d4f9b8495b23ed491d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0766f98754bfc70491797351dd64c965') in 0.014936 seconds 
+  Import took 0.020969 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000165 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/challenger_AO_1.png
+  artifactKey: Guid(8ad183415e7db9644bbc2efc3b92882b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/challenger_AO_1.png using Guid(8ad183415e7db9644bbc2efc3b92882b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd1484acf6036ab23f3d2bf2d499d5764') in 0.012957 seconds 
+  Import took 0.018059 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000125 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/challenger_refl_2_1.png
+  artifactKey: Guid(68be97dfcde017b47a4d2c647868d0cf) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/challenger_refl_2_1.png using Guid(68be97dfcde017b47a4d2c647868d0cf) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4182c863e65ad2f9f94619b18a5bb90b') in 0.013096 seconds 
+  Import took 0.018295 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000136 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/challenger_albedo_1.png
+  artifactKey: Guid(027613c9241d7364fa2454faf3ba3f3a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/challenger_albedo_1.png using Guid(027613c9241d7364fa2454faf3ba3f3a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '04d59dd0e6d9229d66a7f2caf55f333d') in 0.012584 seconds 
+  Import took 0.017590 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000155 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/Body.mat
+  artifactKey: Guid(760198cff4124774cb7262f0d374a9a0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/Body.mat using Guid(760198cff4124774cb7262f0d374a9a0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '40fc2ce2899efac0cee7ff039f7f92b9') in 0.233739 seconds 
+  Import took 0.238584 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000238 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/Skin.mat
+  artifactKey: Guid(869ba61e99e58db43ba4237de4951488) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/Skin.mat using Guid(869ba61e99e58db43ba4237de4951488) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '47034ea1396233490b04a7a198bb988d') in 0.204351 seconds 
+  Import took 0.209238 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000163 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/challenger_hair_diff_white.psd
+  artifactKey: Guid(319fb9e715c9477488a2dba7c4ab60b4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/challenger_hair_diff_white.psd using Guid(319fb9e715c9477488a2dba7c4ab60b4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8ffb0f33aa2878fe2a49bbdf29e7e7f1') in 0.015936 seconds 
+  Import took 0.020766 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000179 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/challenger_NM_1.png
+  artifactKey: Guid(6bb91b9d999fd40489afcb155cd94e19) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/challenger_NM_1.png using Guid(6bb91b9d999fd40489afcb155cd94e19) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0a909473c0bd956baa8aa0a0f380b213') in 0.014695 seconds 
+  Import took 0.019629 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000208 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/Dress.mat
+  artifactKey: Guid(294061d345ef7724d87dbe3962e90273) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/Dress.mat using Guid(294061d345ef7724d87dbe3962e90273) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7fddf4cefce9a37f443b52183277ff16') in 0.016074 seconds 
+  Import took 0.021333 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000182 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/eye.mat
+  artifactKey: Guid(8f49802b2a6bacb4c864e8fa50b96a30) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/eye.mat using Guid(8f49802b2a6bacb4c864e8fa50b96a30) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '87253ca763f8a6cc0cd2f2eafc287bbe') in 0.016262 seconds 
+  Import took 0.022294 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000187 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/challenger_beard_albedo_white.psd
+  artifactKey: Guid(d55744b99dd250145b819167aa120264) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/challenger_beard_albedo_white.psd using Guid(d55744b99dd250145b819167aa120264) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6fc08e189525caa3fbef9c02b99e7c75') in 0.012450 seconds 
+  Import took 0.017582 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000141 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/Hair.mat
+  artifactKey: Guid(8c1cb8e0884a03e43ac8fe60d86e14e3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/Hair.mat using Guid(8c1cb8e0884a03e43ac8fe60d86e14e3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5b57340cee6f32fe676a315946c62403') in 0.013783 seconds 
+  Import took 0.018669 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000143 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/challenger_head_albedo2.png
+  artifactKey: Guid(6459fe6dad50b2f4dbee91ff0fcf73bd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/challenger_head_albedo2.png using Guid(6459fe6dad50b2f4dbee91ff0fcf73bd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e15eaea9745d6dd033ae631d85e8a8d6') in 0.017319 seconds 
+  Import took 0.022033 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000124 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/challenger_AO_2_1.png
+  artifactKey: Guid(c349b5694ef808c4285c0f1fd499656d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/challenger_AO_2_1.png using Guid(c349b5694ef808c4285c0f1fd499656d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a6994d702348d760b2ef634b3ad29039') in 0.009939 seconds 
+  Import took 0.014792 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000123 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/challenger_NM_2_1.png
+  artifactKey: Guid(d158cba6a2e259f4292236c1f74f9640) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/challenger_NM_2_1.png using Guid(d158cba6a2e259f4292236c1f74f9640) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '08d42b8d94c89d85557da22b13258c03') in 0.011459 seconds 
+  Import took 0.016330 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000126 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/challenger_albedo_2_1.png
+  artifactKey: Guid(6e504e1eb39298449a091375198aa0db) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/challenger_albedo_2_1.png using Guid(6e504e1eb39298449a091375198aa0db) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6f1f60e4e97e58c42c6486b19be96806') in 0.009941 seconds 
+  Import took 0.014834 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000131 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/challenger_head_base_AO.TIF
+  artifactKey: Guid(3d1e09de2f39de845aab1015906cfdba) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/challenger_head_base_AO.TIF using Guid(3d1e09de2f39de845aab1015906cfdba) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6fd69d53f5d618d934d2cd929f639c16') in 0.012576 seconds 
+  Import took 0.017423 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000155 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/challenger_refl_1.png
+  artifactKey: Guid(44acacb96fe5b9a4ab1279574a2afd94) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/challenger_refl_1.png using Guid(44acacb96fe5b9a4ab1279574a2afd94) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '317a0d0473180c7db35aa0de442f5361') in 0.010940 seconds 
+  Import took 0.015608 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.003325 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/challenger_refl_1.png
+  artifactKey: Guid(44acacb96fe5b9a4ab1279574a2afd94) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/challenger_refl_1.png using Guid(44acacb96fe5b9a4ab1279574a2afd94) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '317a0d0473180c7db35aa0de442f5361') in 0.011872 seconds 
+  Import took 0.016895 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 11.316503 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Demo.unity
+  artifactKey: Guid(d9c1b96e5fe3afe4b85bb47679e1f8c9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Demo.unity using Guid(d9c1b96e5fe3afe4b85bb47679e1f8c9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3552269acac2020d182c4ee952509c06') in 0.006751 seconds 
+  Import took 0.012101 seconds .
 
 ========================================================================
 Received Prepare
 Registering precompiled user dll's ...
-Registered in 0.008945 seconds.
+Registered in 0.004794 seconds.
 Begin MonoManager ReloadAssembly
 Native extension for WindowsStandalone target not found
-Native extension for OSXStandalone target not found
-Refreshing native plugins compatible for Editor in 1.20 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 1.02 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Mono: successfully reloaded assembly
-- Completed reload, in  1.051 seconds
+- Completed reload, in  0.933 seconds
 Domain Reload Profiling:
-	ReloadAssembly (1051ms)
-		BeginReloadAssembly (109ms)
+	ReloadAssembly (934ms)
+		BeginReloadAssembly (113ms)
 			ExecutionOrderSort (0ms)
 			DisableScriptedObjects (5ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (35ms)
-		EndReloadAssembly (883ms)
-			LoadAssemblies (105ms)
+			CreateAndSetChildDomain (33ms)
+		EndReloadAssembly (773ms)
+			LoadAssemblies (73ms)
 			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (310ms)
+			SetupTypeCache (257ms)
 			ReleaseScriptCaches (1ms)
-			RebuildScriptCaches (44ms)
-			SetupLoadedEditorAssemblies (322ms)
+			RebuildScriptCaches (36ms)
+			SetupLoadedEditorAssemblies (291ms)
 				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (4ms)
+				InitializePlatformSupportModulesInManaged (3ms)
 				SetLoadedEditorAssemblies (0ms)
 				RefreshPlugins (1ms)
-				BeforeProcessingInitializeOnLoad (88ms)
-				ProcessInitializeOnLoadAttributes (215ms)
-				ProcessInitializeOnLoadMethodAttributes (6ms)
-				AfterProcessingInitializeOnLoad (8ms)
+				BeforeProcessingInitializeOnLoad (79ms)
+				ProcessInitializeOnLoadAttributes (198ms)
+				ProcessInitializeOnLoadMethodAttributes (5ms)
+				AfterProcessingInitializeOnLoad (4ms)
 				EditorAssembliesLoaded (0ms)
 			ExecutionOrderSort2 (0ms)
-			AwakeInstancesAfterBackupRestoration (8ms)
+			AwakeInstancesAfterBackupRestoration (13ms)
 Platform modules already initialized, skipping
 Shader 'MoreMountains/MMRipple': fallback shader 'Particle/AlphaBlended' not found
-Refreshing native plugins compatible for Editor in 1.21 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 1.17 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 3798 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 234.3 MB.
-System memory in use after: 234.6 MB.
+Unloading 3807 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 255.2 MB.
+System memory in use after: 255.4 MB.
 
-Unloading 31 unused Assets to reduce memory usage. Loaded Objects now: 4373.
-Total: 4.104200 ms (FindLiveObjects: 0.472700 ms CreateObjectMapping: 0.093000 ms MarkObjects: 3.510700 ms  DeleteObjects: 0.025600 ms)
+Unloading 31 unused Assets to reduce memory usage. Loaded Objects now: 4471.
+Total: 3.091200 ms (FindLiveObjects: 0.318100 ms CreateObjectMapping: 0.166900 ms MarkObjects: 2.588300 ms  DeleteObjects: 0.017300 ms)
 
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
@@ -324,110 +693,300 @@ AssetImportParameters requested are different than current active one (requested
   custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
   custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
 ========================================================================
+Received Import Request.
+  Time since last request: 22.857643 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Demo(VR with limitations).unity
+  artifactKey: Guid(1c775e3b5f31c9f4b8093d60c213bc79) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Demo(VR with limitations).unity using Guid(1c775e3b5f31c9f4b8093d60c213bc79) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '75891a8c5e98762d0c70709b4c727d04') in 0.020893 seconds 
+  Import took 0.025951 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 5.716372 seconds.
+  path: Assets/Scenes/SampleScene.unity
+  artifactKey: Guid(d1c3109bdb54ad54c8a2b2838528e640) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scenes/SampleScene.unity using Guid(d1c3109bdb54ad54c8a2b2838528e640) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '34ab97d12752ec841496148c6ad716cc') in 0.006633 seconds 
+  Import took 0.011647 seconds .
+
+========================================================================
 Received Prepare
 Registering precompiled user dll's ...
-Registered in 0.007826 seconds.
+Registered in 0.004546 seconds.
 Begin MonoManager ReloadAssembly
 Native extension for WindowsStandalone target not found
-Native extension for OSXStandalone target not found
-Refreshing native plugins compatible for Editor in 1.17 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 1.01 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Mono: successfully reloaded assembly
-- Completed reload, in  1.040 seconds
+- Completed reload, in  0.904 seconds
 Domain Reload Profiling:
-	ReloadAssembly (1040ms)
-		BeginReloadAssembly (103ms)
+	ReloadAssembly (904ms)
+		BeginReloadAssembly (104ms)
 			ExecutionOrderSort (0ms)
 			DisableScriptedObjects (4ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (31ms)
-		EndReloadAssembly (877ms)
-			LoadAssemblies (100ms)
+			CreateAndSetChildDomain (35ms)
+		EndReloadAssembly (752ms)
+			LoadAssemblies (75ms)
 			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (303ms)
+			SetupTypeCache (263ms)
 			ReleaseScriptCaches (1ms)
-			RebuildScriptCaches (42ms)
-			SetupLoadedEditorAssemblies (323ms)
+			RebuildScriptCaches (37ms)
+			SetupLoadedEditorAssemblies (265ms)
 				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (5ms)
+				InitializePlatformSupportModulesInManaged (3ms)
 				SetLoadedEditorAssemblies (0ms)
 				RefreshPlugins (1ms)
-				BeforeProcessingInitializeOnLoad (86ms)
-				ProcessInitializeOnLoadAttributes (215ms)
+				BeforeProcessingInitializeOnLoad (79ms)
+				ProcessInitializeOnLoadAttributes (173ms)
+				ProcessInitializeOnLoadMethodAttributes (5ms)
+				AfterProcessingInitializeOnLoad (4ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (11ms)
+Platform modules already initialized, skipping
+Shader 'MoreMountains/MMRipple': fallback shader 'Particle/AlphaBlended' not found
+Refreshing native plugins compatible for Editor in 1.05 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3807 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 255.2 MB.
+System memory in use after: 255.5 MB.
+
+Unloading 31 unused Assets to reduce memory usage. Loaded Objects now: 4473.
+Total: 3.517700 ms (FindLiveObjects: 0.308700 ms CreateObjectMapping: 0.150600 ms MarkObjects: 3.042100 ms  DeleteObjects: 0.015600 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 125.389185 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited
+  artifactKey: Guid(2945490037c7a4745a6bb2139d0d9a84) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited using Guid(2945490037c7a4745a6bb2139d0d9a84) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '25b3de73659c91e664ab805c03e81b51') in 0.011094 seconds 
+  Import took 0.016241 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.029734 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/AttachedBloodDecal.prefab
+  artifactKey: Guid(18ae207df492b2849bc8532355e45390) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/AttachedBloodDecal.prefab using Guid(18ae207df492b2849bc8532355e45390) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e1901f8809978a31b5dcc273351b3b6b') in 0.412662 seconds 
+  Import took 0.418416 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000185 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood2.prefab
+  artifactKey: Guid(dcae3ac22fd41234db730c83fb9b3d83) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood2.prefab using Guid(dcae3ac22fd41234db730c83fb9b3d83) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b300408722e841d259be7bebbbac18cc') in 0.021635 seconds 
+  Import took 0.027450 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000127 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood11.prefab
+  artifactKey: Guid(6178fedf937c8274cbccbf7fa4d0edc5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood11.prefab using Guid(6178fedf937c8274cbccbf7fa4d0edc5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'bb8ad6206b43c51fb158136905ecd253') in 0.040204 seconds 
+  Import took 0.047293 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000125 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood8.prefab
+  artifactKey: Guid(966abf115bdd08c4db396d63fa9e0537) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood8.prefab using Guid(966abf115bdd08c4db396d63fa9e0537) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '215143d219be924749e984aea17a1347') in 0.032722 seconds 
+  Import took 0.038962 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000153 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood7.prefab
+  artifactKey: Guid(f01db1b523b6e2545bc2ff0627f75504) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood7.prefab using Guid(f01db1b523b6e2545bc2ff0627f75504) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9e3f6b19485f93e79f638c9cec71e838') in 0.030099 seconds 
+  Import took 0.036284 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000196 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood10.prefab
+  artifactKey: Guid(37758835262ea8345b00114a77c3e7e8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood10.prefab using Guid(37758835262ea8345b00114a77c3e7e8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '31ff3cf7053fa70bc3806eb32eff7aa9') in 0.031151 seconds 
+  Import took 0.037482 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000177 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood6.prefab
+  artifactKey: Guid(92b1d66261275c44580cf46586100f6e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood6.prefab using Guid(92b1d66261275c44580cf46586100f6e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '91f6853a0ca1a847e7e9ea82857842a3') in 0.019644 seconds 
+  Import took 0.024974 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000161 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood3.prefab
+  artifactKey: Guid(f166ee77d6810a046b6392dd0589b772) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood3.prefab using Guid(f166ee77d6810a046b6392dd0589b772) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e31b9a067aba6b6f34f428f2f28dfdcb') in 0.018895 seconds 
+  Import took 0.024359 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000283 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood4.prefab
+  artifactKey: Guid(5b45204b41907ea4e99daa45b4f9ee49) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood4.prefab using Guid(5b45204b41907ea4e99daa45b4f9ee49) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3e25f1e82146df1d16e15368dcb865fa') in 0.017864 seconds 
+  Import took 0.023121 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000208 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood5.prefab
+  artifactKey: Guid(b82221a0a15ae2e40aea18345400c550) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood5.prefab using Guid(b82221a0a15ae2e40aea18345400c550) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1dc3a26fed00c464e126f81696ecd728') in 0.015007 seconds 
+  Import took 0.019675 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000188 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood14.prefab
+  artifactKey: Guid(de9cfccec1480d2458066a1e856274ad) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood14.prefab using Guid(de9cfccec1480d2458066a1e856274ad) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7bf79b7820246b41a425d2918c71b092') in 0.038524 seconds 
+  Import took 0.045410 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000218 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood1.prefab
+  artifactKey: Guid(2c2b309bdde9d5542ab2826e3dcc310c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood1.prefab using Guid(2c2b309bdde9d5542ab2826e3dcc310c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '33c5d843968a55d343f992c579f08dba') in 0.017105 seconds 
+  Import took 0.022379 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000124 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood2_Left.prefab
+  artifactKey: Guid(e673b154366af4c469ea5e24fa3271fe) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood2_Left.prefab using Guid(e673b154366af4c469ea5e24fa3271fe) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '92d06c49b1fff3ae0f155352e2493e37') in 0.017539 seconds 
+  Import took 0.022954 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000188 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood2_Right.prefab
+  artifactKey: Guid(f33da12f002229d45abb1d40c621f5ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood2_Right.prefab using Guid(f33da12f002229d45abb1d40c621f5ee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '541e0f9c5ee46dc69e42be598e566ca9') in 0.020232 seconds 
+  Import took 0.025607 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000182 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood9.prefab
+  artifactKey: Guid(891e943ae6401864bac361f33e845da4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood9.prefab using Guid(891e943ae6401864bac361f33e845da4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '99e20d07e919821b619bd2f7baa9f231') in 0.021011 seconds 
+  Import took 0.026739 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000240 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood15.prefab
+  artifactKey: Guid(c2b511cc848b6cf4bb7326d4fcc32e00) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood15.prefab using Guid(c2b511cc848b6cf4bb7326d4fcc32e00) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ce7b5b69a774a2f3db663b14d1e438e8') in 0.034207 seconds 
+  Import took 0.041171 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000199 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood12.prefab
+  artifactKey: Guid(8fee967b8783e5147999d236d3e54740) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/Blood12.prefab using Guid(8fee967b8783e5147999d236d3e54740) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8f59aef6c5b05b73909cb3f5f8c95da9') in 0.047712 seconds 
+  Import took 0.055963 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000190 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/blood13.prefab
+  artifactKey: Guid(9381cb95f57a4b943a244725150bb7ab) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/VR_Limited/blood13.prefab using Guid(9381cb95f57a4b943a244725150bb7ab) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '32e85c47fa09abc40cf74efb94e12f99') in 0.043776 seconds 
+  Import took 0.050907 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 80.359711 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/BloodResources
+  artifactKey: Guid(2890f064a94a9b442b7614fb0c6cf301) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/BloodResources using Guid(2890f064a94a9b442b7614fb0c6cf301) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'efff4a8700a72d7d4c5cff7a1f81b41f') in 0.006143 seconds 
+  Import took 0.011758 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 2.478476 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Shaders
+  artifactKey: Guid(0f632b92d3c78394987fcbf2ccaa5a53) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Shaders using Guid(0f632b92d3c78394987fcbf2ccaa5a53) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c4540beea8be5dc17c195ba2e4f42102') in 0.006136 seconds 
+  Import took 0.011712 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 4.505337 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Scripts
+  artifactKey: Guid(5d196e887ea8fce4da97c4bb9dfb0b55) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Scripts using Guid(5d196e887ea8fce4da97c4bb9dfb0b55) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6600fa07d4cb0d86b4d67f0b4dc5ed92') in 0.006175 seconds 
+  Import took 0.011209 seconds .
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.004561 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 1.04 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.919 seconds
+Domain Reload Profiling:
+	ReloadAssembly (919ms)
+		BeginReloadAssembly (102ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (5ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (33ms)
+		EndReloadAssembly (770ms)
+			LoadAssemblies (73ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (263ms)
+			ReleaseScriptCaches (1ms)
+			RebuildScriptCaches (37ms)
+			SetupLoadedEditorAssemblies (280ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (3ms)
+				SetLoadedEditorAssemblies (0ms)
+				RefreshPlugins (1ms)
+				BeforeProcessingInitializeOnLoad (84ms)
+				ProcessInitializeOnLoadAttributes (180ms)
 				ProcessInitializeOnLoadMethodAttributes (6ms)
-				AfterProcessingInitializeOnLoad (9ms)
+				AfterProcessingInitializeOnLoad (5ms)
 				EditorAssembliesLoaded (0ms)
 			ExecutionOrderSort2 (0ms)
 			AwakeInstancesAfterBackupRestoration (12ms)
 Platform modules already initialized, skipping
 Shader 'MoreMountains/MMRipple': fallback shader 'Particle/AlphaBlended' not found
-Refreshing native plugins compatible for Editor in 1.18 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 1.04 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 3798 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 234.3 MB.
-System memory in use after: 234.6 MB.
+Unloading 3808 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 256.1 MB.
+System memory in use after: 256.4 MB.
 
-Unloading 31 unused Assets to reduce memory usage. Loaded Objects now: 4375.
-Total: 3.406000 ms (FindLiveObjects: 0.332000 ms CreateObjectMapping: 0.096500 ms MarkObjects: 2.958400 ms  DeleteObjects: 0.018000 ms)
-
-AssetImportParameters requested are different than current active one (requested -> active):
-  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
-  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
-  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
-  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
-  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
-  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
-  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
-  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-========================================================================
-Received Prepare
-Registering precompiled user dll's ...
-Registered in 0.007857 seconds.
-Begin MonoManager ReloadAssembly
-Native extension for WindowsStandalone target not found
-Native extension for OSXStandalone target not found
-Refreshing native plugins compatible for Editor in 1.14 ms, found 3 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Mono: successfully reloaded assembly
-- Completed reload, in  0.994 seconds
-Domain Reload Profiling:
-	ReloadAssembly (995ms)
-		BeginReloadAssembly (96ms)
-			ExecutionOrderSort (0ms)
-			DisableScriptedObjects (4ms)
-			BackupInstance (0ms)
-			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (29ms)
-		EndReloadAssembly (840ms)
-			LoadAssemblies (99ms)
-			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (288ms)
-			ReleaseScriptCaches (1ms)
-			RebuildScriptCaches (42ms)
-			SetupLoadedEditorAssemblies (310ms)
-				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (4ms)
-				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (1ms)
-				BeforeProcessingInitializeOnLoad (83ms)
-				ProcessInitializeOnLoadAttributes (207ms)
-				ProcessInitializeOnLoadMethodAttributes (6ms)
-				AfterProcessingInitializeOnLoad (9ms)
-				EditorAssembliesLoaded (0ms)
-			ExecutionOrderSort2 (0ms)
-			AwakeInstancesAfterBackupRestoration (9ms)
-Platform modules already initialized, skipping
-Shader 'MoreMountains/MMRipple': fallback shader 'Particle/AlphaBlended' not found
-Refreshing native plugins compatible for Editor in 1.15 ms, found 3 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 3798 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 234.4 MB.
-System memory in use after: 234.6 MB.
-
-Unloading 31 unused Assets to reduce memory usage. Loaded Objects now: 4377.
-Total: 3.400900 ms (FindLiveObjects: 0.322200 ms CreateObjectMapping: 0.087600 ms MarkObjects: 2.973500 ms  DeleteObjects: 0.016500 ms)
+Unloading 31 unused Assets to reduce memory usage. Loaded Objects now: 4512.
+Total: 3.615100 ms (FindLiveObjects: 0.391200 ms CreateObjectMapping: 0.172900 ms MarkObjects: 3.011900 ms  DeleteObjects: 0.038200 ms)
 
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
@@ -440,52 +999,59 @@ AssetImportParameters requested are different than current active one (requested
   custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
   custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
 ========================================================================
+Received Import Request.
+  Time since last request: 37.652248 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood1.prefab
+  artifactKey: Guid(a78e9ef18b366424b84e0c7410d2fe72) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood1.prefab using Guid(a78e9ef18b366424b84e0c7410d2fe72) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '945e6b5740b2b85e814fc992a27607f8') in 0.138160 seconds 
+  Import took 0.143961 seconds .
+
+========================================================================
 Received Prepare
 Registering precompiled user dll's ...
-Registered in 0.007849 seconds.
+Registered in 0.004676 seconds.
 Begin MonoManager ReloadAssembly
 Native extension for WindowsStandalone target not found
-Native extension for OSXStandalone target not found
-Refreshing native plugins compatible for Editor in 1.20 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 1.03 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Mono: successfully reloaded assembly
-- Completed reload, in  1.045 seconds
+- Completed reload, in  0.915 seconds
 Domain Reload Profiling:
-	ReloadAssembly (1045ms)
-		BeginReloadAssembly (87ms)
+	ReloadAssembly (915ms)
+		BeginReloadAssembly (104ms)
 			ExecutionOrderSort (0ms)
-			DisableScriptedObjects (4ms)
+			DisableScriptedObjects (5ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (29ms)
-		EndReloadAssembly (898ms)
-			LoadAssemblies (98ms)
+			CreateAndSetChildDomain (33ms)
+		EndReloadAssembly (765ms)
+			LoadAssemblies (74ms)
 			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (334ms)
+			SetupTypeCache (266ms)
 			ReleaseScriptCaches (1ms)
-			RebuildScriptCaches (43ms)
-			SetupLoadedEditorAssemblies (322ms)
+			RebuildScriptCaches (41ms)
+			SetupLoadedEditorAssemblies (266ms)
 				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (4ms)
+				InitializePlatformSupportModulesInManaged (3ms)
 				SetLoadedEditorAssemblies (0ms)
 				RefreshPlugins (1ms)
-				BeforeProcessingInitializeOnLoad (89ms)
-				ProcessInitializeOnLoadAttributes (213ms)
+				BeforeProcessingInitializeOnLoad (80ms)
+				ProcessInitializeOnLoadAttributes (173ms)
 				ProcessInitializeOnLoadMethodAttributes (5ms)
-				AfterProcessingInitializeOnLoad (8ms)
+				AfterProcessingInitializeOnLoad (4ms)
 				EditorAssembliesLoaded (0ms)
 			ExecutionOrderSort2 (0ms)
-			AwakeInstancesAfterBackupRestoration (9ms)
+			AwakeInstancesAfterBackupRestoration (14ms)
 Platform modules already initialized, skipping
 Shader 'MoreMountains/MMRipple': fallback shader 'Particle/AlphaBlended' not found
-Refreshing native plugins compatible for Editor in 1.14 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 1.04 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 3798 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 234.4 MB.
-System memory in use after: 234.6 MB.
+Unloading 3807 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 256.0 MB.
+System memory in use after: 256.2 MB.
 
-Unloading 31 unused Assets to reduce memory usage. Loaded Objects now: 4379.
-Total: 3.472700 ms (FindLiveObjects: 0.343900 ms CreateObjectMapping: 0.088800 ms MarkObjects: 3.019000 ms  DeleteObjects: 0.019400 ms)
+Unloading 31 unused Assets to reduce memory usage. Loaded Objects now: 4550.
+Total: 3.260100 ms (FindLiveObjects: 0.323000 ms CreateObjectMapping: 0.169500 ms MarkObjects: 2.714900 ms  DeleteObjects: 0.052000 ms)
 
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
@@ -500,50 +1066,49 @@ AssetImportParameters requested are different than current active one (requested
 ========================================================================
 Received Prepare
 Registering precompiled user dll's ...
-Registered in 0.008301 seconds.
+Registered in 0.004725 seconds.
 Begin MonoManager ReloadAssembly
 Native extension for WindowsStandalone target not found
-Native extension for OSXStandalone target not found
-Refreshing native plugins compatible for Editor in 1.17 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 1.09 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Mono: successfully reloaded assembly
-- Completed reload, in  1.025 seconds
+- Completed reload, in  0.910 seconds
 Domain Reload Profiling:
-	ReloadAssembly (1026ms)
-		BeginReloadAssembly (108ms)
+	ReloadAssembly (910ms)
+		BeginReloadAssembly (102ms)
 			ExecutionOrderSort (0ms)
 			DisableScriptedObjects (4ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
 			CreateAndSetChildDomain (31ms)
-		EndReloadAssembly (853ms)
-			LoadAssemblies (98ms)
+		EndReloadAssembly (759ms)
+			LoadAssemblies (75ms)
 			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (299ms)
+			SetupTypeCache (262ms)
 			ReleaseScriptCaches (1ms)
-			RebuildScriptCaches (44ms)
-			SetupLoadedEditorAssemblies (312ms)
+			RebuildScriptCaches (36ms)
+			SetupLoadedEditorAssemblies (272ms)
 				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (5ms)
-				SetLoadedEditorAssemblies (0ms)
+				InitializePlatformSupportModulesInManaged (3ms)
+				SetLoadedEditorAssemblies (1ms)
 				RefreshPlugins (1ms)
-				BeforeProcessingInitializeOnLoad (84ms)
-				ProcessInitializeOnLoadAttributes (208ms)
+				BeforeProcessingInitializeOnLoad (79ms)
+				ProcessInitializeOnLoadAttributes (179ms)
 				ProcessInitializeOnLoadMethodAttributes (5ms)
-				AfterProcessingInitializeOnLoad (8ms)
+				AfterProcessingInitializeOnLoad (4ms)
 				EditorAssembliesLoaded (0ms)
 			ExecutionOrderSort2 (0ms)
-			AwakeInstancesAfterBackupRestoration (8ms)
+			AwakeInstancesAfterBackupRestoration (13ms)
 Platform modules already initialized, skipping
 Shader 'MoreMountains/MMRipple': fallback shader 'Particle/AlphaBlended' not found
-Refreshing native plugins compatible for Editor in 1.15 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 1.09 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 3798 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 234.4 MB.
-System memory in use after: 234.6 MB.
+Unloading 3807 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 256.0 MB.
+System memory in use after: 256.3 MB.
 
-Unloading 31 unused Assets to reduce memory usage. Loaded Objects now: 4381.
-Total: 3.457300 ms (FindLiveObjects: 0.317400 ms CreateObjectMapping: 0.094800 ms MarkObjects: 3.026900 ms  DeleteObjects: 0.017400 ms)
+Unloading 31 unused Assets to reduce memory usage. Loaded Objects now: 4552.
+Total: 3.114700 ms (FindLiveObjects: 0.315100 ms CreateObjectMapping: 0.163600 ms MarkObjects: 2.619900 ms  DeleteObjects: 0.015300 ms)
 
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
@@ -558,108 +1123,49 @@ AssetImportParameters requested are different than current active one (requested
 ========================================================================
 Received Prepare
 Registering precompiled user dll's ...
-Registered in 0.007899 seconds.
+Registered in 0.004559 seconds.
 Begin MonoManager ReloadAssembly
 Native extension for WindowsStandalone target not found
-Native extension for OSXStandalone target not found
-Refreshing native plugins compatible for Editor in 2.85 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 1.02 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Mono: successfully reloaded assembly
-- Completed reload, in  1.011 seconds
+- Completed reload, in  0.908 seconds
 Domain Reload Profiling:
-	ReloadAssembly (1011ms)
-		BeginReloadAssembly (107ms)
+	ReloadAssembly (908ms)
+		BeginReloadAssembly (98ms)
 			ExecutionOrderSort (0ms)
 			DisableScriptedObjects (4ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (28ms)
-		EndReloadAssembly (845ms)
-			LoadAssemblies (94ms)
+			CreateAndSetChildDomain (30ms)
+		EndReloadAssembly (763ms)
+			LoadAssemblies (74ms)
 			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (295ms)
+			SetupTypeCache (264ms)
 			ReleaseScriptCaches (1ms)
-			RebuildScriptCaches (42ms)
-			SetupLoadedEditorAssemblies (314ms)
+			RebuildScriptCaches (37ms)
+			SetupLoadedEditorAssemblies (270ms)
 				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (4ms)
-				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (3ms)
-				BeforeProcessingInitializeOnLoad (82ms)
-				ProcessInitializeOnLoadAttributes (209ms)
-				ProcessInitializeOnLoadMethodAttributes (6ms)
-				AfterProcessingInitializeOnLoad (8ms)
-				EditorAssembliesLoaded (0ms)
-			ExecutionOrderSort2 (0ms)
-			AwakeInstancesAfterBackupRestoration (8ms)
-Platform modules already initialized, skipping
-Shader 'MoreMountains/MMRipple': fallback shader 'Particle/AlphaBlended' not found
-Refreshing native plugins compatible for Editor in 1.22 ms, found 3 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 3798 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 234.4 MB.
-System memory in use after: 234.6 MB.
-
-Unloading 31 unused Assets to reduce memory usage. Loaded Objects now: 4383.
-Total: 3.858100 ms (FindLiveObjects: 0.346100 ms CreateObjectMapping: 0.089800 ms MarkObjects: 3.394200 ms  DeleteObjects: 0.026700 ms)
-
-AssetImportParameters requested are different than current active one (requested -> active):
-  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
-  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
-  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
-  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
-  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
-  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
-  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
-  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
-========================================================================
-Received Prepare
-Registering precompiled user dll's ...
-Registered in 0.008257 seconds.
-Begin MonoManager ReloadAssembly
-Native extension for WindowsStandalone target not found
-Native extension for OSXStandalone target not found
-Refreshing native plugins compatible for Editor in 1.29 ms, found 3 plugins.
-Preloading 0 native plugins for Editor in 0.00 ms.
-Mono: successfully reloaded assembly
-- Completed reload, in  0.994 seconds
-Domain Reload Profiling:
-	ReloadAssembly (995ms)
-		BeginReloadAssembly (99ms)
-			ExecutionOrderSort (0ms)
-			DisableScriptedObjects (4ms)
-			BackupInstance (0ms)
-			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (29ms)
-		EndReloadAssembly (837ms)
-			LoadAssemblies (95ms)
-			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (290ms)
-			ReleaseScriptCaches (1ms)
-			RebuildScriptCaches (43ms)
-			SetupLoadedEditorAssemblies (307ms)
-				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (4ms)
+				InitializePlatformSupportModulesInManaged (3ms)
 				SetLoadedEditorAssemblies (0ms)
 				RefreshPlugins (1ms)
-				BeforeProcessingInitializeOnLoad (82ms)
-				ProcessInitializeOnLoadAttributes (205ms)
+				BeforeProcessingInitializeOnLoad (79ms)
+				ProcessInitializeOnLoadAttributes (176ms)
 				ProcessInitializeOnLoadMethodAttributes (6ms)
-				AfterProcessingInitializeOnLoad (7ms)
+				AfterProcessingInitializeOnLoad (4ms)
 				EditorAssembliesLoaded (0ms)
 			ExecutionOrderSort2 (0ms)
-			AwakeInstancesAfterBackupRestoration (8ms)
+			AwakeInstancesAfterBackupRestoration (14ms)
 Platform modules already initialized, skipping
 Shader 'MoreMountains/MMRipple': fallback shader 'Particle/AlphaBlended' not found
-Refreshing native plugins compatible for Editor in 1.15 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 1.06 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 3798 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 234.4 MB.
-System memory in use after: 234.6 MB.
+Unloading 3807 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 256.0 MB.
+System memory in use after: 256.3 MB.
 
-Unloading 31 unused Assets to reduce memory usage. Loaded Objects now: 4385.
-Total: 3.381300 ms (FindLiveObjects: 0.327100 ms CreateObjectMapping: 0.087100 ms MarkObjects: 2.949400 ms  DeleteObjects: 0.016900 ms)
+Unloading 31 unused Assets to reduce memory usage. Loaded Objects now: 4554.
+Total: 3.966200 ms (FindLiveObjects: 0.331100 ms CreateObjectMapping: 0.184400 ms MarkObjects: 3.414200 ms  DeleteObjects: 0.036000 ms)
 
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
@@ -674,50 +1180,49 @@ AssetImportParameters requested are different than current active one (requested
 ========================================================================
 Received Prepare
 Registering precompiled user dll's ...
-Registered in 0.007939 seconds.
+Registered in 0.004494 seconds.
 Begin MonoManager ReloadAssembly
 Native extension for WindowsStandalone target not found
-Native extension for OSXStandalone target not found
-Refreshing native plugins compatible for Editor in 1.13 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 1.10 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Mono: successfully reloaded assembly
-- Completed reload, in  0.976 seconds
+- Completed reload, in  0.909 seconds
 Domain Reload Profiling:
-	ReloadAssembly (976ms)
+	ReloadAssembly (909ms)
 		BeginReloadAssembly (99ms)
 			ExecutionOrderSort (0ms)
 			DisableScriptedObjects (4ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
 			CreateAndSetChildDomain (27ms)
-		EndReloadAssembly (821ms)
-			LoadAssemblies (93ms)
+		EndReloadAssembly (761ms)
+			LoadAssemblies (72ms)
 			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (283ms)
+			SetupTypeCache (264ms)
 			ReleaseScriptCaches (1ms)
-			RebuildScriptCaches (41ms)
-			SetupLoadedEditorAssemblies (304ms)
+			RebuildScriptCaches (39ms)
+			SetupLoadedEditorAssemblies (269ms)
 				LogAssemblyErrors (0ms)
-				InitializePlatformSupportModulesInManaged (4ms)
+				InitializePlatformSupportModulesInManaged (3ms)
 				SetLoadedEditorAssemblies (0ms)
 				RefreshPlugins (1ms)
-				BeforeProcessingInitializeOnLoad (81ms)
-				ProcessInitializeOnLoadAttributes (203ms)
+				BeforeProcessingInitializeOnLoad (79ms)
+				ProcessInitializeOnLoadAttributes (174ms)
 				ProcessInitializeOnLoadMethodAttributes (6ms)
-				AfterProcessingInitializeOnLoad (8ms)
+				AfterProcessingInitializeOnLoad (4ms)
 				EditorAssembliesLoaded (0ms)
 			ExecutionOrderSort2 (0ms)
-			AwakeInstancesAfterBackupRestoration (8ms)
+			AwakeInstancesAfterBackupRestoration (12ms)
 Platform modules already initialized, skipping
 Shader 'MoreMountains/MMRipple': fallback shader 'Particle/AlphaBlended' not found
-Refreshing native plugins compatible for Editor in 1.25 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 1.21 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
-Unloading 3798 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 234.4 MB.
-System memory in use after: 234.6 MB.
+Unloading 3807 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 256.0 MB.
+System memory in use after: 256.3 MB.
 
-Unloading 31 unused Assets to reduce memory usage. Loaded Objects now: 4387.
-Total: 3.614800 ms (FindLiveObjects: 0.344600 ms CreateObjectMapping: 0.085600 ms MarkObjects: 3.161500 ms  DeleteObjects: 0.022200 ms)
+Unloading 31 unused Assets to reduce memory usage. Loaded Objects now: 4556.
+Total: 3.513200 ms (FindLiveObjects: 0.339100 ms CreateObjectMapping: 0.167100 ms MarkObjects: 2.958900 ms  DeleteObjects: 0.047400 ms)
 
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
@@ -731,18 +1236,205 @@ AssetImportParameters requested are different than current active one (requested
   custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
 ========================================================================
 Received Import Request.
-  Time since last request: 8383.679320 seconds.
-  path: Assets/Managers/CameraBlend.asset
-  artifactKey: Guid(b38cc2e8e21e3724783201344dadd0f7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Managers/CameraBlend.asset using Guid(b38cc2e8e21e3724783201344dadd0f7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '51b191f76d9c3572946442fedc3a8791') in 0.079876 seconds 
-  Import took 0.103211 seconds .
+  Time since last request: 282.866287 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood2.prefab
+  artifactKey: Guid(42a28376f729c864a81abf66add7a418) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood2.prefab using Guid(42a28376f729c864a81abf66add7a418) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '83e9418e77f888304bf39ca110c98b32') in 0.152941 seconds 
+  Import took 0.159170 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000146 seconds.
-  path: Assets/Managers/CM StateDrivenCamera1 Blends.asset
-  artifactKey: Guid(344f45a2ec0963d4abcfe9b2c8a92900) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Managers/CM StateDrivenCamera1 Blends.asset using Guid(344f45a2ec0963d4abcfe9b2c8a92900) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '83d62ae8bd737241917e4ee34e4a93ca') in 0.004846 seconds 
-  Import took 0.021908 seconds .
+  Time since last request: 2.660973 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood2.prefab
+  artifactKey: Guid(42a28376f729c864a81abf66add7a418) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood2.prefab using Guid(42a28376f729c864a81abf66add7a418) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '83e9418e77f888304bf39ca110c98b32') in 0.022681 seconds 
+  Import took 0.028959 seconds .
 
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.004649 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 1.05 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.911 seconds
+Domain Reload Profiling:
+	ReloadAssembly (911ms)
+		BeginReloadAssembly (98ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (5ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (32ms)
+		EndReloadAssembly (763ms)
+			LoadAssemblies (74ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (262ms)
+			ReleaseScriptCaches (1ms)
+			RebuildScriptCaches (37ms)
+			SetupLoadedEditorAssemblies (273ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (3ms)
+				SetLoadedEditorAssemblies (0ms)
+				RefreshPlugins (1ms)
+				BeforeProcessingInitializeOnLoad (79ms)
+				ProcessInitializeOnLoadAttributes (180ms)
+				ProcessInitializeOnLoadMethodAttributes (5ms)
+				AfterProcessingInitializeOnLoad (5ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (14ms)
+Platform modules already initialized, skipping
+Shader 'MoreMountains/MMRipple': fallback shader 'Particle/AlphaBlended' not found
+Refreshing native plugins compatible for Editor in 1.04 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3807 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 256.2 MB.
+System memory in use after: 256.4 MB.
+
+Unloading 31 unused Assets to reduce memory usage. Loaded Objects now: 4594.
+Total: 3.423600 ms (FindLiveObjects: 0.428400 ms CreateObjectMapping: 0.175600 ms MarkObjects: 2.765900 ms  DeleteObjects: 0.052800 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 19.417798 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood2.prefab
+  artifactKey: Guid(42a28376f729c864a81abf66add7a418) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood2.prefab using Guid(42a28376f729c864a81abf66add7a418) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '41bc8ff2d2d871cb668e8d9750d7abbf') in 0.142833 seconds 
+  Import took 0.148656 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 3.170441 seconds.
+  path: Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood2.prefab
+  artifactKey: Guid(42a28376f729c864a81abf66add7a418) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/KriptoFX/VolumetricBloodFX/Prefabs/Blood2.prefab using Guid(42a28376f729c864a81abf66add7a418) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '41bc8ff2d2d871cb668e8d9750d7abbf') in 0.020929 seconds 
+  Import took 0.026843 seconds .
+
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.004723 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 1.02 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.914 seconds
+Domain Reload Profiling:
+	ReloadAssembly (914ms)
+		BeginReloadAssembly (104ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (5ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (33ms)
+		EndReloadAssembly (763ms)
+			LoadAssemblies (74ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (259ms)
+			ReleaseScriptCaches (1ms)
+			RebuildScriptCaches (38ms)
+			SetupLoadedEditorAssemblies (275ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (3ms)
+				SetLoadedEditorAssemblies (0ms)
+				RefreshPlugins (1ms)
+				BeforeProcessingInitializeOnLoad (78ms)
+				ProcessInitializeOnLoadAttributes (182ms)
+				ProcessInitializeOnLoadMethodAttributes (5ms)
+				AfterProcessingInitializeOnLoad (5ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (15ms)
+Platform modules already initialized, skipping
+Shader 'MoreMountains/MMRipple': fallback shader 'Particle/AlphaBlended' not found
+Refreshing native plugins compatible for Editor in 1.03 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3807 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 256.3 MB.
+System memory in use after: 256.5 MB.
+
+Unloading 31 unused Assets to reduce memory usage. Loaded Objects now: 4632.
+Total: 3.813700 ms (FindLiveObjects: 0.403400 ms CreateObjectMapping: 0.222500 ms MarkObjects: 3.148700 ms  DeleteObjects: 0.038300 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Prepare
+Registering precompiled user dll's ...
+Registered in 0.004635 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 1.02 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.942 seconds
+Domain Reload Profiling:
+	ReloadAssembly (942ms)
+		BeginReloadAssembly (98ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (4ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (30ms)
+		EndReloadAssembly (796ms)
+			LoadAssemblies (75ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (269ms)
+			ReleaseScriptCaches (1ms)
+			RebuildScriptCaches (38ms)
+			SetupLoadedEditorAssemblies (290ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (3ms)
+				SetLoadedEditorAssemblies (0ms)
+				RefreshPlugins (1ms)
+				BeforeProcessingInitializeOnLoad (83ms)
+				ProcessInitializeOnLoadAttributes (193ms)
+				ProcessInitializeOnLoadMethodAttributes (5ms)
+				AfterProcessingInitializeOnLoad (4ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (14ms)
+Platform modules already initialized, skipping
+Shader 'MoreMountains/MMRipple': fallback shader 'Particle/AlphaBlended' not found
+Refreshing native plugins compatible for Editor in 1.16 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 3807 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 256.3 MB.
+System memory in use after: 256.5 MB.
+
+Unloading 31 unused Assets to reduce memory usage. Loaded Objects now: 4634.
+Total: 3.528900 ms (FindLiveObjects: 0.347900 ms CreateObjectMapping: 0.156400 ms MarkObjects: 3.008200 ms  DeleteObjects: 0.015700 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
 AssetImportWorkerClient::OnTransportError - code=2 error=End of file

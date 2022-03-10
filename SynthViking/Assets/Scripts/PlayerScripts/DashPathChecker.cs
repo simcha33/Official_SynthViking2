@@ -24,13 +24,15 @@ public class DashPathChecker : MonoBehaviour
         if (playerController.isDashing) {
 
             //Dash collides with enemy
-            if (other.gameObject.layer == 7 && !playerController.enemyDashObjectReached && !other.gameObject.CompareTag("Dead"))
+            if (other.gameObject.layer == playerController.enemyLayer && !playerController.enemyDashObjectReached && !other.gameObject.CompareTag("Dead"))
             {
                 
                 playerController.playerAnim.SetTrigger("DashAttackTrigger");
-
                 playerController.enemyDashObjectReached = true;
                 playerController.playerRb.velocity = new Vector3(0, 0, 0);
+                playerController.DoDash(); 
+                other.GetComponent<BasicEnemyScript>().enemyRb.velocity = new Vector3(0,0,0); 
+                
                 playerController.dashAttackTarget = other.gameObject;
                 playerController.transform.position -= Vector3.up * .5f;
                 playerController.transform.LookAt(other.transform.position);    

@@ -87,6 +87,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     private Vector3 originalIndicatorSize;
     public Transform dashChecker;
     public Image dashChargeIndicator;
+    public Color dashChargeColor; 
     public Image dashChargeBackground;
 
 
@@ -119,6 +120,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     #endregion
 
     [Header("AIR SMASH")]
+    #region 
     public float groundSlamMinDamage;
     public float groundSlamMaxDamage;
     private float currentGroundSlamDamage;
@@ -135,6 +137,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public float airSmashEndHeight;   
     private float airSmashCooldownTimer;
     public float airSmashCooldownDuration; 
+    #endregion
 
 
     [Header("WALLRUNNING")] //Wallrunning; 
@@ -144,8 +147,11 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public float frontWallCheckDist;
     public float sideWallCheckDist;
     public Transform frontWallChecker;
-    private LayerMask EnvorinmentLayer = 6;
-    private LayerMask enemyLayer = 7;
+
+    private Vector3 jumpOffPoint; 
+    [HideInInspector] public LayerMask EnvorinmentLayer = 10;
+    [HideInInspector] public LayerMask enemyLayer = 11;
+    public bool wallRunExitWithJump; 
 
     #endregion
 
@@ -232,10 +238,10 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public bool canDashAttack = true;
     public bool canStartNewAttack;
     //public bool canPauseWallrun = true;
-    public bool canEndDash = false;
     public bool canFall = true;
     public bool canStartAirSmash;
-    public bool canEndAirSmash;
+    private bool canEndAirSmash = true;
+    public bool canEndDash = false;
 
     public bool isMoving;
     public bool isAttacking;
@@ -295,9 +301,10 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         dashDelayTimer = dashDelayDuration;
         airSmashDelayTimer = 0f;
         airSmashCooldownTimer = airSmashCooldownDuration;
-        dashCooldownTimer = dashCooldownDuration;
+        dashCooldownTimer = 0f; 
       
         originalIndicatorSize = dashChargeIndicator.transform.localScale;
+        dashChargeColor = dashChargeIndicator.color; 
 
         fixedControllerState = (int)currentState.MOVING;
         controllerState = (int)currentState.MOVING;
@@ -487,8 +494,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     void MovePlayer()
     {
-        moveDirection += moveInput.x * GetCameraRight(playerCamera) * currentMoveSpeed * Time.fixedDeltaTime;
-        if (!isWallRunning) moveDirection += moveInput.y * GetCameraForward(playerCamera) * currentMoveSpeed * Time.fixedDeltaTime;
+        moveDirection += moveInput.x * GetCameraRight(playerCamera) * currentMoveSpeed * Time.fixedUnscaledDeltaTime;
+        if (!isWallRunning) moveDirection += moveInput.y * GetCameraForward(playerCamera) * currentMoveSpeed * Time.fixedUnscaledDeltaTime;
 
         playerRb.velocity = new Vector3(moveDirection.x, playerRb.velocity.y, moveDirection.z);
         moveDirection = Vector3.zero;
@@ -560,20 +567,25 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
         //dashDirection = playerCamera.transform.forward;
 
-        if (input.dashButtonPressed && !isDashing)
+        if (input.dashButtonPressed && !isDashing && canDash)
         {
             raycastCheck.gameObject.SetActive(true);
             RaycastHit camForwardHit;
 
             //Check camera forward position 
-            if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward.normalized, out camForwardHit, currentDashDistance))
+            if (Physics.Raycast(playerCamera.transform.position, playerCamera.transform.forward.normalized, out camForwardHit, currentDashDistance) && canDash)
             {
-                Debug.Log("DashHit");
-                if (camForwardHit.transform.gameObject.layer == 6 || camForwardHit.transform.CompareTag("Enemy"))
+                //if (canDash && (camForwardHit.transform.gameObject.layer == 6 || camForwardHit.transform.CompareTag("Enemy")))
+                 raycastCheckMeshr.material = holoGreen;
+                if ((camForwardHit.transform.gameObject.layer == EnvorinmentLayer))
                 {
                     raycastCheck.transform.position = camForwardHit.point;
-                    dashDirection = camForwardHit.point;
-                    raycastCheckMeshr.material = holoGreen;
+                    dashDirection = camForwardHit.point;          
+                }
+                else
+                {             
+                    raycastCheck.transform.position = playerCamera.transform.position + playerCamera.transform.forward * currentDashDistance;
+                    dashDirection = raycastCheck.transform.position + dashOffset;
                 }
             }
             else
@@ -629,7 +641,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //Build up the dashduration on button hold
         if (input.dashButtonPressed && canDash)
         {
-            slowScript.DoSlowmo(); 
+            //slowScript.DoSlowmo(true); 
 
             isChargingDash = true;
             if (currentDashDistance < maxDashDistance) currentDashDistance += dashBuildUpSpeed * Time.unscaledDeltaTime;
@@ -685,7 +697,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //The player is dashing 
         if (isDashing && !solidDashObjectReached && !enemyDashObjectReached && !canEndDash) //Maintain dash
         {
-            if (currentDashDistance <= 1.2f)
+            if (currentDashDistance <= 6f)
             {
                 canEndDash = true; //End Dash
                 return;
@@ -699,7 +711,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
 
             //Trigger stylish move at the end of the dash
-            if (currentDashDistance <= 30 && !dashEndMove)
+            if (currentDashDistance <= 35 && !dashEndMove)
             {
                 //Delay and enable landing for ground dashes 
                 canLand = true;
@@ -724,10 +736,17 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //Recharge dash 
         if (!canDash && !isDashing)
         {
-            dashCooldownTimer -= Time.deltaTime;
-            if (dashCooldownTimer < 0)
+            dashCooldownTimer += Time.deltaTime;
+            dashChargeBackground.color = Color.grey; 
+            dashChargeIndicator.color = Color.white;  
+            dashChargeIndicator.fillAmount = dashCooldownTimer / dashCooldownDuration; 
+                //dashChargeIndicator.fillAmount = (currentDashDistance - minDashDistance) / (maxDashDistance - minDashDistance);
+
+            if (dashCooldownTimer >= dashCooldownDuration)
             {
-                dashCooldownTimer = dashCooldownDuration;
+                dashChargeIndicator.color = dashChargeColor; 
+                dashChargeBackground.color = Color.white; 
+                dashCooldownTimer = 0f; 
                 canDash = true;
             }
         }
@@ -735,10 +754,14 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         Debug.DrawLine(dashChecker.position, dashChecker.position + dashChecker.forward * 2f, Color.blue);
     }
 
-    void DoDash()
+    public void DoDash()
     {
+        
         if (!enemyDashObjectReached && !solidDashObjectReached)
         {
+  
+           // dashSequence.Append(transform.DOMove(dashDirection, 1f)); 
+            //transform.DOMove(dashDirection, 1f); 
             playerRb.AddForce((dashDirection - transform.position) * dashForwardForce, ForceMode.VelocityChange);
             dashChecker.gameObject.SetActive(true);
         }
@@ -747,13 +770,14 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public void DoDashAttack()
     {
         BasicEnemyScript script = dashAttackTarget.transform.GetComponentInParent<BasicEnemyScript>();
-        script.LaunchEnemy(aimPoint.forward, Random.Range( dashAttackForce -5, dashAttackForce + 5), 5f);
+        script.LaunchEnemy(aimPoint.forward, Random.Range( dashAttackForce -5, dashAttackForce + 5), 5f);    
         script.transform.position = transform.position + transform.forward + script.transform.up; 
         playerRb.AddForce(transform.up * 5, ForceMode.VelocityChange);
     }
 
     public void ResetDash()
     {
+        
         playerRb.velocity = new Vector3(0, 0, 0); 
         DashEndFeeback?.PlayFeedbacks();
         transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
@@ -774,37 +798,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         dashDelayTimer = dashDelayDuration;
         controllerState = (int)currentState.MOVING;
         fixedControllerState = (int)currentState.MOVING;
+     
     }
-
-    /*
-    void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-
-        //Draw a Ray forward from GameObject toward the maximum distance
-        Gizmos.DrawRay(dashChecker.position, dashChecker.forward * m_MaxDistance);
-        //Draw a cube at the maximum distance
-        Gizmos.DrawWireCube(dashChecker.position + dashChecker.forward * m_MaxDistance, dashCheckerSize);
-
-        Gizmos.color = Color.green;
-
-        //Draw a Ray forward from GameObject toward the maximum distance
-        Gizmos.DrawRay(dashChecker.position, dashChecker.forward * m_MaxDistance2);
-        //Draw a cube at the maximum distance
-        Gizmos.DrawWireCube(dashChecker.position + dashChecker.forward * m_MaxDistance2, dashCheckerSize2);
-
-    }
-    */
-
-    void HandleSlowmo()
-    {
-     //   aimSlowmoTimer -= Time.unscaledDeltaTime; 
-     //   if(aimSlowmoTimer > 0) slowmoFeedback?.PlayFeedbacks();
-     //   else
-
-
-    }
-
 
 
 
@@ -955,14 +950,20 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         if (Physics.Raycast(frontRay, out hit, frontWallCheckDist) && isSprinting)
         {
             //Start wallrun
-            if (hit.collider.gameObject.layer == 6 && canStartWallrun) //Environment
+            if (hit.collider.gameObject.layer == EnvorinmentLayer && canStartWallrun) //Environment
             {
 
                 StartWallRun();
             }
         }
-        else if (isWallRunning || isWallRunning && input.jumpButtonPressed)
+        else if (isWallRunning || isWallRunning && (input.jumpButtonPressed || !input.sprintButtonPressed))
         {
+            if(input.jumpButtonPressed || !input.sprintButtonPressed)
+            { 
+                jumpOffPoint = transform.position - transform.forward * 3f; 
+                wallRunExitWithJump = true; 
+            }
+       
             ExitWallRun();
         }
     }
@@ -985,11 +986,27 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     void ExitWallRun()
     {
         //Give the player a small boost after wallrunning 
+  
+
+
         playerAnim.SetTrigger("WallRunEndTrigger");
         groundCheckTimer = .3f;
         jumpCount = 1;
-        DoJump(jumpForce * .05f);
+        
 
+      
+
+        if(wallRunExitWithJump)
+        {
+            transform.DOMove(jumpOffPoint, .25f); 
+            transform.DORotate(new Vector3(transform.eulerAngles.x, transform.eulerAngles.y + 180, transform.eulerAngles.z), .5f); 
+        }
+        else
+        {
+            DoJump(jumpForce * .05f);
+        }
+
+        wallRunExitWithJump = false; 
         isWallRunning = false;
         canStartWallrun = true;
         
@@ -1004,7 +1021,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     //Air smashing 
     void CheckForAirSmash()
-    {
+    { 
        
         if (input.airSmashButtonPressed && canStartAirSmash)
         {
@@ -1110,7 +1127,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         canEndAirSmash = false; 
      
 
-        if (airSmashDelayTimer >= airSmashDelayDuration - .05f || !isGroundSmash)
+        if (airSmashDelayTimer >= airSmashDelayDuration - .09f || !isGroundSmash)
         {
             isAirSmashing = false;
             isGroundSmash = false;
@@ -1139,19 +1156,21 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     void ResetStates()
     {
 
+/*
         canLand = false;
         canMove = true;
         canRotate = true;
         canJump = true;
         canSprint = true;
         canStartWallrun = true;
-        canDash = true;
+      //  canDash = true;
         canDashAttack = true;
         canEndDash = false;
         canStartNewAttack = true;
         canStartAirSmash = true;
         canEndAirSmash = true;
         canFall = true;
+        */
        
 
         isMoving = false;

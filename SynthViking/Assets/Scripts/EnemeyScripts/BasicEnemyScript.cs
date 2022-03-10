@@ -150,9 +150,8 @@ public class BasicEnemyScript : MonoBehaviour
     {
         if(isLaunched)
         {
-            if(other.gameObject.layer == 6)
+            if(other.gameObject.layer == playerController.EnvorinmentLayer)
             {
-                Debug.Log("We have hit an object with impact"); 
                 hasHitObject = true; 
             }
 
@@ -165,7 +164,6 @@ public class BasicEnemyScript : MonoBehaviour
         {
             if(!canAddImpactDamage && hasHitObject)
             {
-                Debug.Log("Reset hit impact state"); 
                 hasHitObject = false; 
             }
         }
@@ -183,7 +181,6 @@ public class BasicEnemyScript : MonoBehaviour
             if(revoveryTimer >= recoveryDuration)
             {
                 StandBackUp(); 
-                Debug.Log("We can recover"); 
              //   isGettingUp = true; 
                 isLaunched = false;
                 isStunned = false; 
@@ -203,7 +200,6 @@ public class BasicEnemyScript : MonoBehaviour
         {
             canAddImpactDamage = false; 
             TakeDamage(50f); 
-            Debug.Log("Add like some damage"); 
         }
         
     }

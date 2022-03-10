@@ -9,134 +9,82 @@ public class SlowMoScript : MonoBehaviour
     public ThirdPerson_PlayerControler playerController;
     public PlayerInputCheck input; 
 
-  //  public float aimSlowmoDuration;
-   // public float aimSlowmoTimer;
-
     public float maxSlowMoTime;
-  //  public float minSlowMoTime; 
     public float currentSlowmoTime;
 
     public float slowmoRechargeCooldownDuration;
-    public float slowmoRechargeCooldownTimer; 
+    private float slowmoRechargeCooldownTimer; 
     public float rechargeSpeed;
     public bool canSlowmo;
-    public bool isInSlowmo;
-    public bool startSlowmo; 
-   // public bool isRecharing;
-   // public bool canRecharge; 
+    public bool isInSlowmo; 
+    public bool isRecharging; 
+    public float currentTimeScale; 
 
-
-    private MMFeedbackTimescaleModifier mmSlowmoTime;
-    public MMFeedbacks slowmoFeedback;
-
-    //State
-    private int slowmoState; 
-    private int fixedControllerState;
-    [HideInInspector]
-    public enum currentState
-    {
-        InSlowmo,
-        Recharge,
-        Wait,
-    }
+    public MMTimeManager timeManager; 
 
     void Start()
     {
-        mmSlowmoTime = slowmoFeedback.GetComponent<MMFeedbackTimescaleModifier>();
-        currentSlowmoTime  = mmSlowmoTime.TimeScaleDuration = maxSlowMoTime;
+        currentSlowmoTime  = maxSlowMoTime;
         slowmoRechargeCooldownTimer = slowmoRechargeCooldownDuration;
     }
 
     // Update is called once per frame
     void Update()
     {
-        HandleSlowmo();
-
-        switch (slowmoState)
-        {
-            case (int)currentState.Wait:
-                break;
-
-            case (int)currentState.InSlowmo:
-
-                DoSlowmo();
-                break;
-
-            case (int)currentState.Recharge:
-                DoSlowmoRecharge();
-                break;
-        }
-
+        currentTimeScale = Time.timeScale; 
+        Debug.Log(currentTimeScale); 
         CheckForSlowmo();
     }
 
+    
+
     public void CheckForSlowmo()
     {
+        //Check if we have enough slowmo
         if (currentSlowmoTime <= 0) canSlowmo = false;
+        else if(!input.dashButtonPressed) canSlowmo = true; 
 
-        if (input.slowMoButtonPressed && canSlowmo && !isInSlowmo)
+        //Player is in slowmo 
+        if (canSlowmo && input.dashButtonPressed)
         {
-
-            slowmoState = (int)currentState.InSlowmo; 
+            if(!isInSlowmo)
+            { 
+                timeManager.SetTimescaleTo(.45f);
+                isInSlowmo = true; 
+            }
+            isRecharging = false; 
+            
+            DoSlowmo(true, .51f); 
         }
-        else if (input.slowMoButtonPressed && isInSlowmo)
-        {
-            slowmoRechargeCooldownTimer = slowmoRechargeCooldownDuration; 
-            slowmoState = (int)currentState.Recharge; 
-        }
 
+     
 
-        else if (!input.slowMoButtonPressed && currentSlowmoTime < maxSlowMoTime)
-        {
-            DoSlowmoRecharge();
-        }
+        //Player is not in slowmo 
+        if(currentSlowmoTime < maxSlowMoTime && !input.dashButtonPressed)
+        {                          
+            if(!isRecharging)
+            { 
+                canSlowmo = false; 
+                isInSlowmo = false; 
+                isRecharging = true; 
+                timeManager.SetTimescaleTo(1f);   
+                slowmoRechargeCooldownTimer = slowmoRechargeCooldownDuration;             
+            }      
+
+            DoSlowmoRecharge();           
+        }   
     }
 
-    public void HandleSlowmo()
-    {
-        mmSlowmoTime.TimeScaleDuration = currentSlowmoTime; 
-       // mmSlowmoTime.stop
-    
-        if (currentSlowmoTime > 0)
-        {
-            canSlowmo = true; 
-        }       
-        else if (!isInSlowmo && currentSlowmoTime < maxSlowMoTime)
-        {
-            DoSlowmoRecharge();
-            if (currentSlowmoTime > maxSlowMoTime) currentSlowmoTime = maxSlowMoTime;
-        }
-
-        isInSlowmo = false;
+    public void DoSlowmo(bool hasCost, float timeScaleModifier)
+    {  
+        if(hasCost) currentSlowmoTime -= Time.unscaledDeltaTime;
     }
-
-   
-
-    public void DoSlowmo()
-    {
-
-        Time.timeScale = .3f; 
-        isInSlowmo = true;
-        slowmoFeedback?.PlayFeedbacks();
-        currentSlowmoTime -= Time.unscaledDeltaTime;
-        slowmoRechargeCooldownTimer = slowmoRechargeCooldownDuration;
-
-    }
-
-
 
     void DoSlowmoRecharge()
     {
-        //  Time.timeScale = .f;
-        Debug.Log("InRecharge");
-        Time.timeScale = 1f;
-        slowmoRechargeCooldownTimer -= Time.deltaTime;
-
-
-        if (slowmoRechargeCooldownTimer <= 0)
-        {        
-            currentSlowmoTime += Time.deltaTime * rechargeSpeed;
-        }
-   
+        slowmoRechargeCooldownTimer -= Time.deltaTime; //Wait for recharge to begin 
+        if (slowmoRechargeCooldownTimer <= 0) currentSlowmoTime += Time.deltaTime * rechargeSpeed;
+        isInSlowmo = false; 
     }
+
 }

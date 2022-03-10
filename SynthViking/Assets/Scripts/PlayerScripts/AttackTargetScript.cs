@@ -11,11 +11,12 @@ public class AttackTargetScript : MonoBehaviour
     public float targetCheckRadius; 
     public float targetCheckRange;
 
-    private LayerMask enemyLayer = 7;
     public Transform targetCube; 
     public Transform selectedTarget;
     public ThirdPerson_PlayerControler playerController;
     public CheckForLimbs limbCheckerScript; 
+
+    public GameObject bloodFx; 
 
     public List<GameObject> enemyTargetsInRange = new List<GameObject>();  
 
@@ -32,12 +33,12 @@ public class AttackTargetScript : MonoBehaviour
         if(Physics.SphereCast(transform.position, targetCheckRadius, playerController.inputDir, out hit, targetCheckRange))
         {
             //Check for enemy layer
-            if(hit.transform.gameObject.layer == enemyLayer && !hit.transform.CompareTag("Dead"))
+            if(hit.transform.gameObject.layer == playerController.enemyLayer && !hit.transform.CompareTag("Dead"))
             {
                 BasicEnemyScript script = hit.transform.GetComponent<BasicEnemyScript>();             
                 if(script.canBeTargeted)
                 {
-                   selectedTarget = hit.transform; 
+                    selectedTarget = hit.transform; 
                     targetCube.transform.position = selectedTarget.position + new Vector3(0,2,0); 
                 }
             }
@@ -52,7 +53,7 @@ public class AttackTargetScript : MonoBehaviour
      void OnTriggerEnter(Collider other)
      {
 
-        if(other.gameObject.layer == enemyLayer)
+        if(other.gameObject.layer == playerController.enemyLayer)
         {
             enemyTargetsInRange.Add(other.transform.gameObject); 
         }
@@ -60,9 +61,12 @@ public class AttackTargetScript : MonoBehaviour
 
      void OnTriggerExit(Collider other)
      {
-         foreach(GameObject obj in enemyTargetsInRange)
+         if(enemyTargetsInRange.Count > 0) 
          {
-            if(other.transform.name == obj.name) enemyTargetsInRange.Remove(obj); 
+            foreach(GameObject obj in enemyTargetsInRange)
+            {
+                if(other.transform.name == obj.name) enemyTargetsInRange.Remove(obj); 
+            }
          }
 
      }
@@ -77,6 +81,7 @@ public class AttackTargetScript : MonoBehaviour
             //Deal damage to hit target
             BasicEnemyScript enemyScript = obj.GetComponent<BasicEnemyScript>(); 
             enemyScript.TakeDamage(playerController.currentAttackDamage);
+            Instantiate(bloodFx, enemyScript.transform.position, enemyScript.transform.rotation); 
           
 
             //Is the enemy dead after our hit?            
