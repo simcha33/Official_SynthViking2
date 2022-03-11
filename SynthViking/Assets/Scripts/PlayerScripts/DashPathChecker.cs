@@ -26,7 +26,7 @@ public class DashPathChecker : MonoBehaviour
             //Dash collides with enemy
             if (other.gameObject.layer == playerController.enemyLayer && !playerController.enemyDashObjectReached && !other.gameObject.CompareTag("Dead"))
             {
-                
+       
                 playerController.playerAnim.SetTrigger("DashAttackTrigger");
                 playerController.enemyDashObjectReached = true;
                 playerController.playerRb.velocity = new Vector3(0, 0, 0);

@@ -25,6 +25,8 @@ public class BasicEnemyScript : MonoBehaviour
  //    public bool isGettingUp; 
     #endregion
 
+ 
+
     [Header("STATEMACHINE")]
     #region 
     private int enemyState;
@@ -49,6 +51,7 @@ public class BasicEnemyScript : MonoBehaviour
     public Collider mainCollider; 
     public ThirdPerson_PlayerControler playerController; 
     public Transform rootTransform; 
+    public Transform bloodSpawnPoint; 
 
     [Header("STATES")]
     public bool isStunned;
@@ -102,18 +105,30 @@ public class BasicEnemyScript : MonoBehaviour
             break;
         }
     }
+
+    public void LookForPlayer(){
+
+    }
+
+    public void FollowPlayer(){
+
+    }
+
+    public void Attackplayer(){
+
+    }
     
 
 
     public void LaunchEnemy(Vector3 direction, float forwardForce, float upForce)
     {
+
         if(canBeLaunched)
         {
             canAddImpactDamage = true; 
             isLaunched = true; 
             isStunned = true; 
-
-           // transform.position = playerController.transform.position + playerController.transform.forward + transform.up; 
+            enemyRb.velocity = new Vector3(0,0,0); 
             EnableRagdoll(); 
 
             foreach(Rigidbody rb in ragdollRbs)
@@ -238,6 +253,7 @@ public class BasicEnemyScript : MonoBehaviour
            // Destroy(joint);                
         }
 
+        enemyRb.constraints = RigidbodyConstraints.None; 
         enemyRb.useGravity = false; 
         enemyRb.isKinematic = false; 
 
@@ -266,7 +282,8 @@ public class BasicEnemyScript : MonoBehaviour
           //  rb.detectCollisions = false;        
             rb.GetComponent<Collider>().isTrigger = true;    
         }
-
+        
+        enemyRb.constraints = RigidbodyConstraints.FreezePositionY; 
         mainCollider.isTrigger = false;  
         enemyAnim.enabled = true; 
         isRagdolling = false; 

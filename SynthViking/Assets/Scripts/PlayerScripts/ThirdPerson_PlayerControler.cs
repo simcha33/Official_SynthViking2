@@ -43,12 +43,13 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     //Jumping 
     public float jumpForce;
     public float maxJumps;
-    private int jumpCount;
+    public int jumpCount;
     private float randomJumpVar = 2;
     public bool hasJumped = false;
 
     private float jumpDelayTimer;
-    private float landingDelayTimer;
+    public float landingDelayTimer;
+    private float landingDelayDuration; 
     private float gravity = 1f;
     public float fallMultiplier = 5f;
     public float lowJumpGravity;
@@ -125,11 +126,11 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public float groundSlamMaxDamage;
     private float currentGroundSlamDamage;
     public float groundSlamRadius;
-    public float groundSlamForwardForce;
-    public float groundSlamUpForce; 
+    public float slamImpactForwardForce;
+    public float slamImpactUpForce; 
 
     private float airSmashCurrentDamage;
-    public float airSmashDownForce;
+    public float airSmashDownSpeed; 
     private float airSmashDelayDuration;
     private float airSmashDelayTimer;
     private Vector3 airSmashDirection;
@@ -363,7 +364,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             case (int)currentState.DASHING:
                 CheckForDash();
                 CheckForAirSmash();
-                GroundCheck(); 
+               // GroundCheck(); 
                 break;
 
             case (int)currentState.AIRSMASHING:
@@ -374,6 +375,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         }
 
         HandleAnimations();
+        //if(transform.eulerAngles.x != 0) transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, transform.eulerAngles.z); 
     }
 
 
@@ -834,39 +836,12 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             //Handle Jump animations
             if (hasJumped)
             {
+                playerRb.constraints = playerRb.constraints; 
                 DoJump(jumpForce);
                 hasJumped = false;
             }
         }
         else canJump = false;
-
-
-        //Land player when near ground 
-        if (isLanding)
-        {
-            if (canLand)
-            {
-                playerAnim.SetTrigger("LandingTrigger");
-                landingDelayTimer = moveLandingClip.length * .7f;
-                canLand = false;
-            }
-
-            //Setup or interupt delay for next state when landing 
-            landingDelayTimer -= Time.deltaTime;
-            if (landingDelayTimer <= 0 && !CheckAnimationClip(noMoveLandingClip.name)) isLanding = false; //Player finishes the move landing animation 
-            else if (isGrounded && CheckAnimationClip(noMoveLandingClip.name) && landingDelayTimer <= moveLandingClip.length * 1 - noMoveLandingClip.length * 1) isLanding = false; //Player exits the no move landing animation 
-
-            //Player has landed 
-            if (isGrounded && isInAir)
-            {
-                wasSprintingBeforeJump = false;
-                isInAir = false;
-                canJump = true;
-
-                groundCheckJumpDelay = .5f;
-                jumpCount = 0;
-            }
-        }
 
 
         //Add extra falling gravity 
@@ -912,19 +887,32 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             {
                 playerRb.useGravity = false;
                 isGrounded = true;
+                canJump = true;
+                jumpCount = 0;
 
             }
             //Player isn't grounded 
             else
             {
-                canLand = true;
+                //canLand = true;
+                canLand = true; 
                 isGrounded = false;
+               // isLanding = false; 
                 isInAir = true;
                 playerRb.useGravity = true;
+        
             }
 
             //Player can land 
-            if ((Physics.Raycast(ray, out hit, landCheckHeight)) && canLand) isLanding = true;
+            if ((Physics.Raycast(ray, out hit, landCheckHeight) && canLand && isInAir))
+            { 
+                canLand = false;  
+                isInAir = false;     
+                isLanding = true;  
+                landingDelayTimer = 0f;   
+                playerAnim.SetTrigger("LandingTrigger");  
+                Debug.Log("LAND TRIGGER");       
+            }
       
         }
 
@@ -932,9 +920,33 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         if ((!Physics.Raycast(ray, out hit, airSmashMinStartHeight)) && isInAir) canStartAirSmash = true;
         else canStartAirSmash = false;
 
+        if(isLanding) LandPlayer(); 
+       
 
+    }
 
+    void LandPlayer()
+    {
+        
+        //Set animation based on
+        if(moveVelocity > .3f) landingDelayDuration = (moveLandingClip.length / playerAnim.GetCurrentAnimatorStateInfo(0).speed);
+        else if(moveVelocity <= .3f) landingDelayDuration = (noMoveLandingClip.length / playerAnim.GetCurrentAnimatorStateInfo(0).speed);
+        
+        landingDelayTimer += Time.deltaTime;
+        if(landingDelayTimer >= landingDelayDuration - .15f) isLanding = false; 
 
+        
+        //Player has landed 
+        if (isGrounded && isInAir && !isLanding)
+        {
+            wasSprintingBeforeJump = false;
+            isInAir = false;
+            canLand = true;
+            groundCheckJumpDelay = .5f;
+          
+            Debug.Log(" YOU IN HERE???"); 
+        }
+        
     }
 
 
@@ -990,7 +1002,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
 
         playerAnim.SetTrigger("WallRunEndTrigger");
-        groundCheckTimer = .3f;
+        groundCheckTimer = .45f;
         jumpCount = 1;
         
 
@@ -1085,7 +1097,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     void DoAirSmash()
     {      
-        playerRb.AddForce(-Vector3.up * airSmashDownForce, ForceMode.VelocityChange);
+        playerRb.AddForce(-Vector3.up * airSmashDownSpeed, ForceMode.VelocityChange);
         dashChecker.gameObject.SetActive(true);
 
         //Dash has reached ground
@@ -1106,7 +1118,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                     {
                         BasicEnemyScript enemyScript = slamTarget.GetComponent<BasicEnemyScript>();
                         enemyScript.TakeDamage(currentGroundSlamDamage);
-                        enemyScript.LaunchEnemy((slamTarget.transform.position - transform.position), groundSlamForwardForce, groundSlamUpForce);
+                        enemyScript.LaunchEnemy((slamTarget.transform.position - transform.position), slamImpactForwardForce, Random.Range(slamImpactUpForce / 1.3f, slamImpactUpForce * 1.3f));
                     }
                 }
             }
@@ -1198,7 +1210,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //ResetDash(); 
     }
 
-    void ResetAnimator()
+    public void ResetAnimator()
     {
         foreach (AnimatorControllerParameter parameter in playerAnim.parameters)
         {
