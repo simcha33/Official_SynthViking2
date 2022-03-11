@@ -81,8 +81,9 @@ public class AttackTargetScript : MonoBehaviour
             //Deal damage to hit target
             BasicEnemyScript enemyScript = obj.GetComponent<BasicEnemyScript>(); 
             enemyScript.TakeDamage(playerController.currentAttackDamage);
-            Instantiate(bloodFx, enemyScript.transform.position, enemyScript.transform.rotation); 
-          
+            Instantiate(bloodFx, enemyScript.transform.position, Quaternion.Euler(0, enemyScript.transform.eulerAngles.y + 90, 0));
+            //var instance = Instantiate(bloodPrefab, hit.point, Quaternion.Euler(0, angle + 90, 0));
+
 
             //Is the enemy dead after our hit?            
             if (enemyScript.isDead)

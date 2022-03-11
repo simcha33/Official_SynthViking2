@@ -1739,6 +1739,7 @@ GameObject:
   - component: {fileID: 177779495}
   - component: {fileID: 177779487}
   - component: {fileID: 177779502}
+  - component: {fileID: 177779503}
   m_Layer: 0
   m_Name: LightAttackFeedback
   m_TagString: Untagged
@@ -1753,7 +1754,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 177779485}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 841b72de2996c5c40bfb394f3d0e0a98, type: 3}
   m_Name: 
@@ -1774,6 +1775,7 @@ MonoBehaviour:
   - {fileID: 177779488}
   - {fileID: 177779487}
   - {fileID: 177779502}
+  - {fileID: 177779503}
   InitializationMode: 2
   SafeMode: 3
   Direction: 0
@@ -2763,7 +2765,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ba1d39e1a4e0a142831b5815b528429, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Active: 0
+  Active: 1
   Label: Cinemachine Impulse
   Chance: 100
   Timing:
@@ -2807,8 +2809,8 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       m_AttackTime: 0
-      m_SustainTime: 0.2
-      m_DecayTime: 0.7
+      m_SustainTime: 0.1
+      m_DecayTime: 0.1
       m_ScaleWithImpact: 1
       m_HoldForever: 0
     m_ImpactRadius: 100
@@ -2816,7 +2818,7 @@ MonoBehaviour:
     m_DissipationMode: 2
     m_DissipationDistance: 1000
     m_PropagationSpeed: 343
-  Velocity: {x: 5, y: 5, z: 5}
+  Velocity: {x: 0.2, y: 0.2, z: 0.2}
   ClearImpulseOnStop: 0
 --- !u!114 &177779502
 MonoBehaviour:
@@ -3005,6 +3007,46 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &177779503
+MonoBehaviour:
+  m_ObjectHideFlags: 2
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 177779485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4cf8e1825623fb34b9fc92dbef54ec56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Active: 1
+  Label: Flash
+  Chance: 100
+  Timing:
+    TimescaleMode: 0
+    InitialDelay: 0
+    CooldownDuration: 0
+    ExcludeFromHoldingPauses: 0
+    InterruptsOnStop: 1
+    NumberOfRepeats: 0
+    RepeatForever: 0
+    DelayBetweenRepeats: 1
+    MMFeedbacksDirectionCondition: 0
+    PlayDirection: 0
+    ConstantIntensity: 0
+    UseIntensityInterval: 0
+    IntensityIntervalMin: 0
+    IntensityIntervalMax: 0
+    Sequence: {fileID: 0}
+    TrackID: 0
+    Quantized: 0
+    TargetBPM: 120
+  DebugActive: 0
+  Channel: 0
+  FlashColor: {r: 1, g: 1, b: 1, a: 1}
+  FlashDuration: 0.4
+  FlashAlpha: 0.4
+  FlashID: 1
 --- !u!1 &196805686
 GameObject:
   m_ObjectHideFlags: 0
@@ -5413,7 +5455,7 @@ MonoBehaviour:
   airMoveSpeed: 900
   airDrag: 1.5
   groundCheckTimer: 0
-  dashForwardForce: 0.45
+  dashForwardForce: 0.35
   dashDelayDuration: 0.22
   minDashDistance: 25
   maxDashDistance: 51
