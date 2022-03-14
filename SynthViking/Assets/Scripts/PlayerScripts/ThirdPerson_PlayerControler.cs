@@ -1293,7 +1293,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     void SetAttackType()
     {
-        int totalAttackTrees = 6;
+        int totalAttackTrees = 5;
 
         if (isSprinting)
         {
@@ -1313,16 +1313,16 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             currentAttackForwardForce = basicAttackForwardForce;
 
             attackState = currentAttackType.BasicLightAttack.ToString();
-            if(currentComboLength == 0) playerAnim.SetInteger("LightAttackType", Random.Range(1, totalAttackTrees));  //Decide which combo tree to go into (only once per full combo tree)
-
+             if(currentComboLength == 0) playerAnim.SetInteger("LightAttackType", Random.Range(1, totalAttackTrees + 1));  //Decide which combo tree to go into (only once per full combo tree)
+         //   if (currentComboLength == 0) playerAnim.SetInteger("LightAttackType", 1); 
 
             //Set current attack tree length
             if      (playerAnim.GetInteger("LightAttackType") == 1) totalComboLength = 3; 
-            else if (playerAnim.GetInteger("LightAttackType") == 2) totalComboLength = 3;
+            else if (playerAnim.GetInteger("LightAttackType") == 2) totalComboLength = 4;
             else if (playerAnim.GetInteger("LightAttackType") == 3) totalComboLength = 4;
-            else if (playerAnim.GetInteger("LightAttackType") == 4) totalComboLength = 5;
-            else if (playerAnim.GetInteger("LightAttackType") == 5) totalComboLength = 7;
-            else if (playerAnim.GetInteger("LightAttackType") == 6) totalComboLength = 5;
+            else if (playerAnim.GetInteger("LightAttackType") == 4) totalComboLength = 4;
+            else if (playerAnim.GetInteger("LightAttackType") == 5) totalComboLength = 6; //Done
+          //  else if (playerAnim.GetInteger("LightAttackType") == 6) totalComboLength = 5;
         }
 
 
@@ -1424,6 +1424,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     {
 
         canRotate = false;
+       // 
         attackTargetScript.TargetDamageCheck();
         if(attackState != currentAttackType.SprintAttack.ToString()) transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .4f);
 
@@ -1432,6 +1433,11 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     void AllowAttackForwardForce()
     {
         transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .6f);
+    }
+
+    void AllowNextAttack()
+    {
+        nextAttackTimer = nextAttackDuration;
     }
 
 
