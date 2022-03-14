@@ -1,28 +1,35 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using DG.Tweening; 
+using DG.Tweening;
+using MoreMountains.Feedbacks; 
 
 public class AttackTargetScript : MonoBehaviour
 {
 
     //public List<Transform> nearbyTargets = new List<Transform>(); 
-   
+    [Header("COMPONENTS")] //GROUND MOVEMENT
+    #region
+    public MMFeedbacks weaponImpactFeedback;
+    public MMFeedbacks weaponKillFeedback;
+    public ThirdPerson_PlayerControler playerController;
+    public CheckForLimbs limbCheckerScript;
+
+    public GameObject bloodFx1;
+    public GameObject bloodFx2;
+    public Transform swordPoint;
+    public Transform targetCube;
+    public Transform selectedTarget;
+    #endregion
+
+    [Header("VALUES")] //GROUND MOVEMENT
+    #region
     public float targetCheckRadius; 
     public float targetCheckRange;
-
     public bool canTarget; 
+    public List<GameObject> enemyTargetsInRange = new List<GameObject>();
+    #endregion
 
-    public Transform targetCube; 
-    public Transform selectedTarget;
-    public ThirdPerson_PlayerControler playerController;
-    public CheckForLimbs limbCheckerScript; 
-
-    public GameObject bloodFx1; 
-    public GameObject bloodFx2; 
-    public Transform swordPoint; 
-
-    public List<GameObject> enemyTargetsInRange = new List<GameObject>();  
 
 
     void Start()
@@ -86,35 +93,37 @@ public class AttackTargetScript : MonoBehaviour
             BasicEnemyScript enemyScript = obj.GetComponent<BasicEnemyScript>(); 
             enemyScript.TakeDamage(playerController.currentAttackDamage);
             Instantiate(bloodFx1, enemyScript.bloodSpawnPoint.position, enemyScript.bloodSpawnPoint.rotation);
-            //var instance = Instantiate(bloodPrefab, hit.point, Quaternion.Euler(0, angle + 90, 0));
-
+            weaponImpactFeedback?.PlayFeedbacks();
 
             //Is the enemy dead after our hit?            
             if (enemyScript.isDead)
-            { 
-                    
-                //limbCheckerScript.Limbs(); 
-                foreach(Rigidbody limb in limbCheckerScript.hitLimbs)
+            {
+         
+                //Collect and detach limbs
+                foreach (Rigidbody limb in limbCheckerScript.hitLimbs)
                 {
                     if(enemyScript.ragdollRbs.Contains(limb))
-                    {
+                    {         
                         CharacterJoint joint = limb.GetComponent<CharacterJoint>();
+                        Instantiate(bloodFx1, limb.position, limb.rotation);
                         Destroy(joint);
-                        limb.transform.parent = null; 
-                        limb.mass *=2f; 
+                        limb.transform.parent = null;             
                         limb.AddForce((swordPoint.position - limb.transform.position) * 1f, ForceMode.Impulse);
                         limb.AddForce(limb.transform.up * .4f, ForceMode.Impulse);
+
+                        if (enemyScript.canBeTargeted)limb.mass *= 3f; 
                     }
                 }
+
+                if (enemyScript.canBeTargeted)
+                {
+                    enemyScript.canBeTargeted = false; 
+                    weaponKillFeedback?.PlayFeedbacks();
+                }
+
             }
 
-            // enemyScript.enemyRb.AddForce(transform.forward * 4f, ForceMode.VelocityChange);
-            enemyScript.transform.DOMove(playerController.transform.position + transform.forward * 3.5f, .3f); 
-
-            //else
-            //{
-            // enemyScript.transform.position += transform.forward * 1.3f; 
-            // }
+            enemyScript.transform.DOMove(playerController.transform.position + transform.forward * 3.5f, .3f); //Move enemy backwards
 
         }
             

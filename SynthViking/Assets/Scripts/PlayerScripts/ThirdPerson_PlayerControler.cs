@@ -91,6 +91,20 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public Color dashChargeColor; 
     public Image dashChargeBackground;
 
+    //Attack types
+    //private string currentAttackType;
+    private string attackType_Sprint = "SprintAttackTrigger";
+
+    private string attackState; 
+
+    [HideInInspector]
+    public enum currentAttackType
+    {
+        BasicLightAttack,
+        BasicHeavyAttack,
+        SprintAttack,
+    }
+
 
     #endregion
 
@@ -102,21 +116,27 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     [Header("MELEE ATTACK")]
     #region   
-    public float nextAttackDuration;
-    public float nextAttackTimer;
     public float maxTimeBetweenAttacks;
+    private float nextAttackDuration;
+    private float nextAttackTimer; 
     public int currentComboLength;
     public int totalComboLength;
     private float attackMoveLerpT;
     private Vector3 attackStartPos;
 
     private float attackMoveSpeed = 1f;
-    public bool attackTargetInRange;
+    [HideInInspector]public bool attackTargetInRange;
     [HideInInspector] public bool canDamageTarget;
-    public Transform currentAttackTarget;
-    public float swordAttackDamage = 10f;
-    public float punchAttackDamage = 5f;
+    [HideInInspector]public Transform currentAttackTarget;
     [HideInInspector] public float currentAttackDamage;
+    [HideInInspector] public float currentAttackForwardForce; 
+    public float basicAttackForwardForce;
+    public float sprintAttackForwardForce; 
+    public float basicLightAttackDamage = 10f;
+    public float basicHeavyAttackDamage = 20f;
+    public float basicSprintAttackDamage = 20f; 
+    public float punchAttackDamage = 5f;
+  
 
     #endregion
 
@@ -197,6 +217,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public Material[] holoSkinMat;
     public Material[] defaultSkinMat;
     public Transform raycastCheck;
+    public Rigidbody groundConstraints;
+    public Rigidbody airConstraints;
     #endregion
 
     [Header("FEEDBACK")]
@@ -204,11 +226,15 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public MMFeedbacks JumpFeedback;
     public MMFeedbacks LandingFeedback;
     public MMFeedbacks DashStartFeeback;
-    public MMFeedbacks DashAttackFeedback;
     public MMFeedbacks DashEndFeeback;
-    public MMFeedbacks LightAttackFeedback;
-    public MMFeedbacks aimingFeedback;
-    public MMFeedbacks slowmoFeedback; 
+    public MMFeedbacks DashAttackFeedback; 
+    public MMFeedbacks AttackFeedback; 
+    public MMFeedbacks BasicLightAttackFeedback;
+    public MMFeedbacks SprintAttackFeedback;
+    public MMFeedbacks AirSlamStartFeeback;
+    public MMFeedbacks AirSlamEndFeedback;
+    // public MMFeedbacks aimingFeedback;
+    // public MMFeedbacks slowmoFeedback; 
     #endregion
 
     [Header("Switch Case")] //SWITCH CASE
@@ -356,7 +382,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 CheckForAirSmash();
                 CheckForDash(); 
                 CheckForMoveInput();
-                GroundCheck();
+            //    GroundCheck();
                 HandleRotation();
                 CheckForDamage();
                 break;
@@ -687,6 +713,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
                 playerRb.drag = airDrag;
                 playerRb.velocity = new Vector3(0, 0, 0);
+                playerRb.constraints = airConstraints.constraints; 
 
                 controllerState = (int)currentState.DASHING;
                 fixedControllerState = (int)currentState.DASHING;
@@ -836,7 +863,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             //Handle Jump animations
             if (hasJumped)
             {
-                playerRb.constraints = playerRb.constraints; 
+                GroundCheck(); 
                 DoJump(jumpForce);
                 hasJumped = false;
             }
@@ -878,6 +905,9 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             isGrounded = false;
             isLanding = false;
             isInAir = true;
+            playerRb.constraints = airConstraints.constraints; 
+      
+            playerRb.useGravity = true;
         }
         else
         {
@@ -886,6 +916,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             if (Physics.Raycast(ray, out hit, groundCheckHeight))
             {
                 playerRb.useGravity = false;
+                playerRb.constraints = groundConstraints.constraints; 
                 isGrounded = true;
                 canJump = true;
                 jumpCount = 0;
@@ -894,8 +925,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             //Player isn't grounded 
             else
             {
-                //canLand = true;
-                canLand = true; 
+                playerRb.constraints = airConstraints.constraints; 
+                if (!isLanding) canLand = true; 
                 isGrounded = false;
                // isLanding = false; 
                 isInAir = true;
@@ -913,14 +944,16 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 playerAnim.SetTrigger("LandingTrigger");  
                 Debug.Log("LAND TRIGGER");       
             }
-      
+
+            if (isLanding) LandPlayer();
+
         }
 
         //Player can airSmash 
         if ((!Physics.Raycast(ray, out hit, airSmashMinStartHeight)) && isInAir) canStartAirSmash = true;
         else canStartAirSmash = false;
 
-        if(isLanding) LandPlayer(); 
+      
        
 
     }
@@ -943,8 +976,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             isInAir = false;
             canLand = true;
             groundCheckJumpDelay = .5f;
-          
-            Debug.Log(" YOU IN HERE???"); 
         }
         
     }
@@ -989,6 +1020,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         isSprinting = true;
         canMove = true;
 
+        playerRb.constraints = airConstraints.constraints; 
         playerRb.isKinematic = false;
 
         playerRb.velocity = new Vector3(playerRb.velocity.x, 0, playerRb.velocity.z);
@@ -1048,6 +1080,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 playerAnim.SetTrigger("AirSmashStartTrigger");
                 playerRb.useGravity = false;
                 isAirSmashing = true;
+                AirSlamStartFeeback?.PlayFeedbacks(); 
                 controllerState = (int)currentState.AIRSMASHING;
                 fixedControllerState = (int)currentState.AIRSMASHING; 
             }
@@ -1108,7 +1141,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             if (hit.transform.gameObject.layer == EnvorinmentLayer)
             {
              
-                playerRb.velocity = new Vector3(0, 0, 0);            
+                playerRb.velocity = new Vector3(0, 0, 0);
+                AirSlamEndFeedback?.PlayFeedbacks(); 
                 isGroundSmash = true;
 
                 Collider[] colls = Physics.OverlapSphere(transform.position, groundSlamRadius);
@@ -1220,24 +1254,25 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         }
     }
 
+    //Attacking
+
     void CheckForAttack()
     {
-        int totalAttackTrees = 1;
 
         if (input.meleeButtonPressed && canStartNewAttack && !isAttacking)
         {
-
-            ResetAnimator();
+            currentComboLength = 0;
+            ResetAnimator(); 
+            SetAttackType();           
             ResetStates();
-            playerAnim.SetInteger("LComboType", Random.Range(1, totalAttackTrees));  //Decide which combo tree to go into
             isAttacking = true;
             canStartNewAttack = false;
             playerRb.isKinematic = false;
+            
 
-            nextAttackTimer = 5f;
-            currentAttackDamage = swordAttackDamage;
-            currentComboLength = 0;
-
+            nextAttackTimer = 10f;
+            
+           
             controllerState = (int)currentState.ATTACKING;
             fixedControllerState = (int)currentState.ATTACKING;
         }
@@ -1247,7 +1282,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             ResetStates();
             isAttacking = true;
             canStartNewAttack = false;
-            nextAttackTimer = 5f;
+            nextAttackTimer = 10f;
+
             controllerState = (int)currentState.ATTACKING;
             fixedControllerState = (int)currentState.ATTACKING;
         }
@@ -1255,7 +1291,43 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         if (isAttacking) HandleAttack();
     }
 
-    //Attacking
+    void SetAttackType()
+    {
+        int totalAttackTrees = 6;
+
+        if (isSprinting)
+        {
+            totalComboLength = 2;    
+            AttackFeedback = SprintAttackFeedback;
+            currentAttackDamage = basicSprintAttackDamage;
+            currentAttackForwardForce = sprintAttackForwardForce;
+
+            attackState = currentAttackType.SprintAttack.ToString();
+            playerAnim.SetFloat("SprintAttackType", Random.Range(1, 4));
+         
+        }
+        else
+        {                  
+            AttackFeedback = BasicLightAttackFeedback;
+            currentAttackDamage = basicLightAttackDamage;
+            currentAttackForwardForce = basicAttackForwardForce;
+
+            attackState = currentAttackType.BasicLightAttack.ToString();
+            if(currentComboLength == 0) playerAnim.SetInteger("LightAttackType", Random.Range(1, totalAttackTrees));  //Decide which combo tree to go into (only once per full combo tree)
+
+
+            //Set current attack tree length
+            if      (playerAnim.GetInteger("LightAttackType") == 1) totalComboLength = 3; 
+            else if (playerAnim.GetInteger("LightAttackType") == 2) totalComboLength = 3;
+            else if (playerAnim.GetInteger("LightAttackType") == 3) totalComboLength = 4;
+            else if (playerAnim.GetInteger("LightAttackType") == 4) totalComboLength = 5;
+            else if (playerAnim.GetInteger("LightAttackType") == 5) totalComboLength = 7;
+            else if (playerAnim.GetInteger("LightAttackType") == 6) totalComboLength = 5;
+        }
+
+
+    }
+
 
     void HandleAttack()
     {
@@ -1265,23 +1337,24 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //Check if we can continue to the next attack
         if (nextAttackTimer >= nextAttackDuration - (nextAttackDuration / 3f) && input.meleeButtonPressed)
         {
-
-            //Set attack duration equel to current animation length    
+         
+            CheckForMoveInput(); //Set attack direction 
+            if(currentComboLength > 0) SetAttackType(); // Set attack type (skip first attack so we can do conditional start attacks)
             currentComboLength++;
-            CheckForMoveInput();
-            LightAttackFeedback?.PlayFeedbacks();
+
+            //Trigger correct animation stuff
+
+            AttackFeedback?.PlayFeedbacks();
             playerAnim.SetBool("IsAttacking", true);
             playerAnim.SetInteger("CurrentComboLength", currentComboLength);
-            playerAnim.SetTrigger("LightAttackTrigger");
+            playerAnim.SetTrigger(attackState + "Trigger");
+
             nextAttackTimer = 0f;
             attackMoveLerpT = 0f;
             canRotate = true;
 
             attackStartPos = transform.position;
             playerRb.velocity = new Vector3(0, 0, 0);
-
-            //playerRb.AddForce(transform.forward * 4f, ForceMode.VelocityChange); 
-
 
             //Check if there is a attack target within range 
             if (attackTargetScript.selectedTarget != null)
@@ -1291,11 +1364,15 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             }
             else attackTargetInRange = false;
 
-            if (currentComboLength >= totalComboLength) currentComboLength = 0; //Reset combo tree
+            if (currentComboLength >= totalComboLength)
+            {
+                currentComboLength = 0; //Reset combo tree
+                SetAttackType(); 
+            }
         }
 
         //Move towards attack target
-        if (attackTargetInRange)
+        if (attackTargetInRange && attackState != currentAttackType.SprintAttack.ToString()) 
         {
             float animStartDistance = 5;
             //Slightly delay attacks animations
@@ -1333,6 +1410,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //Exit attack state
         if (nextAttackTimer >= nextAttackDuration + maxTimeBetweenAttacks)
         {
+            currentComboLength = 0;
+            Debug.Log("EXIT?"); 
             isAttacking = false;
             attackTargetInRange = false;
             playerAnim.SetBool("IsAttacking", false);
@@ -1346,7 +1425,13 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
         canRotate = false;
         attackTargetScript.TargetDamageCheck();
-        transform.DOMove(transform.position + transform.forward * 2.5f, .4f);
+        if(attackState != currentAttackType.SprintAttack.ToString()) transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .4f);
+
+    }
+
+    void AllowAttackForwardForce()
+    {
+        transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .6f);
     }
 
 

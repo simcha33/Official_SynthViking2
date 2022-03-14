@@ -147,6 +147,7 @@ public class BasicEnemyScript : MonoBehaviour
 
         if(currentHealth > 0)
         {
+            enemyAnim.SetFloat("DamageReaction", Random.Range(0, 5)); 
             enemyAnim.SetTrigger("DamageTrigger"); 
         }
 
@@ -223,7 +224,7 @@ public class BasicEnemyScript : MonoBehaviour
 
     public void EnemyDies()
     {
-        canBeTargeted = false; 
+        //canBeTargeted = false; 
          transform.tag = "Dead"; 
         //transform.GetComponent<BasicEnemyScript>().enabled = false; 
     }

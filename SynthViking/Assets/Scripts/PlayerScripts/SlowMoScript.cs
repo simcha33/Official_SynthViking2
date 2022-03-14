@@ -1,13 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MoreMountains.Feedbacks; 
+using MoreMountains.Feedbacks;
+using UnityEngine.UI; 
 
 public class SlowMoScript : MonoBehaviour
 {
 
     public ThirdPerson_PlayerControler playerController;
-    public PlayerInputCheck input; 
+    public PlayerInputCheck input;
+    public Slider slowMoSlider;
+    public Image slowMoBar; 
 
     public float maxSlowMoTime;
     public float currentSlowmoTime;
@@ -31,8 +34,6 @@ public class SlowMoScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        currentTimeScale = Time.timeScale; 
-        Debug.Log(currentTimeScale); 
         CheckForSlowmo();
     }
 
@@ -55,12 +56,18 @@ public class SlowMoScript : MonoBehaviour
             isRecharging = false; 
             
             DoSlowmo(true, .51f); 
+
         }
 
-     
+        //UI Elements
+        slowMoSlider.value = currentSlowmoTime / maxSlowMoTime;
+        if (currentSlowmoTime < maxSlowMoTime / 4) slowMoBar.color = Color.red;
+        else slowMoBar.color = Color.blue *.85f; 
+
+
 
         //Player is not in slowmo 
-        if(currentSlowmoTime < maxSlowMoTime && !input.dashButtonPressed)
+        if (currentSlowmoTime < maxSlowMoTime && !input.dashButtonPressed)
         {                          
             if(!isRecharging)
             { 
