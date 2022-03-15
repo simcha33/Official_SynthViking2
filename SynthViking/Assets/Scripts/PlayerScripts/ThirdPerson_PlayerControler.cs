@@ -204,6 +204,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public AttackTargetScript attackTargetScript;
     public CameraHandeler camHandeler;
     public SlowMoScript slowScript; 
+
+    public HitPauses hitPauseScript; 
     #endregion
 
     [Header("Components")] //COMPONENTS
@@ -459,7 +461,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         playerAnim.SetBool("CandDash", canDash);
         playerAnim.SetBool("canStartWallrun", canStartWallrun);
         playerAnim.SetBool("CanLand", canLand);
-
     }
 
     void CheckForDamage()
@@ -942,7 +943,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 isLanding = true;  
                 landingDelayTimer = 0f;   
                 playerAnim.SetTrigger("LandingTrigger");  
-                Debug.Log("LAND TRIGGER");       
             }
 
             if (isLanding) LandPlayer();
@@ -1376,8 +1376,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         {
             float animStartDistance = 5;
             //Slightly delay attacks animations
-            if (Vector3.Distance(transform.position, currentAttackTarget.position) > animStartDistance) playerAnim.speed = 0f;
-            else playerAnim.speed = 1;
+            if (Vector3.Distance(transform.position, currentAttackTarget.position) > animStartDistance) playerAnim.enabled = false;
+            else playerAnim.enabled = true; 
 
             float timeToReach = .15f;
             attackMoveLerpT = Time.deltaTime / timeToReach;
@@ -1386,7 +1386,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         }
         else
         {
-            playerAnim.speed = 1f;
+            playerAnim.enabled = true; 
         }
 
 
@@ -1424,8 +1424,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     {
 
         canRotate = false;
-       // 
-        attackTargetScript.TargetDamageCheck();
+      
+        attackTargetScript.TargetDamageCheck();     
         if(attackState != currentAttackType.SprintAttack.ToString()) transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .4f);
 
     }

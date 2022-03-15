@@ -13,6 +13,8 @@ public class AttackTargetScript : MonoBehaviour
     public MMFeedbacks weaponImpactFeedback;
     public MMFeedbacks weaponKillFeedback;
     public ThirdPerson_PlayerControler playerController;
+
+    public HitPauses hitpauseScript; 
     public CheckForLimbs limbCheckerScript;
 
     public GameObject bloodFx1;
@@ -93,7 +95,7 @@ public class AttackTargetScript : MonoBehaviour
             BasicEnemyScript enemyScript = obj.GetComponent<BasicEnemyScript>(); 
             enemyScript.TakeDamage(playerController.currentAttackDamage);
             Instantiate(bloodFx1, enemyScript.bloodSpawnPoint.position, enemyScript.bloodSpawnPoint.rotation);
-            weaponImpactFeedback?.PlayFeedbacks();
+            weaponImpactFeedback?.PlayFeedbacks();           
 
             //Is the enemy dead after our hit?            
             if (enemyScript.isDead)
@@ -122,12 +124,23 @@ public class AttackTargetScript : MonoBehaviour
                 }
 
             }
+            else
+            {           
+               hitpauseScript.objectsToPause.Add(enemyScript.enemyAnim); 
+               hitpauseScript.doHitPause = true; 
+            }
 
-            enemyScript.transform.DOMove(playerController.transform.position + transform.forward * 3.5f, .3f); //Move enemy backwards
+           enemyScript.transform.DOMove(playerController.transform.position + transform.forward * playerController.currentAttackForwardForce * 1.5f, .3f); //Move enemy backwards
 
         }
             
         
+    }
+
+    public void TargetDamageEffects()
+    {
+     
+    
     }
 
      void OnDrawGizmos()
