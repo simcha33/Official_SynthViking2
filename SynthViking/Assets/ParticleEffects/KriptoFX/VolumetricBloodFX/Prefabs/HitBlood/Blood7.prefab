@@ -269,7 +269,7 @@ MonoBehaviour:
   AnimationSpeed: 5
   GroundHeight: 0
   LightIntensityMultiplier: 1
-  FreezeDecalDisappearance: 0
+  FreezeDecalDisappearance: 1
   DecalRenderinMode: 0
   ClampDecalSideSurface: 0
 --- !u!1 &6553911729242099609

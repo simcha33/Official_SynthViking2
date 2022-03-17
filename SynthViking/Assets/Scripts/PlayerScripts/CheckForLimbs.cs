@@ -16,8 +16,8 @@ public class CheckForLimbs : MonoBehaviour
         if(!playerController.isAttacking){
             hitLimbs.Clear(); 
         }
-     
         
+
     }
 
 

@@ -58,7 +58,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public float airDrag = 2f;
 
 
-    private float groundCheckHeight = .4f;
+    private float groundCheckHeight = .35f;
     private float landCheckHeight = 2.5f;
     private float groundCheckJumpDelay = .5f; //Temporaly turn of the groundcheck after jumping 
     public float groundCheckTimer;
@@ -203,7 +203,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public PlayerState playerState;
     public AttackTargetScript attackTargetScript;
     public CameraHandeler camHandeler;
-    public SlowMoScript slowScript; 
+    public SlowMoScript slowScript;
+    public CheckForLimbs limbCheckerScript; 
 
     public HitPauses hitPauseScript; 
     #endregion
@@ -1336,14 +1337,15 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
         //Check if we can continue to the next attack
         if (nextAttackTimer >= nextAttackDuration - (nextAttackDuration / 3f) && input.meleeButtonPressed)
-        {
+        {      
          
             CheckForMoveInput(); //Set attack direction 
             if(currentComboLength > 0) SetAttackType(); // Set attack type (skip first attack so we can do conditional start attacks)
             currentComboLength++;
 
             //Trigger correct animation stuff
-
+            //limbCheckerScript.hitLimbs.Clear();
+          //  attackTargetScript.enemyTargetsInRange.Clear();
             AttackFeedback?.PlayFeedbacks();
             playerAnim.SetBool("IsAttacking", true);
             playerAnim.SetInteger("CurrentComboLength", currentComboLength);
@@ -1355,6 +1357,19 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
             attackStartPos = transform.position;
             playerRb.velocity = new Vector3(0, 0, 0);
+
+   
+            //Remove limbs 
+            /*
+            if (limbCheckerScript.hitLimbs.Count > 0)
+            {
+                foreach (Rigidbody limb in limbCheckerScript.hitLimbs)
+                {
+                    limbCheckerScript.hitLimbs.Remove(limb);
+                    Debug.Log("RemoveLimb"); 
+                }
+            }
+            */
 
             //Check if there is a attack target within range 
             if (attackTargetScript.selectedTarget != null)
@@ -1424,9 +1439,10 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     {
 
         canRotate = false;
-      
-        attackTargetScript.TargetDamageCheck();     
-        if(attackState != currentAttackType.SprintAttack.ToString()) transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .4f);
+        attackTargetScript.TargetDamageCheck();
+        //if (attackState != currentAttackType.SprintAttack.ToString()) transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .4f, snapping: false).SetEase(Ease.InElastic);   
+        if (attackState != currentAttackType.SprintAttack.ToString()) transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .4f).SetUpdate(UpdateType.Fixed);
+        Debug.LogError("How much"); 
 
     }
 

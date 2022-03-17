@@ -33,7 +33,7 @@ public class HitPauses : MonoBehaviour
 
                 //if(waitForTimer >= waitForDuration){
                 hitPauseTimer += Time.deltaTime; 
-
+                
                 foreach(Animator anim in objectsToPause)
                 {
 
@@ -41,7 +41,6 @@ public class HitPauses : MonoBehaviour
                     if(hitPauseTimer < hitPauseDuration) 
                     {
                         if(anim == playerAnim){ anim.speed = .02f; print("PlayerHit");}
-                       // else if(hitPauseTimer > 0) { anim.enabled = false; print("enemyHit"); }
                                 
                     }
 
@@ -50,8 +49,7 @@ public class HitPauses : MonoBehaviour
                     { 
                       
                         anim.speed = 1f;  
-                       // doHitPause = false; 
-                        if(anim != playerAnim) objectsToPause.Remove(anim); 
+                      //  if(anim != playerAnim) objectsToPause.Remove(anim); 
                     }        
                 }
 

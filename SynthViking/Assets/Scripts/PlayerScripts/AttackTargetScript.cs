@@ -34,6 +34,7 @@ public class AttackTargetScript : MonoBehaviour
 
 
 
+
     void Start()
     {
 
@@ -63,26 +64,33 @@ public class AttackTargetScript : MonoBehaviour
         }
     }
 
-     void OnTriggerEnter(Collider other)
-     {
+    public void OnTriggerEnter(Collider other)
+    {
 
-        if(other.gameObject.layer == playerController.enemyLayer)
+        if (other.gameObject.layer == playerController.enemyLayer && !enemyTargetsInRange.Contains(other.gameObject))
         {
-            enemyTargetsInRange.Add(other.transform.gameObject); 
+            enemyTargetsInRange.Add(other.transform.gameObject);
         }
     }
 
-     void OnTriggerExit(Collider other)
-     {
-         if(enemyTargetsInRange.Count > 0) 
-         {
-            foreach(GameObject obj in enemyTargetsInRange)
-            {
-                if(other.transform.name == obj.name) enemyTargetsInRange.Remove(obj); 
-            }
-         }
 
-     }
+
+    
+    void OnTriggerExit(Collider other)
+    {
+        if (enemyTargetsInRange.Count > 0)
+        {
+            enemyTargetsInRange.Remove(other.gameObject); 
+            /*
+            foreach (GameObject obj in enemyTargetsInRange)
+            {
+                if (other.transform.name == obj.name && enemyTargetsInRange.Contains(other.gameObject)) enemyTargetsInRange.Remove(obj);
+            }
+            */
+        }
+
+    }
+    
 
 
     public void TargetDamageCheck()
@@ -95,7 +103,8 @@ public class AttackTargetScript : MonoBehaviour
             BasicEnemyScript enemyScript = obj.GetComponent<BasicEnemyScript>(); 
             enemyScript.TakeDamage(playerController.currentAttackDamage);
             Instantiate(bloodFx1, enemyScript.bloodSpawnPoint.position, enemyScript.bloodSpawnPoint.rotation);
-            weaponImpactFeedback?.PlayFeedbacks();           
+            weaponImpactFeedback?.PlayFeedbacks();
+     
 
             //Is the enemy dead after our hit?            
             if (enemyScript.isDead)
@@ -130,12 +139,19 @@ public class AttackTargetScript : MonoBehaviour
                hitpauseScript.doHitPause = true; 
             }
 
-           enemyScript.transform.DOMove(playerController.transform.position + transform.forward * playerController.currentAttackForwardForce * 1.5f, .3f); //Move enemy backwards
+           // enemyTargetsInRange.Remove(obj); 
+            enemyScript.transform.DOMove(playerController.transform.position + transform.forward * playerController.currentAttackForwardForce * 1.5f, .3f).SetUpdate(UpdateType.Fixed); ; //Move enemy backwards
+          // enemyTargetsInRange.Clear();
 
         }
-            
-        
+
+        limbCheckerScript.hitLimbs.Clear();
+        //enemyTargetsInRange.Clear();
+
+
     }
+
+   
 
     public void TargetDamageEffects()
     {
@@ -143,7 +159,8 @@ public class AttackTargetScript : MonoBehaviour
     
     }
 
-     void OnDrawGizmos()
+
+    void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
       //  Gizmos.DrawSphere(playerController.transform.position * playerController.moveInput,)
