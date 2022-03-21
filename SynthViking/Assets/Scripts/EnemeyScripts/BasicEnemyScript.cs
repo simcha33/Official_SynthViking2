@@ -290,6 +290,7 @@ public class BasicEnemyScript : MonoBehaviour
             isFollowing = true;      
             enemyState = (int)currentState.ENGAGE; 
             enemyManager.SetNewEngager(thisScript); 
+            Debug.Log("Check"); 
         }
         else if(!playerLocationIsKnown || !canFollow)
         {

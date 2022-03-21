@@ -33,12 +33,18 @@ public class EnemyManager : MonoBehaviour
             
             if(attackingEnemies.Count > 0)
             { 
-                foreach(BasicEnemyScript attacker in engagedEnemies)
-                {
-                    if(attacker.targetDistance < attacker.circleDistance)  CheckForAttackers();             
-                }
+               
 
                 HandleAttackers();          
+            }
+
+            if(engagedEnemies.Count > 0)
+            {
+                CheckForAttackers(); 
+              //  foreach(BasicEnemyScript attacker in engagedEnemies)
+               // {
+               //     if(attacker.targetDistance < attacker.circleDistance)  CheckForAttackers();             
+               // }
             }
 
    
@@ -65,16 +71,20 @@ public class EnemyManager : MonoBehaviour
 
         void SetNewAttackers()
         {
-            BasicEnemyScript choosenEnemy; 
+            //BasicEnemyScript choosenEnemy; 
 
-            choosenEnemy = engagedEnemies[Random.Range(engagedEnemies.Count, 0)]; 
+            BasicEnemyScript choosenEnemy = engagedEnemies[Random.Range(engagedEnemies.Count, 0)]; 
 
-            if(attackingEnemies.Contains(choosenEnemy) || choosenEnemy.targetDistance >= choosenEnemy.circleDistance + 1 || !choosenEnemy.canBeManaged) return; 
-    
-
-            attackingEnemies.Add(choosenEnemy); 
-            choosenEnemy.currentRequiredDistance = choosenEnemy.attackDistance; 
-            choosenEnemy.canAttack = true;
+            if(choosenEnemy.targetDistance <= choosenEnemy.circleDistance + 1 && choosenEnemy.canBeManaged)
+            {
+                Debug.Log("ADD "); 
+                attackingEnemies.Add(choosenEnemy); 
+                choosenEnemy.currentRequiredDistance = choosenEnemy.attackDistance; 
+                choosenEnemy.canAttack = true;
+            }
+            else return; 
+               
+  
        
 
             /*
@@ -98,9 +108,7 @@ public class EnemyManager : MonoBehaviour
 
         public void SetNewEngager(BasicEnemyScript engager)
         {
-            if(engagedEnemies.Contains(engager)) return; 
-            
-            engagedEnemies.Add(engager); 
+            if(!engagedEnemies.Contains(engager)) engagedEnemies.Add(engager); 
       
             if(engager.canBeManaged)
             {
