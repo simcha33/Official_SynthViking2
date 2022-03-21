@@ -19,6 +19,8 @@ public class BasicEnemyScript : MonoBehaviour
     public float animSpeed;
     private float currentMoveSpeed; 
     public float lookRange;
+    public bool canBeManaged; 
+    public  BasicEnemyScript thisScript; 
 
 
     
@@ -28,6 +30,8 @@ public class BasicEnemyScript : MonoBehaviour
     [Header("ATTACKING")]
     #region  
     public float attackDistance;
+    public float currentRequiredDistance; 
+    public float circleDistance; 
     public float basicMeleeAttackDamage;
     private float totalComboLength;
     [HideInInspector] public float currentAttackDamage; 
@@ -39,21 +43,30 @@ public class BasicEnemyScript : MonoBehaviour
     private float nextAttackTimer;
     private float nextAttackDuration;
     private Vector3 attackStartPos; 
+
+    [HideInInspector] public float targetDistance; 
     [HideInInspector] public List<Rigidbody> ragdollRbs = new List<Rigidbody>();
 
     #endregion
 
     [Header("STUNNED")]
     #region 
+    public bool canDoStunImpact; 
     public float minStunnedImpactVelocity; //The minimum speed a launched enemy must have to be damaged by a impact
     private float currentVelocity; 
     public float stunDuration; 
-    private float stunTimer; 
+    [HideInInspector] public float stunTimer; 
     public float recoveryTimer; 
     public float recoveryDuration;
     public string stunType;
     public float getUpTimer;
     public float getUpDuration;
+    public Vector3 launchDirection; 
+
+    public float chainHitStunDuration; 
+    public float chainhitBackForce; 
+
+    private string StunType;
    
  //    public bool isGettingUp; 
     #endregion
@@ -68,6 +81,7 @@ public class BasicEnemyScript : MonoBehaviour
     #region 
     public ThirdPerson_PlayerControler playerController;
     public AttackTargetScript attackTargetScript;
+    public EnemyManager enemyManager; 
     public Animator enemyAnim;
     [HideInInspector] public Rigidbody enemyRb;
     public Collider mainCollider; 
@@ -78,8 +92,10 @@ public class BasicEnemyScript : MonoBehaviour
     private Vector3 weaponAngle;
     private FixedJoint mainColJoint;
     public Rigidbody connectedJointRb; //Should be the pelvis
-
     public NavMeshAgent enemyAgent; 
+    public Material[] stunnedSkinMat;
+    public Material[] defaultSkinMat;
+    public SkinnedMeshRenderer enemyMeshr; 
 
     
     #endregion
@@ -92,6 +108,7 @@ public class BasicEnemyScript : MonoBehaviour
     public bool isRagdolling; 
     public bool isAttacking; 
     public bool isInAttackRange; 
+    public bool isInCircleRange; 
     public bool hasHitObject; 
     public bool isMeleeAttack; 
     public bool isProjectileAttack; 
@@ -130,9 +147,10 @@ public class BasicEnemyScript : MonoBehaviour
     {
         playerController = GameObject.Find("Player").GetComponent<ThirdPerson_PlayerControler>(); 
         enemyState = (int)currentState.IDLE;
+        thisScript = this.gameObject.GetComponent<BasicEnemyScript>(); 
+        //currentRequiredDistance = circleDistance;
        // connectedJointRb = mainColJoint.connectedBody;
       
-
 
         //Add a bit of randomness to the walking speed
         originalRunSpeed = runSpeed;
@@ -141,9 +159,9 @@ public class BasicEnemyScript : MonoBehaviour
         runSpeed = Random.Range(runSpeed - 1f, runSpeed + 1f); 
         enemyAgent.speed = walkSpeed;
 
+        defaultSkinMat = enemyMeshr.materials; 
         enemyRb = GetComponent<Rigidbody>();
-        currentHealth = maxHealth; 
-        //canBeTargeted = true; 
+        currentHealth = maxHealth;  
         ResetState(); 
         target = playerController.transform;
         weaponAngle = weapon.localEulerAngles; 
@@ -157,7 +175,6 @@ public class BasicEnemyScript : MonoBehaviour
                 rb.GetComponent<Collider>().isTrigger = true;
                 rb.isKinematic = true;
             }
-
 
            
             rb.useGravity = false; 
@@ -219,8 +236,10 @@ public class BasicEnemyScript : MonoBehaviour
 
     public void CheckForPlayer()
     {
+        targetDistance = Vector3.Distance(transform.position, target.position); 
+
         //Check if the enemy is close is close enough to attack
-        if(Vector3.Distance(transform.position, target.position) <= attackDistance + .25f) 
+        if(targetDistance <= attackDistance + .25f) 
         {
             isInAttackRange = true;
         }
@@ -229,14 +248,27 @@ public class BasicEnemyScript : MonoBehaviour
             isInAttackRange = false; 
         }
 
+        //If we are engaged and can't attack check for circle distance
+        if(targetDistance <= circleDistance && !canAttack)
+        {
+            isInCircleRange = true; 
+        }
+        else
+        {
+            isInCircleRange = false; 
+        }
+
         playerLocationIsKnown = true; 
     }
 
     public void CheckForAttack()
     {
-        if(playerLocationIsKnown && isInAttackRange)
+        if(playerLocationIsKnown && isInAttackRange && canAttack)
         {
             enemyState = (int)currentState.ATTACKING; 
+        }
+        else if(playerLocationIsKnown && isInCircleRange && !canAttack){
+            //Circle state
         }
     }
 
@@ -257,21 +289,14 @@ public class BasicEnemyScript : MonoBehaviour
             transform.LookAt(target, Vector3.up); 
             isFollowing = true;      
             enemyState = (int)currentState.ENGAGE; 
+            enemyManager.SetNewEngager(thisScript); 
         }
         else if(!playerLocationIsKnown || !canFollow)
         {
+            //enemyManager.attackingEnemies.Remove(this.gameObject); 
             enemyState = (int)currentState.IDLE;
             enemyAgent.speed = walkSpeed; 
         }
-    }
-
-    public void CheckForStun(float stunLength)
-    {
-        canRecover = true;
-        enemyAgent.enabled = false; 
-        enemyState = (int)currentState.STUNNED;
-        stunTimer = 0f; 
-        stunDuration = stunLength; 
     }
 
 
@@ -279,7 +304,9 @@ public class BasicEnemyScript : MonoBehaviour
     {
         if(canMove)
         {
-            enemyAgent.destination = target.position - transform.forward * attackDistance; 
+            enemyAgent.destination = target.position - transform.forward * currentRequiredDistance; 
+           // transform.LookAt(target); 
+            //enemyRb.isKinematic = true; 
         }   
     }
 
@@ -376,12 +403,16 @@ public class BasicEnemyScript : MonoBehaviour
         }
     }
 
-    public void TakeDamage(float damgeAmount){
+    public void TakeDamage(float damgeAmount, string DamageType){
         
         currentHealth -= damgeAmount;
 
         if(currentHealth > 0)
         {
+              //launchDirection = new Vector3(0,0,playerController.transform.forward.z);
+              launchDirection = playerController.transform.forward; 
+              canDoStunImpact = false;
+           
 
             //No double hit animations
             float originalReaction = enemyAnim.GetFloat("DamageReaction");
@@ -395,18 +426,25 @@ public class BasicEnemyScript : MonoBehaviour
               
             }
            
-                        
+                       
             enemyAnim.SetFloat("DamageReaction", newRandomNumber);           
             enemyAnim.SetTrigger("DamageTrigger");
+            enemyRb.velocity = new Vector3(0,0,0); 
+          
 
             //Stun player
-            ResetState();
-            CheckForStun(1f); 
+            if(DamageType != "ImpactDamage")ResetState();
+
+
+            CheckForStun(1f, DamageType); 
         }
 
         //Kill the enemy
         else
         {       
+            ResetState(); 
+            enemyManager.RemoveEngager(thisScript); 
+            canDoStunImpact = false; 
             isDead = true;
             enemyAgent.enabled = false; 
             EnableRagdoll(); 
@@ -429,12 +467,23 @@ public class BasicEnemyScript : MonoBehaviour
     private void OnCollisionEnter(Collision other)
     {
         //Add some backwards force to enemies hit by stunned enemies
-        if(other.gameObject.layer == playerController.enemyLayer)
+        if(other.gameObject.layer == playerController.enemyLayer && !isDead && targetDistance < 10f && canDoStunImpact)
         {
             BasicEnemyScript otherScript = other.gameObject.GetComponent<BasicEnemyScript>();
-            if (otherScript.isStunned)
+            if ((otherScript.isStunned || otherScript.isDead) && otherScript.stunTimer < .3f)
             {
-                enemyRb.AddForce(-other.transform.forward * 5f, ForceMode.Impulse);
+                    enemyRb.velocity = new Vector3(0,0,0); 
+                    enemyAnim.speed = Random.Range(1, .8f);  
+                    enemyAnim.SetFloat("DamageReaction", Random.Range(1f,3f));           
+                    enemyAnim.SetTrigger("DamageTrigger");
+                    CheckForStun(chainHitStunDuration, "ChainStunHit");
+                                                   
+                    launchDirection = otherScript.launchDirection; //Base launch direction of attackers forward 
+                    enemyRb.AddForce(launchDirection * chainhitBackForce, ForceMode.Impulse);
+                    enemyMeshr.materials = stunnedSkinMat;
+
+                    canDoStunImpact = false;  
+                    isStunned = true;                     
             }
         }
     }
@@ -450,14 +499,29 @@ public class BasicEnemyScript : MonoBehaviour
         }
     }
 
+    
+    public void CheckForStun(float stunLength, string damageType)
+    {
+        stunType = damageType; 
+        canRecover = true;
+        
+        if(damageType == "PhysicsImpact")
+        {
+            print("turn of physics"); 
+             enemyAgent.enabled = false; 
+        }
+        enemyAgent.speed = 0f; 
+        enemyState = (int)currentState.STUNNED; 
+        stunTimer = 0f; 
+        stunDuration = stunLength; 
+    }
+    
     private void CheckForRecovery()
     {
         stunTimer += Time.deltaTime;
         currentVelocity = enemyRb.velocity.magnitude;
         isStunned = true;
-       // enemyRb.isKinematic = true;
-        
-       
+        enemyRb.isKinematic = false;
 
         //Check if a stunned and launched enemy has stopped moving 
         if (isLaunched && currentVelocity < 2f)
@@ -466,8 +530,8 @@ public class BasicEnemyScript : MonoBehaviour
             canRecover = false; 
 
             if (recoveryTimer >= recoveryDuration)
-            {
-                StandBackUp();
+            {          
+                StandBackUp(); 
             }
         }
         else if(isLaunched && currentVelocity >= 2f)
@@ -479,16 +543,56 @@ public class BasicEnemyScript : MonoBehaviour
             canRecover = true;
             recoveryTimer = 0f;
         }
+
+        //Allow hit impacts
+        if(stunTimer >= .3f){
+            canDoStunImpact = true; 
+        }
       
         //Recover
         if (stunTimer >= stunDuration && canRecover && !isGettingUp)
         {
+           // Debug.Log("Recover??"); 
             isGettingUp = true;
             getUpTimer = 10f;
             DisableRagdoll();
             StandBackUp();
         }
     }
+
+    
+    void StandBackUp()
+    {
+         Debug.Log("Recover??"); 
+        getUpTimer += Time.deltaTime; 
+
+        if (!isGettingUp)
+        {
+            isGettingUp = true;
+            DisableRagdoll();
+            enemyAnim.SetFloat("GetUpType", Random.Range(1f, 4f));
+            enemyAnim.speed = Random.Range(.6f, 1f); 
+            enemyAnim.SetTrigger("GetUpTrigger");      
+            enemyRb.velocity = new Vector3(0, 0, 0);
+            getUpDuration = 1f;                
+        }
+     
+        if(getUpTimer >= getUpDuration)
+        {
+            ResetState();  
+            enemyAgent.speed = currentMoveSpeed;  
+            canRecover = false; 
+            recoveryTimer = 0f;
+            stunTimer = 0f; 
+            getUpTimer = 0f;
+            enemyRb.velocity = new Vector3(0,0,0); 
+            enemyState = (int)currentState.ENGAGE;
+            enemyRb.freezeRotation = false; 
+        }
+
+        getUpDuration = enemyAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / enemyAnim.GetCurrentAnimatorStateInfo(0).speed;
+    }
+
 
 
     public void CheckForImpactDamage()
@@ -498,58 +602,12 @@ public class BasicEnemyScript : MonoBehaviour
         if(hasHitObject && currentVelocity > minStunnedImpactVelocity && canAddImpactDamage && isLaunched)
         {
             canAddImpactDamage = false; 
-            TakeDamage(50f); 
+            TakeDamage(50f, "ImpactDamage"); 
         }
         
     }
  
-
-    public void EnemyDies()
-    {
-        //canBeTargeted = false; 
-        transform.tag = "Dead";
-        enemyAgent.enabled = false; 
-        //transform.GetComponent<BasicEnemyScript>().enabled = false; 
-    }
-       
-    
    
-
-    void StandBackUp()
-    {
-        getUpTimer += Time.deltaTime; 
-
-        if (!isGettingUp)
-        {
-            isGettingUp = true;
-            DisableRagdoll();
-         //   enemyAnim.applyRootMotion = true;
-            enemyAnim.SetFloat("GetUpType", Random.Range(1f, 4f));
-            enemyAnim.speed = Random.Range(.6f, 1f); 
-            enemyAnim.SetTrigger("GetUpTrigger");      
-            enemyRb.velocity = new Vector3(0, 0, 0);
-            getUpDuration = 1f;
-            
-
-        }
-     
-        if(getUpTimer >= getUpDuration)
-        {
-           // enemyAnim.applyRootMotion = false; 
-            enemyAnim.speed = 1f; 
-            isLaunched = false;
-            isGettingUp = false;
-            isStunned = false; 
-            canRecover = false; 
-            recoveryTimer = 0f;
-            stunTimer = 0f; 
-            getUpTimer = 0f;
-            //enemyAgent.enabled = true;
-            enemyState = (int)currentState.ENGAGE;
-        }
-
-        getUpDuration = enemyAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / enemyAnim.GetCurrentAnimatorStateInfo(0).speed;
-    }
 
     public void EnableRagdoll(){
 
@@ -567,7 +625,7 @@ public class BasicEnemyScript : MonoBehaviour
         }
 
         enemyRb.constraints = RigidbodyConstraints.None; 
-        enemyRb.useGravity = false; 
+        enemyRb.useGravity = true; 
         enemyRb.isKinematic = false;
         enemyAgent.enabled = false;
         isRagdolling = true; 
@@ -583,7 +641,6 @@ public class BasicEnemyScript : MonoBehaviour
         enemyRb.constraints = RigidbodyConstraints.FreezePositionY;
 
         canAddImpactDamage = false;
-
         isRagdolling = false;
         enemyAgent.enabled = true;
 
@@ -620,6 +677,8 @@ public class BasicEnemyScript : MonoBehaviour
         //   canBeLaunched = true; 
         //   canFollow = true;
 
+        //canDoStunImpact = false;
+
         isGettingUp = false; 
         isFollowing = false;
         isStunned = false;
@@ -636,6 +695,7 @@ public class BasicEnemyScript : MonoBehaviour
 
         enemyAgent.enabled = true;
         enemyAnim.speed = 1f; 
+        enemyMeshr.materials = defaultSkinMat; 
 
 }
 
@@ -643,5 +703,15 @@ public class BasicEnemyScript : MonoBehaviour
     {
 
     }
+
+      public void EnemyDies()
+    {
+        //canBeTargeted = false; 
+        transform.tag = "Dead";
+        enemyAgent.enabled = false; 
+        //transform.GetComponent<BasicEnemyScript>().enabled = false; 
+    }
+       
+    
     
 }

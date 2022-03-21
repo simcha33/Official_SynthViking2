@@ -134,7 +134,7 @@ public class AttackTargetScript : MonoBehaviour
             {
                 //Deal damage to hit target
                 BasicEnemyScript enemyScript = obj.GetComponent<BasicEnemyScript>();
-                enemyScript.TakeDamage(playerController.currentAttackDamage);
+                enemyScript.TakeDamage(playerController.currentAttackDamage, "LightAxeDamage");
                 hitpauseScript.theHitPaused.Add(obj);
                 Instantiate(bloodFx1, enemyScript.bloodSpawnPoint.position, enemyScript.bloodSpawnPoint.rotation);
                 weapinFirstImpactFeedback?.PlayFeedbacks();
@@ -153,11 +153,14 @@ public class AttackTargetScript : MonoBehaviour
                             Instantiate(bloodFx1, limb.position, limb.rotation);
                             Destroy(joint);
                             limb.transform.parent = null;
+
                             limb.velocity = new Vector3(0, 0, 0);
-                            limb.AddForce((swordPoint.position - limb.transform.position) * 1f, ForceMode.Impulse);
-                            limb.AddForce(Vector3.up * Random.Range(7f, 10f), ForceMode.Impulse);
+                            //limb.AddForce((swordPoint.position - limb.transform.position) * 1f, ForceMode.Impulse);
+                            //limb.AddForce(Vector3.up * Random.Range(7f, 10f), ForceMode.Impulse);
+                            limb.AddExplosionForce(10f, limb.position, 2f, 4f, ForceMode.Impulse); 
                             //limb.AddTorque(transform.up * 200f * Time.deltaTime, ForceMode.Impulse);
                             //limb.AddTorque(transform.right * 200f * Time.deltaTime, ForceMode.Impulse); 
+                            //Instantiate(bloodFx1, enemyScript.bloodSpawnPoint.position, enemyScript.bloodSpawnPoint.rotation);
 
                             if (enemyScript.canBeTargeted) limb.mass *= 3f;
                         }
@@ -167,6 +170,8 @@ public class AttackTargetScript : MonoBehaviour
                     {
                         if (enemyScript.weapon != null)
                         {
+                            enemyScript.enemyRb.velocity = new Vector3(0,0,0); 
+                        
                             Destroy(enemyScript.weapon.GetComponent<FixedJoint>());
                             enemyScript.weapon.parent = null;
                             Rigidbody swordrb = enemyScript.weapon.GetComponent<Rigidbody>();
@@ -189,7 +194,7 @@ public class AttackTargetScript : MonoBehaviour
                 }
 
                 // targetsInRange.Remove(obj); 
-                if (!enemyScript.isRagdolling || enemyScript.isDead) enemyScript.transform.DOMove(playerController.transform.position + transform.forward * playerController.currentAttackForwardForce * 1.5f, .3f).SetUpdate(UpdateType.Fixed);  //Move enemy backwards
+                if (!enemyScript.isRagdolling || enemyScript.isDead) enemyScript.transform.DOMove(playerController.transform.position + transform.forward * playerController.currentAttackForwardForce * 1.5f, .3f).SetUpdate(UpdateType.Fixed);  //Move enemy backwards enemyScript.enemyRb.AddForce(playerController.transform.position + transform.forward * playerController.currentAttackForwardForce, ForceMode.VelocityChange); 
                 else if(enemyScript.isRagdolling || enemyScript.isDead)enemyScript.enemyRb.AddForce(Vector3.up * 5f, ForceMode.VelocityChange); 
                                                                                                                                                                                               // targetsInRange.Clear();
 

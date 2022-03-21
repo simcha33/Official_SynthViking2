@@ -128,6 +128,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     [Header("DASH ATTACK")]
     #region
     public float dashAttackForce;
+    public float dashAttackDamage = 5f; 
     [HideInInspector] public GameObject dashAttackTarget;
     #endregion
 
@@ -141,6 +142,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public float animAttackSpeed; 
     private float attackMoveLerpT;
     private Vector3 attackStartPos;
+
+    [HideInInspector] public Vector3 attackDirection; 
 
     private float attackMoveSpeed = 1f;
     [HideInInspector]public bool attackTargetInRange;
@@ -841,6 +844,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public void DoDashAttack()
     {
         BasicEnemyScript script = dashAttackTarget.transform.GetComponentInParent<BasicEnemyScript>();
+        script.TakeDamage(dashAttackDamage, "PhysicsImpact"); 
         script.LaunchEnemy(aimPoint.forward, Random.Range( dashAttackForce -5, dashAttackForce + 5), 5f);    
         script.transform.position = transform.position + transform.forward + script.transform.up; 
         playerRb.AddForce(transform.up * 5, ForceMode.VelocityChange);
@@ -1198,7 +1202,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                     if (slamTarget.gameObject.layer == enemyLayer)
                     {
                         BasicEnemyScript enemyScript = slamTarget.GetComponent<BasicEnemyScript>();
-                        enemyScript.TakeDamage(currentGroundSlamDamage);
+                        enemyScript.TakeDamage(currentGroundSlamDamage, "PhysicsImpact");
                         enemyScript.LaunchEnemy((slamTarget.transform.position - transform.position), slamImpactForwardForce, Random.Range(slamImpactUpForce / 1.3f, slamImpactUpForce * 1.3f));
                     }
                 }
@@ -1492,6 +1496,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
         canRotate = false;
         attackTargetScript.TargetDamageCheck();  
+        attackDirection = transform.position + inputDir;
         if (attackState != currentAttackType.SprintAttack.ToString()) transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .4f).SetUpdate(UpdateType.Fixed);
         else meshR.materials = defaultSkinMat; 
 
