@@ -14,7 +14,9 @@ public class HitPauses : MonoBehaviour
     public List<Animator> objectsToPause = new List<Animator>(); 
     public AttackTargetScript attackTargetScript; 
     public Animator playerAnim;
-  //  public Animator hitEnemyAnim; 
+
+    public List<GameObject> theHitPaused = new List<GameObject>();
+    //  public Animator hitEnemyAnim; 
 
     // Start is called before the first frame update
     void Start()
@@ -29,9 +31,6 @@ public class HitPauses : MonoBehaviour
 
         if(doHitPause) 
         {
-                //waitForTimer+= Time.deltaTime; 
-
-                //if(waitForTimer >= waitForDuration){
                 hitPauseTimer += Time.deltaTime; 
                 
                 foreach(Animator anim in objectsToPause)
@@ -46,9 +45,22 @@ public class HitPauses : MonoBehaviour
 
                     //Turn anim back on 
                     else if (hitPauseTimer >= hitPauseDuration)
-                    { 
+                    {
+
+                    foreach (GameObject obj in theHitPaused)
+                    {
+                        //Deal damage to hit target
+                        BasicEnemyScript enemyScript = obj.GetComponent<BasicEnemyScript>();
+                       // enemyScript.TakeDamage(attackTargetScript.playerController.currentAttackDamage);
+                        Instantiate(attackTargetScript.bloodFx1, enemyScript.bloodSpawnPoint.position, enemyScript.bloodSpawnPoint.rotation);
+                     
                       
-                        anim.speed = 1f;  
+                    }
+
+                    attackTargetScript.weaponHitFeedback?.PlayFeedbacks();
+                    theHitPaused.Clear();
+                    if (anim == playerAnim) anim.speed = attackTargetScript.playerController.animAttackSpeed;
+                    else anim.speed = 1f; 
                       //  if(anim != playerAnim) objectsToPause.Remove(anim); 
                     }        
                 }
@@ -59,10 +71,6 @@ public class HitPauses : MonoBehaviour
                     doHitPause = false; 
                    // attackTargetScript.TargetDamageEffects();
                 } 
-        }
-        else
-        {
-            //hitPauseTimer = 0f; 
         }
     }
 

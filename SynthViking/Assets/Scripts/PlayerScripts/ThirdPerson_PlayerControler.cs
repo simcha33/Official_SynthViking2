@@ -14,7 +14,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     [Header("GROUND MOVEMENT")] //GROUND MOVEMENT
     #region
-
     //Moving
     public float maxMoveSpeed;
     public float sprintMoveSpeed;
@@ -58,10 +57,28 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public float airDrag = 2f;
 
 
-    private float groundCheckHeight = .35f;
+    private float groundCheckHeight = .5f;
     private float landCheckHeight = 2.5f;
     private float groundCheckJumpDelay = .5f; //Temporaly turn of the groundcheck after jumping 
     public float groundCheckTimer;
+
+    [Header("BLOCKING")]
+    #region
+    public bool isBlocking;
+    public bool canBlock;
+    public bool isPerfectParry;
+    public float blockResetDuration;
+
+    public float blockRechargeTimer;
+    public float blockRechargeDuration;
+
+    public float blockTimer;
+    public float perfectParryWindow;
+    public int perfectParryRestorationAmount; 
+    public int maxAvailableBlocks;
+    public int currentAvailableBlocks; 
+   
+    #endregion
 
 
     #endregion
@@ -75,10 +92,10 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public float maxDashDistance;
     private float dashDelayTimer;
     public float dashBuildUpSpeed;
-    private float currentDashDistance;
+    public float currentDashDistance;
 
 
-    private float dashCooldownTimer;
+    [HideInInspector] public float dashCooldownTimer;
     public float dashCooldownDuration;
     [HideInInspector] public bool solidDashObjectReached;
     [HideInInspector] public bool enemyDashObjectReached;
@@ -87,9 +104,9 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     private Vector3 dashOffset = Vector3.up * -1f;
     private Vector3 originalIndicatorSize;
     public Transform dashChecker;
-    public Image dashChargeIndicator;
-    public Color dashChargeColor; 
-    public Image dashChargeBackground;
+   // public Image dashChargeIndicator;
+   // public Color dashChargeColor; 
+   // public Image dashChargeBackground;
 
     //Attack types
     //private string currentAttackType;
@@ -121,6 +138,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     private float nextAttackTimer; 
     public int currentComboLength;
     public int totalComboLength;
+    public float animAttackSpeed; 
     private float attackMoveLerpT;
     private Vector3 attackStartPos;
 
@@ -172,14 +190,15 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     private Vector3 jumpOffPoint; 
     [HideInInspector] public LayerMask EnvorinmentLayer = 10;
     [HideInInspector] public LayerMask enemyLayer = 11;
-    public bool wallRunExitWithJump; 
+    public bool wallRunExitWithJump;
 
     #endregion
 
     [Header("Animation")]  //ANIMATION
     #region  
 
-
+   // public bool holsterWeapon;
+  //  public bool drawWeapon; 
     public AnimationClip jumpStartClip;
     public AnimationClip moveLandingClip;
     public AnimationClip noMoveLandingClip;
@@ -222,6 +241,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public Transform raycastCheck;
     public Rigidbody groundConstraints;
     public Rigidbody airConstraints;
+    public GameObject holsteredWeapon;
+    public GameObject drawnWeapon; 
     #endregion
 
     [Header("FEEDBACK")]
@@ -242,8 +263,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     [Header("Switch Case")] //SWITCH CASE
     #region
-    private int controllerState;
-    private int fixedControllerState;
+    [HideInInspector] public int controllerState;
+    [HideInInspector] public int fixedControllerState;
     [HideInInspector]
     public enum currentState
     {
@@ -253,6 +274,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         ATTACKING,
         DASHING,
         AIRSMASHING,
+        STUNNED,
     }
     #endregion
 
@@ -280,6 +302,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public bool isLanding;
     public bool isDashing;
     public bool isChargingDash;
+    public bool isRechargingDash; 
     public bool isDashAttacking;
     public bool isWalking;
     public bool isSprinting;
@@ -288,6 +311,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public bool isAirSmashing;
     public bool isGroundSmash;
     public bool isGrounded = true;
+    public bool isStunned; 
 
     public bool wasSprintingBeforeJump;
     /*
@@ -320,6 +344,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         velocityHash = Animator.StringToHash("MoveVelocity");
         raycastCheckMeshr = raycastCheck.GetComponent<MeshRenderer>();
         raycastCheck.gameObject.SetActive(false);
+        HandleWeaponSwaping(true); 
         //dashChecker.position, dashChecker.position + dashChecker.forward * 2f
 
         defaultSkinMat = meshR.materials;
@@ -333,8 +358,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         airSmashCooldownTimer = airSmashCooldownDuration;
         dashCooldownTimer = 0f; 
       
-        originalIndicatorSize = dashChargeIndicator.transform.localScale;
-        dashChargeColor = dashChargeIndicator.color; 
+       // originalIndicatorSize = dashChargeIndicator.transform.localScale;
+       // dashChargeColor = dashChargeIndicator.color; 
 
         fixedControllerState = (int)currentState.MOVING;
         controllerState = (int)currentState.MOVING;
@@ -350,6 +375,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     private void Update()
     {
+        Debug.Log(totalComboLength); 
 
         switch (controllerState)
         {
@@ -361,23 +387,23 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 CheckForJump();
                 CheckForWall();
                 CheckForAttack();
-                CheckForDamage();
                 HandleDrag();
                 CheckForDash();
-                CheckForAirSmash(); 
+                CheckForAirSmash();
+               // HandleWeaponSwaping(); 
                 break;
 
             case (int)currentState.WALLRUNNING:
                 CheckForJump();
                 CheckForWall();
                 CheckForAirSmash(); 
-                CheckForDamage();
                 CheckForDash();
                 HandleMoveSpeed();
                 CheckForMoveInput();
                 HandleWallRunning();
                 HandleDrag();
-                CheckForAirSmash(); 
+                CheckForAirSmash();
+               // HandleWeaponSwaping(); 
                 break;
 
             case (int)currentState.ATTACKING:
@@ -387,7 +413,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 CheckForMoveInput();
             //    GroundCheck();
                 HandleRotation();
-                CheckForDamage();
+             //   HandleWeaponSwaping(); 
                 break;
 
             case (int)currentState.DASHING:
@@ -400,7 +426,10 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 CheckForDash();
                 CheckForMoveInput(); 
                 CheckForAirSmash();
+                HandleRotation(); 
                 break;
+            case (int)currentState.STUNNED:
+                break; 
         }
 
         HandleAnimations();
@@ -427,7 +456,9 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 break;
             case (int)currentState.AIRSMASHING:
                 MovePlayer(); 
-                break; 
+                break;
+            case (int)currentState.STUNNED:
+                break;
 
         }
     }
@@ -452,7 +483,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         playerAnim.SetBool("IsSprinting", isSprinting);
         playerAnim.SetBool("IsDashing", isDashing);
         playerAnim.SetBool("IsAiming", isChargingDash);
-        playerAnim.SetBool("IsAirSmashing", isAirSmashing); 
+        playerAnim.SetBool("IsAirSmashing", isAirSmashing);
+        playerAnim.SetBool("IsStunned", isStunned); 
 
         //Checks
         playerAnim.SetBool("CanJump", canJump);
@@ -464,9 +496,21 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         playerAnim.SetBool("CanLand", canLand);
     }
 
-    void CheckForDamage()
+    void HandleWeaponSwaping(bool holsterWeapon)
     {
+        if (holsterWeapon)
+        {
+            drawnWeapon.SetActive(false);
+            holsteredWeapon.SetActive(true); 
+           // hols 
+        }
 
+        if (!holsterWeapon)
+        {
+            drawnWeapon.SetActive(true);
+            holsteredWeapon.SetActive(false);
+           // drawWeapon = false;
+        }   
     }
 
 
@@ -540,6 +584,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //Check for sprinting 
         if (input.sprintButtonPressed && canSprint && (isMoving || isWallRunning))
         {
+            if (!isSprinting) HandleWeaponSwaping(true); 
+         
             isSprinting = true;
             if (!isWallRunning) canStartWallrun = true;
         }
@@ -665,8 +711,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     void CheckForDash()
     {
         //Handle dash charge indicator UI
-        float dashIndicatorSizeModifier = 1.3f;
-        dashChargeIndicator.fillAmount = (currentDashDistance - minDashDistance) / (maxDashDistance - minDashDistance);
+       // float dashIndicatorSizeModifier = 1.3f;
+        //dashChargeIndicator.fillAmount = (currentDashDistance - minDashDistance) / (maxDashDistance - minDashDistance);
 
         //Build up the dashduration on button hold
         if (input.dashButtonPressed && canDash)
@@ -677,12 +723,14 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             if (currentDashDistance < maxDashDistance) currentDashDistance += dashBuildUpSpeed * Time.unscaledDeltaTime;
             else
             {
+                /*
                 //Full charged dash UI effects
                 if (dashChargeIndicator.transform.localScale == originalIndicatorSize)
                 {
                     dashChargeIndicator.transform.localScale *= dashIndicatorSizeModifier;
                     dashChargeBackground.transform.localScale *= dashIndicatorSizeModifier;
                 }
+                */
                 currentDashDistance = maxDashDistance;
             }
         }
@@ -693,6 +741,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             //Add small dash delay for the animation charge up 
             if (dashDelayTimer == dashDelayDuration)
             {
+                playerState.canBeHit = false; 
                 canMove = false;
                 canLand = false;
                 ResetAnimator();
@@ -719,9 +768,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
                 controllerState = (int)currentState.DASHING;
                 fixedControllerState = (int)currentState.DASHING;
-
-                dashChargeIndicator.transform.localScale = originalIndicatorSize;
-                dashChargeBackground.transform.localScale = originalIndicatorSize;
             }
         }
 
@@ -734,11 +780,9 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 return;
             }
 
-
             playerRb.useGravity = false;
             playerRb.isKinematic = false;
             currentDashDistance = Vector3.Distance(transform.position, dashDirection);
-            // currentDashDistance -= Time.deltaTime;
 
 
             //Trigger stylish move at the end of the dash
@@ -768,15 +812,11 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         if (!canDash && !isDashing)
         {
             dashCooldownTimer += Time.deltaTime;
-            dashChargeBackground.color = Color.grey; 
-            dashChargeIndicator.color = Color.white;  
-            dashChargeIndicator.fillAmount = dashCooldownTimer / dashCooldownDuration; 
-                //dashChargeIndicator.fillAmount = (currentDashDistance - minDashDistance) / (maxDashDistance - minDashDistance);
+            isRechargingDash = true; 
 
             if (dashCooldownTimer >= dashCooldownDuration)
             {
-                dashChargeIndicator.color = dashChargeColor; 
-                dashChargeBackground.color = Color.white; 
+                isRechargingDash = false;
                 dashCooldownTimer = 0f; 
                 canDash = true;
             }
@@ -804,11 +844,12 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         script.LaunchEnemy(aimPoint.forward, Random.Range( dashAttackForce -5, dashAttackForce + 5), 5f);    
         script.transform.position = transform.position + transform.forward + script.transform.up; 
         playerRb.AddForce(transform.up * 5, ForceMode.VelocityChange);
+        
     }
 
     public void ResetDash()
     {
-        
+     
         playerRb.velocity = new Vector3(0, 0, 0); 
         DashEndFeeback?.PlayFeedbacks();
         transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
@@ -824,6 +865,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         canMove = true;
         dashEndMove = false;
         playerRb.useGravity = true;
+        playerState.canBeHit = true;
 
         currentDashDistance = minDashDistance;
         dashDelayTimer = dashDelayDuration;
@@ -917,7 +959,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             //Player is grounded  
             if (Physics.Raycast(ray, out hit, groundCheckHeight))
             {
-                playerRb.useGravity = false;
+                playerRb.useGravity = false;     
                 playerRb.constraints = groundConstraints.constraints; 
                 isGrounded = true;
                 canJump = true;
@@ -1118,6 +1160,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         }
         else if (isAirSmashing && airSmashDelayTimer >= airSmashDelayDuration)
         {
+            
             DoAirSmash();
         }
         
@@ -1145,6 +1188,9 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 playerRb.velocity = new Vector3(0, 0, 0);
                 AirSlamEndFeedback?.PlayFeedbacks(); 
                 isGroundSmash = true;
+                playerState.canBeHit = false; 
+                DoJump(jumpForce / 1.2f); 
+
 
                 Collider[] colls = Physics.OverlapSphere(transform.position, groundSlamRadius);
                 foreach (Collider slamTarget in colls)
@@ -1166,8 +1212,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //Have we hit the ground with our slam?
         if (isGroundSmash)
         {
-         
 
+            playerState.canBeHit = true; 
 
         }
 
@@ -1181,6 +1227,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             canEndAirSmash = true; 
             canLand = true;
             canFall = true;
+            canMove = true; 
 
             playerRb.useGravity = true;
             airSmashDelayTimer = 0f;      
@@ -1196,33 +1243,218 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     }
 
 
+    //Attacking
 
-
-
-    //Resets
-    void ResetStates()
+    void CheckForAttack()
     {
 
-/*
-        canLand = false;
-        canMove = true;
-        canRotate = true;
-        canJump = true;
-        canSprint = true;
-        canStartWallrun = true;
-      //  canDash = true;
-        canDashAttack = true;
-        canEndDash = false;
-        canStartNewAttack = true;
-        canStartAirSmash = true;
-        canEndAirSmash = true;
-        canFall = true;
-        */
-       
+        if (input.meleeButtonPressed && canStartNewAttack && !isAttacking)
+        {
+            currentComboLength = 0;
+            ResetAnimator(); 
+            SetAttackType();           
+            ResetStates();
+            isAttacking = true;
+            canStartNewAttack = false;
+            playerRb.isKinematic = false;
+            //HandleWeaponSwaping(false);     
+            playerAnim.speed = animAttackSpeed;  
+            nextAttackTimer = 10f;
+            
+           
+            controllerState = (int)currentState.ATTACKING;
+            fixedControllerState = (int)currentState.ATTACKING;
+        }
+        else if (input.meleeButtonPressed && canStartNewAttack && isAttacking)
+        {
+            playerAnim.speed = animAttackSpeed;
+            //playerAnim.SetInteger("CurrentComboLength", currentComboLength);
+            ResetStates();
+            isAttacking = true;
+            canStartNewAttack = false;
+            nextAttackTimer = 10f;
 
+            controllerState = (int)currentState.ATTACKING;
+            fixedControllerState = (int)currentState.ATTACKING;
+        }
+
+        if (isAttacking) HandleAttack();
+    }
+
+    void SetAttackType()
+    {
+        int totalAttackTrees = 5;
+        HandleWeaponSwaping(false);
+
+        if (isSprinting)
+        {
+            totalComboLength = 2;
+            AttackFeedback = SprintAttackFeedback;
+            currentAttackDamage = basicSprintAttackDamage;
+            currentAttackForwardForce = sprintAttackForwardForce;
+
+
+            attackState = currentAttackType.SprintAttack.ToString();
+            playerAnim.SetFloat("SprintAttackType", Random.Range(1, 4));
+
+        }
+        else
+        {
+            AttackFeedback = BasicLightAttackFeedback;
+            currentAttackDamage = basicLightAttackDamage;
+            currentAttackForwardForce = basicAttackForwardForce;
+
+            attackState = currentAttackType.BasicLightAttack.ToString();
+
+            //Set new combo 
+            if (currentComboLength == 0)
+            {
+                //No double hit animations
+                int originalReaction = playerAnim.GetInteger("LightAttackType");
+                int newRandomNumber = Random.Range(1, totalAttackTrees + 1);
+                if (newRandomNumber == originalReaction)
+                {
+                    if (newRandomNumber - 1 <= 0) newRandomNumber += 1;
+                    else newRandomNumber -= 1;
+                }
+                playerAnim.SetInteger("LightAttackType", newRandomNumber);  //Decide which combo tree to go into (only once per full combo tree)
+            }
+
+            //Set current attack tree length
+            if      (playerAnim.GetInteger("LightAttackType") == 1) totalComboLength = 3; 
+            else if (playerAnim.GetInteger("LightAttackType") == 2) totalComboLength = 4;
+            else if (playerAnim.GetInteger("LightAttackType") == 3) totalComboLength = 4;
+            else if (playerAnim.GetInteger("LightAttackType") == 4) totalComboLength = 4;
+            else if (playerAnim.GetInteger("LightAttackType") == 5) totalComboLength = 6; //Done
+          //  else if (playerAnim.GetInteger("LightAttackType") == 6) totalComboLength = 5;
+        }
+
+
+    }
+
+
+    void HandleAttack()
+    {
+        //Set attack duration equel to current animation clip length and speed
+        nextAttackDuration = playerAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / playerAnim.GetCurrentAnimatorStateInfo(0).speed;
+
+        //Check if we can continue to the next attack
+        if (nextAttackTimer >= nextAttackDuration - .21f && input.meleeButtonPressed)
+        {      
+            
+            CheckForMoveInput(); //Set attack direction 
+            if(currentComboLength > 0) SetAttackType(); // Set attack type (skip first attack so we can do conditional start attacks)
+            currentComboLength++;
+
+            //Trigger correct animation stuff
+            AttackFeedback?.PlayFeedbacks();
+            playerAnim.SetBool("IsAttacking", true);
+            playerAnim.SetInteger("CurrentComboLength", currentComboLength);
+            playerAnim.SetTrigger(attackState + "Trigger");
+
+            nextAttackTimer = 0f;
+            attackMoveLerpT = 0f;
+            canRotate = true;
+
+            attackStartPos = transform.position;
+            playerRb.velocity = new Vector3(0, 0, 0);
+
+
+            //Check if there is a attack target within range 
+            if (attackTargetScript.selectedTarget != null)
+            {
+                attackTargetInRange = true;
+                currentAttackTarget = attackTargetScript.selectedTarget;
+            }
+            else attackTargetInRange = false;
+
+            if (currentComboLength >= totalComboLength)
+            {
+                currentComboLength = 0; //Reset combo tree
+                SetAttackType(); 
+            }
+        }
+
+        /*
+        //Move towards attack target
+        if (attackTargetInRange && attackState != currentAttackType.SprintAttack.ToString()) 
+        {
+            float animStartDistance = 5;
+            //Slightly delay attacks animations
+            if (Vector3.Distance(transform.position, currentAttackTarget.position) > animStartDistance) playerAnim.enabled = false;
+            else playerAnim.enabled = true; 
+
+            float timeToReach = .15f;
+            attackMoveLerpT = Time.deltaTime / timeToReach;
+            transform.position = Vector3.Lerp(transform.position, currentAttackTarget.position, attackMoveLerpT);
+            transform.LookAt(currentAttackTarget.position);
+        }
+        else
+        {
+            playerAnim.enabled = true; 
+        }
+        */
+
+
+        //Check if the combo is broken 
+        if (nextAttackTimer >= nextAttackDuration)
+        {
+            playerAnim.SetBool("IsAttacking", false);
+            fixedControllerState = (int)currentState.MOVING;
+            controllerState = (int)currentState.MOVING;
+            canStartNewAttack = true;
+            playerAnim.speed = 1f; 
+            attackTargetInRange = false;
+            canRotate = true;
+            playerRb.isKinematic = false; 
+
+        }
+        else if (nextAttackTimer < nextAttackDuration)
+        {
+            //HandleRotation();
+            playerRb.isKinematic = true;
+            isAttacking = true;
+        }
+
+        //Exit attack state
+        if (nextAttackTimer >= nextAttackDuration + maxTimeBetweenAttacks)
+        {
+            currentComboLength = 0;
+            isAttacking = false;
+            attackTargetInRange = false;
+            playerAnim.SetBool("IsAttacking", false);
+        }
+
+        nextAttackTimer += Time.deltaTime;
+    }
+
+    //Resets
+    public void ResetStates()
+    {
+        canRotate = true;
+        canStartNewAttack = true; 
+       // canMove = true; 
+        /*
+                canLand = false;
+                canMove = true;
+                canRotate = true;
+                canJump = true;
+                canSprint = true;
+                canStartWallrun = true;
+              //  canDash = true;
+                canDashAttack = true;
+                canEndDash = false;
+                canStartNewAttack = true;
+                canStartAirSmash = true;
+                canEndAirSmash = true;
+                canFall = true;
+                */
+
+        isStunned = false; 
         isMoving = false;
         isWalking = false;
         isSprinting = false;
+
         isRunning = false;
         isInAir = false;
         isLanding = false;
@@ -1233,7 +1465,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         isChargingDash = false;
         isDashAttacking = false;
         isAirSmashing = false;
-        isGroundSmash = false; 
+        isGroundSmash = false;
 
         wasSprintingBeforeJump = false;
         playerRb.isKinematic = false;
@@ -1255,200 +1487,20 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         }
     }
 
-    //Attacking
-
-    void CheckForAttack()
-    {
-
-        if (input.meleeButtonPressed && canStartNewAttack && !isAttacking)
-        {
-            currentComboLength = 0;
-            ResetAnimator(); 
-            SetAttackType();           
-            ResetStates();
-            isAttacking = true;
-            canStartNewAttack = false;
-            playerRb.isKinematic = false;
-            
-
-            nextAttackTimer = 10f;
-            
-           
-            controllerState = (int)currentState.ATTACKING;
-            fixedControllerState = (int)currentState.ATTACKING;
-        }
-        else if (input.meleeButtonPressed && canStartNewAttack && isAttacking)
-        {
-            //playerAnim.SetInteger("CurrentComboLength", currentComboLength);
-            ResetStates();
-            isAttacking = true;
-            canStartNewAttack = false;
-            nextAttackTimer = 10f;
-
-            controllerState = (int)currentState.ATTACKING;
-            fixedControllerState = (int)currentState.ATTACKING;
-        }
-
-        if (isAttacking) HandleAttack();
-    }
-
-    void SetAttackType()
-    {
-        int totalAttackTrees = 5;
-
-        if (isSprinting)
-        {
-            totalComboLength = 2;    
-            AttackFeedback = SprintAttackFeedback;
-            currentAttackDamage = basicSprintAttackDamage;
-            currentAttackForwardForce = sprintAttackForwardForce;
-
-            attackState = currentAttackType.SprintAttack.ToString();
-            playerAnim.SetFloat("SprintAttackType", Random.Range(1, 4));
-         
-        }
-        else
-        {                  
-            AttackFeedback = BasicLightAttackFeedback;
-            currentAttackDamage = basicLightAttackDamage;
-            currentAttackForwardForce = basicAttackForwardForce;
-
-            attackState = currentAttackType.BasicLightAttack.ToString();
-             if(currentComboLength == 0) playerAnim.SetInteger("LightAttackType", Random.Range(1, totalAttackTrees + 1));  //Decide which combo tree to go into (only once per full combo tree)
-         //   if (currentComboLength == 0) playerAnim.SetInteger("LightAttackType", 1); 
-
-            //Set current attack tree length
-            if      (playerAnim.GetInteger("LightAttackType") == 1) totalComboLength = 3; 
-            else if (playerAnim.GetInteger("LightAttackType") == 2) totalComboLength = 4;
-            else if (playerAnim.GetInteger("LightAttackType") == 3) totalComboLength = 4;
-            else if (playerAnim.GetInteger("LightAttackType") == 4) totalComboLength = 4;
-            else if (playerAnim.GetInteger("LightAttackType") == 5) totalComboLength = 6; //Done
-          //  else if (playerAnim.GetInteger("LightAttackType") == 6) totalComboLength = 5;
-        }
-
-
-    }
-
-
-    void HandleAttack()
-    {
-        //Set attack duration equel to current animation clip length and speed
-        nextAttackDuration = playerAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / playerAnim.GetCurrentAnimatorStateInfo(0).speed;
-
-        //Check if we can continue to the next attack
-        if (nextAttackTimer >= nextAttackDuration - (nextAttackDuration / 3f) && input.meleeButtonPressed)
-        {      
-         
-            CheckForMoveInput(); //Set attack direction 
-            if(currentComboLength > 0) SetAttackType(); // Set attack type (skip first attack so we can do conditional start attacks)
-            currentComboLength++;
-
-            //Trigger correct animation stuff
-            //limbCheckerScript.hitLimbs.Clear();
-          //  attackTargetScript.enemyTargetsInRange.Clear();
-            AttackFeedback?.PlayFeedbacks();
-            playerAnim.SetBool("IsAttacking", true);
-            playerAnim.SetInteger("CurrentComboLength", currentComboLength);
-            playerAnim.SetTrigger(attackState + "Trigger");
-
-            nextAttackTimer = 0f;
-            attackMoveLerpT = 0f;
-            canRotate = true;
-
-            attackStartPos = transform.position;
-            playerRb.velocity = new Vector3(0, 0, 0);
-
-   
-            //Remove limbs 
-            /*
-            if (limbCheckerScript.hitLimbs.Count > 0)
-            {
-                foreach (Rigidbody limb in limbCheckerScript.hitLimbs)
-                {
-                    limbCheckerScript.hitLimbs.Remove(limb);
-                    Debug.Log("RemoveLimb"); 
-                }
-            }
-            */
-
-            //Check if there is a attack target within range 
-            if (attackTargetScript.selectedTarget != null)
-            {
-                attackTargetInRange = true;
-                currentAttackTarget = attackTargetScript.selectedTarget;
-            }
-            else attackTargetInRange = false;
-
-            if (currentComboLength >= totalComboLength)
-            {
-                currentComboLength = 0; //Reset combo tree
-                SetAttackType(); 
-            }
-        }
-
-        //Move towards attack target
-        if (attackTargetInRange && attackState != currentAttackType.SprintAttack.ToString()) 
-        {
-            float animStartDistance = 5;
-            //Slightly delay attacks animations
-            if (Vector3.Distance(transform.position, currentAttackTarget.position) > animStartDistance) playerAnim.enabled = false;
-            else playerAnim.enabled = true; 
-
-            float timeToReach = .15f;
-            attackMoveLerpT = Time.deltaTime / timeToReach;
-            transform.position = Vector3.Lerp(transform.position, currentAttackTarget.position, attackMoveLerpT);
-            transform.LookAt(currentAttackTarget.position);
-        }
-        else
-        {
-            playerAnim.enabled = true; 
-        }
-
-
-        //Check if the combo is broken 
-        if (nextAttackTimer >= nextAttackDuration)
-        {
-            playerAnim.SetBool("IsAttacking", false);
-            fixedControllerState = (int)currentState.MOVING;
-            controllerState = (int)currentState.MOVING;
-            canStartNewAttack = true;
-            attackTargetInRange = false;
-            canRotate = true;
-
-        }
-        else if (nextAttackTimer < nextAttackDuration)
-        {
-            //HandleRotation();
-            isAttacking = true;
-        }
-
-        //Exit attack state
-        if (nextAttackTimer >= nextAttackDuration + maxTimeBetweenAttacks)
-        {
-            currentComboLength = 0;
-            Debug.Log("EXIT?"); 
-            isAttacking = false;
-            attackTargetInRange = false;
-            playerAnim.SetBool("IsAttacking", false);
-        }
-
-        nextAttackTimer += Time.deltaTime;
-    }
-
     void AllowAttackDamage()
     {
 
         canRotate = false;
-        attackTargetScript.TargetDamageCheck();
-        //if (attackState != currentAttackType.SprintAttack.ToString()) transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .4f, snapping: false).SetEase(Ease.InElastic);   
+        attackTargetScript.TargetDamageCheck();  
         if (attackState != currentAttackType.SprintAttack.ToString()) transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .4f).SetUpdate(UpdateType.Fixed);
-        Debug.LogError("How much"); 
+        else meshR.materials = defaultSkinMat; 
 
     }
 
     void AllowAttackForwardForce()
     {
-        transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .6f);
+        meshR.materials = holoSkinMat;
+        transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .7f).SetUpdate(UpdateType.Fixed);
     }
 
     void AllowNextAttack()

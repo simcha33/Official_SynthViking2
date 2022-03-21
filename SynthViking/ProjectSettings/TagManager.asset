@@ -10,6 +10,7 @@ TagManager:
   - AttackTargetCheck
   - Dead
   - Limb
+  - BasicEnemy
   layers:
   - Default
   - TransparentFX

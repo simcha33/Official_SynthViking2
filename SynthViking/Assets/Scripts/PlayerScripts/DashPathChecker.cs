@@ -35,7 +35,7 @@ public class DashPathChecker : MonoBehaviour
                 
                 playerController.dashAttackTarget = other.gameObject;
                 playerController.transform.position -= Vector3.up * .5f;
-                playerController.transform.LookAt(other.transform.position);    
+                playerController.transform.LookAt(other.transform.position, Vector3.up);    
                 playerController.DashAttackFeedback?.PlayFeedbacks();
             }
         }
