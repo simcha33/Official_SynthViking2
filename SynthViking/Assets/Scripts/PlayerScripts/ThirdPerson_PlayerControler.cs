@@ -190,9 +190,11 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public float sideWallCheckDist;
     public Transform frontWallChecker;
 
-    private Vector3 jumpOffPoint; 
-    [HideInInspector] public LayerMask EnvorinmentLayer = 10;
-    [HideInInspector] public LayerMask enemyLayer = 11;
+    private Vector3 jumpOffPoint;
+    //[HideInInspector] public LayerMask EnvorinmentLayer = 10;
+    public int EnvorinmentLayer = 10;
+  //  public int enemyLayer = 11; 
+   [HideInInspector] public LayerMask enemyLayer = 11;
     public bool wallRunExitWithJump;
 
     #endregion
@@ -963,11 +965,14 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             //Player is grounded  
             if (Physics.Raycast(ray, out hit, groundCheckHeight))
             {
-                playerRb.useGravity = false;     
-                playerRb.constraints = groundConstraints.constraints; 
-                isGrounded = true;
-                canJump = true;
-                jumpCount = 0;
+                if (hit.collider.gameObject.layer == EnvorinmentLayer)
+                {
+                    playerRb.useGravity = false;
+                    playerRb.constraints = groundConstraints.constraints;
+                    isGrounded = true;
+                    canJump = true;
+                    jumpCount = 0;
+                }
 
             }
             //Player isn't grounded 
@@ -984,12 +989,15 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
             //Player can land 
             if ((Physics.Raycast(ray, out hit, landCheckHeight) && canLand && isInAir))
-            { 
-                canLand = false;  
-                isInAir = false;     
-                isLanding = true;  
-                landingDelayTimer = 0f;   
-                playerAnim.SetTrigger("LandingTrigger");  
+            {
+                if (hit.collider.gameObject.layer == EnvorinmentLayer)
+                { 
+                    canLand = false;
+                    isInAir = false;
+                    isLanding = true;
+                    landingDelayTimer = 0f;
+                    playerAnim.SetTrigger("LandingTrigger");
+                }
             }
 
             if (isLanding) LandPlayer();
@@ -1389,6 +1397,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             else playerAnim.enabled = true; 
 
             float timeToReach = .15f;
+            float timeToReach = .15f;
             attackMoveLerpT = Time.deltaTime / timeToReach;
             transform.position = Vector3.Lerp(transform.position, currentAttackTarget.position, attackMoveLerpT);
             transform.LookAt(currentAttackTarget.position);
@@ -1494,10 +1503,10 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     void AllowAttackDamage()
     {
 
-        canRotate = false;
+        //canRotate = false;
         attackTargetScript.TargetDamageCheck();  
         attackDirection = transform.position + inputDir;
-        if (attackState != currentAttackType.SprintAttack.ToString()) transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .4f).SetUpdate(UpdateType.Fixed);
+        if (attackState != currentAttackType.SprintAttack.ToString()) transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .55f).SetUpdate(UpdateType.Fixed);
         else meshR.materials = defaultSkinMat; 
 
     }

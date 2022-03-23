@@ -266,10 +266,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 36b8a788ff17aab40b283e664f0304da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AnimationSpeed: 5
+  AnimationSpeed: 3
   GroundHeight: 0
   LightIntensityMultiplier: 1
-  FreezeDecalDisappearance: 1
+  FreezeDecalDisappearance: 0
   DecalRenderinMode: 0
   ClampDecalSideSurface: 0
 --- !u!1 &6553911729242099609

@@ -19,7 +19,10 @@ public class PlayerState : MonoBehaviour
     public float stunDuration;
     public float stunTimer;
     public bool isStunned;
-    public bool canBeHit; 
+    public bool canBeHit;
+    public bool wasHitByAttack;
+    private float recoveryTimer;
+    public float recoveryDuration; 
     #endregion
 
     [Header("UI")]  
@@ -72,13 +75,21 @@ public class PlayerState : MonoBehaviour
         switch (playerState)
         {
             case (int)currentState.NOTHING:
+                PlayerRecovery();
                 break;
             case (int)currentState.STUNNED:
                 StunPlayer();
+                PlayerRecovery();
                 break;
         }
 
-        HandleUI(); 
+        HandleUI();
+
+    }
+
+    void CanBeHit()
+    {
+
     }
 
     void HandleUI()
@@ -125,6 +136,7 @@ public class PlayerState : MonoBehaviour
                 if(DamageType == "BasicMeleeAttackDamage")
                 {
                     canBeHit = false;
+                    wasHitByAttack = true;
                 }
                 
 
@@ -151,7 +163,7 @@ public class PlayerState : MonoBehaviour
 
         if (stunTimer >= stunDuration)
         {
-            canBeHit = true;
+            //canBeHit = true;
             stunTimer = 0f;
             playerController.isStunned = isStunned = false;
             playerState = (int)currentState.NOTHING;
@@ -162,6 +174,21 @@ public class PlayerState : MonoBehaviour
         stunDuration = playerAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / playerAnim.GetCurrentAnimatorStateInfo(0).speed;
 
 
+    }
+
+    void PlayerRecovery()
+    {
+        if(wasHitByAttack && !canBeHit)
+        {
+            recoveryTimer += Time.deltaTime; 
+
+            if(recoveryTimer > stunDuration + recoveryDuration)
+            {
+                canBeHit = true;
+                wasHitByAttack = false;
+                recoveryTimer = 0f; 
+            }
+        }
     }
  
 

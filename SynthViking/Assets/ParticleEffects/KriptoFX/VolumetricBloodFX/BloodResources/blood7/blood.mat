@@ -105,7 +105,7 @@ Material:
     - _pack_normal: 0
     - _speed: 35
     m_Colors:
-    - _Color: {r: 0.74509805, g: 0, b: 0.2732752, a: 1}
+    - _Color: {r: 1, g: 0, b: 0.17541885, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _HeightOffset: {r: 17.3, g: -71.72, b: -16.7, a: 1}
     - _SpecColor: {r: 1, g: 1, b: 1, a: 1}

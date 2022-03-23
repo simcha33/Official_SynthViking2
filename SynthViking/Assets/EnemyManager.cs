@@ -41,10 +41,6 @@ public class EnemyManager : MonoBehaviour
             if(engagedEnemies.Count > 0)
             {
                 CheckForAttackers(); 
-              //  foreach(BasicEnemyScript attacker in engagedEnemies)
-               // {
-               //     if(attacker.targetDistance < attacker.circleDistance)  CheckForAttackers();             
-               // }
             }
 
    

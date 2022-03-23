@@ -19,7 +19,9 @@ public class BasicEnemyScript : MonoBehaviour
     public float animSpeed;
     private float currentMoveSpeed; 
     public float lookRange;
-    public bool canBeManaged; 
+    public bool canBeManaged;
+    private float groundCheckHeight = .5f;
+    private bool isGrounded; 
     public  BasicEnemyScript thisScript; 
 
 
@@ -64,7 +66,9 @@ public class BasicEnemyScript : MonoBehaviour
     public Vector3 launchDirection; 
 
     public float chainHitStunDuration; 
-    public float chainhitBackForce; 
+    public float chainhitBackForce;
+    public float chainHitActiveTime = .4f;
+    public float chainHitMaxDistance = 11f; 
 
     private string StunType;
    
@@ -81,7 +85,7 @@ public class BasicEnemyScript : MonoBehaviour
     #region 
     public ThirdPerson_PlayerControler playerController;
     public AttackTargetScript attackTargetScript;
-    public EnemyManager enemyManager; 
+  //  public EnemyManager enemyManager; 
     public Animator enemyAnim;
     [HideInInspector] public Rigidbody enemyRb;
     public Collider mainCollider; 
@@ -95,6 +99,8 @@ public class BasicEnemyScript : MonoBehaviour
     public NavMeshAgent enemyAgent; 
     public Material[] stunnedSkinMat;
     public Material[] defaultSkinMat;
+    public Material[] hitSkinMat;
+    public Material[] deadSkinMat; 
     public SkinnedMeshRenderer enemyMeshr; 
 
     
@@ -201,11 +207,13 @@ public class BasicEnemyScript : MonoBehaviour
                 CheckForAttack(); 
                 MoveTowardsPlayer();
                 HandleAnimation();
+              //  GroundCheck();
                 break; 
 
             case(int)currentState.ATTACKING:
                 HandleAttack(); 
                 CheckForPlayer();
+               // GroundCheck();
                 HandleAnimation();
                 break; 
 
@@ -214,6 +222,8 @@ public class BasicEnemyScript : MonoBehaviour
                 CheckForPlayer(); 
                 CheckForImpactDamage();
                 HandleAnimation();
+                GroundCheck(); 
+               // GroundCheck();
 
                 break; 
 
@@ -222,6 +232,7 @@ public class BasicEnemyScript : MonoBehaviour
                 break;  
         }
 
+     
         animSpeed = enemyAnim.speed; 
 
         
@@ -289,7 +300,7 @@ public class BasicEnemyScript : MonoBehaviour
             transform.LookAt(target, Vector3.up); 
             isFollowing = true;      
             enemyState = (int)currentState.ENGAGE; 
-            enemyManager.SetNewEngager(thisScript); 
+          //  enemyManager.SetNewEngager(thisScript); 
             Debug.Log("Check"); 
         }
         else if(!playerLocationIsKnown || !canFollow)
@@ -299,6 +310,24 @@ public class BasicEnemyScript : MonoBehaviour
             enemyAgent.speed = walkSpeed; 
         }
     }
+
+    void GroundCheck()
+    {
+        RaycastHit hit;
+        Ray ray = new Ray(this.transform.position + Vector3.up * .25f, Vector3.down);
+
+        //Enemy is grounded
+        if (Physics.Raycast(ray, out hit, groundCheckHeight))
+        {
+            isGrounded = true;
+        }
+        else
+        {
+            if(!isRagdolling)EnableRagdoll();
+            isGrounded = false; 
+        }
+    }
+
 
 
     public void MoveTowardsPlayer()
@@ -410,41 +439,55 @@ public class BasicEnemyScript : MonoBehaviour
 
         if(currentHealth > 0)
         {
-              //launchDirection = new Vector3(0,0,playerController.transform.forward.z);
-              launchDirection = playerController.transform.forward; 
-              canDoStunImpact = false;
-           
-
-            //No double hit animations
-            float originalReaction = enemyAnim.GetFloat("DamageReaction");
-            float newRandomNumber = Random.Range(0, 6f);
-
+            //launchDirection = new Vector3(0,0,playerController.transform.forward.z);
+            launchDirection = playerController.transform.forward; 
+            canDoStunImpact = false;
             
-            if (newRandomNumber == originalReaction)
+            enemyRb.velocity = new Vector3(0,0,0);
+
+            //Special damage type stuff
+            if (DamageType == "PhysicsImpact")
             {
-                if (newRandomNumber - 1 < 0) newRandomNumber += 1f;
-                else newRandomNumber -= 1f; 
-              
+                ResetState();
+                enemyMeshr.materials = stunnedSkinMat; 
+            } 
+
+            if(DamageType == "LightAxeDamage")
+            {
+                ResetState();
+                enemyRb.freezeRotation = true; 
+                enemyMeshr.materials = hitSkinMat;
+
+                //No double hit animations
+                float originalReaction = enemyAnim.GetFloat("DamageReaction");
+                float newRandomNumber = Random.Range(0, 6f);
+
+
+                if (newRandomNumber == originalReaction)
+                {
+                    if (newRandomNumber - 1 < 0) newRandomNumber += 1f;
+                    else newRandomNumber -= 1f;
+
+                }
+
+                enemyAnim.SetFloat("DamageReaction", newRandomNumber);
+                enemyAnim.SetTrigger("DamageTrigger");
             }
-           
-                       
-            enemyAnim.SetFloat("DamageReaction", newRandomNumber);           
-            enemyAnim.SetTrigger("DamageTrigger");
-            enemyRb.velocity = new Vector3(0,0,0); 
-          
 
-            //Stun player
-            if(DamageType != "ImpactDamage")ResetState();
+            //if(DamageType != "ImpactDamage") ResetState();
+        
 
 
-            CheckForStun(1f, DamageType); 
+            CheckForStun(.8f, DamageType); 
         }
 
         //Kill the enemy
         else
         {       
-            ResetState(); 
-            enemyManager.RemoveEngager(thisScript); 
+            ResetState();
+            enemyMeshr.materials = deadSkinMat; 
+            canDoStunImpact = true; 
+          //  enemyManager.RemoveEngager(thisScript); 
             canDoStunImpact = false; 
             isDead = true;
             enemyAgent.enabled = false; 
@@ -468,17 +511,18 @@ public class BasicEnemyScript : MonoBehaviour
     private void OnCollisionEnter(Collision other)
     {
         //Add some backwards force to enemies hit by stunned enemies
-        if(other.gameObject.layer == playerController.enemyLayer && !isDead && targetDistance < 10f && canDoStunImpact)
+        if(other.gameObject.layer == playerController.enemyLayer && !isDead && targetDistance < chainHitMaxDistance && canDoStunImpact)
         {
             BasicEnemyScript otherScript = other.gameObject.GetComponent<BasicEnemyScript>();
-            if ((otherScript.isStunned || otherScript.isDead) && otherScript.stunTimer < .3f)
+            if ((otherScript.isStunned || otherScript.isDead) && otherScript.stunTimer < chainHitActiveTime)
             {
                     enemyRb.velocity = new Vector3(0,0,0); 
                     enemyAnim.speed = Random.Range(1, .8f);  
                     enemyAnim.SetFloat("DamageReaction", Random.Range(1f,3f));           
                     enemyAnim.SetTrigger("DamageTrigger");
+
                     CheckForStun(chainHitStunDuration, "ChainStunHit");
-                                                   
+                    enemyRb.freezeRotation = true;
                     launchDirection = otherScript.launchDirection; //Base launch direction of attackers forward 
                     enemyRb.AddForce(launchDirection * chainhitBackForce, ForceMode.Impulse);
                     enemyMeshr.materials = stunnedSkinMat;
@@ -506,15 +550,30 @@ public class BasicEnemyScript : MonoBehaviour
         stunType = damageType; 
         canRecover = true;
         
-        if(damageType == "PhysicsImpact")
+        if(stunType == "PhysicsImpact")
         {
-            print("turn of physics"); 
-             enemyAgent.enabled = false; 
+             print("turn of physics"); 
+             enemyAgent.enabled = false;
+             
         }
+
+        if (stunType == "LightAxeDamage")
+        {
+            enemyAgent.enabled = false;
+            //stunDuration = enemyAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / enemyAnim.GetCurrentAnimatorStateInfo(0).speed;
+        }
+
+        if(stunType == "ChainStunHit")
+        {
+            enemyAgent.enabled = false;
+        }
+
+        stunDuration = stunLength;
+
         enemyAgent.speed = 0f; 
         enemyState = (int)currentState.STUNNED; 
         stunTimer = 0f; 
-        stunDuration = stunLength; 
+        
     }
     
     private void CheckForRecovery()
@@ -559,9 +618,16 @@ public class BasicEnemyScript : MonoBehaviour
             DisableRagdoll();
             StandBackUp();
         }
+
+        if (stunType == "LightAxeDamage")
+        {
+            //enemyAgent.enabled = false;
+           // stunDuration = enemyAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / enemyAnim.GetCurrentAnimatorStateInfo(0).speed;
+        }
+
     }
 
-    
+
     void StandBackUp()
     {
          Debug.Log("Recover??"); 
@@ -581,7 +647,8 @@ public class BasicEnemyScript : MonoBehaviour
         if(getUpTimer >= getUpDuration)
         {
             ResetState();  
-            enemyAgent.speed = currentMoveSpeed;  
+            enemyAgent.speed = currentMoveSpeed;
+            enemyAgent.enabled = true; 
             canRecover = false; 
             recoveryTimer = 0f;
             stunTimer = 0f; 

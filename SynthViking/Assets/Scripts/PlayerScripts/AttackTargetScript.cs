@@ -168,10 +168,12 @@ public class AttackTargetScript : MonoBehaviour
 
                     if (enemyScript.canBeTargeted)
                     {
+
+                        //Unhand enemies weapon
                         if (enemyScript.weapon != null)
                         {
                             enemyScript.enemyRb.velocity = new Vector3(0,0,0); 
-                        
+                    
                             Destroy(enemyScript.weapon.GetComponent<FixedJoint>());
                             enemyScript.weapon.parent = null;
                             Rigidbody swordrb = enemyScript.weapon.GetComponent<Rigidbody>();
@@ -201,7 +203,7 @@ public class AttackTargetScript : MonoBehaviour
             }
 
             limbCheckerScript.hitLimbs.Clear();
-            //targetsInRange.Clear();
+            targetsInRange.Clear();
         }
         if (isEnemy)
         {

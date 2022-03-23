@@ -9,7 +9,8 @@ public class HitPauses : MonoBehaviour
 
     private float waitForTimer; 
     private float waitForDuration = .05f; 
-    public bool doHitPause; 
+    public bool doHitPause;
+    public ThirdPerson_PlayerControler playerController; 
 
     public List<Animator> objectsToPause = new List<Animator>(); 
     public AttackTargetScript attackTargetScript; 
@@ -31,6 +32,7 @@ public class HitPauses : MonoBehaviour
 
         if(doHitPause) 
         {
+                playerController.canRotate = false;
                 hitPauseTimer += Time.deltaTime; 
                 
                 foreach(Animator anim in objectsToPause)
@@ -67,6 +69,7 @@ public class HitPauses : MonoBehaviour
 
                 if(hitPauseTimer >= hitPauseDuration)
                 {
+                    playerController.canRotate = true;
                     hitPauseTimer = 0f; 
                     doHitPause = false; 
                    // attackTargetScript.TargetDamageEffects();
