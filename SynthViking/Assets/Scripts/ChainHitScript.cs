@@ -79,8 +79,8 @@ public class ChainHitScript : MonoBehaviour
                     otherScript.chainHitScript.currentDamage = currentDamage;
                     otherScript.chainHitScript.currentChainHitBackForce = currentChainHitBackForce;
                 }
-                else SetChainHitType(chainHitString); 
-                
+                else SetChainHitType(chainHitString);
+
                 otherScript.TakeDamage(currentDamage, chainHitString);
                 otherScript.enemyRb.freezeRotation = true;
                 otherScript.launchDirection = mainScript.launchDirection; //Base launch direction of attackers forward 
@@ -98,21 +98,24 @@ public class ChainHitScript : MonoBehaviour
         {
             currentChainHitActiveDuration = powerPunchChainActiveDuration;
             currentChainHitBackForce = powerPunchForce;
-            currentDamage = powerPunchChainDamage; 
+            currentDamage = powerPunchChainDamage;
+            stunType = playerAttackType.PowerPunch.ToString(); 
         }
 
         if(stunType == playerAttackType.LightAxeHit.ToString())
         {
             currentChainHitActiveDuration = axeHitChainActiveDuration; 
             currentChainHitBackForce = axeHitForce;
-            currentDamage = axeHitChainDamage; 
+            currentDamage = axeHitChainDamage;
+            stunType = playerAttackType.LightAxeHit.ToString();
         }
 
         if (stunType == chainHitString)
-        {
+        {     
             currentChainHitActiveDuration = chainHitActiveDuration;
             currentChainHitBackForce = chainHitForce;
-            currentDamage = chainHitDamage; 
+            currentDamage = chainHitDamage;
+            stunType = chainHitString;
         }
     }
 }

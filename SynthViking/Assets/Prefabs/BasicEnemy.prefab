@@ -957,13 +957,13 @@ MonoBehaviour:
   isOrigin: 0
   chainHitMaxDistance: 14
   chainHitStunDuration: 0.4
-  axeHitForce: 20
+  axeHitForce: 30
   axeHitChainActiveDuration: 0.4
   axeHitChainDamage: 0
   powerPunchForce: 35
   powerPunchChainActiveDuration: 0.8
   powerPunchChainDamage: 30
-  chainHitForce: 0
+  chainHitForce: 20
   chainHitActiveDuration: 0.4
   chainHitDamage: 5
   chainHitString: 
