@@ -8,6 +8,16 @@ using MoreMountains.Feedbacks;
 using System;
 using DG.Tweening;
 
+public enum playerAttackType
+{
+    PowerPunch,
+    PhysicsImpact,
+    LightAxeHit,
+    GroundSlam,
+    NormalePunch,
+}
+
+
 public class ThirdPerson_PlayerControler : MonoBehaviour
 {
     public Vector3 inputDir;
@@ -115,6 +125,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     private string attackState; 
 
     [HideInInspector]
+
+
     public enum currentAttackType
     {
         BasicLightAttack,
@@ -380,7 +392,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     private void Update()
     {
-        Debug.Log(totalComboLength); 
 
         switch (controllerState)
         {
@@ -613,8 +624,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //Set move speed 
         if (isGrounded)  //Handle ground move speed changes
         {
-            if (isAttacking && nextAttackTimer < nextAttackDuration) currentMoveSpeed = attackMoveSpeed;
-            else if (isSprinting) currentMoveSpeed = sprintMoveSpeed;  //Sprinting 
+            //if (isAttacking && nextAttackTimer < nextAttackDuration) currentMoveSpeed = attackMoveSpeed;
+            if (isSprinting) currentMoveSpeed = sprintMoveSpeed;  //Sprinting 
             else if (isMoving && !isSprinting)
             {
                 if (!isRunning) currentMoveSpeed = maxMoveSpeed * moveVelocity; //Walking
@@ -846,7 +857,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public void DoDashAttack()
     {
         BasicEnemyScript script = dashAttackTarget.transform.GetComponentInParent<BasicEnemyScript>();
-        script.TakeDamage(dashAttackDamage, "PhysicsImpact"); 
+        script.TakeDamage(dashAttackDamage, playerAttackType.PowerPunch.ToString()); 
         script.LaunchEnemy(aimPoint.forward, Random.Range( dashAttackForce -5, dashAttackForce + 5), 5f);    
         script.transform.position = transform.position + transform.forward + script.transform.up; 
         playerRb.AddForce(transform.up * 5, ForceMode.VelocityChange);
@@ -1210,7 +1221,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                     if (slamTarget.gameObject.layer == enemyLayer)
                     {
                         BasicEnemyScript enemyScript = slamTarget.GetComponent<BasicEnemyScript>();
-                        enemyScript.TakeDamage(currentGroundSlamDamage, "PhysicsImpact");
+                        enemyScript.TakeDamage(currentGroundSlamDamage, playerAttackType.GroundSlam.ToString());
                         enemyScript.LaunchEnemy((slamTarget.transform.position - transform.position), slamImpactForwardForce, Random.Range(slamImpactUpForce / 1.3f, slamImpactUpForce * 1.3f));
                     }
                 }
@@ -1410,7 +1421,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
 
         //Check if the combo is broken 
-        if (nextAttackTimer >= nextAttackDuration)
+        if (nextAttackTimer >= nextAttackDuration - .2f)
         {
             playerAnim.SetBool("IsAttacking", false);
             fixedControllerState = (int)currentState.MOVING;
@@ -1419,7 +1430,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             playerAnim.speed = 1f; 
             attackTargetInRange = false;
             canRotate = true;
-            playerRb.isKinematic = false; 
+            playerRb.isKinematic = false;
+            canMove = true; 
 
         }
         else if (nextAttackTimer < nextAttackDuration)

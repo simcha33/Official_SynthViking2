@@ -442,6 +442,67 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &1249726616
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1249726617}
+  - component: {fileID: 1249726618}
+  - component: {fileID: 1249726619}
+  m_Layer: 0
+  m_Name: GroundcheckPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1249726617
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1249726616}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.55, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8410380785031049891}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &1249726618
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1249726616}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 112
+  m_CollisionDetection: 0
+--- !u!65 &1249726619
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1249726616}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1266677021
 GameObject:
   m_ObjectHideFlags: 0
@@ -834,6 +895,79 @@ FixedJoint:
   m_EnablePreprocessing: 0
   m_MassScale: 1
   m_ConnectedMassScale: 1
+--- !u!1 &5894487437324550962
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5976219132611384195}
+  - component: {fileID: 8768177868038106436}
+  - component: {fileID: 271370257864884223}
+  m_Layer: 0
+  m_Name: ChainHitRadius
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5976219132611384195
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5894487437324550962}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0, y: 1.006, z: -0.057}
+  m_LocalScale: {x: 1.3110137, y: 1.6971294, z: 1.8734668}
+  m_Children: []
+  m_Father: {fileID: 8410380785031049891}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!136 &8768177868038106436
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5894487437324550962}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &271370257864884223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5894487437324550962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e667a9887296c7a4698cc4c657f512ac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mainScript: {fileID: 8410380785165072143}
+  isOrigin: 0
+  chainHitMaxDistance: 14
+  chainHitStunDuration: 0.4
+  axeHitForce: 20
+  axeHitChainActiveDuration: 0.4
+  axeHitChainDamage: 0
+  powerPunchForce: 35
+  powerPunchChainActiveDuration: 0.8
+  powerPunchChainDamage: 30
+  chainHitForce: 0
+  chainHitActiveDuration: 0.4
+  chainHitDamage: 5
+  chainHitString: 
+  currentChainHitActiveDuration: 0
 --- !u!1 &8410380784834786784
 GameObject:
   m_ObjectHideFlags: 0
@@ -1160,6 +1294,8 @@ Transform:
   m_Children:
   - {fileID: 8410380785329976505}
   - {fileID: 8410380786440310811}
+  - {fileID: 1249726617}
+  - {fileID: 5976219132611384195}
   m_Father: {fileID: 8410380785165072141}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1184,8 +1320,8 @@ MonoBehaviour:
   enemyController: {fileID: 0}
   hitpauseScript: {fileID: 0}
   limbCheckerScript: {fileID: 0}
-  bloodFx1: {fileID: 0}
-  bloodFx2: {fileID: 0}
+  axeHitBloodVFX: {fileID: 0}
+  axeKillBloodVFX: {fileID: 0}
   swordPoint: {fileID: 0}
   targetCube: {fileID: 0}
   selectedTarget: {fileID: 0}
@@ -1299,7 +1435,7 @@ GameObject:
   - component: {fileID: 8410380785165072128}
   - component: {fileID: 8410380785165072129}
   - component: {fileID: 82971100}
-  m_Layer: 7
+  m_Layer: 11
   m_Name: BasicEnemy
   m_TagString: BasicEnemy
   m_Icon: {fileID: 0}
@@ -1357,25 +1493,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   currentHealth: 0
-  maxHealth: 300
+  maxHealth: 100
   walkSpeed: 4
-  runSpeed: 8
-  animSpeed: 0
+  runSpeed: 7
   lookRange: 0
-  canBeManaged: 0
+  groundCheckHeight: 0.8
+  envorinmentLayer:
+    serializedVersion: 2
+    m_Bits: 1024
   thisScript: {fileID: 0}
+  canBeManaged: 0
+  isGrounded: 0
   target: {fileID: 0}
-  attackDistance: 1.5
+  attackDistance: 2
   currentRequiredDistance: 0
   circleDistance: 10
   basicMeleeAttackDamage: 20
   currentAttackDamage: 0
-  attackType: 
+  enemyAttackType: 
   basicMeleeAttackForwardForce: 0
   targetDistance: 0
   ragdollRbs: []
-  canDoStunImpact: 1
   minStunnedImpactVelocity: 10
+  currentVelocity: 0
   stunDuration: 5
   stunTimer: 0
   recoveryTimer: 0
@@ -1384,21 +1524,8 @@ MonoBehaviour:
   getUpTimer: 0
   getUpDuration: 0
   launchDirection: {x: 0, y: 0, z: 0}
-  chainHitStunDuration: 1
-  chainhitBackForce: 23
-  stunnedFeebacks: {fileID: 8410380786024326795}
-  startAttackFeedback: {fileID: 0}
-  playerController: {fileID: 0}
-  attackTargetScript: {fileID: 837819321}
-  enemyManager: {fileID: 0}
-  enemyAnim: {fileID: 8410380785165072142}
-  enemyRb: {fileID: 0}
-  mainCollider: {fileID: 8410380785165072128}
-  rootTransform: {fileID: 8410380785165072141}
-  bloodSpawnPoint: {fileID: 1129851785}
-  weapon: {fileID: 4503962363214031}
-  connectedJointRb: {fileID: 8410380784877409721}
-  enemyAgent: {fileID: 82971100}
+  chainHitStunDuration: 1.4
+  canBeChainHit: 1
   stunnedSkinMat:
   - {fileID: 2100000, guid: 085bead2946154d44aa9e6b283201e52, type: 2}
   - {fileID: 2100000, guid: a3ac3a789870a7a41a3a116e64bf55c8, type: 2}
@@ -1411,6 +1538,21 @@ MonoBehaviour:
   deadSkinMat:
   - {fileID: 2100000, guid: 7b778565cf9e34c4aa4472afc1f25d45, type: 2}
   - {fileID: 2100000, guid: a3ac3a789870a7a41a3a116e64bf55c8, type: 2}
+  stunnedFeebacks: {fileID: 8410380786024326795}
+  startAttackFeedback: {fileID: 0}
+  playerController: {fileID: 0}
+  attackTargetScript: {fileID: 837819321}
+  chainHitScript: {fileID: 271370257864884223}
+  enemyAnim: {fileID: 8410380785165072142}
+  enemyRb: {fileID: 0}
+  mainCollider: {fileID: 8410380785165072128}
+  chainHitCollider: {fileID: 0}
+  rootTransform: {fileID: 8410380785165072141}
+  bloodSpawnPoint: {fileID: 1129851785}
+  weapon: {fileID: 4503962363214031}
+  groundCheckPoint: {fileID: 1249726618}
+  connectedJointRb: {fileID: 8410380784877409721}
+  enemyAgent: {fileID: 82971100}
   enemyMeshr: {fileID: 8410380785426902637}
   isStunned: 0
   isDead: 0
@@ -1433,6 +1575,7 @@ MonoBehaviour:
   canBeTargeted: 1
   canAddImpactDamage: 1
   canBeLaunched: 1
+  enemyState: 0
 --- !u!136 &8410380785165072128
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1443,7 +1586,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.7
+  m_Radius: 0.4
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1.1, z: 0}
@@ -1455,7 +1598,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8410380785165072131}
   serializedVersion: 2
-  m_Mass: 1.5
+  m_Mass: 1.1
   m_Drag: 1
   m_AngularDrag: 0.05
   m_UseGravity: 0
@@ -1744,8 +1887,8 @@ MonoBehaviour:
   enemyController: {fileID: 8410380785165072143}
   hitpauseScript: {fileID: 0}
   limbCheckerScript: {fileID: 0}
-  bloodFx1: {fileID: 5170585893340993107, guid: 7b88f11816abaa34c9e02cbaa8485321, type: 3}
-  bloodFx2: {fileID: 5170585893340993107, guid: 7b88f11816abaa34c9e02cbaa8485321, type: 3}
+  axeHitBloodVFX: {fileID: 5170585893340993107, guid: 7b88f11816abaa34c9e02cbaa8485321, type: 3}
+  axeKillBloodVFX: {fileID: 5170585893340993107, guid: e333dc4c486756844b1719e55212914b, type: 3}
   swordPoint: {fileID: 0}
   targetCube: {fileID: 0}
   selectedTarget: {fileID: 0}
@@ -1861,7 +2004,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.014449926, y: -0.0158754, z: -0.10696817}
+  m_ConnectedAnchor: {x: 0.01444969, y: -0.01587414, z: -0.10696936}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: -1}
   m_TwistLimitSpring:
@@ -2412,7 +2555,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.25601327, y: 0.00398891, z: -0.0008380711}
+  m_ConnectedAnchor: {x: -0.25601253, y: 0.003985464, z: -0.0008366145}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -2588,7 +2731,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.014447177, y: -0.015873343, z: 0.10696818}
+  m_ConnectedAnchor: {x: 0.014448389, y: -0.015876744, z: 0.106966786}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: -1}
   m_TwistLimitSpring:
@@ -3230,7 +3373,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.25601363, y: -0.0039901477, z: 0.0008393676}
+  m_ConnectedAnchor: {x: 0.25601253, y: -0.0039865044, z: 0.00083856296}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: -1, z: 0}
   m_TwistLimitSpring:
@@ -3811,7 +3954,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.43303454, y: 0.00015243886, z: 0.011093773}
+  m_ConnectedAnchor: {x: 0.4330355, y: 0.00014944373, z: 0.011092231}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: -1}
   m_TwistLimitSpring:
@@ -4420,7 +4563,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.37406328, y: -0.0059396, z: -0.0058395434}
+  m_ConnectedAnchor: {x: -0.37406334, y: -0.00594341, z: -0.005840376}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: -1}
   m_TwistLimitSpring:
@@ -4745,7 +4888,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.43303695, y: -0.00015053897, z: -0.011093318}
+  m_ConnectedAnchor: {x: -0.43303877, y: -0.00015051661, z: -0.011089899}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: -1}
   m_TwistLimitSpring:

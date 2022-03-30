@@ -138,9 +138,7 @@ public class PlayerState : MonoBehaviour
                     canBeHit = false;
                     wasHitByAttack = true;
                 }
-                
-
-                Debug.Log(DamageType);
+               
 
                 playerState = (int)currentState.STUNNED;
                 playerController.controllerState = (int)currentState.STUNNED;

@@ -28,54 +28,55 @@ public class HitPauses : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Debug.Log(playerController.playerAnim.speed); 
 
-        if(doHitPause) 
+        if (doHitPause)
         {
-                playerController.canRotate = false;
-                hitPauseTimer += Time.deltaTime; 
-                
-                foreach(Animator anim in objectsToPause)
+            playerController.canRotate = false;
+            hitPauseTimer += Time.deltaTime;
+
+            foreach (Animator anim in objectsToPause)
+            {
+
+                //Turn anim off 
+                if (hitPauseTimer < hitPauseDuration)
                 {
-
-                    //Turn anim off 
-                    if(hitPauseTimer < hitPauseDuration) 
-                    {
-                        if(anim == playerAnim){ anim.speed = .02f; print("PlayerHit");}
-                                
-                    }
-
+                    if (anim == playerAnim) anim.speed = .02f;
                     //Turn anim back on 
-                    else if (hitPauseTimer >= hitPauseDuration)
-                    {
+                    
+                }
+                else if (hitPauseTimer >= hitPauseDuration)
+                {
 
                     foreach (GameObject obj in theHitPaused)
                     {
                         //Deal damage to hit target
                         BasicEnemyScript enemyScript = obj.GetComponent<BasicEnemyScript>();
-                       // enemyScript.TakeDamage(attackTargetScript.playerController.currentAttackDamage);
-                        Instantiate(attackTargetScript.bloodFx1, enemyScript.bloodSpawnPoint.position, enemyScript.bloodSpawnPoint.rotation);
-                     
-                      
+                        // enemyScript.TakeDamage(attackTargetScript.playerController.currentAttackDamage);
+                        GameObject blood = Instantiate(attackTargetScript.axeHitBloodVFX, enemyScript.bloodSpawnPoint.position, enemyScript.bloodSpawnPoint.rotation);
+                        blood.AddComponent<CleanUpScript>();
                     }
 
                     attackTargetScript.weaponHitFeedback?.PlayFeedbacks();
                     theHitPaused.Clear();
+                    Debug.Log("AIHWIDHAIOUDAIUDHAIUDHIUDH");              
                     if (anim == playerAnim) anim.speed = attackTargetScript.playerController.animAttackSpeed;
-                    else anim.speed = 1f; 
-                      //  if(anim != playerAnim) objectsToPause.Remove(anim); 
-                    }        
+                    else anim.speed = 1f;
+                    //  if(anim != playerAnim) objectsToPause.Remove(anim); 
                 }
+                 
 
-                if(hitPauseTimer >= hitPauseDuration)
-                {
-                    playerController.canRotate = true;
-                    hitPauseTimer = 0f; 
-                    doHitPause = false; 
-                   // attackTargetScript.TargetDamageEffects();
-                } 
+            }
+
+            if (hitPauseTimer >= hitPauseDuration)
+            {
+                playerController.canRotate = true;
+                hitPauseTimer = 0f;
+                doHitPause = false;
+                
+                // attackTargetScript.TargetDamageEffects();
+            }
         }
     }
-
    
 }
