@@ -284,8 +284,9 @@ public class BasicEnemyScript : MonoBehaviour
 
     public void CheckForAttack()
     {
-        if(playerLocationIsKnown && isInAttackRange && canAttack)
+        if(playerLocationIsKnown && isInAttackRange)
         {
+            print(" 0"); 
             enemyState = (int)currentState.ATTACKING; 
         }
         else if(playerLocationIsKnown && isInCircleRange && !canAttack){
@@ -366,6 +367,7 @@ public class BasicEnemyScript : MonoBehaviour
             ResetState();
             enemyRb.isKinematic = true; 
             transform.LookAt(target, Vector3.up);
+            print("1"); 
             SetAttackType(); 
         }    
 
@@ -383,6 +385,7 @@ public class BasicEnemyScript : MonoBehaviour
     void SetAttackType()
     {
         int totalAttackTrees = 1;
+            print("2"); 
 
         //Reset some attack values 
         canAttack = true;
@@ -401,7 +404,7 @@ public class BasicEnemyScript : MonoBehaviour
     public void DoAttack()
     {
         nextAttackDuration = enemyAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / enemyAnim.GetCurrentAnimatorStateInfo(0).speed;
-
+         print("3");
         if (canAttack)
         {
             canAttack = false; 
@@ -475,6 +478,13 @@ public class BasicEnemyScript : MonoBehaviour
                 enemyMeshr.materials = stunnedSkinMat;
             }
 
+            if (DamageType == chainHitScript.chainHitString) //Enemy is hit by power punch
+            {
+                canBeChainHit = true;              
+                enemyMeshr.materials = stunnedSkinMat;
+            }
+
+
             if (DamageType == playerAttackType.LightAxeHit.ToString()) //Enemy is hit by axe
             {
             
@@ -532,6 +542,7 @@ public class BasicEnemyScript : MonoBehaviour
         {
             enemyAgent.enabled = false;
             chainHitScript.enabled = true;
+            chainHitScript.isOrigin = true; 
             chainHitScript.SetChainHitType(stunType);
             stunDuration = 2f;
 
@@ -541,6 +552,7 @@ public class BasicEnemyScript : MonoBehaviour
         {
             enemyAgent.enabled = false;
             chainHitScript.enabled = true; //allow this enemy to cause chain hit impacts
+            chainHitScript.isOrigin = true; 
             chainHitScript.SetChainHitType(stunType);
             stunDuration = 1f;     
         }
@@ -549,7 +561,7 @@ public class BasicEnemyScript : MonoBehaviour
         { 
             enemyAgent.enabled = false;
             chainHitScript.enabled = true;
-            stunDuration = chainHitScript.chainHitStunDuration; 
+            stunDuration = chainHitScript.currentStunDuration; 
         }
 
         //stunDuration = stunLength;
@@ -595,7 +607,6 @@ public class BasicEnemyScript : MonoBehaviour
  
         if (isLaunched) //Trigger logic for getting up once if the enemy has to get up first 
         {
-            print("5 trigger get up logic once");
             isGettingUp = true;
             isLaunched = false; 
             DisableRagdoll();
@@ -615,8 +626,8 @@ public class BasicEnemyScript : MonoBehaviour
      
         if(getUpTimer >= getUpDuration) //exit stunned satte 
         {
-            print("6 finish recovery state");
             ResetState();  
+            DisableRagdoll(); 
             enemyAgent.speed = currentMoveSpeed;
            // enemyAgent.enabled = true; 
             canRecover = false;

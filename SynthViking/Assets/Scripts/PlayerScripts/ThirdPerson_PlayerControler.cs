@@ -71,27 +71,27 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     private float landCheckHeight = 2.5f;
     private float groundCheckJumpDelay = .5f; //Temporaly turn of the groundcheck after jumping 
     public float groundCheckTimer;
+    #endregion
 
-    [Header("BLOCKING")]
+     [Header("BLOCKING")]
     #region
     public bool isBlocking;
     public bool canBlock;
-    public bool isPerfectParry;
-    public float blockResetDuration;
+   // public bool isPerfectParry;
+   // public float blockResetDuration;
 
     public float blockRechargeTimer;
     public float blockRechargeDuration;
 
     public float blockTimer;
-    public float perfectParryWindow;
-    public int perfectParryRestorationAmount; 
-    public int maxAvailableBlocks;
-    public int currentAvailableBlocks; 
+    public float blockDuration; 
+   // public float perfectParryWindow;
+   /// public int perfectParryRestorationAmount; 
+    //public int maxAvailableBlocks;
+    //public int currentAvailableBlocks; 
    
     #endregion
 
-
-    #endregion
 
     [Header("DASH MOVEMENT")]
     #region
@@ -193,7 +193,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public float airSmashCooldownDuration; 
     #endregion
 
-
     [Header("WALLRUNNING")] //Wallrunning; 
     #region
     public float wallRunMoveSpeed;
@@ -281,6 +280,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     [Header("Switch Case")] //SWITCH CASE
     #region
     [HideInInspector] public int controllerState;
+    private int previousState; 
     [HideInInspector] public int fixedControllerState;
     [HideInInspector]
     public enum currentState
@@ -292,6 +292,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         DASHING,
         AIRSMASHING,
         STUNNED,
+        BLOCKING, 
     }
     #endregion
 
@@ -331,27 +332,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public bool isStunned; 
 
     public bool wasSprintingBeforeJump;
-    /*
-    [HideInInspector] public bool canMove = true;
-    [HideInInspector] public bool canRotate = true;
-    [HideInInspector] public bool canJump = true;
-    [HideInInspector] public bool canSprint = true;
-    [HideInInspector] public bool canLand = false;
-    [HideInInspector] public bool canDash = true;
-    [HideInInspector] public bool canStartWallrun = true;
-
-    [HideInInspector] public bool isMoving;
-    [HideInInspector] public bool isWallRunning; 
-    [HideInInspector] public bool isLanding;
-    [HideInInspector] public bool isDashing;
-    [HideInInspector] public bool isWalking;
-    [HideInInspector] public bool isSprinting;
-    [HideInInspector] public bool isRunning;
-    [HideInInspector] public bool isInAir;
-    [HideInInspector] public bool isGrounded = true;
-
-   
-    */
     #endregion
 
 
@@ -361,7 +341,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         velocityHash = Animator.StringToHash("MoveVelocity");
         raycastCheckMeshr = raycastCheck.GetComponent<MeshRenderer>();
         raycastCheck.gameObject.SetActive(false);
-        HandleWeaponSwaping(true); 
+        HolsterWeapon(true); 
         //dashChecker.position, dashChecker.position + dashChecker.forward * 2f
 
         defaultSkinMat = meshR.materials;
@@ -406,6 +386,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 HandleDrag();
                 CheckForDash();
                 CheckForAirSmash();
+                CheckForBlock(); 
                // HandleWeaponSwaping(); 
                 break;
 
@@ -429,6 +410,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 CheckForMoveInput();
             //    GroundCheck();
                 HandleRotation();
+                CheckForBlock(); 
              //   HandleWeaponSwaping(); 
                 break;
 
@@ -444,6 +426,13 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 CheckForAirSmash();
                 HandleRotation(); 
                 break;
+
+
+            case(int)currentState.BLOCKING:
+                DoBlock(previousState); 
+                
+                break; 
+
             case (int)currentState.STUNNED:
                 break; 
         }
@@ -500,7 +489,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         playerAnim.SetBool("IsDashing", isDashing);
         playerAnim.SetBool("IsAiming", isChargingDash);
         playerAnim.SetBool("IsAirSmashing", isAirSmashing);
-        playerAnim.SetBool("IsStunned", isStunned); 
+        playerAnim.SetBool("IsStunned", isStunned);
+        playerAnim.SetBool("IsBlocking", isBlocking);  
 
         //Checks
         playerAnim.SetBool("CanJump", canJump);
@@ -512,7 +502,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         playerAnim.SetBool("CanLand", canLand);
     }
 
-    void HandleWeaponSwaping(bool holsterWeapon)
+    void HolsterWeapon(bool holsterWeapon)
     {
         if (holsterWeapon)
         {
@@ -589,9 +579,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
         playerRb.velocity = new Vector3(moveDirection.x, playerRb.velocity.y, moveDirection.z);
         moveDirection = Vector3.zero;
-
-
-
     }
 
     void HandleMoveSpeed()
@@ -600,7 +587,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //Check for sprinting 
         if (input.sprintButtonPressed && canSprint && (isMoving || isWallRunning))
         {
-            if (!isSprinting) HandleWeaponSwaping(true); 
+            if (!isSprinting) HolsterWeapon(true); 
          
             isSprinting = true;
             if (!isWallRunning) canStartWallrun = true;
@@ -726,9 +713,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     void CheckForDash()
     {
-        //Handle dash charge indicator UI
-       // float dashIndicatorSizeModifier = 1.3f;
-        //dashChargeIndicator.fillAmount = (currentDashDistance - minDashDistance) / (maxDashDistance - minDashDistance);
 
         //Build up the dashduration on button hold
         if (input.dashButtonPressed && canDash)
@@ -739,14 +723,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             if (currentDashDistance < maxDashDistance) currentDashDistance += dashBuildUpSpeed * Time.unscaledDeltaTime;
             else
             {
-                /*
-                //Full charged dash UI effects
-                if (dashChargeIndicator.transform.localScale == originalIndicatorSize)
-                {
-                    dashChargeIndicator.transform.localScale *= dashIndicatorSizeModifier;
-                    dashChargeBackground.transform.localScale *= dashIndicatorSizeModifier;
-                }
-                */
                 currentDashDistance = maxDashDistance;
             }
         }
@@ -1265,6 +1241,45 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     }
 
+    //Blockiong
+
+    void CheckForBlock()
+    {
+        if(input.blockButtonPressed && canBlock) //Check if the player is and can block 
+        {
+            isBlocking = true;
+            canBlock = false;  
+            HolsterWeapon(false); 
+            previousState = controllerState; 
+            playerAnim.SetTrigger("BlockTrigger"); 
+            controllerState = (int)currentState.BLOCKING; 
+        }
+
+        if(!canBlock && !isBlocking) //Recharge the block after use 
+        {
+            blockRechargeTimer += Time.deltaTime; 
+            if(blockRechargeTimer >= blockRechargeDuration && !input.blockButtonPressed)
+            {
+                blockRechargeTimer = 0f; 
+                canBlock = true; 
+            }
+        }
+    }
+
+    void DoBlock(int previousState)
+    {
+        blockTimer+= Time.deltaTime; 
+        playerState.canBeHit = false; 
+
+        if(blockTimer >= blockDuration)
+        {
+            isBlocking = false;  
+            playerState.canBeHit = true; 
+            blockTimer = 0f;
+            controllerState = previousState; 
+        }
+    }
+
 
     //Attacking
 
@@ -1307,7 +1322,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     void SetAttackType()
     {
         int totalAttackTrees = 5;
-        HandleWeaponSwaping(false);
+        HolsterWeapon(false);
 
         if (isSprinting)
         {
@@ -1380,7 +1395,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             canRotate = true;
 
             attackStartPos = transform.position;
-            playerRb.velocity = new Vector3(0, 0, 0);
+          //  playerRb.velocity = new Vector3(0, 0, 0);
 
 
             //Check if there is a attack target within range 
@@ -1431,7 +1446,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             attackTargetInRange = false;
             canRotate = true;
             playerRb.isKinematic = false;
-            canMove = true; 
+           // canMove = true; 
 
         }
         else if (nextAttackTimer < nextAttackDuration)
@@ -1518,8 +1533,9 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //canRotate = false;
         attackTargetScript.TargetDamageCheck();  
         attackDirection = transform.position + inputDir;
-        if (attackState != currentAttackType.SprintAttack.ToString()) transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .55f).SetUpdate(UpdateType.Fixed);
+        if (attackState != currentAttackType.SprintAttack.ToString()) transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .35f).SetUpdate(UpdateType.Fixed);
         else meshR.materials = defaultSkinMat; 
+        //nextAttackTimer = nextAttackDuration; 
 
     }
 

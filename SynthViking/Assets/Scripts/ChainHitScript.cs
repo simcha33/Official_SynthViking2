@@ -8,31 +8,40 @@ public class ChainHitScript : MonoBehaviour
     public BasicEnemyScript mainScript;
     public bool isOrigin;
     public float chainHitMaxDistance = 20f;
-    public float chainHitStunDuration;
+    public float currentStunDuration; 
+
+
+
+    public Vector3 launchDirection; 
 
     [Header ("AXE CHAIN HIT")]
     public float axeHitForce;
     public float axeHitChainActiveDuration;
     public float axeHitChainDamage = 0;
+    public float axeHitStunDuration; 
+
 
     [Header("POWER PUNCH CHAIN HIT")]
     //Forces    
     public float powerPunchForce;
     public float powerPunchChainActiveDuration;
     public float powerPunchChainDamage = 30f;
+    public float powerPunchStunDuration;  
+
 
     [Header("DEFAULT CHAIN HIT")]
     public float chainHitForce;
     public float chainHitActiveDuration;
     private float chainHitActiveTimer;
     public float chainHitDamage = 5f;
+    public float chainHitStunDuration; 
     [HideInInspector] public string chainHitString;
 
     //Current values
     private float currentDamage;
     private float currentChainHitBackForce;
     [HideInInspector] public float currentChainHitActiveDuration;
-    private string stunType;
+    private string chainType; 
 
 
     private void Start()
@@ -62,7 +71,7 @@ public class ChainHitScript : MonoBehaviour
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("Enemy") && mainScript.targetDistance < chainHitMaxDistance && (mainScript.isStunned || mainScript.isDead))
         {
-            Debug.Log("DetectTheEnemy"); 
+//            Debug.Log("DetectTheEnemy"); 
             BasicEnemyScript otherScript = other.gameObject.GetComponent<BasicEnemyScript>();
 
             if (otherScript.canBeChainHit && !otherScript.isDead) 
@@ -79,12 +88,17 @@ public class ChainHitScript : MonoBehaviour
                     otherScript.chainHitScript.currentDamage = currentDamage;
                     otherScript.chainHitScript.currentChainHitBackForce = currentChainHitBackForce;
                 }
-                else SetChainHitType(chainHitString);
+                else otherScript.chainHitScript.SetChainHitType(chainHitString);
 
                 otherScript.TakeDamage(currentDamage, chainHitString);
                 otherScript.enemyRb.freezeRotation = true;
+
+
+                //Set launch direction 
+                otherScript.enemyRb.velocity = new Vector3(0f,0f,0f); 
                 otherScript.launchDirection = mainScript.launchDirection; //Base launch direction of attackers forward 
-                otherScript.enemyRb.AddForce(mainScript.launchDirection * currentChainHitBackForce, ForceMode.Impulse);
+                otherScript.enemyRb.AddForce(mainScript.launchDirection * currentChainHitBackForce, ForceMode.Impulse);             
+               // otherScript.enemyRb.AddForce(launchDirection * currentChainHitBackForce, ForceMode.Impulse);
                 otherScript.enemyMeshr.materials = otherScript.stunnedSkinMat;
             }
         }
@@ -93,21 +107,28 @@ public class ChainHitScript : MonoBehaviour
     public void SetChainHitType(string stunType)
     {
         isOrigin = true; 
+       // chainType = stunType;  
+          
 
         if(stunType == playerAttackType.PowerPunch.ToString())
         {
             currentChainHitActiveDuration = powerPunchChainActiveDuration;
             currentChainHitBackForce = powerPunchForce;
             currentDamage = powerPunchChainDamage;
+         //   currentStunDuration = powerPunchStunDuration; 
             stunType = playerAttackType.PowerPunch.ToString(); 
+             print("PowerPunchDir"); 
         }
 
         if(stunType == playerAttackType.LightAxeHit.ToString())
         {
+
             currentChainHitActiveDuration = axeHitChainActiveDuration; 
             currentChainHitBackForce = axeHitForce;
             currentDamage = axeHitChainDamage;
+          //  currentStunDuration = axeHitStunDuration; 
             stunType = playerAttackType.LightAxeHit.ToString();
+            print("AxeHitDir"); 
         }
 
         if (stunType == chainHitString)
@@ -115,7 +136,36 @@ public class ChainHitScript : MonoBehaviour
             currentChainHitActiveDuration = chainHitActiveDuration;
             currentChainHitBackForce = chainHitForce;
             currentDamage = chainHitDamage;
+           // currentStunDuration = chainHitStunDuration; 
             stunType = chainHitString;
+            print("ChainHitDir"); 
+        }
+    }
+
+    public void CheckForLaunchDirection(Transform other, BasicEnemyScript otherScript)
+    {
+
+
+        if(chainType == playerAttackType.PowerPunch.ToString())
+        {
+            float leftSide = Vector3.Distance(transform.position - transform.right * .5f, other.position); //Look for closest side
+            float rightSide = Vector3.Distance(transform.position - transform.right * .5f, other.position); 
+
+            if(leftSide > rightSide) launchDirection = transform.right; //Launch enemy to the left
+            else launchDirection = -transform.right; //Launch enemy to the right 
+            print("PowerPunchDir"); 
+        }
+
+        if(chainType == playerAttackType.LightAxeHit.ToString())
+        {
+            launchDirection = mainScript.launchDirection; //Base launch direction of attackers forward 
+            print("AxeHitDir"); 
+        }
+
+        if (chainType == chainHitString)
+        {
+            launchDirection = mainScript.launchDirection; //Base launch direction of attackers forward 
+            print("ChainHitDir"); 
         }
     }
 }

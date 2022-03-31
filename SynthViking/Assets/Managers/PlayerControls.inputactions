@@ -54,7 +54,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Parry",
+                    "name": "Block",
                     "type": "Value",
                     "id": "4b0fe72c-7bf1-4b72-bc94-56328b17d089",
                     "expectedControlType": "Button",
@@ -242,7 +242,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Parry",
+                    "action": "Block",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

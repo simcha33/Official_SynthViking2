@@ -28,12 +28,11 @@ public class HitPauses : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(playerController.playerAnim.speed); 
 
         if (doHitPause)
         {
             playerController.canRotate = false;
-            hitPauseTimer += Time.deltaTime;
+            hitPauseTimer += Time.unscaledDeltaTime;
 
             foreach (Animator anim in objectsToPause)
             {

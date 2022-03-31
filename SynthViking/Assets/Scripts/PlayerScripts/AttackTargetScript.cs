@@ -19,14 +19,20 @@ public class AttackTargetScript : MonoBehaviour
     }
     #endregion
 
-    [Header("COMPONENTS")] //GROUND MOVEMENT
+    [Header("FEEDBACKS")] //GROUND MOVEMENT
     #region
     public MMFeedbacks weaponHitFeedback;
     public MMFeedbacks weaponKillFeedback;
     public MMFeedbacks weapinFirstImpactFeedback;
+    public MMFeedbacks playerBlockFeedback; 
+    #endregion
+
+
+    [Header("COMPONENTS")] //GROUND MOVEMENT
+    #region
+        public BasicEnemyScript enemyController; 
     [HideInInspector] public ThirdPerson_PlayerControler playerController;
    // public CleanUpScript cleanUpScript;
-    public BasicEnemyScript enemyController; 
     public HitPauses hitpauseScript; 
     public CheckForLimbs limbCheckerScript;
 
@@ -211,7 +217,14 @@ public class AttackTargetScript : MonoBehaviour
             {
                 //Deal damage to hit target            
                 PlayerState targetScript = obj.GetComponent<PlayerState>();
-                targetScript.TakeDamage(enemyController.currentAttackDamage, enemyController.enemyAttackType);
+
+                if(!playerController.isBlocking) targetScript.TakeDamage(enemyController.currentAttackDamage, enemyController.enemyAttackType);
+                else
+                {
+                    playerController.blockRechargeTimer = playerController.blockRechargeDuration; 
+                  //  enemyController.TakeDamage(0, attackt)
+                    playerBlockFeedback?.PlayFeedbacks(); 
+                }
             }
         }
 

@@ -67,7 +67,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Parry"",
+                    ""name"": ""Block"",
                     ""type"": ""Value"",
                     ""id"": ""4b0fe72c-7bf1-4b72-bc94-56328b17d089"",
                     ""expectedControlType"": ""Button"",
@@ -255,7 +255,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Parry"",
+                    ""action"": ""Block"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -453,7 +453,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Gameplay_Sprint = m_Gameplay.FindAction("Sprint", throwIfNotFound: true);
         m_Gameplay_SlowMo = m_Gameplay.FindAction("SlowMo", throwIfNotFound: true);
         m_Gameplay_Look = m_Gameplay.FindAction("Look", throwIfNotFound: true);
-        m_Gameplay_Parry = m_Gameplay.FindAction("Parry", throwIfNotFound: true);
+        m_Gameplay_Block = m_Gameplay.FindAction("Block", throwIfNotFound: true);
         m_Gameplay_Aim = m_Gameplay.FindAction("Aim", throwIfNotFound: true);
         m_Gameplay_Dash = m_Gameplay.FindAction("Dash", throwIfNotFound: true);
         m_Gameplay_AirSmash = m_Gameplay.FindAction("AirSmash", throwIfNotFound: true);
@@ -519,7 +519,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_Sprint;
     private readonly InputAction m_Gameplay_SlowMo;
     private readonly InputAction m_Gameplay_Look;
-    private readonly InputAction m_Gameplay_Parry;
+    private readonly InputAction m_Gameplay_Block;
     private readonly InputAction m_Gameplay_Aim;
     private readonly InputAction m_Gameplay_Dash;
     private readonly InputAction m_Gameplay_AirSmash;
@@ -535,7 +535,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @Sprint => m_Wrapper.m_Gameplay_Sprint;
         public InputAction @SlowMo => m_Wrapper.m_Gameplay_SlowMo;
         public InputAction @Look => m_Wrapper.m_Gameplay_Look;
-        public InputAction @Parry => m_Wrapper.m_Gameplay_Parry;
+        public InputAction @Block => m_Wrapper.m_Gameplay_Block;
         public InputAction @Aim => m_Wrapper.m_Gameplay_Aim;
         public InputAction @Dash => m_Wrapper.m_Gameplay_Dash;
         public InputAction @AirSmash => m_Wrapper.m_Gameplay_AirSmash;
@@ -568,9 +568,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Look.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLook;
                 @Look.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLook;
                 @Look.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnLook;
-                @Parry.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnParry;
-                @Parry.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnParry;
-                @Parry.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnParry;
+                @Block.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBlock;
+                @Block.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBlock;
+                @Block.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnBlock;
                 @Aim.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAim;
                 @Aim.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAim;
                 @Aim.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnAim;
@@ -608,9 +608,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Look.started += instance.OnLook;
                 @Look.performed += instance.OnLook;
                 @Look.canceled += instance.OnLook;
-                @Parry.started += instance.OnParry;
-                @Parry.performed += instance.OnParry;
-                @Parry.canceled += instance.OnParry;
+                @Block.started += instance.OnBlock;
+                @Block.performed += instance.OnBlock;
+                @Block.canceled += instance.OnBlock;
                 @Aim.started += instance.OnAim;
                 @Aim.performed += instance.OnAim;
                 @Aim.canceled += instance.OnAim;
@@ -705,7 +705,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnSprint(InputAction.CallbackContext context);
         void OnSlowMo(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
-        void OnParry(InputAction.CallbackContext context);
+        void OnBlock(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
         void OnAirSmash(InputAction.CallbackContext context);

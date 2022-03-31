@@ -19,7 +19,7 @@ public class PlayerInputCheck : MonoBehaviour
     [HideInInspector] public bool beamButtonPressed;
     [HideInInspector] public bool projectileButtonPressed;
     [HideInInspector] public bool meleeButtonPressed;
-    [HideInInspector] public bool parryButtonPressed;
+    [HideInInspector] public bool blockButtonPressed;
     [HideInInspector] public bool ultimateButtonPressed;
     [HideInInspector] public bool jumpButtonPressed;
     [HideInInspector] public bool airSmashButtonPressed; 
@@ -51,6 +51,12 @@ public class PlayerInputCheck : MonoBehaviour
         jumpButtonPressed = value.isPressed;
     }
 
+    private void OnBlock(InputValue value)
+    {
+        blockButtonPressed = value.isPressed; 
+    }
+
+
     private void OnDash(InputValue value)
     {
         dashButtonPressed = value.isPressed;
@@ -75,6 +81,7 @@ public class PlayerInputCheck : MonoBehaviour
     {
         airSmashButtonPressed = value.isPressed; 
     }
+
 
 
     private void OnRestartScene(InputValue value)
