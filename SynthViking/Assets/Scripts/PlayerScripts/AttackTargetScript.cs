@@ -30,7 +30,7 @@ public class AttackTargetScript : MonoBehaviour
 
     [Header("COMPONENTS")] //GROUND MOVEMENT
     #region
-        public BasicEnemyScript enemyController; 
+    public BasicEnemyScript enemyController; 
     [HideInInspector] public ThirdPerson_PlayerControler playerController;
    // public CleanUpScript cleanUpScript;
     public HitPauses hitpauseScript; 
@@ -68,6 +68,7 @@ public class AttackTargetScript : MonoBehaviour
         switch (attackerType)
         {
             case (int)currentAttackerType.BASICENEMY:
+                CheckForParry(); 
                 break;
 
             case (int)currentAttackerType.PLAYER:
@@ -165,7 +166,6 @@ public class AttackTargetScript : MonoBehaviour
 
                             limb.velocity = new Vector3(0, 0, 0);
                             limb.AddExplosionForce(10f, limb.position, 2f, 4f, ForceMode.Impulse); 
-
                             if (enemyScript.canBeTargeted) limb.mass *= 3f;
                         }
                     }
@@ -176,8 +176,7 @@ public class AttackTargetScript : MonoBehaviour
                         //Unhand enemies weapon
                         if (enemyScript.weapon != null)
                         {
-                            enemyScript.enemyRb.velocity = new Vector3(0,0,0); 
-             
+                            enemyScript.enemyRb.velocity = new Vector3(0,0,0);           
                             Destroy(enemyScript.weapon.GetComponent<FixedJoint>());
                             enemyScript.weapon.parent = null;
                             Rigidbody swordrb = enemyScript.weapon.GetComponent<Rigidbody>();
@@ -200,37 +199,75 @@ public class AttackTargetScript : MonoBehaviour
                 }
 
                 // targetsInRange.Remove(obj); 
-                if (!enemyScript.isRagdolling || enemyScript.isDead) enemyScript.transform.DOMove(backDirection, .3f).SetUpdate(UpdateType.Fixed);  //Move enemy backwards enemyScript.enemyRb.AddForce(playerController.transform.position + transform.forward * playerController.currentAttackForwardForce, ForceMode.VelocityChange); 
-                else if(enemyScript.isRagdolling || enemyScript.isDead) enemyScript.enemyRb.AddForce(Vector3.up * 5f, ForceMode.VelocityChange); 
+
+                enemyScript.enemyRb.velocity = new Vector3(0, 0, 0); 
+                if (!enemyScript.isRagdolling || enemyScript.isDead) enemyScript.transform.DOMove(backDirection, .3f).SetUpdate(UpdateType.Fixed);  //Move enemy backwards enemyScript.enemyRb.AddForce(playerController.transform.position + transform.forward * playerController.currentAttackForwardForce, ForceMode.VelocityChange);            
+                if(enemyScript.isRagdolling || enemyScript.isDead) enemyScript.enemyRb.AddForce(Vector3.up * 10f, ForceMode.VelocityChange); 
                                                                                                                                                                                               // targetsInRange.Clear();
 
             }
 
             limbCheckerScript.hitLimbs.Clear();
           //  targetsInRange.Clear();
-        }
+        }//Player hits enemy
+
 
 
         if (isEnemy)
         {
+
             foreach (GameObject obj in targetsInRange)
             {
-                //Deal damage to hit target            
                 PlayerState targetScript = obj.GetComponent<PlayerState>();
-
-                if(!playerController.isBlocking) targetScript.TakeDamage(enemyController.currentAttackDamage, enemyController.enemyAttackType);
-                else
-                {
-                    playerController.blockRechargeTimer = playerController.blockRechargeDuration; 
-                  //  enemyController.TakeDamage(0, attackt)
-                    playerBlockFeedback?.PlayFeedbacks(); 
-                }
-            }
+                targetScript.TakeDamage(enemyController.currentAttackDamage, enemyController.enemyAttackType); //Damage the player
+            }         
         }
 
     }
 
-   
+    void CheckForParry()
+    {
+        foreach (GameObject obj in targetsInRange)
+        {
+            PlayerState targetScript = obj.GetComponent<PlayerState>();
+
+            if (playerController.isBlocking && enemyController.canBeParried && enemyController.isAttacking) //Check if the player is blocking              
+            {
+                playerController.blockRechargeTimer = playerController.blockRechargeDuration;
+
+                if (playerController.canBlockStun) //Do a stun effect around the player 
+                {
+                    Collider[] colls = Physics.OverlapSphere(playerController.transform.position, playerController.blockStunRadius);
+                    foreach (Collider enemy in colls)
+                    {
+                        if (enemy.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+                        {
+                            //Debug.Log(enemy.name);
+                            BasicEnemyScript enemyScript = enemy.GetComponent<BasicEnemyScript>();
+                            playerController.canBlockStun = false;
+                            enemyScript.TakeDamage(enemyController.chainHitScript.blockChainDamage, playerAttackType.BlockStun.ToString());
+                            enemyScript.isLaunched = true;
+                            enemyScript.isBlockStunned = true;
+                        }
+
+                    }
+                    playerController.playerAnim.SetTrigger("HasParriedTrigger"); 
+                    playerBlockFeedback?.PlayFeedbacks();
+                }
+            }
+           // else targetScript.TakeDamage(enemyController.currentAttackDamage, enemyController.enemyAttackType); //Damage the player
+        }
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+     //Use the same vars you use to draw your Overlap SPhere to draw your Wire Sphere.
+        Gizmos.DrawWireSphere(playerController.transform.position,playerController.blockStunRadius);
+    }
+
+
+
 
     public void TargetDamageEffects()
     {

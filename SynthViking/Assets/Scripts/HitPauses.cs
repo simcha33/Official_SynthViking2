@@ -57,8 +57,7 @@ public class HitPauses : MonoBehaviour
                     }
 
                     attackTargetScript.weaponHitFeedback?.PlayFeedbacks();
-                    theHitPaused.Clear();
-                    Debug.Log("AIHWIDHAIOUDAIUDHAIUDHIUDH");              
+                    theHitPaused.Clear();            
                     if (anim == playerAnim) anim.speed = attackTargetScript.playerController.animAttackSpeed;
                     else anim.speed = 1f;
                     //  if(anim != playerAnim) objectsToPause.Remove(anim); 

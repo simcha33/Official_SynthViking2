@@ -24,13 +24,16 @@ public class BasicEnemyScript : MonoBehaviour
     public  BasicEnemyScript thisScript;
     public bool canBeManaged;
     public bool isGrounded;
-    [HideInInspector] public Transform target; 
+    [HideInInspector] public Transform target;
+    private float originalRbMass;
+    private float stunnedMass = 400f; 
    
     #endregion
 
     [Header("ATTACKING")]
     #region  
     public float attackDistance;
+    public float attackMoveSpeed; 
     public float currentRequiredDistance; 
     public float circleDistance; 
     public float basicMeleeAttackDamage;
@@ -43,7 +46,8 @@ public class BasicEnemyScript : MonoBehaviour
     public float basicMeleeAttackForwardForce;
     private float nextAttackTimer;
     private float nextAttackDuration;
-    private Vector3 attackStartPos; 
+    private Vector3 attackStartPos;
+    private MeshRenderer weaponMeshr; 
 
     [HideInInspector] public float targetDistance; 
     [HideInInspector] public List<Rigidbody> ragdollRbs = new List<Rigidbody>();
@@ -65,7 +69,10 @@ public class BasicEnemyScript : MonoBehaviour
     public Vector3 launchDirection; 
 
     public float chainHitStunDuration;
-    public bool canBeChainHit; 
+    public bool canBeChainHit;
+    public bool canBeParried;
+    public float canBeParriedTimer;
+    public float canBeParriedDuration; 
    // public float chainhitBackForce;
    // public float chainHitActiveTime = .4f;
    // public float chainHitMaxDistance = 11f; 
@@ -79,6 +86,8 @@ public class BasicEnemyScript : MonoBehaviour
     public Material[] defaultSkinMat;
     public Material[] hitSkinMat;
     public Material[] deadSkinMat;
+    public Material attackIndicationMat;
+    public Material originalWeaponMat;
     #endregion
 
     [Header("FEEDBACKS")]
@@ -127,7 +136,8 @@ public class BasicEnemyScript : MonoBehaviour
     public bool isProjectileAttack; 
     public bool playerLocationIsKnown;
     public bool isFollowing;
-    public bool isGettingUp; 
+    public bool isGettingUp;
+    public bool isBlockStunned; 
 
   //  public bool canBeStunned;
     public bool canRecover = false;
@@ -162,6 +172,8 @@ public class BasicEnemyScript : MonoBehaviour
         enemyState = (int)currentState.IDLE;
         thisScript = this.gameObject.GetComponent<BasicEnemyScript>(); 
         chainHitScript.enabled = false;
+        weaponMeshr = weapon.GetComponent<MeshRenderer>(); 
+       
         //currentRequiredDistance = circleDistance;
        // connectedJointRb = mainColJoint.connectedBody;
       
@@ -175,11 +187,13 @@ public class BasicEnemyScript : MonoBehaviour
 
         defaultSkinMat = enemyMeshr.materials; 
         enemyRb = GetComponent<Rigidbody>();
+        originalRbMass = enemyRb.mass;
         currentHealth = maxHealth;  
         ResetState(); 
         target = playerController.transform;
         weaponAngle = weapon.localEulerAngles; 
         weaponPos = weapon.localPosition;
+        originalWeaponMat = weaponMeshr.material; 
 
         foreach(Rigidbody rb in GetComponentsInChildren<Rigidbody>())
         {
@@ -225,6 +239,7 @@ public class BasicEnemyScript : MonoBehaviour
                 CheckForPlayer();
                 GroundCheck();
                 HandleAnimation();
+                AllowAttackDamage(); 
                 break; 
 
             case(int)currentState.STUNNED:
@@ -252,7 +267,9 @@ public class BasicEnemyScript : MonoBehaviour
         enemyAnim.SetBool("IsAttacking", isAttacking);
         enemyAnim.SetBool("CanMove", canMove);
         enemyAnim.SetBool("IsStunned", isStunned);
-        enemyAnim.SetBool("IsGettingUp", isGettingUp); 
+        enemyAnim.SetBool("IsGettingUp", isGettingUp);
+        enemyAnim.SetBool("IsFollowing", isFollowing); 
+       // enemyAnim.SetBool("IsLaunched")
     }
 
     public void CheckForPlayer()
@@ -286,19 +303,12 @@ public class BasicEnemyScript : MonoBehaviour
     {
         if(playerLocationIsKnown && isInAttackRange)
         {
-            print(" 0"); 
+            currentMoveSpeed = attackMoveSpeed; 
             enemyState = (int)currentState.ATTACKING; 
         }
         else if(playerLocationIsKnown && isInCircleRange && !canAttack){
             //Circle state
         }
-    }
-
-    public void AllowAttackDamage()
-    {
-        attackTargetScript.TargetDamageCheck(); 
-       
-        //if (attackState != currentAttackType.SprintAttack.ToString()) transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .4f).SetUpdate(UpdateType.Fixed);
     }
 
     public void CheckForMovement()
@@ -339,15 +349,15 @@ public class BasicEnemyScript : MonoBehaviour
         
         if(!isGrounded && isStunned && !isRagdolling && !isLaunched && !isGettingUp)
         {
+            isLaunched = true;
             EnableRagdoll();
+            
             CheckForStunType("PhysicsImpact"); 
         }
         
 
 
     }
-
-
 
     public void MoveTowardsPlayer()
     {
@@ -358,23 +368,24 @@ public class BasicEnemyScript : MonoBehaviour
     }
 
     
-
+    //Attacking
     void HandleAttack()
     {
         //Set a new attack
         if(!isAttacking && isInAttackRange)
         {
             ResetState();
-            enemyRb.isKinematic = true; 
+            //enemyRb.isKinematic = true;
+            enemyRb.mass = stunnedMass; 
             transform.LookAt(target, Vector3.up);
-            print("1"); 
             SetAttackType(); 
         }    
 
         //Reset attack state and return to enage state
         else if(!isAttacking)
         {
-            enemyRb.isKinematic = false;
+            //  enemyRb.isKinematic = false;
+            enemyRb.mass = originalRbMass; 
             currentComboLength = 0; 
             enemyState = (int)currentState.ENGAGE; 
         }
@@ -385,7 +396,6 @@ public class BasicEnemyScript : MonoBehaviour
     void SetAttackType()
     {
         int totalAttackTrees = 1;
-            print("2"); 
 
         //Reset some attack values 
         canAttack = true;
@@ -404,11 +414,13 @@ public class BasicEnemyScript : MonoBehaviour
     public void DoAttack()
     {
         nextAttackDuration = enemyAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / enemyAnim.GetCurrentAnimatorStateInfo(0).speed;
-         print("3");
+
         if (canAttack)
         {
             canAttack = false; 
             isAttacking = true;
+
+            enemyRb.velocity = new Vector3(0, 0, 0); 
      
             enemyAnim.SetInteger("CurrentComboLength", currentComboLength);
             enemyAnim.SetTrigger("AttackTrigger");
@@ -427,7 +439,33 @@ public class BasicEnemyScript : MonoBehaviour
 
         nextAttackTimer += Time.deltaTime; 
     }
-    
+
+    public void AttackEventTrigger()
+    {
+        canBeParried = true;
+        // weapon.gameObject.GetComponent<MeshRenderer>().material = attackIndicationMat;
+        //if (attackState != currentAttackType.SprintAttack.ToString()) transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .4f).SetUpdate(UpdateType.Fixed);
+    }
+
+    public void AllowAttackDamage()
+    {
+        if (canBeParried)
+        {
+            canBeParriedTimer += Time.deltaTime;
+            weapon.gameObject.GetComponent<MeshRenderer>().material = attackIndicationMat;
+
+            if (canBeParriedTimer > canBeParriedDuration)
+            {
+                canBeParriedTimer = 0f;
+                canBeParried = false;
+                weaponMeshr.material = originalWeaponMat;
+                attackTargetScript.TargetDamageCheck();
+            }
+        }
+    }
+
+
+
 
 
     public void LaunchEnemy(Vector3 direction, float forwardForce, float upForce)
@@ -452,11 +490,11 @@ public class BasicEnemyScript : MonoBehaviour
         }
     }
 
-    public void TakeDamage(float damgeAmount, string DamageType){
+    public void TakeDamage(float damageAmount, string DamageType){
         
-        currentHealth -= damgeAmount;
+        currentHealth -= damageAmount;
 
-        if(currentHealth > 0)
+        if(currentHealth > 0 && !isDead)
         {
             launchDirection = playerController.transform.forward; 
         
@@ -468,30 +506,51 @@ public class BasicEnemyScript : MonoBehaviour
             {
                 ResetState();
                 canBeChainHit = false;             
-                enemyMeshr.materials = stunnedSkinMat; 
+              //  enemyMeshr.materials = stunnedSkinMat; 
             }
 
             if (DamageType == playerAttackType.GroundSlam.ToString()) //Enemy is hit by power punch
             {
                 ResetState();
                 canBeChainHit = true;              
-                enemyMeshr.materials = stunnedSkinMat;
+               // enemyMeshr.materials = stunnedSkinMat;
+            }
+
+            if (DamageType == playerAttackType.BlockStun.ToString()) //Enemy is hit by power punch
+            {
+                ResetState();
+                //  canBeChainHit = true;
+                canBeChainHit = true;
+                enemyAnim.speed = Random.Range(.5f, 1f);
+                enemyAnim.SetFloat("DamageReaction", 6f);
+                enemyAnim.SetTrigger("DamageTrigger");
+                // enemyMeshr.materials = stunnedSkinMat;
             }
 
             if (DamageType == chainHitScript.chainHitString) //Enemy is hit by power punch
             {
                 canBeChainHit = true;              
-                enemyMeshr.materials = stunnedSkinMat;
+             //   enemyMeshr.materials = stunnedSkinMat;
             }
 
 
             if (DamageType == playerAttackType.LightAxeHit.ToString()) //Enemy is hit by axe
             {
             
-                if (!isStunned) ResetState(); //** this might fuck up something to do with enemies not being able to attack after getting hit**
-                canBeChainHit = false; 
+                ResetState(); //** this might fuck up something to do with enemies not being able to attack after getting hit**
+                if (damageAmount >= playerController.basicLightAttackDamage)
+                {
+                    enemyRb.mass = stunnedMass;
+                    canBeChainHit = false;
+                }
+                else
+                {
+                    canBeChainHit = true;
+                    enemyRb.mass = originalRbMass;
+                }
+
                 enemyRb.freezeRotation = true; 
-                enemyMeshr.materials = hitSkinMat;
+                //enemyMeshr.materials = hitSkinMat;
 
                 //No double hit animations
                 float originalReaction = enemyAnim.GetFloat("DamageReaction");
@@ -512,14 +571,15 @@ public class BasicEnemyScript : MonoBehaviour
             CheckForStunType(DamageType); 
         }
 
-        //Kill the enemy
-        else
-        {       
+        else if(!isDead)//Kill the enemy
+        {
             ResetState();
+            enemyRb.mass = originalRbMass; 
             enemyMeshr.materials = deadSkinMat; 
             isDead = true;
             enemyAgent.enabled = false;
             chainHitScript.enabled = true;
+            chainHitScript.SetChainHitType(DamageType); 
             EnableRagdoll(); 
             enemyState = (int)currentState.DEAD; 
         }    
@@ -529,42 +589,54 @@ public class BasicEnemyScript : MonoBehaviour
     
     public void CheckForStunType(string damageType)
     {
-        stunType = damageType; 
-        
-        if(stunType == playerAttackType.GroundSlam.ToString()) //Player is hit by ground slam
+        stunType = damageType;
+        enemyMeshr.materials = stunnedSkinMat;
+        enemyAgent.enabled = false;
+
+        if (stunType == playerAttackType.GroundSlam.ToString()) //Enemy is hit by ground slam
         {
-            enemyAgent.enabled = false;
-            stunDuration = 2f; 
+            stunDuration = 2f;
+            enemyRb.mass = originalRbMass;
 
         }
 
-        if (stunType == playerAttackType.PowerPunch.ToString()) //Player is hit by ground slam
+        if (stunType == playerAttackType.PowerPunch.ToString()) //Enemy is hit by ground slam
         {
-            enemyAgent.enabled = false;
             chainHitScript.enabled = true;
             chainHitScript.isOrigin = true; 
             chainHitScript.SetChainHitType(stunType);
             stunDuration = 2f;
+            enemyRb.mass = originalRbMass; 
 
         }
 
-        if (stunType == playerAttackType.LightAxeHit.ToString()) 
+        if (stunType == playerAttackType.LightAxeHit.ToString()) //Enemy is hit with axe attack
         {
-            enemyAgent.enabled = false;
             chainHitScript.enabled = true; //allow this enemy to cause chain hit impacts
             chainHitScript.isOrigin = true; 
             chainHitScript.SetChainHitType(stunType);
-            stunDuration = 1f;     
+            stunDuration = 1f;
+            //enemyRb.mass = stunnedMass; 
+            enemyMeshr.materials = hitSkinMat;
         }
 
-        if(stunType == chainHitScript.chainHitString)
-        { 
-            enemyAgent.enabled = false;
+        if (stunType == playerAttackType.BlockStun.ToString()) //Enemy attack is parried
+        {
             chainHitScript.enabled = true;
-            stunDuration = chainHitScript.currentStunDuration; 
+            chainHitScript.isOrigin = true;
+            chainHitScript.SetChainHitType(stunType);
+            stunDuration = chainHitScript.currentStunDuration;
+            enemyRb.mass = stunnedMass; 
+            //enemyRb.isKinematic = true; 
         }
 
-        //stunDuration = stunLength;
+        if (stunType == chainHitScript.chainHitString) //Enemy is hit by an already stunned enemy
+        { 
+            chainHitScript.enabled = true;
+            stunDuration = chainHitScript.currentStunDuration;
+            enemyRb.mass = originalRbMass; 
+        }
+       
         enemyAgent.speed = 0f;
         stunTimer = 0f;
         enemyRb.isKinematic = false;    
@@ -579,17 +651,17 @@ public class BasicEnemyScript : MonoBehaviour
         float maxRecoveryVel = 3f;
         //  enemyRb.isKinematic = false;
 
-        if (isLaunched && currentVelocity < maxRecoveryVel) //Check if a launched enemy has slowed down enough to be allowed to start recovery
+        if (isLaunched && currentVelocity < maxRecoveryVel && !isBlockStunned) //Check if a launched enemy has slowed down enough to be allowed to start recovery
         {
             recoveryTimer += Time.deltaTime;
         } 
-        else if (isLaunched && currentVelocity >= maxRecoveryVel && !isGettingUp) //If a launched enemy is moving to fast don't allow him to recover 
+        else if (isLaunched && currentVelocity >= maxRecoveryVel && !isGettingUp && !isBlockStunned) //If a launched enemy is moving to fast don't allow him to recover 
         {
             recoveryTimer = 0f;
             canRecover = false;
         }
 
-        if(!isLaunched && isGrounded || recoveryTimer >= recoveryDuration) //Recovery is allowed
+        if(!isLaunched && isGrounded || recoveryTimer >= recoveryDuration || isBlockStunned  && isGrounded) //Recovery is allowed
         {
             canRecover = true;
             recoveryTimer = 0f;
@@ -604,16 +676,27 @@ public class BasicEnemyScript : MonoBehaviour
 
     void StandBackUp()
     {
- 
+        if (isBlockStunned)
+        {
+            //   enemyAnim.SetFloat("GetUpType", Random.Range(1f, 4f));
+            //   enemyAnim.SetTrigger("GetUpTrigger");
+            getUpTimer = getUpDuration; 
+            Debug.Log("count");           
+        }
+
         if (isLaunched) //Trigger logic for getting up once if the enemy has to get up first 
         {
             isGettingUp = true;
-            isLaunched = false; 
+            isLaunched = false;
+            enemyRb.isKinematic = true;
             DisableRagdoll();
+           
             enemyRb.velocity = new Vector3(0, 0, 0);
+
 
             enemyAnim.SetFloat("GetUpType", Random.Range(1f, 4f));
             enemyAnim.SetTrigger("GetUpTrigger");
+            transform.LookAt(playerController.transform); 
             enemyAnim.speed = Random.Range(.6f, 1f);        
          
             getUpDuration = 10f;
@@ -623,26 +706,30 @@ public class BasicEnemyScript : MonoBehaviour
         {
             getUpTimer = getUpDuration; 
         }
-     
+
+        
+    
         if(getUpTimer >= getUpDuration) //exit stunned satte 
         {
             ResetState();  
-            DisableRagdoll(); 
+            if(isRagdolling) DisableRagdoll(); 
             enemyAgent.speed = currentMoveSpeed;
-           // enemyAgent.enabled = true; 
+            // enemyAgent.enabled = true; 
+            enemyRb.isKinematic = false;
+            isBlockStunned = false; 
             canRecover = false;
             canBeChainHit = true; //probally set some kind of enemy type check to this
             recoveryTimer = 0f;
             stunTimer = 0f; 
             getUpTimer = 0f;
+            enemyRb.mass = originalRbMass; 
             enemyRb.velocity = new Vector3(0,0,0);
             enemyRb.freezeRotation = false;
-            enemyState = (int)currentState.ENGAGE;
-      
+            enemyState = (int)currentState.ENGAGE;   
         }
 
         getUpTimer += Time.deltaTime;
-        getUpDuration = enemyAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / enemyAnim.GetCurrentAnimatorStateInfo(0).speed;
+        if(!isBlockStunned) getUpDuration = enemyAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / enemyAnim.GetCurrentAnimatorStateInfo(0).speed;
     }
 
     void OnTriggerEnter(Collider other)
@@ -746,7 +833,8 @@ public class BasicEnemyScript : MonoBehaviour
         //   canRecover = true; 
         //    canDetectPlayer = true; 
         // canMove = true;  
-        canAttack = true; 
+        canAttack = true;
+        canBeParried = false; 
         //  canBeTargeted = true; 
         //   canAddImpactDamage = true; 
         //   canBeLaunched = true; 
@@ -758,7 +846,8 @@ public class BasicEnemyScript : MonoBehaviour
         isGettingUp = false; 
         isFollowing = false;
         isStunned = false;
-        isDead = false;
+        //isDead = false;
+        isBlockStunned = false; 
      //   isLaunched = false;
        // isRagdolling = false;
         isAttacking = false;
@@ -770,9 +859,12 @@ public class BasicEnemyScript : MonoBehaviour
         isFollowing = false;
 
         enemyAgent.enabled = true;
-        enemyAnim.enabled = true; 
-        enemyAnim.speed = 1f; 
-        enemyMeshr.materials = defaultSkinMat; 
+        enemyAnim.enabled = true;
+        weapon.gameObject.GetComponent<MeshRenderer>().material = originalWeaponMat;
+        enemyAnim.speed = 1f;
+        canBeParriedTimer = 0f; 
+        enemyMeshr.materials = defaultSkinMat;
+        transform.eulerAngles = new Vector3(0, 0, 0); 
 
     }
 
@@ -783,7 +875,7 @@ public class BasicEnemyScript : MonoBehaviour
 
       public void EnemyDies()
     {
-        //canBeTargeted = false; 
+        canBeTargeted = false; 
         transform.tag = "Dead";
         enemyAgent.enabled = false; 
         //transform.GetComponent<BasicEnemyScript>().enabled = false; 

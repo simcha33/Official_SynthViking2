@@ -15,6 +15,7 @@ public enum playerAttackType
     LightAxeHit,
     GroundSlam,
     NormalePunch,
+    BlockStun,
 }
 
 
@@ -38,7 +39,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     [HideInInspector] public Vector3 moveInput;
     [HideInInspector] public Vector3 moveDirection;
-
 
     //Rotation
     public float turnLerpValue = .3f;
@@ -77,19 +77,15 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     #region
     public bool isBlocking;
     public bool canBlock;
+    [HideInInspector] public bool canBlockStun = true; 
    // public bool isPerfectParry;
    // public float blockResetDuration;
 
     public float blockRechargeTimer;
     public float blockRechargeDuration;
-
     public float blockTimer;
-    public float blockDuration; 
-   // public float perfectParryWindow;
-   /// public int perfectParryRestorationAmount; 
-    //public int maxAvailableBlocks;
-    //public int currentAvailableBlocks; 
-   
+    public float blockDuration;
+    public float blockStunRadius;   
     #endregion
 
 
@@ -258,7 +254,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public Rigidbody groundConstraints;
     public Rigidbody airConstraints;
     public GameObject holsteredWeapon;
-    public GameObject drawnWeapon; 
+    public GameObject drawnWeapon;
+    public TrailRenderer sprintTrail; 
     #endregion
 
     [Header("FEEDBACK")]
@@ -338,6 +335,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     private void Start()
     {
+        sprintTrail.enabled = false; 
         velocityHash = Animator.StringToHash("MoveVelocity");
         raycastCheckMeshr = raycastCheck.GetComponent<MeshRenderer>();
         raycastCheck.gameObject.SetActive(false);
@@ -399,6 +397,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 CheckForMoveInput();
                 HandleWallRunning();
                 HandleDrag();
+                CheckForBlock(); 
                 CheckForAirSmash();
                // HandleWeaponSwaping(); 
                 break;
@@ -410,13 +409,15 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 CheckForMoveInput();
             //    GroundCheck();
                 HandleRotation();
-                CheckForBlock(); 
+                CheckForBlock();
+                CheckForJump(); 
              //   HandleWeaponSwaping(); 
                 break;
 
             case (int)currentState.DASHING:
                 CheckForDash();
                 CheckForAirSmash();
+                CheckForBlock(); 
                // GroundCheck(); 
                 break;
 
@@ -429,7 +430,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
 
             case(int)currentState.BLOCKING:
-                DoBlock(previousState); 
+                DoBlock(previousState);
+             //   CheckForAttack(); 
                 
                 break; 
 
@@ -590,12 +592,15 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             if (!isSprinting) HolsterWeapon(true); 
          
             isSprinting = true;
+            sprintTrail.enabled = true; 
+           
             if (!isWallRunning) canStartWallrun = true;
         }
         else
         {
             canStartWallrun = false;
             isSprinting = false;
+          //  sprintTrail.enabled = false; 
         }
 
         //Fix weird rotation big
@@ -878,6 +883,12 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             if (input.jumpButtonPressed && canJump)
             {
                 jumpCount++;
+                if (isSprinting && jumpCount == 1) wasSprintingBeforeJump = true; //check if we we're running before the jump
+
+                ResetStates(); 
+                controllerState = (int)currentState.MOVING;
+                fixedControllerState = (int)currentState.MOVING; 
+                
                 groundCheckTimer = groundCheckJumpDelay;
 
                 isGrounded = false;
@@ -891,9 +902,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 playerAnim.SetFloat("JumpCount", jumpCount);
                 if (jumpCount == 1) playerAnim.SetFloat("RandomJumpVar", 0f);
                 else playerAnim.SetFloat("RandomJumpVar", Random.Range(1, 5)); //Randomly select a second jump animation 
-                playerAnim.SetTrigger("JumpTrigger");
-
-                if (isSprinting && jumpCount == 1) wasSprintingBeforeJump = true; //check if we we're running before the jump
+                playerAnim.SetTrigger("JumpTrigger");              
             }
             else if (!input.jumpButtonPressed && !hasJumped) canJump = true;
 
@@ -1273,6 +1282,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
         if(blockTimer >= blockDuration)
         {
+            canBlockStun = true; 
             isBlocking = false;  
             playerState.canBeHit = true; 
             blockTimer = 0f;
@@ -1307,6 +1317,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         {
             playerAnim.speed = animAttackSpeed;
             //playerAnim.SetInteger("CurrentComboLength", currentComboLength);
+           // ResetAnimator();
             ResetStates();
             isAttacking = true;
             canStartNewAttack = false;
@@ -1378,14 +1389,20 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
         //Check if we can continue to the next attack
         if (nextAttackTimer >= nextAttackDuration - .21f && input.meleeButtonPressed)
-        {      
-            
+        {
+            if (currentComboLength >= totalComboLength)
+            {
+                currentComboLength = 0; //Reset combo tree
+                SetAttackType();
+            }
+
             CheckForMoveInput(); //Set attack direction 
             if(currentComboLength > 0) SetAttackType(); // Set attack type (skip first attack so we can do conditional start attacks)
             currentComboLength++;
-
+          //  ResetAnimator();
             //Trigger correct animation stuff
             AttackFeedback?.PlayFeedbacks();
+          
             playerAnim.SetBool("IsAttacking", true);
             playerAnim.SetInteger("CurrentComboLength", currentComboLength);
             playerAnim.SetTrigger(attackState + "Trigger");
@@ -1406,11 +1423,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             }
             else attackTargetInRange = false;
 
-            if (currentComboLength >= totalComboLength)
-            {
-                currentComboLength = 0; //Reset combo tree
-                SetAttackType(); 
-            }
+            
         }
 
         /*
@@ -1494,6 +1507,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         isMoving = false;
         isWalking = false;
         isSprinting = false;
+        isBlocking = false; 
 
         isRunning = false;
         isInAir = false;
@@ -1507,12 +1521,12 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         isAirSmashing = false;
         isGroundSmash = false;
 
-        wasSprintingBeforeJump = false;
+       // wasSprintingBeforeJump = false;
         playerRb.isKinematic = false;
         meshR.materials = defaultSkinMat;
         playerAnim.speed = 1f;
 
-        jumpCount = 0;
+        //jumpCount = 0;
 
         //ResetDash(); 
     }
