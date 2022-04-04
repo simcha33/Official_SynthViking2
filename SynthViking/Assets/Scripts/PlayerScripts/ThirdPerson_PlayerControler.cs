@@ -35,7 +35,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     public float currentMoveSpeed;
     private float moveVelocity = 0.0f;
-    private float groundStopDrag = 8f;
+    private float groundStopDrag = 20f;
 
     [HideInInspector] public Vector3 moveInput;
     [HideInInspector] public Vector3 moveDirection;
@@ -65,6 +65,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     //[Range(0, 1)] public float airMSpeedReduction;
     public float airMoveSpeed;
     public float airDrag = 2f;
+    private float inAirTime = 0f; 
 
 
     private float groundCheckHeight = .5f;
@@ -240,6 +241,17 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public HitPauses hitPauseScript; 
     #endregion
 
+    [Header("VISUALS")] //COMPONENTS
+    #region
+      public TrailRenderer sprintTrail; 
+      public GameObject landVFX; 
+      private float sprintTrailTimer; 
+      private float sprintTrailDuration; 
+      public bool enableTrail = false; 
+
+
+    #endregion 
+
     [Header("Components")] //COMPONENTS
     #region
     public Animator playerAnim;
@@ -255,7 +267,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public Rigidbody airConstraints;
     public GameObject holsteredWeapon;
     public GameObject drawnWeapon;
-    public TrailRenderer sprintTrail; 
     #endregion
 
     [Header("FEEDBACK")]
@@ -335,36 +346,31 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     private void Start()
     {
-        sprintTrail.enabled = false; 
+        //Set components
         velocityHash = Animator.StringToHash("MoveVelocity");
         raycastCheckMeshr = raycastCheck.GetComponent<MeshRenderer>();
         raycastCheck.gameObject.SetActive(false);
-        HolsterWeapon(true); 
-        //dashChecker.position, dashChecker.position + dashChecker.forward * 2f
-
-        defaultSkinMat = meshR.materials;
-        //meshR.materials = holoSkinMat; 
+         
 
         //Set default values
+        defaultSkinMat = meshR.materials;
         currentMoveSpeed = maxMoveSpeed;
         currentDashDistance = minDashDistance;
         dashDelayTimer = dashDelayDuration;
+        sprintTrailDuration = sprintTrail.time; sprintTrail.time = -.1f;
         airSmashDelayTimer = 0f;
         airSmashCooldownTimer = airSmashCooldownDuration;
         dashCooldownTimer = 0f; 
-      
-       // originalIndicatorSize = dashChargeIndicator.transform.localScale;
-       // dashChargeColor = dashChargeIndicator.color; 
+        playerRb.drag = groundStopDrag;
+        HolsterWeapon(true);
 
+
+       //Set default states
+        ResetStates();
         fixedControllerState = (int)currentState.MOVING;
         controllerState = (int)currentState.MOVING;
 
-        //mmSlowmoTime = aimingFeedback.GetComponent<MMFeedbackTimescaleModifier>(); 
-
-        //Set default states
-        ResetStates();
-
-        playerRb.drag = groundStopDrag;
+       
     }
 
 
@@ -440,6 +446,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         }
 
         HandleAnimations();
+    
         //if(transform.eulerAngles.x != 0) transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, transform.eulerAngles.z); 
     }
 
@@ -467,7 +474,10 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             case (int)currentState.STUNNED:
                 break;
 
+                  
+
         }
+          SetTrailRender(); 
     }
 
     //Animations
@@ -592,15 +602,14 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             if (!isSprinting) HolsterWeapon(true); 
          
             isSprinting = true;
-            sprintTrail.enabled = true; 
-           
+          //  sprintTrail.enabled = true;         
             if (!isWallRunning) canStartWallrun = true;
         }
         else
         {
             canStartWallrun = false;
             isSprinting = false;
-          //  sprintTrail.enabled = false; 
+            //sprintTrail.enabled = false; 
         }
 
         //Fix weird rotation big
@@ -837,11 +846,16 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     public void DoDashAttack()
     {
-        BasicEnemyScript script = dashAttackTarget.transform.GetComponentInParent<BasicEnemyScript>();
-        script.TakeDamage(dashAttackDamage, playerAttackType.PowerPunch.ToString()); 
-        script.LaunchEnemy(aimPoint.forward, Random.Range( dashAttackForce -5, dashAttackForce + 5), 5f);    
-        script.transform.position = transform.position + transform.forward + script.transform.up; 
-        playerRb.AddForce(transform.up * 5, ForceMode.VelocityChange);
+        BasicEnemyScript script = dashAttackTarget.transform.GetComponentInParent<BasicEnemyScript>();  
+        if(!script.isDead)
+        {
+            script.TakeDamage(dashAttackDamage, playerAttackType.PowerPunch.ToString()); 
+           
+            script.transform.position = transform.position + transform.forward + script.transform.up; 
+            playerRb.AddForce(transform.up * 5, ForceMode.VelocityChange);
+        }
+
+              script.LaunchEnemy(aimPoint.forward, Random.Range( dashAttackForce -5, dashAttackForce + 5), 5f);  
         
     }
 
@@ -963,9 +977,17 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             {
                 if (hit.collider.gameObject.layer == EnvorinmentLayer)
                 {
-                    playerRb.useGravity = false;
-                    playerRb.constraints = groundConstraints.constraints;
+                    
+                    if(!isGrounded && inAirTime >= .2f)
+                    {  
+                        GameObject landEffect = Instantiate(landVFX, transform.position, transform.rotation); 
+                        landEffect.AddComponent<CleanUpScript>();
+                    }
+
                     isGrounded = true;
+                    inAirTime = 0f; 
+                    playerRb.useGravity = false;
+                    playerRb.constraints = groundConstraints.constraints;                 
                     canJump = true;
                     jumpCount = 0;
                 }
@@ -979,6 +1001,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 isGrounded = false;
                // isLanding = false; 
                 isInAir = true;
+                inAirTime += Time.deltaTime; 
                 playerRb.useGravity = true;
         
             }
@@ -992,8 +1015,11 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                     isInAir = false;
                     isLanding = true;
                     landingDelayTimer = 0f;
-                    playerAnim.SetTrigger("LandingTrigger");
+                    playerAnim.SetTrigger("LandingTrigger");     
+                               
                 }
+
+                //if(Vector3.Distance(hit.point, transform.position) < .1f)
             }
 
             if (isLanding) LandPlayer();
@@ -1017,12 +1043,19 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         else if(moveVelocity <= .3f) landingDelayDuration = (noMoveLandingClip.length / playerAnim.GetCurrentAnimatorStateInfo(0).speed);
         
         landingDelayTimer += Time.deltaTime;
-        if(landingDelayTimer >= landingDelayDuration - .15f) isLanding = false; 
 
+        if(isGrounded)
+        {   
+           // GameObject landEffect = Instantiate(landVFX, transform.position, transform.rotation); 
+           // landEffect.AddComponent<CleanUpScript>(); 
+        }
+
+        if(landingDelayTimer >= landingDelayDuration - .15f) isLanding = false; 
+        
         
         //Player has landed 
         if (isGrounded && isInAir && !isLanding)
-        {
+        {      
             wasSprintingBeforeJump = false;
             isInAir = false;
             canLand = true;
@@ -1562,6 +1595,43 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     void AllowNextAttack()
     {
         nextAttackTimer = nextAttackDuration;
+    }
+
+    void SetTrailRender()
+    {
+        float disableTrailDuration = .75f; 
+
+        if(isSprinting || jumpCount >= 1 || isDashing || isAirSmashing) 
+        {
+            enableTrail = true; 
+        }
+        else 
+        {
+            enableTrail = false; 
+        }
+
+        if(enableTrail) //Enable the trail 
+        { 
+            if(sprintTrail.time <= 0) sprintTrail.time = sprintTrailDuration * .1f; 
+
+            if(sprintTrail.time < sprintTrailDuration)
+            {
+                sprintTrail.time += Time.deltaTime * disableTrailDuration; 
+            }
+            else
+            {                     
+                sprintTrail.time = sprintTrailDuration;  
+            }
+            sprintTrailTimer = sprintTrailDuration; 
+  
+            
+        }
+        else if(!enableTrail && sprintTrailTimer > -.1) //Disable the trail        
+        {
+            sprintTrailTimer -= Time.fixedDeltaTime * disableTrailDuration; 
+            sprintTrail.time = sprintTrailTimer; 
+        }
+
     }
 
 

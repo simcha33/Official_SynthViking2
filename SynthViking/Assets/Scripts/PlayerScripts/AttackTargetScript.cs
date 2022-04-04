@@ -36,8 +36,6 @@ public class AttackTargetScript : MonoBehaviour
     public HitPauses hitpauseScript; 
     public CheckForLimbs limbCheckerScript;
 
-    public GameObject axeHitBloodVFX;
-    public GameObject axeKillBloodVFX; 
     public Transform swordPoint;
     public Transform targetCube;
     public Transform selectedTarget;
@@ -50,6 +48,13 @@ public class AttackTargetScript : MonoBehaviour
     public bool canTarget; 
     public List<GameObject> targetsInRange = new List<GameObject>();
     #endregion
+
+     [Header("VISUALS")] //GROUND MOVEMENT
+     #region 
+    public GameObject axeHitBloodVFX;
+    public GameObject axeKillBloodVFX; 
+    public GameObject parryLightningVFX; 
+     #endregion
 
    
 
@@ -243,11 +248,16 @@ public class AttackTargetScript : MonoBehaviour
                         if (enemy.gameObject.layer == LayerMask.NameToLayer("Enemy"))
                         {
                             //Debug.Log(enemy.name);
-                            BasicEnemyScript enemyScript = enemy.GetComponent<BasicEnemyScript>();
-                            playerController.canBlockStun = false;
-                            enemyScript.TakeDamage(enemyController.chainHitScript.blockChainDamage, playerAttackType.BlockStun.ToString());
-                            enemyScript.isLaunched = true;
-                            enemyScript.isBlockStunned = true;
+                            BasicEnemyScript enemyScript = enemy.GetComponent<BasicEnemyScript>(); 
+                            if(!enemyScript.isDead)
+                            {
+                                playerController.canBlockStun = false;
+                                enemyScript.TakeDamage(enemyController.chainHitScript.blockChainDamage, playerAttackType.BlockStun.ToString());
+                                enemyScript.isLaunched = true;
+                                enemyScript.isBlockStunned = true;
+                                GameObject lightningVFX =  Instantiate(parryLightningVFX, enemy.transform.position, enemy.transform.rotation); 
+                                lightningVFX.AddComponent<CleanUpScript>(); 
+                            }
                         }
 
                     }

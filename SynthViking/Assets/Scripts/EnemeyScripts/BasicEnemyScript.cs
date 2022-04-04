@@ -574,6 +574,7 @@ public class BasicEnemyScript : MonoBehaviour
         else if(!isDead)//Kill the enemy
         {
             ResetState();
+            
             enemyRb.mass = originalRbMass; 
             enemyMeshr.materials = deadSkinMat; 
             isDead = true;
@@ -667,7 +668,7 @@ public class BasicEnemyScript : MonoBehaviour
             recoveryTimer = 0f;
         }
 
-        if (stunTimer >= stunDuration && canRecover) //Let enemy recover from stunned state 
+        if (stunTimer >= stunDuration && canRecover && !isDead) //Let enemy recover from stunned state 
         {
             StandBackUp();
         }

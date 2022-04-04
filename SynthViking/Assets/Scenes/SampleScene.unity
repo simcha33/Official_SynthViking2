@@ -2688,6 +2688,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
       objectReference: {fileID: 1453248107}
@@ -4002,6 +4006,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
@@ -6209,6 +6217,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
       objectReference: {fileID: 1453248107}
@@ -8065,6 +8077,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
       objectReference: {fileID: 1453248107}
@@ -8260,7 +8276,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3130931354078819328, guid: d90e429f41b34d8b8cc6584d35f76938, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3130931354078819329, guid: d90e429f41b34d8b8cc6584d35f76938, type: 3}
       propertyPath: m_RootOrder
@@ -8824,6 +8840,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
@@ -10244,6 +10264,9 @@ MonoBehaviour:
   slowScript: {fileID: 196805689}
   limbCheckerScript: {fileID: 331320500}
   hitPauseScript: {fileID: 1166039880}
+  sprintTrail: {fileID: 1119717783}
+  landVFX: {fileID: 1051833564315131423, guid: 8b48f61e977f93f4f87f5fc8411124b1, type: 3}
+  enableTrail: 0
   playerAnim: {fileID: 444531104}
   playerRb: {fileID: 444531102}
   meshR: {fileID: 499698341}
@@ -10258,7 +10281,6 @@ MonoBehaviour:
   airConstraints: {fileID: 1817778932}
   holsteredWeapon: {fileID: 342711065}
   drawnWeapon: {fileID: 331320498}
-  sprintTrail: {fileID: 1119717783}
   JumpFeedback: {fileID: 60396040}
   LandingFeedback: {fileID: 243418964}
   DashStartFeeback: {fileID: 555444185}
@@ -10461,6 +10483,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
@@ -10941,6 +10967,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
@@ -12717,6 +12747,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
       objectReference: {fileID: 1453248107}
@@ -13001,6 +13035,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
@@ -14228,6 +14266,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
       objectReference: {fileID: 1453248107}
@@ -14555,6 +14597,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
@@ -15200,6 +15246,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
@@ -16081,6 +16131,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
       objectReference: {fileID: 1453248107}
@@ -16532,6 +16586,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
       objectReference: {fileID: 1453248107}
@@ -16727,6 +16785,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
       objectReference: {fileID: 1453248107}
@@ -16921,6 +16983,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
@@ -18467,6 +18533,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
       objectReference: {fileID: 1453248107}
@@ -19606,6 +19676,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
       objectReference: {fileID: 1453248107}
@@ -19795,6 +19869,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
@@ -20453,7 +20531,7 @@ Transform:
   - {fileID: 1643343525}
   - {fileID: 1161458406}
   - {fileID: 628294281}
-  - {fileID: 1995173497}
+  - {fileID: 8032841064231615070}
   - {fileID: 442922017}
   - {fileID: 1267252864}
   - {fileID: 52348302}
@@ -20646,7 +20724,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Time: 0.5
+  m_Time: 0.4
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -20654,8 +20732,8 @@ TrailRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 0.3984928
+        time: 0.001540832
+        value: 0.33269852
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -21464,8 +21542,6 @@ MonoBehaviour:
   playerController: {fileID: 444531100}
   hitpauseScript: {fileID: 1166039880}
   limbCheckerScript: {fileID: 331320500}
-  axeHitBloodVFX: {fileID: 5170585893340993107, guid: 7b88f11816abaa34c9e02cbaa8485321, type: 3}
-  axeKillBloodVFX: {fileID: 5170585893340993107, guid: e333dc4c486756844b1719e55212914b, type: 3}
   swordPoint: {fileID: 24806461}
   targetCube: {fileID: 147546492}
   selectedTarget: {fileID: 2068204095}
@@ -21473,6 +21549,9 @@ MonoBehaviour:
   targetCheckRange: 10
   canTarget: 0
   targetsInRange: []
+  axeHitBloodVFX: {fileID: 5170585893340993107, guid: 7b88f11816abaa34c9e02cbaa8485321, type: 3}
+  axeKillBloodVFX: {fileID: 5170585893340993107, guid: e333dc4c486756844b1719e55212914b, type: 3}
+  parryLightningVFX: {fileID: 0}
 --- !u!114 &1166039875
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -21920,6 +21999,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
       objectReference: {fileID: 1453248107}
@@ -22204,6 +22287,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
@@ -22515,6 +22602,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
@@ -24352,6 +24443,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
       objectReference: {fileID: 1453248107}
@@ -24894,6 +24989,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
       objectReference: {fileID: 1453248107}
@@ -25283,6 +25382,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
@@ -26332,6 +26435,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
       objectReference: {fileID: 1453248107}
@@ -27117,6 +27224,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
@@ -28218,6 +28329,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
       objectReference: {fileID: 1453248107}
@@ -28611,7 +28726,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1209399627295410835, guid: 3c939a5701dd4995afb650f83410bbd7, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3c939a5701dd4995afb650f83410bbd7, type: 3}
@@ -29079,6 +29194,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
@@ -29758,6 +29877,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
@@ -30882,6 +31005,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
       objectReference: {fileID: 1453248107}
@@ -31066,67 +31193,6 @@ Transform:
   m_Father: {fileID: 444531103}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1741058838
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 1096950919}
-    m_Modifications:
-    - target: {fileID: 8032841063741016392, guid: 16f1d7f2dd2145348b4b3af98d0aeea7, type: 3}
-      propertyPath: m_RootOrder
-      value: 19
-      objectReference: {fileID: 0}
-    - target: {fileID: 8032841063741016392, guid: 16f1d7f2dd2145348b4b3af98d0aeea7, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 2.360836
-      objectReference: {fileID: 0}
-    - target: {fileID: 8032841063741016392, guid: 16f1d7f2dd2145348b4b3af98d0aeea7, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -4
-      objectReference: {fileID: 0}
-    - target: {fileID: 8032841063741016392, guid: 16f1d7f2dd2145348b4b3af98d0aeea7, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 39.817535
-      objectReference: {fileID: 0}
-    - target: {fileID: 8032841063741016392, guid: 16f1d7f2dd2145348b4b3af98d0aeea7, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8032841063741016392, guid: 16f1d7f2dd2145348b4b3af98d0aeea7, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8032841063741016392, guid: 16f1d7f2dd2145348b4b3af98d0aeea7, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8032841063741016392, guid: 16f1d7f2dd2145348b4b3af98d0aeea7, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8032841063741016392, guid: 16f1d7f2dd2145348b4b3af98d0aeea7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8032841063741016392, guid: 16f1d7f2dd2145348b4b3af98d0aeea7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8032841063741016392, guid: 16f1d7f2dd2145348b4b3af98d0aeea7, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8032841063741016393, guid: 16f1d7f2dd2145348b4b3af98d0aeea7, type: 3}
-      propertyPath: m_Name
-      value: IonStrike
-      objectReference: {fileID: 0}
-    - target: {fileID: 8032841063741016393, guid: 16f1d7f2dd2145348b4b3af98d0aeea7, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 16f1d7f2dd2145348b4b3af98d0aeea7, type: 3}
 --- !u!1 &1743388773
 GameObject:
   m_ObjectHideFlags: 0
@@ -31254,6 +31320,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
@@ -32249,6 +32319,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
       objectReference: {fileID: 1453248107}
@@ -32669,6 +32743,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
       objectReference: {fileID: 1453248107}
@@ -32858,6 +32936,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
@@ -33291,6 +33373,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1432773726}
     m_Modifications:
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: playerBlockFeedback
       value: 
@@ -34336,6 +34422,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 444531100}
     - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
+      propertyPath: parryLightningVFX
+      value: 
+      objectReference: {fileID: 8032841064231615071}
+    - target: {fileID: 837819321, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
       propertyPath: weaponHitFeedback
       value: 
       objectReference: {fileID: 2068204099}
@@ -34624,11 +34714,6 @@ Transform:
 Transform:
   m_CorrespondingSourceObject: {fileID: 8410380785165072141, guid: 879eb0c8db046f8439285cb08329f317, type: 3}
   m_PrefabInstance: {fileID: 1440825208}
-  m_PrefabAsset: {fileID: 0}
---- !u!4 &1995173497 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8032841063741016392, guid: 16f1d7f2dd2145348b4b3af98d0aeea7, type: 3}
-  m_PrefabInstance: {fileID: 1741058838}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &2006294302 stripped
 Transform:
@@ -37477,3 +37562,82 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 57.032, y: 0, z: 0}
+--- !u!1001 &7053410448022185024
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1096950919}
+    m_Modifications:
+    - target: {fileID: 1051833564315131422, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+      propertyPath: m_RootOrder
+      value: 19
+      objectReference: {fileID: 0}
+    - target: {fileID: 1051833564315131422, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.360836
+      objectReference: {fileID: 0}
+    - target: {fileID: 1051833564315131422, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -4
+      objectReference: {fileID: 0}
+    - target: {fileID: 1051833564315131422, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 39.817535
+      objectReference: {fileID: 0}
+    - target: {fileID: 1051833564315131422, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1051833564315131422, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1051833564315131422, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1051833564315131422, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1051833564315131422, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1051833564315131422, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1051833564315131422, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+      propertyPath: m_Name
+      value: ParryStrike
+      objectReference: {fileID: 0}
+    - target: {fileID: 1051833565126340843, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+      propertyPath: simulationSpeed
+      value: 1.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1051833565126340843, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1051833565126340843, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+      propertyPath: InitialModule.startSizeZ.scalar
+      value: 0.8
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+--- !u!4 &8032841064231615070 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1051833564315131422, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+  m_PrefabInstance: {fileID: 7053410448022185024}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &8032841064231615071 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1051833564315131423, guid: b20f11fe5d1410f468ca2e9bacc2746e, type: 3}
+  m_PrefabInstance: {fileID: 7053410448022185024}
+  m_PrefabAsset: {fileID: 0}

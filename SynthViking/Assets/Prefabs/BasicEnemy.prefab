@@ -1872,8 +1872,6 @@ MonoBehaviour:
   playerController: {fileID: 0}
   hitpauseScript: {fileID: 0}
   limbCheckerScript: {fileID: 0}
-  axeHitBloodVFX: {fileID: 5170585893340993107, guid: 7b88f11816abaa34c9e02cbaa8485321, type: 3}
-  axeKillBloodVFX: {fileID: 5170585893340993107, guid: e333dc4c486756844b1719e55212914b, type: 3}
   swordPoint: {fileID: 0}
   targetCube: {fileID: 0}
   selectedTarget: {fileID: 0}
@@ -1881,6 +1879,9 @@ MonoBehaviour:
   targetCheckRange: 10
   canTarget: 0
   targetsInRange: []
+  axeHitBloodVFX: {fileID: 5170585893340993107, guid: 7b88f11816abaa34c9e02cbaa8485321, type: 3}
+  axeKillBloodVFX: {fileID: 5170585893340993107, guid: e333dc4c486756844b1719e55212914b, type: 3}
+  parryLightningVFX: {fileID: 0}
 --- !u!1 &8410380785333457773
 GameObject:
   m_ObjectHideFlags: 0
