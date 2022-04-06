@@ -123,9 +123,8 @@ public class ChainHitScript : MonoBehaviour
             currentChainHitActiveDuration = powerPunchChainActiveDuration;
             currentChainHitBackForce = powerPunchForce;
             currentDamage = powerPunchChainDamage;
-         //   currentStunDuration = powerPunchStunDuration; 
             stunType = playerAttackType.PowerPunch.ToString(); 
-             print("PowerPunchDir"); 
+
         }
 
         if(stunType == playerAttackType.LightAxeHit.ToString()) //Light axe hit 
@@ -133,10 +132,8 @@ public class ChainHitScript : MonoBehaviour
 
             currentChainHitActiveDuration = axeHitChainActiveDuration; 
             currentChainHitBackForce = axeHitForce;
-            currentDamage = axeHitChainDamage;
-          //  currentStunDuration = axeHitStunDuration; 
+            currentDamage = axeHitChainDamage; 
             stunType = playerAttackType.LightAxeHit.ToString();
-            print("AxeHitDir"); 
         }
 
         if (stunType == playerAttackType.BlockStun.ToString()) //Block stun 
@@ -146,8 +143,6 @@ public class ChainHitScript : MonoBehaviour
             currentDamage = blockChainDamage;
             currentStunDuration = blockStunDuration; 
             stunType = playerAttackType.BlockStun.ToString();
-            //print("axeblock");
-            Debug.Log("axeBlock : " + currentStunDuration); 
         }
 
         if (stunType == chainHitString) //Normale chain stun 
@@ -157,7 +152,6 @@ public class ChainHitScript : MonoBehaviour
             currentDamage = chainHitDamage;
             currentStunDuration = chainHitStunDuration; 
             stunType = chainHitString;
-            print("ChainHitDir"); 
         }
 
         canCheck = true; 
@@ -176,19 +170,16 @@ public class ChainHitScript : MonoBehaviour
 
             if(leftSide > rightSide) launchDirection = transform.right; //Launch enemy to the left
             else launchDirection = -transform.right; //Launch enemy to the right 
-            print("PowerPunchDir"); 
         }
 
         if(chainType == playerAttackType.LightAxeHit.ToString())
         {
             launchDirection = mainScript.launchDirection; //Base launch direction of attackers forward 
-            print("AxeHitDir"); 
         }
 
         if (chainType == chainHitString)
         {
             launchDirection = mainScript.launchDirection; //Base launch direction of attackers forward 
-            print("ChainHitDir"); 
         }
 
         

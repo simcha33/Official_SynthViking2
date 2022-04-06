@@ -172,7 +172,13 @@ public class AttackTargetScript : MonoBehaviour
                             limb.velocity = new Vector3(0, 0, 0);
                             limb.AddExplosionForce(10f, limb.position, 2f, 4f, ForceMode.Impulse); 
                             if (enemyScript.canBeTargeted) limb.mass *= 3f;
+                           // limb.GetComponent<SetEnemyInside>().ActivateLimbInside(); 
                         }
+                    }
+
+                    foreach (GameObject enemyInside in limbCheckerScript.hitInsides)
+                    {
+                        enemyInside.GetComponent<MeshRenderer>().enabled = true; 
                     }
 
                     if (enemyScript.canBeTargeted)
@@ -213,6 +219,7 @@ public class AttackTargetScript : MonoBehaviour
             }
 
             limbCheckerScript.hitLimbs.Clear();
+            limbCheckerScript.hitInsides.Clear(); 
           //  targetsInRange.Clear();
         }//Player hits enemy
 

@@ -36,6 +36,7 @@ public class PlayerState : MonoBehaviour
     [Header("SCRIPTS")]  
     #region
     public ThirdPerson_PlayerControler playerController;
+    public ComboManager comboManagerScript; 
     #endregion
 
     [Header("COMPONENTS")]  

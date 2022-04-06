@@ -238,16 +238,20 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public SlowMoScript slowScript;
     public CheckForLimbs limbCheckerScript; 
 
-    public HitPauses hitPauseScript; 
+    public HitPauses hitPauseScript;
     #endregion
 
     [Header("VISUALS")] //COMPONENTS
     #region
-      public TrailRenderer sprintTrail; 
-      public GameObject landVFX; 
-      private float sprintTrailTimer; 
-      private float sprintTrailDuration; 
-      public bool enableTrail = false; 
+    public TrailRenderer attackTrail; 
+    //public TrailRenderer sprintTrailLeft;
+   // public TrailRenderer sprintTrailRight;
+    public GameObject landVFX;
+    public GameObject groundSlamVFX;
+    public TrailRenderer[] footTrail;
+    private float sprintTrailTimer; 
+    private float sprintTrailDuration; 
+    private bool enableTrail = false; 
 
 
     #endregion 
@@ -357,7 +361,9 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         currentMoveSpeed = maxMoveSpeed;
         currentDashDistance = minDashDistance;
         dashDelayTimer = dashDelayDuration;
-        sprintTrailDuration = sprintTrail.time; sprintTrail.time = -.1f;
+        // sprintTrailDuration = sprintTrail.time; sprintTrail.time = -.1f;
+        sprintTrailDuration = footTrail[1].time;
+        foreach (TrailRenderer trail in footTrail) trail.time = -.1f; 
         airSmashDelayTimer = 0f;
         airSmashCooldownTimer = airSmashCooldownDuration;
         dashCooldownTimer = 0f; 
@@ -1164,7 +1170,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 playerAnim.SetTrigger("AirSmashStartTrigger");
                 playerRb.useGravity = false;
                 isAirSmashing = true;
-                AirSlamStartFeeback?.PlayFeedbacks(); 
+               // AirSlamStartFeeback?.PlayFeedbacks(); 
                 controllerState = (int)currentState.AIRSMASHING;
                 fixedControllerState = (int)currentState.AIRSMASHING; 
             }
@@ -1175,6 +1181,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
             if (airSmashDelayTimer >= airSmashDelayDuration)
             {
+                AirSlamStartFeeback?.PlayFeedbacks();
                 //isAirSmashing = true;
                 meshR.materials = holoSkinMat;
                 canStartAirSmash = false;
@@ -1200,8 +1207,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
         }
         else if (isAirSmashing && airSmashDelayTimer >= airSmashDelayDuration)
-        {
-            
+        {          
             DoAirSmash();
         }
         
@@ -1243,6 +1249,11 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                         enemyScript.LaunchEnemy((slamTarget.transform.position - transform.position), slamImpactForwardForce, Random.Range(slamImpactUpForce / 1.3f, slamImpactUpForce * 1.3f));
                     }
                 }
+
+                GameObject slamEffect = Instantiate(groundSlamVFX, hit.point, transform.rotation);
+                slamEffect.AddComponent<CleanUpScript>(); 
+
+
             }
         }
 
@@ -1599,39 +1610,44 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     void SetTrailRender()
     {
-        float disableTrailDuration = .75f; 
+        float disableTrailDuration = .75f;
 
-        if(isSprinting || jumpCount >= 1 || isDashing || isAirSmashing) 
+        if (isSprinting || jumpCount >= 1 || isDashing || isAirSmashing)enableTrail = true; 
+        else enableTrail = false;
+ 
+
+        foreach (TrailRenderer trail in footTrail)
         {
-            enableTrail = true; 
-        }
-        else 
-        {
-            enableTrail = false; 
-        }
-
-        if(enableTrail) //Enable the trail 
-        { 
-            if(sprintTrail.time <= 0) sprintTrail.time = sprintTrailDuration * .1f; 
-
-            if(sprintTrail.time < sprintTrailDuration)
+            if (enableTrail) //Enable the trail 
             {
-                sprintTrail.time += Time.deltaTime * disableTrailDuration; 
+                if (trail.time <= 0)
+                {
+                    trail.time = sprintTrailDuration * .05f;
+                }
+
+                if (trail.time < sprintTrailDuration)
+                {
+                    trail.time += Time.deltaTime * disableTrailDuration;
+
+                }
+                else
+                {
+                    trail.time = sprintTrailDuration;
+                }
+                sprintTrailTimer = sprintTrailDuration;
+
+
             }
-            else
-            {                     
-                sprintTrail.time = sprintTrailDuration;  
+            else if (!enableTrail && sprintTrailTimer > -.1) //Disable the trail        
+            {
+                trail.time = sprintTrailTimer;
             }
-            sprintTrailTimer = sprintTrailDuration; 
-  
-            
-        }
-        else if(!enableTrail && sprintTrailTimer > -.1) //Disable the trail        
-        {
-            sprintTrailTimer -= Time.fixedDeltaTime * disableTrailDuration; 
-            sprintTrail.time = sprintTrailTimer; 
         }
 
+        if (!enableTrail && sprintTrailTimer > -.1) //Disable the trail        
+        {
+            sprintTrailTimer -= Time.fixedDeltaTime * disableTrailDuration;
+        }
     }
 
 

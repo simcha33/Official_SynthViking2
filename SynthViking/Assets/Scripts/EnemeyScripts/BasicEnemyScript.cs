@@ -50,7 +50,6 @@ public class BasicEnemyScript : MonoBehaviour
     private MeshRenderer weaponMeshr; 
 
     [HideInInspector] public float targetDistance; 
-    [HideInInspector] public List<Rigidbody> ragdollRbs = new List<Rigidbody>();
 
     #endregion
 
@@ -88,6 +87,8 @@ public class BasicEnemyScript : MonoBehaviour
     public Material[] deadSkinMat;
     public Material attackIndicationMat;
     public Material originalWeaponMat;
+    [HideInInspector] public List<Rigidbody> ragdollRbs = new List<Rigidbody>();
+    public List<GameObject> limbInsides = new List<GameObject>();
     #endregion
 
     [Header("FEEDBACKS")]
@@ -100,7 +101,9 @@ public class BasicEnemyScript : MonoBehaviour
     #region 
     public ThirdPerson_PlayerControler playerController;
     public AttackTargetScript attackTargetScript;
-    public ChainHitScript chainHitScript; 
+    public ChainHitScript chainHitScript;
+    public ComboManager comboManagerScript; 
+    //public SetEnemyInside enemyInsideScript; 
   
   //  public EnemyManager enemyManager; 
     public Animator enemyAnim;
@@ -168,25 +171,23 @@ public class BasicEnemyScript : MonoBehaviour
 
     void Start()
     {
-        playerController = GameObject.Find("Player").GetComponent<ThirdPerson_PlayerControler>(); 
-        enemyState = (int)currentState.IDLE;
+        //Components
+        playerController = GameObject.Find("Player").GetComponent<ThirdPerson_PlayerControler>();
+        comboManagerScript = GameObject.Find("StyleManager").GetComponent<ComboManager>(); 
         thisScript = this.gameObject.GetComponent<BasicEnemyScript>(); 
-        chainHitScript.enabled = false;
-        weaponMeshr = weapon.GetComponent<MeshRenderer>(); 
-       
-        //currentRequiredDistance = circleDistance;
-       // connectedJointRb = mainColJoint.connectedBody;
-      
+        weaponMeshr = weapon.GetComponent<MeshRenderer>();
+        enemyRb = GetComponent<Rigidbody>();
 
-        //Add a bit of randomness to the walking speed
+        chainHitScript.enabled = false;
+
         originalRunSpeed = runSpeed;
         originalWalkSpeed = walkSpeed; 
         walkSpeed = Random.Range(walkSpeed - 1f, walkSpeed + 1f);
         runSpeed = Random.Range(runSpeed - 1f, runSpeed + 1f); 
         enemyAgent.speed = walkSpeed;
+        enemyState = (int)currentState.IDLE;
 
         defaultSkinMat = enemyMeshr.materials; 
-        enemyRb = GetComponent<Rigidbody>();
         originalRbMass = enemyRb.mass;
         currentHealth = maxHealth;  
         ResetState(); 
@@ -202,11 +203,16 @@ public class BasicEnemyScript : MonoBehaviour
                 ragdollRbs.Add(rb);
                 rb.GetComponent<Collider>().isTrigger = true;
                 rb.isKinematic = true;
+                //if(rb.name != "pelvis")rb.gameObject.AddComponent<SetEnemyInside>(); 
             }
-
-           
+       
             rb.useGravity = false; 
             //rb.isKinematic = true; 
+        }
+
+        foreach(GameObject inside in limbInsides)
+        {
+            inside.GetComponent<MeshRenderer>().enabled = false; 
         }
 
         enemyRb.detectCollisions = true; 
@@ -533,6 +539,11 @@ public class BasicEnemyScript : MonoBehaviour
              //   enemyMeshr.materials = stunnedSkinMat;
             }
 
+            if(DamageType == "ImpactDamage")
+            {
+
+            }
+
 
             if (DamageType == playerAttackType.LightAxeHit.ToString()) //Enemy is hit by axe
             {
@@ -573,17 +584,37 @@ public class BasicEnemyScript : MonoBehaviour
 
         else if(!isDead)//Kill the enemy
         {
-            ResetState();
-            
-            enemyRb.mass = originalRbMass; 
-            enemyMeshr.materials = deadSkinMat; 
-            isDead = true;
-            enemyAgent.enabled = false;
-            chainHitScript.enabled = true;
-            chainHitScript.SetChainHitType(DamageType); 
-            EnableRagdoll(); 
-            enemyState = (int)currentState.DEAD; 
-        }    
+            setStyleMeter(DamageType);
+            KillEnemy(DamageType);
+       
+        }
+
+
+    }
+
+    public void setStyleMeter(string styleType)
+    {
+        print("SetStyleMeter"); 
+        comboManagerScript.AddStyle(styleType); 
+    }
+
+    void KillEnemy(string DamageType)
+    {
+        ResetState();
+
+        foreach (GameObject enemyInside in limbInsides)
+        {
+           // enemyInside.SetActive(true);
+        }
+
+        enemyRb.mass = originalRbMass;
+        enemyMeshr.materials = deadSkinMat;
+        isDead = true;
+        enemyAgent.enabled = false;
+        chainHitScript.enabled = true;
+        chainHitScript.SetChainHitType(DamageType);
+        EnableRagdoll();
+        enemyState = (int)currentState.DEAD;
     }
 
 
@@ -679,10 +710,7 @@ public class BasicEnemyScript : MonoBehaviour
     {
         if (isBlockStunned)
         {
-            //   enemyAnim.SetFloat("GetUpType", Random.Range(1f, 4f));
-            //   enemyAnim.SetTrigger("GetUpTrigger");
-            getUpTimer = getUpDuration; 
-            Debug.Log("count");           
+            getUpTimer = getUpDuration;   
         }
 
         if (isLaunched) //Trigger logic for getting up once if the enemy has to get up first 

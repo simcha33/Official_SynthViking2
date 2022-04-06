@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MeteorStrike_Explosion_Wave_01
+  m_Name: GroundSlamRing
   m_Shader: {fileID: -6465566751694194690, guid: 28890434b7404a74095bc3cb05f55aed, type: 3}
   m_ShaderKeywords: _DISSOLVETEXTUREFLIP_ON _DISTORTIONENABLED_ON _EMISSIONVERTEXSTREAMENABLED_ON
     _RAMPENABLED_ON
@@ -189,7 +189,7 @@ Material:
     - _RAMPENABLED: 1
     - _RadialDistortionNoisePower: 0
     - _RampAffectedByDynamics: 1
-    - _RampIgnoreVertexColor: 0
+    - _RampIgnoreVertexColor: 1
     - _RampNoiseAmount: 1
     - _RampOffsetExp: 6
     - _RampOffsetMultiply: 1
@@ -218,5 +218,5 @@ Material:
     - _FinalColor: {r: 1, g: 0, b: 0, a: 1}
     - _MainMaskChannelsMultiply: {r: 1, g: 0, b: 0, a: 0}
     - _Noise01ScrollSpeedUV: {r: 1, g: 1, b: 0, a: 0}
-    - _RampColorTint: {r: 1, g: 0.0956518, b: 0, a: 1}
+    - _RampColorTint: {r: 1, g: 0, b: 0.6766882, a: 1}
   m_BuildTextureStacks: []

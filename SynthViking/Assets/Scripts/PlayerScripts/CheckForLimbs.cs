@@ -7,7 +7,8 @@ public class CheckForLimbs : MonoBehaviour
     public AttackTargetScript attackScript; 
     public ThirdPerson_PlayerControler playerController; 
 
-    public List <Rigidbody> hitLimbs = new List<Rigidbody>(); 
+    public List <Rigidbody> hitLimbs = new List<Rigidbody>();
+    public List<GameObject> hitInsides = new List<GameObject>();
 
     // Update is called once per frame
     void Update()
@@ -27,6 +28,10 @@ public class CheckForLimbs : MonoBehaviour
         {
             hitLimbs.Add(other.attachedRigidbody);   
         }   
+
+        if(!hitInsides.Contains(other.gameObject) && other.gameObject.CompareTag("EnemyInside")){
+            hitInsides.Add(other.gameObject);
+        }
     }
 
 
