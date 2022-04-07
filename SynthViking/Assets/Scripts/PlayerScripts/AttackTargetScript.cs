@@ -30,7 +30,8 @@ public class AttackTargetScript : MonoBehaviour
 
     [Header("COMPONENTS")] //GROUND MOVEMENT
     #region
-    public BasicEnemyScript enemyController; 
+    public BasicEnemyScript enemyController;
+
     [HideInInspector] public ThirdPerson_PlayerControler playerController;
    // public CleanUpScript cleanUpScript;
     public HitPauses hitpauseScript; 
@@ -66,6 +67,7 @@ public class AttackTargetScript : MonoBehaviour
         if (isPlayer) attackerType = (int)currentAttackerType.PLAYER;
         else if (isEnemy) attackerType = (int)currentAttackerType.BASICENEMY;
         playerController = GameObject.Find("Player").GetComponent<ThirdPerson_PlayerControler>(); 
+        //comboManagerScript = GameObject.Find("StyleManager").GetComponent<ComboManager>(); 
     }
 
     void Update()

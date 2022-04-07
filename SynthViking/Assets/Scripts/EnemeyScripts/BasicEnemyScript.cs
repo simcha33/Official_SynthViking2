@@ -87,6 +87,7 @@ public class BasicEnemyScript : MonoBehaviour
     public Material[] deadSkinMat;
     public Material attackIndicationMat;
     public Material originalWeaponMat;
+    public TextMesh styleScoreText; 
     [HideInInspector] public List<Rigidbody> ragdollRbs = new List<Rigidbody>();
     public List<GameObject> limbInsides = new List<GameObject>();
     #endregion
@@ -177,6 +178,7 @@ public class BasicEnemyScript : MonoBehaviour
         thisScript = this.gameObject.GetComponent<BasicEnemyScript>(); 
         weaponMeshr = weapon.GetComponent<MeshRenderer>();
         enemyRb = GetComponent<Rigidbody>();
+        //styleScoreText = GetComponentInChildren<TextMesh>(); 
 
         chainHitScript.enabled = false;
 
@@ -526,6 +528,7 @@ public class BasicEnemyScript : MonoBehaviour
             {
                 ResetState();
                 //  canBeChainHit = true;
+                comboManagerScript.AddStyle(DamageType, this.transform);  
                 canBeChainHit = true;
                 enemyAnim.speed = Random.Range(.5f, 1f);
                 enemyAnim.SetFloat("DamageReaction", 6f);
@@ -595,7 +598,7 @@ public class BasicEnemyScript : MonoBehaviour
     public void setStyleMeter(string styleType)
     {
         print("SetStyleMeter"); 
-        comboManagerScript.AddStyle(styleType); 
+        comboManagerScript.AddStyle(styleType, this.transform); 
     }
 
     void KillEnemy(string DamageType)

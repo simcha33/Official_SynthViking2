@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI; 
+using TMPro; 
 
 public class ComboManager : MonoBehaviour
 {
@@ -32,8 +33,23 @@ public class ComboManager : MonoBehaviour
     [Header("UI")]
     // public Image styleMeter;
     public Slider styleMeter; 
+
+    public GameObject styleSliderButton; 
     public Text styleText;
     public Text styleLevelText;
+
+
+    public TextMeshPro lowStyleScoreText; 
+    public TextMesh highStyleScoreText; 
+    public TextMesh mediumStyleScoreText; 
+    public TextMesh extremeStyleScoreText; 
+
+    
+
+    public List<TextMeshPro> styleTextsInScene = new List<TextMeshPro>();
+
+    public Camera cam; 
+ //   public TextMesh currentStyleScoreText; 
 
  
 
@@ -53,23 +69,24 @@ public class ComboManager : MonoBehaviour
 
     void Start()
     {
-        SetPlayerLevel(0); 
-        
+        SetPlayerLevel(0);      
     }
 
     // Update is called once per frame
     void Update()
     {
         CheckForStyle(); 
+        MoveTowardsStyleMeter(); 
     }
 
-    public void AddStyle(string styleType)
+    public void AddStyle(string styleType, Transform styleSource)
     {
         // currentStyleAmount += gainedStyle; 
         Debug.Log("StyleSet"); 
 
         float oldStyleAmount = currentStyleAmount;
         float minStyleResetValue = 5f; 
+        
 
         if (styleType == playerAttackType.PowerPunch.ToString()) //Enemy is killed power punch
         {
@@ -101,11 +118,24 @@ public class ComboManager : MonoBehaviour
             currentStyleAmount += axeHitKillValue; 
         }
 
+        TextMeshPro currentStyleScoreText = Instantiate(lowStyleScoreText, styleSource.position + new Vector3(0, 2, 0), playerController.transform.rotation); 
+        currentStyleScoreText.text = (currentStyleAmount - oldStyleAmount).ToString(); 
+        styleTextsInScene.Add(currentStyleScoreText); 
+
        // if(currentStyleAmount - oldStyleAmount > minStyleResetValue) //If enough style points where gathered 
        // {
             timeSinceLastStyle = 0f; 
        // }
 
+    
+       
+       
+
+
+    }
+
+    void SetUIDepth()
+    {
 
     }
 
@@ -120,6 +150,28 @@ public class ComboManager : MonoBehaviour
         timeSinceLastStyle = 0f;
     } 
 
+    void MoveTowardsStyleMeter()
+    {
+        if(styleTextsInScene.Count > 0)
+        {
+            foreach(TextMeshPro text in styleTextsInScene)
+            {
+                Vector3 screenPoint = styleSliderButton.transform.position; 
+                Vector3 sliderWorldpos = cam.ScreenToWorldPoint(screenPoint); 
+
+               //text.transform.position = Vector3.MoveTowards(text.transform.position, sliderWorldpos, .04f); 
+               text.transform.LookAt(cam.transform.forward);
+                if(Vector3.Distance(text.transform.position, styleMeter.transform.position) < .5f)
+                {
+                    styleTextsInScene.Remove(text); 
+                    Destroy(text); 
+                }
+            }
+        }
+    }
+
+
+
     
      
     
@@ -128,7 +180,7 @@ public class ComboManager : MonoBehaviour
     {
         timeSinceLastStyle += Time.deltaTime; 
 
-        if(timeSinceLastStyle > maxTimeBetweenstyle)
+        if(timeSinceLastStyle > maxTimeBetweenstyle && currentStylelevel > 0)
         {
             DecreaseStyle(); 
         }
