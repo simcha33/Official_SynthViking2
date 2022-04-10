@@ -3684,6 +3684,7 @@ MonoBehaviour:
   - {fileID: 2100000, guid: a3ac3a789870a7a41a3a116e64bf55c8, type: 2}
   attackIndicationMat: {fileID: 2100000, guid: a9ec4debd24f85743beb37367c0cb56e, type: 2}
   originalWeaponMat: {fileID: 2100000, guid: 3dd541ff5a009a243a14d6408272cef9, type: 2}
+  styleScoreText: {fileID: 0}
   ragdollRbs: []
   limbInsides:
   - {fileID: 2107484403}
@@ -3711,6 +3712,7 @@ MonoBehaviour:
   playerController: {fileID: 0}
   attackTargetScript: {fileID: 837819321}
   chainHitScript: {fileID: 271370257864884223}
+  comboManagerScript: {fileID: 0}
   enemyAnim: {fileID: 8410380785165072142}
   enemyRb: {fileID: 0}
   mainCollider: {fileID: 8410380785165072128}

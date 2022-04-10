@@ -8,14 +8,13 @@ public class ComboManager : MonoBehaviour
 {
 
     [Header("STYLE VALUES")]
-    public int[] styleLevels;
+   public int[] styleLevels;
+  //  public List<int> styleLevels = new List<int>();
+//    public List<float> maxStyleAmount = new List<float>(); 
     public float[] maxStyleAmount;
     public int currentStylelevel;
-
-
     public float currentStyleAmount;
     public float levelMaxStyleAmount;
-
     private float timeSinceLastStyle;
     public float maxTimeBetweenstyle;
     public float styleDecreaseValue;
@@ -29,6 +28,18 @@ public class ComboManager : MonoBehaviour
     public float parryValue = 1f;
     public float impactDamageKillValue =20f;
 
+    public float lowStyleScoreValueCap;
+    public float mediumStyleScoreValueCap;
+    public float highStyleScoreValueCap;
+    public float extremeStyleScoreValueCap;
+
+
+    [Header("COMBOS")]
+    public float currentComboLength;
+    public float comboTimer;
+    public float maxTimeBetweenCombos; 
+
+
 
     [Header("UI")]
     // public Image styleMeter;
@@ -36,13 +47,13 @@ public class ComboManager : MonoBehaviour
 
     public GameObject styleSliderButton; 
     public Text styleText;
+    public TextMeshProUGUI comboText; 
     public Text styleLevelText;
-
-
+    public TextMeshPro currentStyleScoreText; 
     public TextMeshPro lowStyleScoreText; 
-    public TextMesh highStyleScoreText; 
-    public TextMesh mediumStyleScoreText; 
-    public TextMesh extremeStyleScoreText; 
+    public TextMeshPro highStyleScoreText; 
+    public TextMeshPro mediumStyleScoreText; 
+    public TextMeshPro extremeStyleScoreText; 
 
     
 
@@ -69,13 +80,15 @@ public class ComboManager : MonoBehaviour
 
     void Start()
     {
-        SetPlayerLevel(0);      
+        SetPlayerLevel(0);    
+       
     }
 
     // Update is called once per frame
     void Update()
     {
-        CheckForStyle(); 
+        CheckForStyle();
+        CheckForCombo(); 
         MoveTowardsStyleMeter(); 
     }
 
@@ -85,6 +98,7 @@ public class ComboManager : MonoBehaviour
         Debug.Log("StyleSet"); 
 
         float oldStyleAmount = currentStyleAmount;
+        float styleDifference; 
         float minStyleResetValue = 5f; 
         
 
@@ -92,9 +106,7 @@ public class ComboManager : MonoBehaviour
         {
             currentStyleAmount += powerPunchKillValue; 
         }
-
-        
-
+      
         if (styleType == playerAttackType.GroundSlam.ToString()) //Enemy is killed by ground slam 
         {
             currentStyleAmount += groundSlamKillValue; 
@@ -118,13 +130,20 @@ public class ComboManager : MonoBehaviour
             currentStyleAmount += axeHitKillValue; 
         }
 
-        TextMeshPro currentStyleScoreText = Instantiate(lowStyleScoreText, styleSource.position + new Vector3(0, 2, 0), playerController.transform.rotation); 
-        currentStyleScoreText.text = (currentStyleAmount - oldStyleAmount).ToString(); 
-        styleTextsInScene.Add(currentStyleScoreText); 
+        styleDifference = currentStyleAmount - oldStyleAmount; //Check for style gained
 
-       // if(currentStyleAmount - oldStyleAmount > minStyleResetValue) //If enough style points where gathered 
-       // {
-            timeSinceLastStyle = 0f; 
+        //Check which style text to select based on style gained
+        if (styleDifference > 0 && styleDifference <= lowStyleScoreValueCap) currentStyleScoreText = lowStyleScoreText;
+        else if (styleDifference > lowStyleScoreValueCap && styleDifference <= mediumStyleScoreValueCap) currentStyleScoreText = mediumStyleScoreText;
+        else if (styleDifference > mediumStyleScoreValueCap && styleDifference <= highStyleScoreValueCap) currentStyleScoreText = highStyleScoreText;
+        else if (styleDifference > highStyleScoreValueCap) currentStyleScoreText = extremeStyleScoreText;
+
+        
+        TextMeshPro styleScoreText = Instantiate(currentStyleScoreText, styleSource.position + new Vector3(0, 2.3f, 0), playerController.transform.rotation); 
+        styleScoreText.text = styleDifference.ToString();
+        styleScoreText.GetComponent<ScoreText>().target = styleSource;
+
+       
        // }
 
     
@@ -160,7 +179,7 @@ public class ComboManager : MonoBehaviour
                 Vector3 sliderWorldpos = cam.ScreenToWorldPoint(screenPoint); 
 
                //text.transform.position = Vector3.MoveTowards(text.transform.position, sliderWorldpos, .04f); 
-               text.transform.LookAt(cam.transform.forward);
+             //  text.transform.LookAt(cam.transform.forward);
                 if(Vector3.Distance(text.transform.position, styleMeter.transform.position) < .5f)
                 {
                     styleTextsInScene.Remove(text); 
@@ -200,9 +219,48 @@ public class ComboManager : MonoBehaviour
         if (currentStyleAmount <= 0 && currentStylelevel > 0)
         {
             SetPlayerLevel(-1); 
+        }    
+    }
+
+    public void AddCombo()
+    {
+        //Combo stuff
+        currentComboLength++;
+        comboTimer = 0f;
+        timeSinceLastStyle = 0f;
+        if (comboText.alpha < 1) comboText.alpha = 1; 
+    }
+
+    public void ResetCombo()
+    {
+        currentComboLength = 0f;
+        comboTimer = 0f;
+    }
+
+
+    void CheckForCombo()
+    {
+    
+        if(currentComboLength > 0)
+        {
+            comboTimer += Time.deltaTime;
+            
+            if(comboTimer >= maxTimeBetweenCombos)
+            {
+                comboText.alpha -= Time.deltaTime;
+                if (comboText.alpha <= 0)
+                {
+                    ResetCombo();
+                }
+            }
+        }
+        
+        if(comboText.alpha > 0 && currentComboLength <= 0)
+        {
+            comboText.alpha -= Time.deltaTime; 
         }
 
-     
+        comboText.text = "X" + currentComboLength.ToString(); 
     }
 
 }

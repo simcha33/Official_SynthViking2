@@ -502,33 +502,33 @@ public class BasicEnemyScript : MonoBehaviour
         
         currentHealth -= damageAmount;
 
-        if(currentHealth > 0 && !isDead)
+        if (currentHealth > 0 && !isDead)
         {
-            launchDirection = playerController.transform.forward; 
-        
-            
-            enemyRb.velocity = new Vector3(0,0,0);
+            launchDirection = playerController.transform.forward;
 
-           
+
+            enemyRb.velocity = new Vector3(0, 0, 0);
+
+
             if (DamageType == playerAttackType.PowerPunch.ToString()) //Enemy is hit by ground slam
             {
                 ResetState();
-                canBeChainHit = false;             
-              //  enemyMeshr.materials = stunnedSkinMat; 
+                canBeChainHit = false;
+                //  enemyMeshr.materials = stunnedSkinMat; 
             }
 
             if (DamageType == playerAttackType.GroundSlam.ToString()) //Enemy is hit by power punch
             {
                 ResetState();
-                canBeChainHit = true;              
-               // enemyMeshr.materials = stunnedSkinMat;
+                canBeChainHit = true;
+                // enemyMeshr.materials = stunnedSkinMat;
             }
 
             if (DamageType == playerAttackType.BlockStun.ToString()) //Enemy is hit by power punch
             {
                 ResetState();
                 //  canBeChainHit = true;
-                comboManagerScript.AddStyle(DamageType, this.transform);  
+                comboManagerScript.AddStyle(DamageType, this.transform);
                 canBeChainHit = true;
                 enemyAnim.speed = Random.Range(.5f, 1f);
                 enemyAnim.SetFloat("DamageReaction", 6f);
@@ -538,11 +538,11 @@ public class BasicEnemyScript : MonoBehaviour
 
             if (DamageType == chainHitScript.chainHitString) //Enemy is hit by power punch
             {
-                canBeChainHit = true;              
-             //   enemyMeshr.materials = stunnedSkinMat;
+                canBeChainHit = true;
+                //   enemyMeshr.materials = stunnedSkinMat;
             }
 
-            if(DamageType == "ImpactDamage")
+            if (DamageType == "ImpactDamage")
             {
 
             }
@@ -550,7 +550,7 @@ public class BasicEnemyScript : MonoBehaviour
 
             if (DamageType == playerAttackType.LightAxeHit.ToString()) //Enemy is hit by axe
             {
-            
+
                 ResetState(); //** this might fuck up something to do with enemies not being able to attack after getting hit**
                 if (damageAmount >= playerController.basicLightAttackDamage)
                 {
@@ -563,7 +563,7 @@ public class BasicEnemyScript : MonoBehaviour
                     enemyRb.mass = originalRbMass;
                 }
 
-                enemyRb.freezeRotation = true; 
+                enemyRb.freezeRotation = true;
                 //enemyMeshr.materials = hitSkinMat;
 
                 //No double hit animations
@@ -582,17 +582,27 @@ public class BasicEnemyScript : MonoBehaviour
                 enemyAnim.SetTrigger("DamageTrigger");
             }
 
-            CheckForStunType(DamageType); 
+
+            CheckForStunType(DamageType);
         }
 
-        else if(!isDead)//Kill the enemy
+        else if (!isDead)//Kill the enemy
         {
             setStyleMeter(DamageType);
             KillEnemy(DamageType);
-       
+        }
+
+       if(DamageType != playerAttackType.BlockStun.ToString())
+        {
+            SetComboMeter();
         }
 
 
+    }
+
+    public void SetComboMeter()
+    {
+        comboManagerScript.AddCombo(); 
     }
 
     public void setStyleMeter(string styleType)

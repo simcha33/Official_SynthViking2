@@ -129,7 +129,9 @@ public class PlayerState : MonoBehaviour
         if (canBeHit)
         {
             currentHealth -= damageAmount;
-            helathSlider.value = currentHealth / maxHealth; 
+            helathSlider.value = currentHealth / maxHealth;
+            comboManagerScript.ResetCombo();
+            playerController.PlayerDamagedFeedback?.PlayFeedbacks(); 
 
             if (currentHealth > 0)
             {

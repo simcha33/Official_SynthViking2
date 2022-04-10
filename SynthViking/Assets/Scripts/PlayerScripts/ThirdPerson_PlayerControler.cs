@@ -285,6 +285,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public MMFeedbacks SprintAttackFeedback;
     public MMFeedbacks AirSlamStartFeeback;
     public MMFeedbacks AirSlamEndFeedback;
+    public MMFeedbacks PlayerDamagedFeedback; 
     // public MMFeedbacks aimingFeedback;
     // public MMFeedbacks slowmoFeedback; 
     #endregion
