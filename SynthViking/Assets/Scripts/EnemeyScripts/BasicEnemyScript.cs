@@ -27,6 +27,7 @@ public class BasicEnemyScript : MonoBehaviour
     [HideInInspector] public Transform target;
     private float originalRbMass;
     private float stunnedMass = 400f; 
+
    
     #endregion
 
