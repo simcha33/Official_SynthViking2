@@ -7,6 +7,10 @@ using UnityEngine.AI;
 public class BasicEnemyScript : MonoBehaviour
 {
 
+    public OffMeshLink offLink;
+    public NavMeshLink navLink; 
+
+    public Vector3 targetPos;   
 
     [Header("BASICS")]
     #region 
@@ -73,12 +77,9 @@ public class BasicEnemyScript : MonoBehaviour
     public bool canBeParried;
     public float canBeParriedTimer;
     public float canBeParriedDuration; 
-   // public float chainhitBackForce;
-   // public float chainHitActiveTime = .4f;
-   // public float chainHitMaxDistance = 11f; 
-
-      private string StunType;
+    private string StunType;
     #endregion
+
 
     [Header("VISUALS")]
     #region 
@@ -93,11 +94,13 @@ public class BasicEnemyScript : MonoBehaviour
     public List<GameObject> limbInsides = new List<GameObject>();
     #endregion
 
+
     [Header("FEEDBACKS")]
     #region
     public MMFeedbacks stunnedFeebacks; 
     public MMFeedbacks startAttackFeedback; 
     #endregion
+
 
     [Header("COMPONENTS")]
     #region 
@@ -105,9 +108,6 @@ public class BasicEnemyScript : MonoBehaviour
     public AttackTargetScript attackTargetScript;
     public ChainHitScript chainHitScript;
     public ComboManager comboManagerScript; 
-    //public SetEnemyInside enemyInsideScript; 
-  
-  //  public EnemyManager enemyManager; 
     public Animator enemyAnim;
     [HideInInspector] public Rigidbody enemyRb;
     public Collider mainCollider;
@@ -123,9 +123,8 @@ public class BasicEnemyScript : MonoBehaviour
     public Rigidbody connectedJointRb; //Should be the pelvis
     public NavMeshAgent enemyAgent; 
     public SkinnedMeshRenderer enemyMeshr;
-  
-
     #endregion
+
 
     [Header("STATES")]
     #region 
@@ -134,6 +133,7 @@ public class BasicEnemyScript : MonoBehaviour
     public bool isLaunched;
     public bool isRagdolling; 
     public bool isAttacking; 
+    public bool isLinkJumping; 
     public bool isInAttackRange; 
     public bool isInCircleRange; 
     public bool hasHitObject; 
@@ -167,6 +167,7 @@ public class BasicEnemyScript : MonoBehaviour
         STUNNED,
         DEAD, 
         CIRCLETARGET,
+        LINKJUMPING, 
     }
     #endregion
 
@@ -226,12 +227,16 @@ public class BasicEnemyScript : MonoBehaviour
 
     void Update()
     {
+       // Debug.Log(enemyAgent.currentOffMeshLinkData.activated); 
+
+
         switch(enemyState){
                 case(int)currentState.IDLE:
                 CheckForPlayer(); 
                 CheckForMovement();
                 HandleAnimation();
                 GroundCheck(); 
+                CheckForLinkJumping(); 
                 break; 
 
             case(int)currentState.ENGAGE:
@@ -241,6 +246,7 @@ public class BasicEnemyScript : MonoBehaviour
                 MoveTowardsPlayer();
                 HandleAnimation();
                 GroundCheck();
+                CheckForLinkJumping(); 
                 break; 
 
             case(int)currentState.ATTACKING:
@@ -264,6 +270,11 @@ public class BasicEnemyScript : MonoBehaviour
             case(int)currentState.DEAD:
                 EnemyDies(); 
                 break;  
+
+            case(int)currentState.LINKJUMPING:
+            CheckForLinkJumping(); 
+           // HandleAnimation(); 
+                break; 
         }
 
      
@@ -272,14 +283,46 @@ public class BasicEnemyScript : MonoBehaviour
         
     }
 
-    public void HandleAnimation(){
+    public void HandleAnimation()
+    {
         enemyAnim.SetBool("IsAttacking", isAttacking);
         enemyAnim.SetBool("CanMove", canMove);
         enemyAnim.SetBool("IsStunned", isStunned);
         enemyAnim.SetBool("IsGettingUp", isGettingUp);
         enemyAnim.SetBool("IsFollowing", isFollowing); 
+        enemyAnim.SetBool("IsLinkJumping", isLinkJumping); 
        // enemyAnim.SetBool("IsLaunched")
     }
+
+    public void CheckForLinkJumping()
+    {
+        float jumpSpeedMulitplier = 3f; 
+
+        if(enemyAgent.currentOffMeshLinkData.activated && !isLinkJumping)
+        {
+            isLinkJumping = true;
+            print("Start jump"); 
+            HandleAnimation(); 
+            targetPos = enemyAgent.currentOffMeshLinkData.endPos; 
+            enemyAgent.speed *= jumpSpeedMulitplier;  
+            enemyAnim.SetTrigger("LinkJumpStartTrigger");  
+            enemyState = (int)currentState.LINKJUMPING;    
+        }
+        else if(isLinkJumping && !enemyAgent.currentOffMeshLinkData.activated)
+        {
+            isLinkJumping = false;        
+            enemyAgent.speed /= jumpSpeedMulitplier;     
+            enemyState = (int)currentState.ENGAGE; 
+              print("End jump"); 
+        }
+
+        if(isLinkJumping)
+        {
+            //targetDis = Vector3.Distance(transform.position, targetPos); 
+          
+        }
+    }
+
 
     public void CheckForPlayer()
     {
@@ -475,8 +518,6 @@ public class BasicEnemyScript : MonoBehaviour
 
 
 
-
-
     public void LaunchEnemy(Vector3 direction, float forwardForce, float upForce)
     {
 
@@ -547,6 +588,8 @@ public class BasicEnemyScript : MonoBehaviour
             {
 
             }
+
+            if(DamageType == "EnvironmentDamage")
 
 
             if (DamageType == playerAttackType.LightAxeHit.ToString()) //Enemy is hit by axe
@@ -891,6 +934,7 @@ public class BasicEnemyScript : MonoBehaviour
         isStunned = false;
         //isDead = false;
         isBlockStunned = false; 
+        isLinkJumping = false; 
      //   isLaunched = false;
        // isRagdolling = false;
         isAttacking = false;

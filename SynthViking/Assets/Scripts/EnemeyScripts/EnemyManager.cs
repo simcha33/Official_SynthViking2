@@ -23,6 +23,20 @@ public class EnemyManager : MonoBehaviour
 
           public int minAttackers = 1; 
 
+          [Header ("ENEMYSPAWNING")]
+          public List <Transform> enemySpawners = new List<Transform>(); 
+          public float maxEnemiesAllowedInScene; 
+          public float currentEnemiesInScene; 
+           public bool totalEnemiesToSpawn; 
+          public float spawnDelay; 
+          public float spawnAmount; 
+          public float spawnDirection;
+          public float stringSpawnType; 
+          public bool canSpawnEnemies; 
+         
+
+
+
         void Start()
         {
           
@@ -34,7 +48,6 @@ public class EnemyManager : MonoBehaviour
             if(attackingEnemies.Count > 0)
             { 
                
-
                 HandleAttackers();          
             }
 
@@ -42,8 +55,19 @@ public class EnemyManager : MonoBehaviour
             {
                 CheckForAttackers(); 
             }
+        }
 
-   
+        void CheckForEnemySpawning()
+        {
+            if(currentEnemiesInScene < maxEnemiesAllowedInScene)
+            {
+                SpawnNewEnemy(); 
+            }
+        }
+
+        void SpawnNewEnemy()
+        {
+            
         }
 
 
@@ -78,8 +102,7 @@ public class EnemyManager : MonoBehaviour
                 choosenEnemy.canAttack = true;
             }
             else return; 
-               
-  
+             
        
 
             /*

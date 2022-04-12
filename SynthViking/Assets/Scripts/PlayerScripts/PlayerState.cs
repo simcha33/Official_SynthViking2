@@ -126,7 +126,7 @@ public class PlayerState : MonoBehaviour
 
     public void TakeDamage(float damageAmount, string DamageType)
     {
-        if (canBeHit)
+        if (canBeHit || DamageType == "EnvironmentDamage")
         {
             currentHealth -= damageAmount;
             helathSlider.value = currentHealth / maxHealth;
@@ -139,20 +139,29 @@ public class PlayerState : MonoBehaviour
                 if(DamageType == "BasicMeleeAttackDamage")
                 {
                     canBeHit = false;
-                    wasHitByAttack = true;
+                    wasHitByAttack = true;                   
+
                 }
-               
+
+                if(DamageType == "EnvironmentDamage")
+                {
+                    playerController.DoJump(550); 
+                }
+
+              
+                playerController.ResetStates();
+                playerController.ResetAnimator();
+                playerController.isStunned = isStunned = true;
+                playerController.playerAnim.SetTrigger(DamageType + "StunTrigger");
 
                 playerState = (int)currentState.STUNNED;
                 playerController.controllerState = (int)currentState.STUNNED;
                 playerController.fixedControllerState = (int)currentState.STUNNED;
-
-                playerController.ResetStates();
-                playerController.ResetAnimator();
-                playerController.playerAnim.SetTrigger(DamageType + "StunTrigger");
-                playerController.isStunned = isStunned = true;
-               
+                  
+                
+           
                 stunDuration = 10f;
+                                               
             }
         }
     }

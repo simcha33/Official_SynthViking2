@@ -945,7 +945,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         if (playerRb.velocity.y > 0 && !input.jumpButtonPressed) playerRb.velocity += Vector3.up * Physics.gravity.y * (lowJumpGravity - 1) * Time.deltaTime;
     }
 
-    void DoJump(float jumpHeight)
+    public void DoJump(float jumpHeight)
     {   
         playerRb.isKinematic = false;
         playerRb.velocity = new Vector3(playerRb.velocity.x, 0, playerRb.velocity.z);
@@ -1494,7 +1494,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
 
         //Check if the combo is broken 
-        if (nextAttackTimer >= nextAttackDuration - .2f)
+        if (nextAttackTimer >= nextAttackDuration - .25f)
         {
             playerAnim.SetBool("IsAttacking", false);
             fixedControllerState = (int)currentState.MOVING;

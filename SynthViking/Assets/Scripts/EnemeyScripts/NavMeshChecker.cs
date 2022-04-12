@@ -32,30 +32,20 @@ using UnityEngine.AI;
  
 public class NavMeshChecker : MonoBehaviour {
  
-   // public Transform goal;
- 
     private NavMeshAgent agent;
-    //public OffMeshLink link;
     private float oldLinkCost;
 
-    public OffMeshLink[] links; 
- 
-   
-   void start(){
-     //  GameObjects.Find()
-     links = GameObject.FindObjectsOfType<OffMeshLink>(); 
-   }
+    public NavMeshLink link; 
 
-   void Update()
+    public bool checkForEnd; 
+
+    BasicEnemyScript userScript; 
+ 
+
+   void Awake()
    {
-       foreach(OffMeshLink offLink in links){
-           if(offLink.activated)
-           {
-           //    offLink.
-               //offLink.enabled = false; 
-           }
-           else if(!offLink.isActiveAndEnabled)
-       }
+       link = GetComponent<NavMeshLink>(); 
+       this.gameObject.transform.localScale = new Vector3(link.width, gameObject.transform.localScale.y, gameObject.transform.localScale.z); 
    }
 
 }
