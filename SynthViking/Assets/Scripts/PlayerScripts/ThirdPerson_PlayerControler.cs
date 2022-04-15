@@ -962,7 +962,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     void GroundCheck()
     {
         RaycastHit hit;
-        Ray ray = new Ray(this.transform.position + Vector3.up * .25f, Vector3.down);
+        Ray ray = new Ray(this.transform.position + Vector3.up * .1f, Vector3.down);
 
         //Shortly disable groundcheck so that it won't interupt the start of the jump 
         if (jumpCount > 0 && groundCheckTimer > 0)
@@ -983,8 +983,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             if (Physics.Raycast(ray, out hit, groundCheckHeight))
             {
                 if (hit.collider.gameObject.layer == EnvorinmentLayer)
-                {
-                    
+                {                
                     if(!isGrounded && inAirTime >= .2f)
                     {  
                         GameObject landEffect = Instantiate(landVFX, transform.position, transform.rotation); 

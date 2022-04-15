@@ -148,9 +148,13 @@ public class AttackTargetScript : MonoBehaviour
             {
                 //Deal damage to hit target
                 BasicEnemyScript enemyScript = obj.GetComponent<BasicEnemyScript>();
-                if(!enemyScript.isDead) enemyScript.TakeDamage(playerController.currentAttackDamage, playerAttackType.LightAxeHit.ToString());
+                if (!enemyScript.isDead)
+                {
+                    enemyScript.TakeDamage(playerController.currentAttackDamage, playerAttackType.LightAxeHit.ToString());
+                    hitpauseScript.theHitPaused.Add(obj);
+                }
                 Vector3 backDirection = playerController.transform.position + transform.forward * playerController.currentAttackForwardForce * 1.5f; 
-                hitpauseScript.theHitPaused.Add(obj);
+                
                 GameObject blood = Instantiate(axeHitBloodVFX, enemyScript.bloodSpawnPoint.position, enemyScript.bloodSpawnPoint.rotation);
                 blood.AddComponent<CleanUpScript>(); 
                 weapinFirstImpactFeedback?.PlayFeedbacks();

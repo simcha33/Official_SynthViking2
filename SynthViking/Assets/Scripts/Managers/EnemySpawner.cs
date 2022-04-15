@@ -5,11 +5,22 @@ using UnityEngine;
 public class EnemySpawner : MonoBehaviour
 {
 
-    public List<Transform> spawnLocations = new List<Transform>(); 
-    // Start is called before the first frame update
-    void Start()
+    EnemyManager enemyBehaviourManagerScript;
+    EnemySpawnManager enemySpawnManagerScript;
+    public Transform spawnPoint;
+    public EnemySpawner thisScript; 
+   // Vector3 spawnDirection; 
+
+    void Awake()
     {
-        
+        enemySpawnManagerScript = GameObject.Find("EnemySpawnManager").GetComponent<EnemySpawnManager>();
+        enemyBehaviourManagerScript = GameObject.Find("EnemyBehaviourManager").GetComponent<EnemyManager>(); 
+    }
+
+    private void Start()
+    {
+        thisScript = GetComponent<EnemySpawner>(); 
+        enemySpawnManagerScript.enemySpawners.Add(thisScript); 
     }
 
     // Update is called once per frame

@@ -95,7 +95,6 @@ public class ComboManager : MonoBehaviour
     public void AddStyle(string styleType, Transform styleSource)
     {
         // currentStyleAmount += gainedStyle; 
-        Debug.Log("StyleSet"); 
 
         float oldStyleAmount = currentStyleAmount;
         float styleDifference; 
@@ -141,16 +140,8 @@ public class ComboManager : MonoBehaviour
         
         TextMeshPro styleScoreText = Instantiate(currentStyleScoreText, styleSource.position + new Vector3(0, 2.3f, 0), playerController.transform.rotation); 
         styleScoreText.text = styleDifference.ToString();
-        styleScoreText.GetComponent<ScoreText>().target = styleSource;
-
-       
+        styleScoreText.GetComponent<ScoreText>().target = styleSource;     
        // }
-
-    
-       
-       
-
-
     }
 
     void SetUIDepth()

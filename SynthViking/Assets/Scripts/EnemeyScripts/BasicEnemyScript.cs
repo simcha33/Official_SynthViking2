@@ -28,9 +28,9 @@ public class BasicEnemyScript : MonoBehaviour
     public  BasicEnemyScript thisScript;
     public bool canBeManaged;
     public bool isGrounded;
-    [HideInInspector] public Transform target;
-    private float originalRbMass;
-    private float stunnedMass = 400f; 
+    public Transform target;
+    [HideInInspector] public float originalRbMass;
+    [HideInInspector] public float stunnedMass = 400f; 
 
    
     #endregion
@@ -107,7 +107,8 @@ public class BasicEnemyScript : MonoBehaviour
     public ThirdPerson_PlayerControler playerController;
     public AttackTargetScript attackTargetScript;
     public ChainHitScript chainHitScript;
-    public ComboManager comboManagerScript; 
+    public ComboManager comboManagerScript;
+    public EnemyManager enemyBehaviourManagerScript; 
     public Animator enemyAnim;
     [HideInInspector] public Rigidbody enemyRb;
     public Collider mainCollider;
@@ -176,14 +177,14 @@ public class BasicEnemyScript : MonoBehaviour
     {
         //Components
         playerController = GameObject.Find("Player").GetComponent<ThirdPerson_PlayerControler>();
-        comboManagerScript = GameObject.Find("StyleManager").GetComponent<ComboManager>(); 
+        comboManagerScript = GameObject.Find("StyleManager").GetComponent<ComboManager>();
+        enemyBehaviourManagerScript = GameObject.Find("EnemyBehaviourManager").GetComponent<EnemyManager>(); 
         thisScript = this.gameObject.GetComponent<BasicEnemyScript>(); 
         weaponMeshr = weapon.GetComponent<MeshRenderer>();
         enemyRb = GetComponent<Rigidbody>();
-        //styleScoreText = GetComponentInChildren<TextMesh>(); 
 
+        //Starting values
         chainHitScript.enabled = false;
-
         originalRunSpeed = runSpeed;
         originalWalkSpeed = walkSpeed; 
         walkSpeed = Random.Range(walkSpeed - 1f, walkSpeed + 1f);
@@ -219,7 +220,8 @@ public class BasicEnemyScript : MonoBehaviour
             inside.GetComponent<MeshRenderer>().enabled = false; 
         }
 
-        enemyRb.detectCollisions = true; 
+        enemyRb.detectCollisions = true;
+        enemyBehaviourManagerScript.currentenemiesInScene.Add(thisScript); 
         
     }
 
@@ -301,7 +303,6 @@ public class BasicEnemyScript : MonoBehaviour
         if(enemyAgent.currentOffMeshLinkData.activated && !isLinkJumping)
         {
             isLinkJumping = true;
-            print("Start jump"); 
             HandleAnimation(); 
             targetPos = enemyAgent.currentOffMeshLinkData.endPos; 
             enemyAgent.speed *= jumpSpeedMulitplier;  
@@ -313,7 +314,6 @@ public class BasicEnemyScript : MonoBehaviour
             isLinkJumping = false;        
             enemyAgent.speed /= jumpSpeedMulitplier;     
             enemyState = (int)currentState.ENGAGE; 
-              print("End jump"); 
         }
 
         if(isLinkJumping)
@@ -399,11 +399,10 @@ public class BasicEnemyScript : MonoBehaviour
         Debug.DrawRay(groundCheckPoint.position, Vector3.down * groundCheckHeight, Color.red);
 
         
-        if(!isGrounded && isStunned && !isRagdolling && !isLaunched && !isGettingUp)
+        if(!isGrounded && isStunned && !isRagdolling && !isLaunched && !isGettingUp && stunType != playerAttackType.LightAxeHit.ToString() )
         {
             isLaunched = true;
             EnableRagdoll();
-            
             CheckForStunType("PhysicsImpact"); 
         }
         
@@ -546,9 +545,7 @@ public class BasicEnemyScript : MonoBehaviour
 
         if (currentHealth > 0 && !isDead)
         {
-            launchDirection = playerController.transform.forward;
-
-
+            launchDirection = playerController.transform.forward;           
             enemyRb.velocity = new Vector3(0, 0, 0);
 
 
@@ -556,32 +553,27 @@ public class BasicEnemyScript : MonoBehaviour
             {
                 ResetState();
                 canBeChainHit = false;
-                //  enemyMeshr.materials = stunnedSkinMat; 
             }
 
             if (DamageType == playerAttackType.GroundSlam.ToString()) //Enemy is hit by power punch
             {
                 ResetState();
                 canBeChainHit = true;
-                // enemyMeshr.materials = stunnedSkinMat;
             }
 
             if (DamageType == playerAttackType.BlockStun.ToString()) //Enemy is hit by power punch
             {
                 ResetState();
-                //  canBeChainHit = true;
                 comboManagerScript.AddStyle(DamageType, this.transform);
                 canBeChainHit = true;
                 enemyAnim.speed = Random.Range(.5f, 1f);
                 enemyAnim.SetFloat("DamageReaction", 6f);
                 enemyAnim.SetTrigger("DamageTrigger");
-                // enemyMeshr.materials = stunnedSkinMat;
             }
 
             if (DamageType == chainHitScript.chainHitString) //Enemy is hit by power punch
             {
                 canBeChainHit = true;
-                //   enemyMeshr.materials = stunnedSkinMat;
             }
 
             if (DamageType == "ImpactDamage")
@@ -589,13 +581,18 @@ public class BasicEnemyScript : MonoBehaviour
 
             }
 
-            if(DamageType == "EnvironmentDamage")
+            if (DamageType == "EnvironmentDamage") 
+            {
+
+            }
+
+               
 
 
             if (DamageType == playerAttackType.LightAxeHit.ToString()) //Enemy is hit by axe
             {
 
-                ResetState(); //** this might fuck up something to do with enemies not being able to attack after getting hit**
+                ResetState(); 
                 if (damageAmount >= playerController.basicLightAttackDamage)
                 {
                     enemyRb.mass = stunnedMass;
@@ -622,6 +619,7 @@ public class BasicEnemyScript : MonoBehaviour
 
                 }
 
+                transform.LookAt(playerController.transform); 
                 enemyAnim.SetFloat("DamageReaction", newRandomNumber);
                 enemyAnim.SetTrigger("DamageTrigger");
             }
@@ -641,7 +639,6 @@ public class BasicEnemyScript : MonoBehaviour
             SetComboMeter();
         }
 
-
     }
 
     public void SetComboMeter()
@@ -651,7 +648,6 @@ public class BasicEnemyScript : MonoBehaviour
 
     public void setStyleMeter(string styleType)
     {
-        print("SetStyleMeter"); 
         comboManagerScript.AddStyle(styleType, this.transform); 
     }
 
@@ -663,6 +659,9 @@ public class BasicEnemyScript : MonoBehaviour
         {
            // enemyInside.SetActive(true);
         }
+
+        if(enemyBehaviourManagerScript.currentenemiesInScene.Contains(thisScript)) enemyBehaviourManagerScript.currentenemiesInScene.Remove(thisScript);
+        enemyBehaviourManagerScript.allDeadEnemiesInScene.Add(thisScript); 
 
         enemyRb.mass = originalRbMass;
         enemyMeshr.materials = deadSkinMat;
@@ -691,8 +690,8 @@ public class BasicEnemyScript : MonoBehaviour
 
         if (stunType == playerAttackType.PowerPunch.ToString()) //Enemy is hit by ground slam
         {
-            chainHitScript.enabled = true;
-            chainHitScript.isOrigin = true; 
+            chainHitScript.isOrigin = true;
+            chainHitScript.enabled = true;   
             chainHitScript.SetChainHitType(stunType);
             stunDuration = 2f;
             enemyRb.mass = originalRbMass; 
@@ -701,8 +700,9 @@ public class BasicEnemyScript : MonoBehaviour
 
         if (stunType == playerAttackType.LightAxeHit.ToString()) //Enemy is hit with axe attack
         {
-            chainHitScript.enabled = true; //allow this enemy to cause chain hit impacts
+          //  chainHitScript.enabled = true; //allow this enemy to cause chain hit impacts
             chainHitScript.isOrigin = true; 
+            canBeChainHit = false;
             chainHitScript.SetChainHitType(stunType);
             stunDuration = 1f;
             //enemyRb.mass = stunnedMass; 
@@ -720,8 +720,9 @@ public class BasicEnemyScript : MonoBehaviour
         }
 
         if (stunType == chainHitScript.chainHitString) //Enemy is hit by an already stunned enemy
-        { 
-            chainHitScript.enabled = true;
+        {
+            chainHitScript.isOrigin = true;
+            chainHitScript.enabled = true;       
             stunDuration = chainHitScript.currentStunDuration;
             enemyRb.mass = originalRbMass; 
         }
@@ -848,7 +849,8 @@ public class BasicEnemyScript : MonoBehaviour
         //Add damage to enemy on high speed launch collisions
         if(hasHitObject && currentVelocity > minStunnedImpactVelocity && canAddImpactDamage && isLaunched)
         {
-            canAddImpactDamage = false; 
+            canAddImpactDamage = false;
+            print("ImpactDamageTaken"); 
             TakeDamage(50f, "ImpactDamage"); 
         }        
     }
@@ -960,14 +962,27 @@ public class BasicEnemyScript : MonoBehaviour
 
     }
 
-      public void EnemyDies()
+    public void EnemyDies()
     {
         canBeTargeted = false; 
         transform.tag = "Dead";
         enemyAgent.enabled = false; 
         //transform.GetComponent<BasicEnemyScript>().enabled = false; 
     }
-       
-    
-    
+
+    public void DestroySelf()
+    {
+        enemyBehaviourManagerScript.allDeadEnemiesInScene.Remove(thisScript);
+        if(playerController.attackTargetScript.targetsInRange.Contains(this.gameObject)) playerController.attackTargetScript.targetsInRange.Remove(this.gameObject);
+        if (playerController.hitPauseScript.theHitPaused.Contains(this.gameObject)) playerController.hitPauseScript.theHitPaused.Remove(this.gameObject);
+        // limbCheckerScript.hitLimbs.Clear();
+        // limbCheckerScript.hitInsides.Clear();
+        Destroy(weapon.gameObject);
+        Destroy(this.gameObject);
+        foreach(GameObject limb in limbInsides)
+        {
+            Destroy(limb); 
+        }
+        
+    }
 }

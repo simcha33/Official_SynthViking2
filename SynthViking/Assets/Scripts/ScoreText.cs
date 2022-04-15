@@ -21,10 +21,17 @@ public class ScoreText : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        lifeTime -= Time.deltaTime;
-        text.transform.LookAt(cam.transform.forward);
-        transform.position = new Vector3(target.position.x, transform.position.y, target.position.z);
-        if(lifeTime <=0 ) text.alpha -= Time.deltaTime;
-        if (text.alpha <= 0) Destroy(this.gameObject); 
+        if (target != null)
+        {
+            lifeTime -= Time.deltaTime;
+            text.transform.LookAt(cam.transform.forward);
+            transform.position = new Vector3(target.position.x, transform.position.y, target.position.z);
+            if (lifeTime <= 0) text.alpha -= Time.deltaTime;
+            if (text.alpha <= 0) Destroy(this.gameObject);
+        }
+        else
+        {
+            Destroy(gameObject); 
+        }
     }
 }
