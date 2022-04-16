@@ -267,9 +267,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AnimationSpeed: 3
-  GroundHeight: 0
+  GroundHeight: -1
   LightIntensityMultiplier: 1
-  FreezeDecalDisappearance: 0
+  FreezeDecalDisappearance: 1
   DecalRenderinMode: 0
   ClampDecalSideSurface: 0
 --- !u!1 &6553911729242099609
@@ -392,5 +392,5 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   FramesCount: 98
-  TimeLimit: 2.5
+  TimeLimit: 2
   OffsetFrames: 0

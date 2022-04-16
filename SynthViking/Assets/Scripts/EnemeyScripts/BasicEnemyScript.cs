@@ -399,7 +399,7 @@ public class BasicEnemyScript : MonoBehaviour
         Debug.DrawRay(groundCheckPoint.position, Vector3.down * groundCheckHeight, Color.red);
 
         
-        if(!isGrounded && isStunned && !isRagdolling && !isLaunched && !isGettingUp && stunType != playerAttackType.LightAxeHit.ToString() )
+        if(!isGrounded && isStunned && !isRagdolling && !isLaunched && !isGettingUp)
         {
             isLaunched = true;
             EnableRagdoll();
