@@ -97,7 +97,7 @@ public class BasicEnemyScript : MonoBehaviour
 
     [Header("FEEDBACKS")]
     #region
-    public MMFeedbacks stunnedFeebacks; 
+    public MMFeedbacks stunnedFeeback; 
     public MMFeedbacks startAttackFeedback; 
     #endregion
 
@@ -680,6 +680,7 @@ public class BasicEnemyScript : MonoBehaviour
         stunType = damageType;
         enemyMeshr.materials = stunnedSkinMat;
         enemyAgent.enabled = false;
+        //stunnedFeeback?.PlayFeedbacks();
 
         if (stunType == playerAttackType.GroundSlam.ToString()) //Enemy is hit by ground slam
         {
@@ -730,7 +731,7 @@ public class BasicEnemyScript : MonoBehaviour
         enemyAgent.speed = 0f;
         stunTimer = 0f;
         enemyRb.isKinematic = false;    
-        enemyState = (int)currentState.STUNNED;        
+        enemyState = (int)currentState.STUNNED;    
     }
     
     private void CheckForRecovery()

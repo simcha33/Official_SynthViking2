@@ -24,7 +24,8 @@ public class AttackTargetScript : MonoBehaviour
     public MMFeedbacks weaponHitFeedback;
     public MMFeedbacks weaponKillFeedback;
     public MMFeedbacks weapinFirstImpactFeedback;
-    public MMFeedbacks playerBlockFeedback; 
+    public MMFeedbacks playerBlockFeedback;
+    public MMFeedbacks parriedFeedback; 
     #endregion
 
 
@@ -269,13 +270,17 @@ public class AttackTargetScript : MonoBehaviour
                                 enemyScript.isLaunched = true;
                                 enemyScript.isBlockStunned = true;
                                 GameObject lightningVFX =  Instantiate(parryLightningVFX, enemy.transform.position, enemy.transform.rotation); 
-                                lightningVFX.AddComponent<CleanUpScript>(); 
+                                lightningVFX.AddComponent<CleanUpScript>();
+                                parriedFeedback?.PlayFeedbacks();
                             }
                         }
 
                     }
                     playerController.playerAnim.SetTrigger("HasParriedTrigger"); 
-                    playerBlockFeedback?.PlayFeedbacks();
+                    playerController.attackTargetScript.playerBlockFeedback?.PlayFeedbacks();
+                    playerController.hasParriedAttack = true; 
+              
+                    print("block feedback");
                 }
             }
            // else targetScript.TakeDamage(enemyController.currentAttackDamage, enemyController.enemyAttackType); //Damage the player

@@ -78,8 +78,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     #region
     public bool isBlocking;
     public bool canBlock;
-    [HideInInspector] public bool canBlockStun = true; 
-   // public bool isPerfectParry;
+    [HideInInspector] public bool canBlockStun = true;
+    public bool hasParriedAttack; 
    // public float blockResetDuration;
 
     public float blockRechargeTimer;
@@ -285,7 +285,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public MMFeedbacks SprintAttackFeedback;
     public MMFeedbacks AirSlamStartFeeback;
     public MMFeedbacks AirSlamEndFeedback;
-    public MMFeedbacks PlayerDamagedFeedback; 
+    public MMFeedbacks PlayerDamagedFeedback;
+    public MMFeedbacks sprintFeedback; 
     // public MMFeedbacks aimingFeedback;
     // public MMFeedbacks slowmoFeedback; 
     #endregion
@@ -325,6 +326,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public bool canStartAirSmash;
     private bool canEndAirSmash = true;
     public bool canEndDash = false;
+    public bool canStartSprintFeedback = false; 
 
     public bool isMoving;
     public bool isAttacking;
@@ -397,7 +399,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 HandleDrag();
                 CheckForDash();
                 CheckForAirSmash();
-                CheckForBlock(); 
+                CheckForBlock();
+                HandleSprinting(); 
                // HandleWeaponSwaping(); 
                 break;
 
@@ -412,6 +415,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 HandleDrag();
                 CheckForBlock(); 
                 CheckForAirSmash();
+
                // HandleWeaponSwaping(); 
                 break;
 
@@ -444,7 +448,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
             case(int)currentState.BLOCKING:
                 DoBlock(previousState);
-             //   CheckForAttack(); 
+                if(hasParriedAttack) CheckForAttack(); 
+          
                 
                 break; 
 
@@ -452,6 +457,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 break; 
         }
 
+        HandleSprinting();
         HandleAnimations();
     
         //if(transform.eulerAngles.x != 0) transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, transform.eulerAngles.z); 
@@ -606,14 +612,24 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //Check for sprinting 
         if (input.sprintButtonPressed && canSprint && (isMoving || isWallRunning))
         {
-            if (!isSprinting) HolsterWeapon(true); 
+            if (!isSprinting)
+            {
+              //  sprintFeedback?.PlayFeedbacks();
+                HolsterWeapon(true);
+            }
+
+        //    if (!isGrounded || isAttacking || isStunned) sprintFeedback?.StopFeedbacks();
          
+       
             isSprinting = true;
+            //
+
           //  sprintTrail.enabled = true;         
             if (!isWallRunning) canStartWallrun = true;
         }
         else
         {
+           // sprintFeedback?.StopFeedbacks(); 
             canStartWallrun = false;
             isSprinting = false;
             //sprintTrail.enabled = false; 
@@ -657,6 +673,28 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         if (!isGrounded) playerRb.drag = airDrag;
         else if (isGrounded && isMoving || isWallRunning) playerRb.drag = 5f;
         else if (!isMoving) playerRb.drag = groundStopDrag;
+    }
+
+    void HandleSprinting()
+    {
+
+
+        if (input.sprintButtonPressed && canSprint && (isMoving && isGrounded || isWallRunning) && !isLanding)
+        {
+            if (canStartSprintFeedback)
+            {
+                sprintFeedback?.PlayFeedbacks();
+                canStartSprintFeedback = false; 
+            }
+        }
+        
+        if (!isGrounded && !isWallRunning || !isSprinting)
+        {
+            sprintFeedback?.StopFeedbacks();           
+            canStartSprintFeedback = true; 
+        }
+
+     
     }
 
     private Vector3 GetCameraForward(Camera playerCamera)
@@ -1313,7 +1351,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             blockRechargeTimer += Time.deltaTime; 
             if(blockRechargeTimer >= blockRechargeDuration && !input.blockButtonPressed)
             {
-                blockRechargeTimer = 0f; 
+                blockRechargeTimer = 0f;
+                hasParriedAttack = false; 
                 canBlock = true; 
             }
         }
@@ -1351,7 +1390,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             playerRb.isKinematic = false;
             //HandleWeaponSwaping(false);     
             playerAnim.speed = animAttackSpeed;  
-            nextAttackTimer = 10f;
+           
             
            
             controllerState = (int)currentState.ATTACKING;
@@ -1551,7 +1590,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         isMoving = false;
         isWalking = false;
         isSprinting = false;
-        isBlocking = false; 
+        isBlocking = false;
+        hasParriedAttack = false; 
 
         isRunning = false;
         isInAir = false;
@@ -1614,6 +1654,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
         if (isSprinting || jumpCount >= 1 || isDashing || isAirSmashing)enableTrail = true; 
         else enableTrail = false;
+
+      
  
 
         foreach (TrailRenderer trail in footTrail)
@@ -1638,7 +1680,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
 
             }
-            else if (!enableTrail && sprintTrailTimer > -.1) //Disable the trail        
+            else if (!enableTrail && sprintTrailTimer > -.1) //Eetract the trail      
             {
                 trail.time = sprintTrailTimer;
             }

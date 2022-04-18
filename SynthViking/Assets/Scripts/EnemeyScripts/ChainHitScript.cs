@@ -89,15 +89,20 @@ public class ChainHitScript : MonoBehaviour
                 otherScript.enemyAnim.SetFloat("DamageReaction", Random.Range(1f, 3f));
                 otherScript.enemyAnim.SetTrigger("DamageTrigger");
 
+
                 //Set type values equel to orgins type
                 if (isOrigin)
                 {
                     otherScript.chainHitScript.currentChainHitActiveDuration = currentChainHitActiveDuration;
                     otherScript.chainHitScript.currentDamage = currentDamage;
                     otherScript.chainHitScript.currentChainHitBackForce = currentChainHitBackForce;
-                         
+
+
                 }
-                else otherScript.chainHitScript.SetChainHitType(chainType);
+                else
+                {
+                    otherScript.chainHitScript.SetChainHitType(chainType);
+                }
 
                 
 
