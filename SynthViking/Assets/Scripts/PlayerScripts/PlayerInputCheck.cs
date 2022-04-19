@@ -26,6 +26,8 @@ public class PlayerInputCheck : MonoBehaviour
     [HideInInspector] public bool restartSceneButtonPressed;
     [HideInInspector] public bool slowMoButtonPressed; 
 
+    [HideInInspector] public bool pauseButtonPressed; 
+
 
     [HideInInspector] public Vector3 moveInput;
     [HideInInspector] public Vector3 aimInput;
@@ -80,6 +82,11 @@ public class PlayerInputCheck : MonoBehaviour
     private void OnAirSmash(InputValue value)
     {
         airSmashButtonPressed = value.isPressed; 
+    }
+
+     private void OnPauseGame(InputValue value)
+    {
+        pauseButtonPressed = value.isPressed; 
     }
 
 

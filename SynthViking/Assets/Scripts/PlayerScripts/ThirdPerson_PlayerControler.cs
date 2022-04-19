@@ -448,7 +448,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
             case(int)currentState.BLOCKING:
                 DoBlock(previousState);
-                if(hasParriedAttack) CheckForAttack(); 
+             //   if(hasParriedAttack) CheckForAttack(); 
           
                 
                 break; 
@@ -1336,7 +1336,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     void CheckForBlock()
     {
-        if(input.blockButtonPressed && canBlock) //Check if the player is and can block 
+        if(input.blockButtonPressed && canBlock) //Check if the player is blocking
         {
             isBlocking = true;
             canBlock = false;  
@@ -1389,7 +1389,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             canStartNewAttack = false;
             playerRb.isKinematic = false;
             //HandleWeaponSwaping(false);     
-            playerAnim.speed = animAttackSpeed;  
+            playerAnim.speed = animAttackSpeed;
+            nextAttackTimer = 10f;   
            
             
            

@@ -136,6 +136,52 @@ public class AttackTargetScript : MonoBehaviour
         }
 
     }
+
+     void CheckForParry()
+    {
+        foreach (GameObject obj in targetsInRange)
+        {
+            PlayerState targetScript = obj.GetComponent<PlayerState>();
+
+            if (playerController.isBlocking && enemyController.canBeParried && enemyController.isAttacking) //Check if the player is blocking              
+            {
+                playerController.blockRechargeTimer = playerController.blockRechargeDuration;
+                playerController.blockTimer = playerController.blockDuration - .1f; 
+
+                if (playerController.canBlockStun) //Do a stun effect around the player 
+                {
+                    Collider[] colls = Physics.OverlapSphere(playerController.transform.position, playerController.blockStunRadius);
+                    foreach (Collider enemy in colls)
+                    {
+                        if (enemy.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+                        {
+                            //Debug.Log(enemy.name);
+                            BasicEnemyScript enemyScript = enemy.GetComponent<BasicEnemyScript>(); 
+                            if(!enemyScript.isDead)
+                            {
+                                playerController.canBlockStun = false;
+                                enemyScript.TakeDamage(enemyController.chainHitScript.blockChainDamage, playerAttackType.BlockStun.ToString());
+                                enemyScript.isLaunched = true;
+                                enemyScript.isBlockStunned = true;
+                                GameObject lightningVFX =  Instantiate(parryLightningVFX, enemy.transform.position, transform.rotation);
+                                lightningVFX.transform.eulerAngles = new Vector3(-90, lightningVFX.transform.eulerAngles.y, lightningVFX.transform.eulerAngles.z);  
+                                lightningVFX.AddComponent<CleanUpScript>();
+                                parriedFeedback?.PlayFeedbacks();
+                            }
+                        }
+
+                    }
+                    playerController.playerAnim.SetTrigger("HasParriedTrigger"); 
+                    playerController.attackTargetScript.playerBlockFeedback?.PlayFeedbacks();
+                    playerController.hasParriedAttack = true; 
+              
+                    print("block feedback");
+                }
+            }
+           // else targetScript.TakeDamage(enemyController.currentAttackDamage, enemyController.enemyAttackType); //Damage the player
+        }
+    }
+
     
 
 
@@ -159,11 +205,14 @@ public class AttackTargetScript : MonoBehaviour
                 GameObject blood = Instantiate(axeHitBloodVFX, enemyScript.bloodSpawnPoint.position, enemyScript.bloodSpawnPoint.rotation);
                 blood.AddComponent<CleanUpScript>(); 
                 weapinFirstImpactFeedback?.PlayFeedbacks();
-
+                
 
                 //Is the enemy dead after our hit?            
                 if (enemyScript.isDead)
                 {
+
+                 //   limbCheckerScript.bloodDrip = true; //Blood drip effect axe
+
 
                     //Collect and detach limbs
                     foreach (Rigidbody limb in limbCheckerScript.hitLimbs)
@@ -242,49 +291,6 @@ public class AttackTargetScript : MonoBehaviour
             }         
         }
 
-    }
-
-    void CheckForParry()
-    {
-        foreach (GameObject obj in targetsInRange)
-        {
-            PlayerState targetScript = obj.GetComponent<PlayerState>();
-
-            if (playerController.isBlocking && enemyController.canBeParried && enemyController.isAttacking) //Check if the player is blocking              
-            {
-                playerController.blockRechargeTimer = playerController.blockRechargeDuration;
-
-                if (playerController.canBlockStun) //Do a stun effect around the player 
-                {
-                    Collider[] colls = Physics.OverlapSphere(playerController.transform.position, playerController.blockStunRadius);
-                    foreach (Collider enemy in colls)
-                    {
-                        if (enemy.gameObject.layer == LayerMask.NameToLayer("Enemy"))
-                        {
-                            //Debug.Log(enemy.name);
-                            BasicEnemyScript enemyScript = enemy.GetComponent<BasicEnemyScript>(); 
-                            if(!enemyScript.isDead)
-                            {
-                                playerController.canBlockStun = false;
-                                enemyScript.TakeDamage(enemyController.chainHitScript.blockChainDamage, playerAttackType.BlockStun.ToString());
-                                enemyScript.isLaunched = true;
-                                enemyScript.isBlockStunned = true;
-                                GameObject lightningVFX =  Instantiate(parryLightningVFX, enemy.transform.position, enemy.transform.rotation); 
-                                lightningVFX.AddComponent<CleanUpScript>();
-                                parriedFeedback?.PlayFeedbacks();
-                            }
-                        }
-
-                    }
-                    playerController.playerAnim.SetTrigger("HasParriedTrigger"); 
-                    playerController.attackTargetScript.playerBlockFeedback?.PlayFeedbacks();
-                    playerController.hasParriedAttack = true; 
-              
-                    print("block feedback");
-                }
-            }
-           // else targetScript.TakeDamage(enemyController.currentAttackDamage, enemyController.enemyAttackType); //Damage the player
-        }
     }
 
     private void OnDrawGizmosSelected()

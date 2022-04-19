@@ -90,6 +90,8 @@ public class BasicEnemyScript : MonoBehaviour
     public Material attackIndicationMat;
     public Material originalWeaponMat;
     public TextMesh styleScoreText; 
+
+    public GameObject stunnedEffect; 
     [HideInInspector] public List<Rigidbody> ragdollRbs = new List<Rigidbody>();
     public List<GameObject> limbInsides = new List<GameObject>();
     #endregion
@@ -670,7 +672,9 @@ public class BasicEnemyScript : MonoBehaviour
         chainHitScript.enabled = true;
         chainHitScript.SetChainHitType(DamageType);
         EnableRagdoll();
+        stunnedEffect.SetActive(false); 
         enemyState = (int)currentState.DEAD;
+        playerController.attackTargetScript.limbCheckerScript.CheckForBloodDrip(); 
     }
 
 
@@ -678,7 +682,10 @@ public class BasicEnemyScript : MonoBehaviour
     public void CheckForStunType(string damageType)
     {
         stunType = damageType;
-        enemyMeshr.materials = stunnedSkinMat;
+        enemyMeshr.materials = stunnedSkinMat;    
+       // if(stunType != playerAttackType.LightAxeHit.ToString()) stunnedEffect.SetActive(true); 
+        stunnedEffect.SetActive(true); 
+        
         enemyAgent.enabled = false;
         //stunnedFeeback?.PlayFeedbacks();
 
@@ -708,6 +715,7 @@ public class BasicEnemyScript : MonoBehaviour
             stunDuration = 1f;
             //enemyRb.mass = stunnedMass; 
             enemyMeshr.materials = hitSkinMat;
+            isLaunched = false; 
         }
 
         if (stunType == playerAttackType.BlockStun.ToString()) //Enemy attack is parried
@@ -722,6 +730,7 @@ public class BasicEnemyScript : MonoBehaviour
 
         if (stunType == chainHitScript.chainHitString) //Enemy is hit by an already stunned enemy
         {
+            stunnedEffect.SetActive(true);
             chainHitScript.isOrigin = true;
             chainHitScript.enabled = true;       
             stunDuration = chainHitScript.currentStunDuration;
@@ -778,6 +787,7 @@ public class BasicEnemyScript : MonoBehaviour
             isLaunched = false;
             enemyRb.isKinematic = true;
             DisableRagdoll();
+            print("was launched"); 
            
             enemyRb.velocity = new Vector3(0, 0, 0);
 
@@ -800,6 +810,7 @@ public class BasicEnemyScript : MonoBehaviour
         if(getUpTimer >= getUpDuration) //exit stunned satte 
         {
             ResetState();  
+            stunnedEffect.SetActive(false); 
             if(isRagdolling) DisableRagdoll(); 
             enemyAgent.speed = currentMoveSpeed;
             // enemyAgent.enabled = true; 

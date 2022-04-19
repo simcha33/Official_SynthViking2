@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI; 
+using TMPro; 
 
 public class PlayerState : MonoBehaviour
 {
@@ -31,10 +32,13 @@ public class PlayerState : MonoBehaviour
     private Vector3 originalDashIndicatorSize;
     public Color dashChargeColor;
     public Image dashChargeBackground;
+    public TextMeshProUGUI healthText; 
     #endregion
 
     [Header("SCRIPTS")]  
     #region
+
+    public GameManager gameManager; 
     public ThirdPerson_PlayerControler playerController;
     public ComboManager comboManagerScript; 
     #endregion
@@ -69,6 +73,9 @@ public class PlayerState : MonoBehaviour
 
         originalDashIndicatorSize = dashChargeIndicator.transform.localScale;
         dashChargeColor = dashChargeIndicator.color;
+
+         helathSlider.value = currentHealth / maxHealth;
+        healthText.text = currentHealth.ToString(); 
     }
 
     private void Update()
@@ -83,7 +90,7 @@ public class PlayerState : MonoBehaviour
                 PlayerRecovery();
                 break;
         }
-
+     
         HandleUI();
 
     }
@@ -126,10 +133,12 @@ public class PlayerState : MonoBehaviour
 
     public void TakeDamage(float damageAmount, string DamageType)
     {
-        if (canBeHit || DamageType == "EnvironmentDamage")
+        if (canBeHit && currentHealth - damageAmount > 0 || DamageType == "EnvironmentDamage")
         {
             currentHealth -= damageAmount;
+            healthText.text = currentHealth.ToString(); 
             helathSlider.value = currentHealth / maxHealth;
+           
             comboManagerScript.ResetCombo();
             playerController.PlayerDamagedFeedback?.PlayFeedbacks(); 
 
@@ -164,6 +173,11 @@ public class PlayerState : MonoBehaviour
                                                
             }
         }
+
+        else
+        {
+            KillPlayer(); 
+        }
     }
 
     void StunPlayer()
@@ -184,6 +198,11 @@ public class PlayerState : MonoBehaviour
         stunDuration = playerAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / playerAnim.GetCurrentAnimatorStateInfo(0).speed;
 
 
+    }
+
+    void KillPlayer()
+    {
+        gameManager.ResetScene(); 
     }
 
     void PlayerRecovery()

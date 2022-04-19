@@ -124,8 +124,9 @@ public class ChainHitScript : MonoBehaviour
                 }
                       
                            
-               // otherScript.enemyRb.AddForce(launchDirection * currentChainHitBackForce, ForceMode.Impulse);
+                otherScript.enemyRb.AddForce(launchDirection * currentChainHitBackForce, ForceMode.Impulse);
                otherScript.enemyMeshr.materials = otherScript.stunnedSkinMat;
+               otherScript.stunnedEffect.SetActive(true); 
             }
         }
     }

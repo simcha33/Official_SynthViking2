@@ -113,6 +113,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""PauseGame"",
+                    ""type"": ""Value"",
+                    ""id"": ""23d0fb2a-f219-4f0d-9736-4b0b2986f05c"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -357,6 +365,17 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""SlowMo"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""819cd111-ef89-47a4-b585-c7926cee5571"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""PauseGame"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -459,6 +478,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Gameplay_AirSmash = m_Gameplay.FindAction("AirSmash", throwIfNotFound: true);
         m_Gameplay_UltimateMove = m_Gameplay.FindAction("UltimateMove ", throwIfNotFound: true);
         m_Gameplay_RestartScene = m_Gameplay.FindAction("RestartScene", throwIfNotFound: true);
+        m_Gameplay_PauseGame = m_Gameplay.FindAction("PauseGame", throwIfNotFound: true);
         // Test controller
         m_Testcontroller = asset.FindActionMap("Test controller", throwIfNotFound: true);
         m_Testcontroller_Move = m_Testcontroller.FindAction("Move", throwIfNotFound: true);
@@ -525,6 +545,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_AirSmash;
     private readonly InputAction m_Gameplay_UltimateMove;
     private readonly InputAction m_Gameplay_RestartScene;
+    private readonly InputAction m_Gameplay_PauseGame;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -541,6 +562,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @AirSmash => m_Wrapper.m_Gameplay_AirSmash;
         public InputAction @UltimateMove => m_Wrapper.m_Gameplay_UltimateMove;
         public InputAction @RestartScene => m_Wrapper.m_Gameplay_RestartScene;
+        public InputAction @PauseGame => m_Wrapper.m_Gameplay_PauseGame;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -586,6 +608,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @RestartScene.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRestartScene;
                 @RestartScene.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRestartScene;
                 @RestartScene.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRestartScene;
+                @PauseGame.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPauseGame;
+                @PauseGame.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPauseGame;
+                @PauseGame.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPauseGame;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -626,6 +651,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @RestartScene.started += instance.OnRestartScene;
                 @RestartScene.performed += instance.OnRestartScene;
                 @RestartScene.canceled += instance.OnRestartScene;
+                @PauseGame.started += instance.OnPauseGame;
+                @PauseGame.performed += instance.OnPauseGame;
+                @PauseGame.canceled += instance.OnPauseGame;
             }
         }
     }
@@ -711,6 +739,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnAirSmash(InputAction.CallbackContext context);
         void OnUltimateMove(InputAction.CallbackContext context);
         void OnRestartScene(InputAction.CallbackContext context);
+        void OnPauseGame(InputAction.CallbackContext context);
     }
     public interface ITestcontrollerActions
     {

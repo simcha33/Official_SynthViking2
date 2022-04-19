@@ -29,4 +29,9 @@ public class CleanUpScript : MonoBehaviour
 
     }
 
+    public void SetCleanUp(float duration)
+    {
+        destructionDuration = duration; 
+    }
+
 }
