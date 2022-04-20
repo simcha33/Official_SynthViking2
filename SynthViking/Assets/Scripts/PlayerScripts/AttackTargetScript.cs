@@ -268,7 +268,7 @@ public class AttackTargetScript : MonoBehaviour
                 // targetsInRange.Remove(obj); 
 
                 enemyScript.enemyRb.velocity = new Vector3(0, 0, 0); 
-                if (!enemyScript.isRagdolling || enemyScript.isDead) enemyScript.transform.DOMove(backDirection, .3f).SetUpdate(UpdateType.Fixed);  //Move enemy backwards enemyScript.enemyRb.AddForce(playerController.transform.position + transform.forward * playerController.currentAttackForwardForce, ForceMode.VelocityChange);            
+                enemyScript.transform.DOMove(backDirection, .3f).SetUpdate(UpdateType.Fixed);  //Move enemy backwards enemyScript.enemyRb.AddForce(playerController.transform.position + transform.forward * playerController.currentAttackForwardForce, ForceMode.VelocityChange);            
                 if(enemyScript.isRagdolling || enemyScript.isDead) enemyScript.enemyRb.AddForce(Vector3.up * 10f, ForceMode.VelocityChange); 
                                                                                                                                                                                               // targetsInRange.Clear();
 
@@ -286,6 +286,7 @@ public class AttackTargetScript : MonoBehaviour
 
             foreach (GameObject obj in targetsInRange)
             {
+                print("DamagePlayer"); 
                 PlayerState targetScript = obj.GetComponent<PlayerState>();
                 targetScript.TakeDamage(enemyController.currentAttackDamage, enemyController.enemyAttackType); //Damage the player
             }         

@@ -15,7 +15,9 @@ public class EnemyManager : MonoBehaviour
         public List<BasicEnemyScript> currentenemiesInScene = new List<BasicEnemyScript>();
         public List<BasicEnemyScript> allDeadEnemiesInScene = new List<BasicEnemyScript>();
 
-        public int maxDeadEnemiesAllowed = 30; 
+        public int maxDeadEnemiesAllowed = 30;
+        public Transform deadEnemyParent;
+        public Transform aliveEnemyParent; 
 
     /*
        public int currentAttackers;
@@ -39,6 +41,17 @@ public class EnemyManager : MonoBehaviour
     private void Update()
     {
         CheckForCleanUp(); 
+
+        foreach(BasicEnemyScript enemy in currentenemiesInScene)
+        {
+            enemy.transform.parent = deadEnemyParent; 
+        }
+
+        foreach (BasicEnemyScript enemy in engagedEnemies)
+        {
+            enemy.transform.parent = aliveEnemyParent; 
+        } 
+        
     }
 
     public void CheckForCleanUp()

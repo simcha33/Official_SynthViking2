@@ -6,8 +6,9 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
 
-    ThirdPerson_PlayerControler playerController;
-    PlayerState playerState; 
+    public ThirdPerson_PlayerControler playerController;
+    public PlayerState playerState;
+    public bool gameIsPaused; 
     // Start is called before the first frame update
     void Start()
     {

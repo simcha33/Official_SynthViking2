@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6b6834424db3a3419981a417c135707, type: 3}
   m_Name: Wave 3
   m_EditorClassIdentifier: 
-  maxEnemiesInWave: 100
-  maxEnemiesInScene: 50
-  minGroupSpawnSize: 20
-  maxGroupSpawnSize: 30
+  maxEnemiesInWave: 60
+  maxEnemiesInScene: 25
+  minGroupSpawnSize: 10
+  maxGroupSpawnSize: 15
   WaveTitle: TRUE WAR

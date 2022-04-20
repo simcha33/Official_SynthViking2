@@ -125,8 +125,10 @@ public class ChainHitScript : MonoBehaviour
                       
                            
                 otherScript.enemyRb.AddForce(launchDirection * currentChainHitBackForce, ForceMode.Impulse);
-               otherScript.enemyMeshr.materials = otherScript.stunnedSkinMat;
-               otherScript.stunnedEffect.SetActive(true); 
+                otherScript.enemyMeshr.materials = otherScript.stunnedSkinMat;
+                otherScript.stunDuration = currentStunDuration; 
+                otherScript.mainCollider.isTrigger = true; 
+                otherScript.stunnedEffect.SetActive(true); 
             }
         }
     }
@@ -154,6 +156,7 @@ public class ChainHitScript : MonoBehaviour
             currentChainHitBackForce = axeHitForce;
             currentDamage = axeHitChainDamage; 
             stunType = playerAttackType.LightAxeHit.ToString();
+            currentStunDuration = axeHitStunDuration; 
             
         }
 

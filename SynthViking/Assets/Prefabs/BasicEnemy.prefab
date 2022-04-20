@@ -29,7 +29,7 @@ Transform:
   m_GameObject: {fileID: 5164755}
   m_LocalRotation: {x: -0.9972056, y: 0.013446448, z: -0.017149502, w: -0.071457714}
   m_LocalPosition: {x: 0.24082978, y: -0.0040612114, z: 0.0025060403}
-  m_LocalScale: {x: 0.036777984, y: -0.083631456, z: 0.07549855}
+  m_LocalScale: {x: 0.036777984, y: 0.08363146, z: 0.07549855}
   m_Children: []
   m_Father: {fileID: 8410380784874308708}
   m_RootOrder: 3
@@ -1240,7 +1240,7 @@ Transform:
   m_GameObject: {fileID: 975988642}
   m_LocalRotation: {x: -0.99931455, y: -0.0008205936, z: -0.0057568494, w: -0.036561746}
   m_LocalPosition: {x: 0.0042352113, y: -0.0037786071, z: 0.004310839}
-  m_LocalScale: {x: 0.014277221, y: -0.08363143, z: 0.07549852}
+  m_LocalScale: {x: 0.014277221, y: 0.08363143, z: 0.07549852}
   m_Children: []
   m_Father: {fileID: 8410380785910827361}
   m_RootOrder: 2
@@ -2715,7 +2715,7 @@ Transform:
   m_GameObject: {fileID: 1953235629}
   m_LocalRotation: {x: 0.00915059, y: 0.99717665, z: -0.07453072, w: 0.000388354}
   m_LocalPosition: {x: -0.24676661, y: 0.0037578414, z: -0.0031120293}
-  m_LocalScale: {x: 0.023717763, y: -0.08363145, z: 0.07549853}
+  m_LocalScale: {x: 0.023717763, y: 0.08363145, z: 0.07549853}
   m_Children: []
   m_Father: {fileID: 8410380785666286912}
   m_RootOrder: 3
@@ -2931,7 +2931,7 @@ Transform:
   m_GameObject: {fileID: 2107484403}
   m_LocalRotation: {x: -0.0021671285, y: 0.9990884, z: -0.042047877, w: 0.0070550647}
   m_LocalPosition: {x: -0.015688363, y: 0.002134114, z: -0.0051374054}
-  m_LocalScale: {x: 0.036777977, y: -0.08363145, z: 0.0754985}
+  m_LocalScale: {x: 0.036777977, y: 0.08363145, z: 0.0754985}
   m_Children: []
   m_Father: {fileID: 8410380785503007872}
   m_RootOrder: 2
@@ -3241,10 +3241,10 @@ MonoBehaviour:
   chainHitMaxDistance: 14
   currentStunDuration: 0.4
   launchDirection: {x: 0, y: 0, z: 0}
-  axeHitForce: 28
+  axeHitForce: 18
   axeHitChainActiveDuration: 0.4
   axeHitChainDamage: 0
-  axeHitStunDuration: 0
+  axeHitStunDuration: 0.8
   blockHitForce: 5
   blockActiveDuration: 0.2
   blockChainDamage: 0
@@ -3429,7 +3429,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: -1, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.20350622, y: -0.0066018347, z: 0.19514404}
+  m_ConnectedAnchor: {x: -0.20350607, y: -0.0066013606, z: 0.19514547}
   serializedVersion: 2
   m_SwingAxis: {x: -1, y: 0, z: 0}
   m_TwistLimitSpring:
@@ -3488,8 +3488,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8410380784877409722}
-  m_LocalRotation: {x: 0.5399523, y: -0.5175419, z: -0.32393932, w: -0.5793662}
-  m_LocalPosition: {x: 0.008563018, y: -0.0059051947, z: 0.95730376}
+  m_LocalRotation: {x: 0.53995234, y: -0.5175419, z: -0.32393932, w: -0.57936627}
+  m_LocalPosition: {x: 0.008575439, y: -0.0059052706, z: 0.95730376}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 8410380786145033243}
@@ -3813,6 +3813,8 @@ MonoBehaviour:
   attackIndicationMat: {fileID: 2100000, guid: a9ec4debd24f85743beb37367c0cb56e, type: 2}
   originalWeaponMat: {fileID: 2100000, guid: 3dd541ff5a009a243a14d6408272cef9, type: 2}
   styleScoreText: {fileID: 0}
+  jumpEffect: {fileID: 195466, guid: 56c3274d2f9ec214ab584a80b5ce2d6d, type: 3}
+  bloodSplash: {fileID: 167524, guid: fdac75e990da47649b31f10049c400b0, type: 3}
   stunnedEffect: {fileID: 531065980915375107}
   ragdollRbs: []
   limbInsides:
@@ -4314,7 +4316,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.01444914, y: -0.015873656, z: -0.10696765}
+  m_ConnectedAnchor: {x: 0.014449078, y: -0.01587364, z: -0.10696766}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: -1}
   m_TwistLimitSpring:
@@ -4815,7 +4817,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8410380785503007873}
   m_LocalRotation: {x: -0.1372028, y: 0.11091348, z: 0.24626093, w: 0.95301056}
-  m_LocalPosition: {x: -0.256, y: 0.008, z: -0.015}
+  m_LocalPosition: {x: -0.2560133, y: 0.0039883694, z: -0.0008386619}
   m_LocalScale: {x: 1.0000002, y: 1, z: 1}
   m_Children:
   - {fileID: 8410380785566397397}
@@ -4866,7 +4868,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.25599977, y: 0.008000731, z: -0.015000433}
+  m_ConnectedAnchor: {x: -0.2560134, y: 0.0039877477, z: -0.00083701685}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 1, z: 0}
   m_TwistLimitSpring:
@@ -5044,7 +5046,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.014447471, y: -0.015874345, z: 0.10696876}
+  m_ConnectedAnchor: {x: 0.0144474525, y: -0.015874326, z: 0.10696884}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: -1}
   m_TwistLimitSpring:
@@ -5228,7 +5230,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8410380785666286913}
   m_LocalRotation: {x: 0.14352989, y: -0.38492265, z: 0.053170756, w: 0.91016847}
-  m_LocalPosition: {x: -0.138, y: 0.012, z: 0.006}
+  m_LocalPosition: {x: -0.14680545, y: 0.00019153375, z: -0.0007250589}
   m_LocalScale: {x: 0.99999994, y: 1.0000001, z: 1}
   m_Children:
   - {fileID: 8410380785503007872}
@@ -5280,7 +5282,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 0, y: 1, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.21237099, y: 0.03221701, z: -0.1867926}
+  m_ConnectedAnchor: {x: -0.20169745, y: 0.024148414, z: -0.19591424}
   serializedVersion: 2
   m_SwingAxis: {x: -1, y: 0, z: 0}
   m_TwistLimitSpring:
@@ -5436,7 +5438,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8410380785758616902}
   m_LocalRotation: {x: 0.0028390987, y: -0.023966098, z: -0.07139278, w: 0.99715626}
-  m_LocalPosition: {x: -0.1414341, y: 0.047, z: -0.0063}
+  m_LocalPosition: {x: -0.14143412, y: 0.028530702, z: 0.000000013969839}
   m_LocalScale: {x: 1.0000001, y: 1.0000001, z: 1}
   m_Children:
   - {fileID: 8410380785191295494}
@@ -5485,7 +5487,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.25415638, y: -0.03234031, z: -0.027454525}
+  m_ConnectedAnchor: {x: -0.24703088, y: -0.050119936, z: -0.023723975}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: -1}
   m_TwistLimitSpring:
@@ -5690,7 +5692,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.25601226, y: -0.003987525, z: 0.0008396135}
+  m_ConnectedAnchor: {x: 0.25601292, y: -0.003988378, z: 0.0008384959}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: -1, z: 0}
   m_TwistLimitSpring:
@@ -6272,7 +6274,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 0.4330355, y: 0.0001502633, z: 0.011092408}
+  m_ConnectedAnchor: {x: 0.4330355, y: 0.00015040486, z: 0.011092462}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: -1}
   m_TwistLimitSpring:
@@ -6885,7 +6887,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: -1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.3740632, y: -0.005940578, z: -0.0058396286}
+  m_ConnectedAnchor: {x: -0.37406322, y: -0.005940119, z: -0.0058382307}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: -1}
   m_TwistLimitSpring:
@@ -7211,7 +7213,7 @@ CharacterJoint:
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -0.43303785, y: -0.00014987586, z: -0.011091799}
+  m_ConnectedAnchor: {x: -0.433038, y: -0.00014995037, z: -0.011091698}
   serializedVersion: 2
   m_SwingAxis: {x: 0, y: 0, z: -1}
   m_TwistLimitSpring:

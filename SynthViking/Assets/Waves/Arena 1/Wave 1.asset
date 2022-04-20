@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6b6834424db3a3419981a417c135707, type: 3}
   m_Name: Wave 1
   m_EditorClassIdentifier: 
-  maxEnemiesInWave: 30
+  maxEnemiesInWave: 25
   maxEnemiesInScene: 10
-  minGroupSpawnSize: 4
-  maxGroupSpawnSize: 8
-  WaveTitle: 'A NEW DAY '
+  minGroupSpawnSize: 3
+  maxGroupSpawnSize: 5
+  WaveTitle: A NEW DAY

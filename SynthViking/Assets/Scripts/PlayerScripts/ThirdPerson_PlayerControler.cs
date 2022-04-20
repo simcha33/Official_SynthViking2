@@ -89,7 +89,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public float blockStunRadius;   
     #endregion
 
-
     [Header("DASH MOVEMENT")]
     #region
 
@@ -101,11 +100,11 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public float dashBuildUpSpeed;
     public float currentDashDistance;
 
-
     [HideInInspector] public float dashCooldownTimer;
     public float dashCooldownDuration;
     [HideInInspector] public bool solidDashObjectReached;
     [HideInInspector] public bool enemyDashObjectReached;
+    [HideInInspector] public bool fullyChargedDash;
     private bool dashEndMove;
     private Vector3 dashDirection;
     private Vector3 dashOffset = Vector3.up * -1f;
@@ -236,18 +235,22 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public AttackTargetScript attackTargetScript;
     public CameraHandeler camHandeler;
     public SlowMoScript slowScript;
-    public CheckForLimbs limbCheckerScript; 
+    public CheckForLimbs limbCheckerScript;
+    public GameManager mainGameManager; 
 
     public HitPauses hitPauseScript;
     #endregion
 
     [Header("VISUALS")] //COMPONENTS
     #region
-    public TrailRenderer attackTrail; 
+    public TrailRenderer attackTrail;
+    public GameObject dashAttackEffect;
     //public TrailRenderer sprintTrailLeft;
-   // public TrailRenderer sprintTrailRight;
+    // public TrailRenderer sprintTrailRight;
     public GameObject landVFX;
+    public GameObject jumpVFX; 
     public GameObject groundSlamVFX;
+  
     public TrailRenderer[] footTrail;
     private float sprintTrailTimer; 
     private float sprintTrailDuration; 
@@ -271,6 +274,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public Rigidbody airConstraints;
     public GameObject holsteredWeapon;
     public GameObject drawnWeapon;
+    public Collider mainCollider; 
     #endregion
 
     [Header("FEEDBACK")]
@@ -512,7 +516,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         playerAnim.SetBool("IsLanding", isLanding);
         playerAnim.SetBool("IsSprinting", isSprinting);
         playerAnim.SetBool("IsDashing", isDashing);
-        playerAnim.SetBool("IsAiming", isChargingDash);
+    //    playerAnim.SetBool("IsAiming", isChargingDash);
         playerAnim.SetBool("IsAirSmashing", isAirSmashing);
         playerAnim.SetBool("IsStunned", isStunned);
         playerAnim.SetBool("IsBlocking", isBlocking);  
@@ -520,11 +524,11 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //Checks
         playerAnim.SetBool("CanJump", canJump);
         playerAnim.SetBool("CanFall", canFall); 
-        playerAnim.SetBool("canStartAirSmash", canStartAirSmash); 
+       // playerAnim.SetBool("canStartAirSmash", canStartAirSmash); 
         playerAnim.SetBool("CanMove", canMove);
-        playerAnim.SetBool("CandDash", canDash);
-        playerAnim.SetBool("canStartWallrun", canStartWallrun);
-        playerAnim.SetBool("CanLand", canLand);
+      //  playerAnim.SetBool("CandDash", canDash);
+       // playerAnim.SetBool("canStartWallrun", canStartWallrun);
+     //   playerAnim.SetBool("CanLand", canLand);
     }
 
     void HolsterWeapon(bool holsterWeapon)
@@ -599,16 +603,16 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     void MovePlayer()
     {
-        moveDirection += moveInput.x * GetCameraRight(playerCamera) * currentMoveSpeed * Time.fixedUnscaledDeltaTime;
-        if (!isWallRunning) moveDirection += moveInput.y * GetCameraForward(playerCamera) * currentMoveSpeed * Time.fixedUnscaledDeltaTime;
+            moveDirection += moveInput.x * GetCameraRight(playerCamera) * currentMoveSpeed * Time.fixedUnscaledDeltaTime;
+            if (!isWallRunning) moveDirection += moveInput.y * GetCameraForward(playerCamera) * currentMoveSpeed * Time.fixedUnscaledDeltaTime;
 
-        playerRb.velocity = new Vector3(moveDirection.x, playerRb.velocity.y, moveDirection.z);
-        moveDirection = Vector3.zero;
+
+            playerRb.velocity = new Vector3(moveDirection.x, playerRb.velocity.y, moveDirection.z);
+            moveDirection = Vector3.zero;      
     }
 
     void HandleMoveSpeed()
     {
-
         //Check for sprinting 
         if (input.sprintButtonPressed && canSprint && (isMoving || isWallRunning))
         {
@@ -618,21 +622,13 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 HolsterWeapon(true);
             }
 
-        //    if (!isGrounded || isAttacking || isStunned) sprintFeedback?.StopFeedbacks();
-         
-       
-            isSprinting = true;
-            //
-
-          //  sprintTrail.enabled = true;         
+            isSprinting = true;       
             if (!isWallRunning) canStartWallrun = true;
         }
         else
         {
-           // sprintFeedback?.StopFeedbacks(); 
             canStartWallrun = false;
             isSprinting = false;
-            //sprintTrail.enabled = false; 
         }
 
         //Fix weird rotation big
@@ -772,7 +768,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     void CheckForDash()
     {
-
         //Build up the dashduration on button hold
         if (input.dashButtonPressed && canDash)
         {
@@ -782,6 +777,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             if (currentDashDistance < maxDashDistance) currentDashDistance += dashBuildUpSpeed * Time.unscaledDeltaTime;
             else
             {
+                fullyChargedDash = true; 
                 currentDashDistance = maxDashDistance;
             }
         }
@@ -808,6 +804,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 isDashing = true;
                 canDash = false;
                 isChargingDash = false;
+                mainCollider.isTrigger = true;
 
                 //dashDirection = aimPoint.forward;
                 DashStartFeeback?.PlayFeedbacks();
@@ -881,9 +878,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         
         if (!enemyDashObjectReached && !solidDashObjectReached)
         {
-  
-           // dashSequence.Append(transform.DOMove(dashDirection, 1f)); 
-            //transform.DOMove(dashDirection, 1f); 
             playerRb.AddForce((dashDirection - transform.position) * dashForwardForce, ForceMode.VelocityChange);
             dashChecker.gameObject.SetActive(true);
         }
@@ -894,13 +888,12 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         BasicEnemyScript script = dashAttackTarget.transform.GetComponentInParent<BasicEnemyScript>();  
         if(!script.isDead)
         {
-            script.TakeDamage(dashAttackDamage, playerAttackType.PowerPunch.ToString()); 
-           
+            script.TakeDamage(dashAttackDamage, playerAttackType.PowerPunch.ToString());
             script.transform.position = transform.position + transform.forward + script.transform.up; 
             playerRb.AddForce(transform.up * 5, ForceMode.VelocityChange);
         }
 
-              script.LaunchEnemy(aimPoint.forward, Random.Range( dashAttackForce -5, dashAttackForce + 5), 5f);  
+        script.LaunchEnemy(aimPoint.forward, Random.Range( dashAttackForce -5, dashAttackForce + 5), 5f);  
         
     }
 
@@ -923,12 +916,13 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         dashEndMove = false;
         playerRb.useGravity = true;
         playerState.canBeHit = true;
+        fullyChargedDash = false;
+        mainCollider.isTrigger = false; 
 
         currentDashDistance = minDashDistance;
         dashDelayTimer = dashDelayDuration;
         controllerState = (int)currentState.MOVING;
-        fixedControllerState = (int)currentState.MOVING;
-     
+        fixedControllerState = (int)currentState.MOVING;     
     }
 
 
@@ -986,9 +980,14 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public void DoJump(float jumpHeight)
     {   
         playerRb.isKinematic = false;
+        playerRb.constraints = airConstraints.constraints; 
         playerRb.velocity = new Vector3(playerRb.velocity.x, 0, playerRb.velocity.z);
 
         JumpFeedback?.PlayFeedbacks();
+        GameObject jumpEffect = Instantiate(jumpVFX, transform.position + new Vector3(0f, .3f, 0f), transform.rotation);
+        jumpEffect.transform.eulerAngles = new Vector3(-90, jumpEffect.transform.eulerAngles.y, jumpEffect.transform.eulerAngles.z);
+        jumpEffect.AddComponent<CleanUpScript>().SetCleanUp(3f);
+
         playerRb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
         
         if (isWallRunning)
@@ -1247,6 +1246,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         else if (isAirSmashing && airSmashDelayTimer >= airSmashDelayDuration)
         {          
             DoAirSmash();
+          //  mainCollider.isTrigger = true; 
         }
         
 
@@ -1323,7 +1323,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             airSmashDelayTimer = 0f;      
             airSmashCooldownTimer = airSmashCooldownDuration;
             fixedControllerState = (int)currentState.MOVING;
-            controllerState = (int)currentState.MOVING;              
+            controllerState = (int)currentState.MOVING;
+          //  mainCollider.isTrigger = false;
         }     
     }
 

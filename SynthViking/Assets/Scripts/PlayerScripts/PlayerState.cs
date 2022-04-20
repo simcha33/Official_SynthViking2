@@ -64,6 +64,8 @@ public class PlayerState : MonoBehaviour
     }
     #endregion
 
+    public bool playerIsDead; 
+
 
 
     private void Start()
@@ -165,16 +167,13 @@ public class PlayerState : MonoBehaviour
 
                 playerState = (int)currentState.STUNNED;
                 playerController.controllerState = (int)currentState.STUNNED;
-                playerController.fixedControllerState = (int)currentState.STUNNED;
-                  
-                
-           
-                stunDuration = 10f;
-                                               
+                playerController.fixedControllerState = (int)currentState.STUNNED;                                          
+                stunDuration = 10f;                                              
             }
+        
         }
 
-        else
+        else if(currentHealth - damageAmount <= 0)
         {
             KillPlayer(); 
         }
@@ -202,7 +201,10 @@ public class PlayerState : MonoBehaviour
 
     void KillPlayer()
     {
-        gameManager.ResetScene(); 
+        //gameManager.ResetScene(); 
+        playerIsDead = true;
+
+
     }
 
     void PlayerRecovery()

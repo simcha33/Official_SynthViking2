@@ -104,7 +104,7 @@ public class PlayerInputCheck : MonoBehaviour
 
     void OnDisable()
     {
-        controls.Gameplay.Disable();
+     //   controls.Gameplay.Disable();
     }
 
 }

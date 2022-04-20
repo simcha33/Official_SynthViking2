@@ -99,7 +99,6 @@ public class CheckForLimbs : MonoBehaviour
     public void StopBloodDrip()
     {
             bloodDripEffect.SetActive(false);  
-            print("stop"); 
             canBloodDrip = false;     
     }
   

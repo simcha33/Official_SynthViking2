@@ -5,7 +5,19 @@ using UnityEngine;
 public class DamageObject : MonoBehaviour
 {
 
-    public float damageAmount; 
+    public float damageAmount;
+    public GameObject lavaDeathVisual;
+    public bool isLava; 
+    public enum trapType
+    {
+        lava,
+        spike,
+    }
+
+    private void Start()
+    {
+        
+    }
     private void OnTriggerEnter(Collider other) 
     {
         if(other.gameObject.CompareTag("Player") || other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
@@ -20,7 +32,8 @@ public class DamageObject : MonoBehaviour
             if(other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
                 BasicEnemyScript enemyScript = other.gameObject.GetComponent<BasicEnemyScript>(); 
-                enemyScript.TakeDamage(enemyScript.maxHealth, "EnvironmentDamage"); 
+                enemyScript.TakeDamage(enemyScript.maxHealth, "EnvironmentDamage");
+               // DoType(other.transform); 
             }
         }
     }
@@ -28,5 +41,14 @@ public class DamageObject : MonoBehaviour
     void DamageTarget(Transform target)
     {
         
+    }
+
+    void DoType(Transform target)
+    {
+        if (isLava)
+        {
+         //   GameObject deathEffect = Instantiate(lavaDeathVisual, target.transform.position + new Vector3(0,3,0), transform.rotation);
+          //  deathEffect.AddComponent<CleanUpScript>().SetCleanUp(4f); 
+        }
     }
 }

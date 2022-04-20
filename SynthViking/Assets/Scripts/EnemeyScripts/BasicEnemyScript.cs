@@ -89,11 +89,14 @@ public class BasicEnemyScript : MonoBehaviour
     public Material[] deadSkinMat;
     public Material attackIndicationMat;
     public Material originalWeaponMat;
-    public TextMesh styleScoreText; 
+    public TextMesh styleScoreText;
+    public GameObject jumpEffect;
+    public GameObject bloodSplash; 
 
     public GameObject stunnedEffect; 
     [HideInInspector] public List<Rigidbody> ragdollRbs = new List<Rigidbody>();
     public List<GameObject> limbInsides = new List<GameObject>();
+
     #endregion
 
 
@@ -210,6 +213,7 @@ public class BasicEnemyScript : MonoBehaviour
                 ragdollRbs.Add(rb);
                 rb.GetComponent<Collider>().isTrigger = true;
                 rb.isKinematic = true;
+                rb.collisionDetectionMode = CollisionDetectionMode.Continuous; 
                 //if(rb.name != "pelvis")rb.gameObject.AddComponent<SetEnemyInside>(); 
             }
        
@@ -308,7 +312,11 @@ public class BasicEnemyScript : MonoBehaviour
             HandleAnimation(); 
             targetPos = enemyAgent.currentOffMeshLinkData.endPos; 
             enemyAgent.speed *= jumpSpeedMulitplier;  
-            enemyAnim.SetTrigger("LinkJumpStartTrigger");  
+            enemyAnim.SetTrigger("LinkJumpStartTrigger");
+            GameObject effect = Instantiate(jumpEffect, transform.position + new Vector3(0f, .3f, 0f), transform.rotation);
+            effect.transform.eulerAngles = new Vector3(-90, effect.transform.eulerAngles.y, effect.transform.eulerAngles.z);
+            effect.AddComponent<CleanUpScript>().SetCleanUp(3f); 
+
             enemyState = (int)currentState.LINKJUMPING;    
         }
         else if(isLinkJumping && !enemyAgent.currentOffMeshLinkData.activated)
@@ -316,12 +324,6 @@ public class BasicEnemyScript : MonoBehaviour
             isLinkJumping = false;        
             enemyAgent.speed /= jumpSpeedMulitplier;     
             enemyState = (int)currentState.ENGAGE; 
-        }
-
-        if(isLinkJumping)
-        {
-            //targetDis = Vector3.Distance(transform.position, targetPos); 
-          
         }
     }
 
@@ -591,7 +593,7 @@ public class BasicEnemyScript : MonoBehaviour
                
 
 
-            if (DamageType == playerAttackType.LightAxeHit.ToString()) //Enemy is hit by axe
+            if (DamageType == playerAttackType.LightAxeHit.ToString() && !isRagdolling) //Enemy is hit by axe
             {
 
                 ResetState(); 
@@ -706,13 +708,14 @@ public class BasicEnemyScript : MonoBehaviour
 
         }
 
-        if (stunType == playerAttackType.LightAxeHit.ToString()) //Enemy is hit with axe attack
+        if (stunType == playerAttackType.LightAxeHit.ToString() && !isRagdolling) //Enemy is hit with axe attack
         {
           //  chainHitScript.enabled = true; //allow this enemy to cause chain hit impacts
             chainHitScript.isOrigin = true; 
             canBeChainHit = false;
             chainHitScript.SetChainHitType(stunType);
             stunDuration = 1f;
+            mainCollider.isTrigger = false;           
             //enemyRb.mass = stunnedMass; 
             enemyMeshr.materials = hitSkinMat;
             isLaunched = false; 
@@ -824,7 +827,8 @@ public class BasicEnemyScript : MonoBehaviour
             enemyRb.mass = originalRbMass; 
             enemyRb.velocity = new Vector3(0,0,0);
             enemyRb.freezeRotation = false;
-            enemyState = (int)currentState.ENGAGE;   
+            enemyState = (int)currentState.ENGAGE;
+            mainCollider.isTrigger = false;
         }
 
         getUpTimer += Time.deltaTime;
@@ -862,7 +866,9 @@ public class BasicEnemyScript : MonoBehaviour
         if(hasHitObject && currentVelocity > minStunnedImpactVelocity && canAddImpactDamage && isLaunched)
         {
             canAddImpactDamage = false;
-            print("ImpactDamageTaken"); 
+            print("ImpactDamageTaken");
+            GameObject bloodvfx = Instantiate(bloodSplash, transform.position, transform.rotation);
+            bloodvfx.AddComponent<CleanUpScript>().SetCleanUp(10f); 
             TakeDamage(50f, "ImpactDamage"); 
         }        
     }

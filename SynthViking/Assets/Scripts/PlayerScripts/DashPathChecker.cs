@@ -24,7 +24,7 @@ public class DashPathChecker : MonoBehaviour
         if (playerController.isDashing) {
 
             //Dash collides with enemy
-            if (other.gameObject.layer == playerController.enemyLayer && !playerController.enemyDashObjectReached && !other.gameObject.CompareTag("Dead"))
+            if (other.gameObject.layer == playerController.enemyLayer && !playerController.enemyDashObjectReached && !other.gameObject.CompareTag("Dead") && playerController.fullyChargedDash)
             {
        
                 playerController.playerAnim.SetTrigger("DashAttackTrigger");
