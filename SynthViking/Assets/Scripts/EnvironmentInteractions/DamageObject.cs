@@ -25,7 +25,9 @@ public class DamageObject : MonoBehaviour
             if(other.gameObject.CompareTag("Player"))
             {
                 PlayerState playerStateScript = other.gameObject.GetComponent<PlayerState>(); 
-                ThirdPerson_PlayerControler playerController = other.gameObject.GetComponent<ThirdPerson_PlayerControler>(); 
+                ThirdPerson_PlayerControler playerController = playerStateScript.playerController;  
+               // playerController.ResetStates(); 
+                if(playerController.isAirSmashing)playerController.EndAirSmash(); 
                 playerStateScript.TakeDamage(damageAmount, "EnvironmentDamage"); 
             }
 

@@ -16882,9 +16882,9 @@ MonoBehaviour:
   groundSlamRadius: 10
   slamImpactForwardForce: 2
   slamImpactUpForce: 15
-  airSmashDownSpeed: 4.5
+  airSmashDownSpeed: 4
   airSmashMinStartHeight: 5
-  airSmashEndHeight: 0.5
+  airSmashEndHeight: 0.7
   airSmashCooldownDuration: 0.5
   wallRunMoveSpeed: 300
   wallRunUpSpeed: 18
@@ -16962,6 +16962,7 @@ MonoBehaviour:
   canStartNewAttack: 1
   canFall: 1
   canStartAirSmash: 1
+  canEndAirSmash: 1
   canEndDash: 0
   canStartSprintFeedback: 0
   isMoving: 0
@@ -62415,7 +62416,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2052673163}
-  m_LocalRotation: {x: 0.008713706, y: -0.04888354, z: 0.011495871, w: 0.9987003}
+  m_LocalRotation: {x: 0.008713706, y: -0.04888355, z: 0.011495874, w: 0.9987003}
   m_LocalPosition: {x: 2.842171e-14, y: 0.000014883493, z: -0.0000033633698}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -66383,7 +66384,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6507604923629289951, guid: 7664c4103fb9bea429f42a63027aec81, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -50.981644
+      value: -53
       objectReference: {fileID: 0}
     - target: {fileID: 6507604923629289951, guid: 7664c4103fb9bea429f42a63027aec81, type: 3}
       propertyPath: m_LocalPosition.z

@@ -163,6 +163,7 @@ public class EnemySpawnManager : MonoBehaviour
         maxGroupSize  = choosenSpawnData.maxGroupSpawnSize; //Min enemies to spawn in a group
         currentWaveTitle = choosenSpawnData.WaveTitle;
         currentEnemiesSpawnedThisWave = 0;
+    
     }
 
     void DoNextWaveTranstition()

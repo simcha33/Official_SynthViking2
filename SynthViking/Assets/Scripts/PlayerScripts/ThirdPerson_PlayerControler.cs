@@ -328,7 +328,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     //public bool canPauseWallrun = true;
     public bool canFall = true;
     public bool canStartAirSmash;
-    private bool canEndAirSmash = true;
+    public bool canEndAirSmash = true;
     public bool canEndDash = false;
     public bool canStartSprintFeedback = false; 
 
@@ -1267,7 +1267,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         Ray downRay = new Ray(transform.position, -transform.up);
         if ((Physics.Raycast(downRay, out hit, airSmashEndHeight)))
         {
-            if (hit.transform.gameObject.layer == EnvorinmentLayer)
+            if (hit.transform.gameObject.layer == EnvorinmentLayer || hit.transform.gameObject.layer == LayerMask.NameToLayer("DamagePlane"))
             {
              
                 playerRb.velocity = new Vector3(0, 0, 0);
@@ -1297,7 +1297,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     }
 
-    void EndAirSmash()
+    public void EndAirSmash()
     {
         //Have we hit the ground with our slam?
         if (isGroundSmash)
