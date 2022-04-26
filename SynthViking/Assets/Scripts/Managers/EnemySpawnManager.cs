@@ -12,7 +12,9 @@ public class EnemySpawnManager : MonoBehaviour
     public List<GameObject> allEnemyTypes = new List<GameObject>();
     public List<WaveSpawnData> allWaves = new List<WaveSpawnData>(); 
     private EnemyManager enemyBehaviourScript;
-    public WaveSpawnData choosenSpawnData; 
+    public WaveSpawnData choosenSpawnData;
+    public PlayerState playerState;
+    public ThirdPerson_PlayerControler playerController; 
 
     [Header ("SPAWNING RESTRICTIONS")]
     public int maxEnemiesAllowedInScene;
@@ -35,6 +37,7 @@ public class EnemySpawnManager : MonoBehaviour
 
     [Header("WAVE LOGIC")]
     public int currentWave;
+    public int enemiesLeft; 
     public int maxWaves;
     public int maxEnemiesToSpawnThisWave;
     public int currentEnemiesSpawnedThisWave;
@@ -47,7 +50,9 @@ public class EnemySpawnManager : MonoBehaviour
 
     [Header("VISUALS")]
     public TextMeshPro waveText;
-    public TextMeshPro enemyCountText; 
+    public TextMeshPro enemyCountText;
+    public TextMeshPro waveInfoText;
+    public RawImage skullImage; 
 
 
     private void Awake()
@@ -61,7 +66,10 @@ public class EnemySpawnManager : MonoBehaviour
         waveCountdownTimer = waveCountdownDuration; 
         maxWaves = allWaves.Count;
         currentWave = 0;
-        canStartNewWave = true; 
+        canStartNewWave = true;
+        waveInfoText.alpha = 0f;
+        skullImage.enabled = false; 
+
     }
 
     private void Update()
@@ -108,6 +116,7 @@ public class EnemySpawnManager : MonoBehaviour
                     SetEnemyToSpawnType();
                     SetSpawnLocation();
                     SpawnEnemy(currentEnemyTypeToSpawn, choosenSpawnLocation);
+                    if (currentEnemiesSpawnedThisWave >= maxEnemiesToSpawnThisWave) totalGroupSize = 0;
                 }
 
                 groupSpawnCooldownTimer = groupSpawnCooldownDuration;
@@ -137,7 +146,10 @@ public class EnemySpawnManager : MonoBehaviour
 
     void CheckForWave()
     {
-        if(currentEnemiesSpawnedThisWave >=  maxEnemiesToSpawnThisWave|| currentWave == 0) 
+
+        if (waveHasStarted) waveInfoText.text = enemiesLeft.ToString(); 
+
+        if (currentEnemiesSpawnedThisWave >=  maxEnemiesToSpawnThisWave|| currentWave == 0) 
         {
             canSpawnNewEnemies = false;
             
@@ -163,7 +175,8 @@ public class EnemySpawnManager : MonoBehaviour
         maxGroupSize  = choosenSpawnData.maxGroupSpawnSize; //Min enemies to spawn in a group
         currentWaveTitle = choosenSpawnData.WaveTitle;
         currentEnemiesSpawnedThisWave = 0;
-    
+      
+
     }
 
     void DoNextWaveTranstition()
@@ -185,8 +198,11 @@ public class EnemySpawnManager : MonoBehaviour
         waveHasEnded = false;
         waveHasStarted = true;
         groupSpawnCooldownTimer = groupSpawnCooldownDuration;
-        waveText.text = "ACT " + currentWave + " " + currentWaveTitle; 
+        waveText.text = "ACT " + currentWave + " " + currentWaveTitle;
+        playerState.AddHealth(25f);
+        enemiesLeft = maxEnemiesToSpawnThisWave; 
     }
+
 
     void EndWaves()
     {
@@ -196,8 +212,21 @@ public class EnemySpawnManager : MonoBehaviour
 
     void HandleUI()
     {
-        if (waveHasStarted) waveText.alpha -= Time.deltaTime * .1f; 
+        if (waveHasStarted && waveText.alpha > 0) waveText.alpha -= Time.deltaTime * .1f;
+
+        if (waveHasStarted && waveText.alpha <= 0 && waveInfoText.alpha < 1)
+        {
+            waveInfoText.alpha += Time.deltaTime * .35f;
+            skullImage.enabled = true; 
+        }
+        else if (waveHasEnded)
+        {
+            skullImage.enabled = false; 
+            waveInfoText.alpha = 0f;
+        }
     }
+
 }
 
- 
+
+

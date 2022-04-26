@@ -17,7 +17,10 @@ public class EnemyManager : MonoBehaviour
 
         public int maxDeadEnemiesAllowed = 30;
         public Transform deadEnemyParent;
-        public Transform aliveEnemyParent; 
+        public Transform aliveEnemyParent;
+
+        public EnemySpawnManager spawnManager;
+        public RewardPilar rewardPilar;
 
     /*
        public int currentAttackers;
@@ -42,16 +45,16 @@ public class EnemyManager : MonoBehaviour
     {
         CheckForCleanUp(); 
 
-        foreach(BasicEnemyScript enemy in currentenemiesInScene)
-        {
-            enemy.transform.parent = deadEnemyParent; 
-        }
+       // foreach(BasicEnemyScript enemy in allDeadEnemiesInScene)
+       // {
+       //     if(!allDeadEnemiesInScene.Contains(enemy)) enemy.transform.parent = deadEnemyParent; 
+       // }
 
-        foreach (BasicEnemyScript enemy in engagedEnemies)
-        {
-            enemy.transform.parent = aliveEnemyParent; 
-        } 
-        
+       // foreach (BasicEnemyScript enemy in engagedEnemies)
+      //  {
+       //     enemy.transform.parent = aliveEnemyParent; 
+       // } 
+      //  
     }
 
     public void CheckForCleanUp()

@@ -389,80 +389,82 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     private void Update()
     {
-
-        switch (controllerState)
+        if (!mainGameManager.gameIsPaused)
         {
-            case (int)currentState.MOVING:
-                GroundCheck();
-                HandleMoveSpeed();
-                HandleRotation();
-                CheckForMoveInput();
-                CheckForJump();
-                CheckForWall();
-                CheckForAttack();
-                HandleDrag();
-                CheckForDash();
-                CheckForAirSmash();
-                CheckForBlock();
-                HandleSprinting(); 
-               // HandleWeaponSwaping(); 
-                break;
+            switch (controllerState)
+            {
+                case (int)currentState.MOVING:
+                    GroundCheck();
+                    HandleMoveSpeed();
+                    HandleRotation();
+                    CheckForMoveInput();
+                    CheckForJump();
+                    CheckForWall();
+                    CheckForAttack();
+                    HandleDrag();
+                    CheckForDash();
+                    CheckForAirSmash();
+                    CheckForBlock();
+                    HandleSprinting();
+                    // HandleWeaponSwaping(); 
+                    break;
 
-            case (int)currentState.WALLRUNNING:
-                CheckForJump();
-                CheckForWall();
-                CheckForAirSmash(); 
-                CheckForDash();
-                HandleMoveSpeed();
-                CheckForMoveInput();
-                HandleWallRunning();
-                HandleDrag();
-                CheckForBlock(); 
-                CheckForAirSmash();
+                case (int)currentState.WALLRUNNING:
+                    CheckForJump();
+                    CheckForWall();
+                    CheckForAirSmash();
+                    CheckForDash();
+                    HandleMoveSpeed();
+                    CheckForMoveInput();
+                    HandleWallRunning();
+                    HandleDrag();
+                    CheckForBlock();
+                    CheckForAirSmash();
 
-               // HandleWeaponSwaping(); 
-                break;
+                    // HandleWeaponSwaping(); 
+                    break;
 
-            case (int)currentState.ATTACKING:
-                CheckForAttack();
-                CheckForAirSmash();
-                CheckForDash(); 
-                CheckForMoveInput();
-            //    GroundCheck();
-                HandleRotation();
-                CheckForBlock();
-                CheckForJump(); 
-             //   HandleWeaponSwaping(); 
-                break;
+                case (int)currentState.ATTACKING:
+                    CheckForAttack();
+                    CheckForAirSmash();
+                    CheckForDash();
+                    CheckForMoveInput();
+                    //    GroundCheck();
+                    HandleRotation();
+                    CheckForBlock();
+                    CheckForJump();
+                    //   HandleWeaponSwaping(); 
+                    break;
 
-            case (int)currentState.DASHING:
-                CheckForDash();
-                CheckForAirSmash();
-                CheckForBlock(); 
-               // GroundCheck(); 
-                break;
+                case (int)currentState.DASHING:
+                    CheckForDash();
+                    CheckForAirSmash();
+                    CheckForBlock();
+                    // GroundCheck(); 
+                    break;
 
-            case (int)currentState.AIRSMASHING:
-                CheckForDash();
-                CheckForMoveInput(); 
-                CheckForAirSmash();
-                HandleRotation(); 
-                break;
+                case (int)currentState.AIRSMASHING:
+                    CheckForDash();
+                    CheckForMoveInput();
+                    CheckForAirSmash();
+                    HandleRotation();
+                    break;
 
 
-            case(int)currentState.BLOCKING:
-                DoBlock(previousState);
-             //   if(hasParriedAttack) CheckForAttack(); 
-          
-                
-                break; 
+                case (int)currentState.BLOCKING:
+                    DoBlock(previousState);
+                    //   if(hasParriedAttack) CheckForAttack(); 
 
-            case (int)currentState.STUNNED:
-                break; 
+
+                    break;
+
+                case (int)currentState.STUNNED:
+                    break;
+            }
+
+            HandleSprinting();
+            HandleAnimations();
         }
-
-        HandleSprinting();
-        HandleAnimations();
     
         //if(transform.eulerAngles.x != 0) transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, transform.eulerAngles.z); 
     }
@@ -470,31 +472,34 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     private void FixedUpdate()
     {
-        switch (fixedControllerState)
+        if (!mainGameManager.gameIsPaused)
         {
-            case (int)currentState.NOTHING:
-                break;
+            switch (fixedControllerState)
+            {
+                case (int)currentState.NOTHING:
+                    break;
 
-            case (int)currentState.MOVING:
-                MovePlayer();
-                break;
-            case (int)currentState.DASHING:
-                DoDash();
-                break;
-            case (int)currentState.ATTACKING:
-                //  MovePlayer(); 
-                // MovePlayer();
-                break;
-            case (int)currentState.AIRSMASHING:
-                MovePlayer(); 
-                break;
-            case (int)currentState.STUNNED:
-                break;
+                case (int)currentState.MOVING:
+                    MovePlayer();
+                    break;
+                case (int)currentState.DASHING:
+                    DoDash();
+                    break;
+                case (int)currentState.ATTACKING:
+                    //  MovePlayer(); 
+                    // MovePlayer();
+                    break;
+                case (int)currentState.AIRSMASHING:
+                    MovePlayer();
+                    break;
+                case (int)currentState.STUNNED:
+                    break;
 
-                  
 
+
+            }
+            SetTrailRender();
         }
-          SetTrailRender(); 
     }
 
     //Animations
@@ -603,12 +608,13 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     void MovePlayer()
     {
-            moveDirection += moveInput.x * GetCameraRight(playerCamera) * currentMoveSpeed * Time.fixedUnscaledDeltaTime;
-            if (!isWallRunning) moveDirection += moveInput.y * GetCameraForward(playerCamera) * currentMoveSpeed * Time.fixedUnscaledDeltaTime;
+    
 
+        moveDirection += moveInput.x * GetCameraRight(playerCamera) * currentMoveSpeed * Time.fixedUnscaledDeltaTime;
+        if (!isWallRunning) moveDirection += moveInput.y * GetCameraForward(playerCamera) * currentMoveSpeed * Time.fixedUnscaledDeltaTime;
 
-            playerRb.velocity = new Vector3(moveDirection.x, playerRb.velocity.y, moveDirection.z);
-            moveDirection = Vector3.zero;      
+        playerRb.velocity = new Vector3(moveDirection.x, playerRb.velocity.y, moveDirection.z);
+        moveDirection = Vector3.zero;      
     }
 
     void HandleMoveSpeed()
@@ -804,7 +810,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 isDashing = true;
                 canDash = false;
                 isChargingDash = false;
-                mainCollider.isTrigger = true;
+                //  mainCollider.isTrigger = true;
+                Physics.IgnoreLayerCollision(enemyLayer, this.gameObject.layer, true); 
 
                 //dashDirection = aimPoint.forward;
                 DashStartFeeback?.PlayFeedbacks();
@@ -917,7 +924,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         playerRb.useGravity = true;
         playerState.canBeHit = true;
         fullyChargedDash = false;
-        mainCollider.isTrigger = false; 
+        // mainCollider.isTrigger = false; 
+        Physics.IgnoreLayerCollision(enemyLayer, this.gameObject.layer, false);
 
         currentDashDistance = minDashDistance;
         dashDelayTimer = dashDelayDuration;
@@ -1317,7 +1325,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             canEndAirSmash = true; 
             canLand = true;
             canFall = true;
-            canMove = true; 
+            canMove = true;
+            jumpCount = 1; 
 
             playerRb.useGravity = true;
             airSmashDelayTimer = 0f;      
@@ -1507,31 +1516,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 currentAttackTarget = attackTargetScript.selectedTarget;
             }
             else attackTargetInRange = false;
-
-            
         }
-
-        /*
-        //Move towards attack target
-        if (attackTargetInRange && attackState != currentAttackType.SprintAttack.ToString()) 
-        {
-            float animStartDistance = 5;
-            //Slightly delay attacks animations
-            if (Vector3.Distance(transform.position, currentAttackTarget.position) > animStartDistance) playerAnim.enabled = false;
-            else playerAnim.enabled = true; 
-
-            float timeToReach = .15f;
-            float timeToReach = .15f;
-            attackMoveLerpT = Time.deltaTime / timeToReach;
-            transform.position = Vector3.Lerp(transform.position, currentAttackTarget.position, attackMoveLerpT);
-            transform.LookAt(currentAttackTarget.position);
-        }
-        else
-        {
-            playerAnim.enabled = true; 
-        }
-        */
-
 
         //Check if the combo is broken 
         if (nextAttackTimer >= nextAttackDuration - .25f)
@@ -1562,6 +1547,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             attackTargetInRange = false;
             playerAnim.SetBool("IsAttacking", false);
         }
+
 
         nextAttackTimer += Time.deltaTime;
     }
@@ -1629,20 +1615,32 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     void AllowAttackDamage()
     {
-
         //canRotate = false;
-        attackTargetScript.TargetDamageCheck();  
+        attackTargetScript.TargetDamageCheck();
         attackDirection = transform.position + inputDir;
-        if (attackState != currentAttackType.SprintAttack.ToString()) transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .35f).SetUpdate(UpdateType.Fixed);
-        else meshR.materials = defaultSkinMat; 
+        // if (attackState != currentAttackType.SprintAttack.ToString()) transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .35f).SetUpdate(UpdateType.Fixed);
+        //else meshR.materials = defaultSkinMat; 
+        meshR.materials = defaultSkinMat;
         //nextAttackTimer = nextAttackDuration; 
-
     }
 
     void AllowAttackForwardForce()
     {
-        meshR.materials = holoSkinMat;
-        transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .7f).SetUpdate(UpdateType.Fixed);
+        if (attackState == currentAttackType.SprintAttack.ToString())
+        {
+            meshR.materials = holoSkinMat;
+            transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .7f).SetUpdate(UpdateType.Fixed);
+        }
+
+        if (attackState == currentAttackType.BasicLightAttack.ToString())
+        {
+            attackDirection = transform.position + inputDir;
+            attackTargetScript.BackCheck(); 
+            transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .35f).SetUpdate(UpdateType.Fixed);
+        }
+
+        
+
     }
 
     void AllowNextAttack()

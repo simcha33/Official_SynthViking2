@@ -227,8 +227,8 @@ public class BasicEnemyScript : MonoBehaviour
         }
 
         enemyRb.detectCollisions = true;
-        enemyBehaviourManagerScript.currentenemiesInScene.Add(thisScript); 
-        
+        enemyBehaviourManagerScript.currentenemiesInScene.Add(thisScript);
+        transform.parent = enemyBehaviourManagerScript.aliveEnemyParent.transform;         
     }
 
 
@@ -491,6 +491,10 @@ public class BasicEnemyScript : MonoBehaviour
         {
             isAttacking = false; 
         }
+        else
+        {
+            transform.LookAt(target, Vector3.up);
+        }
 
         nextAttackTimer += Time.deltaTime; 
     }
@@ -652,7 +656,7 @@ public class BasicEnemyScript : MonoBehaviour
 
     public void setStyleMeter(string styleType)
     {
-        comboManagerScript.AddStyle(styleType, this.transform); 
+      //  comboManagerScript.AddStyle(styleType, this.transform); 
     }
 
     void KillEnemy(string DamageType)
@@ -664,9 +668,19 @@ public class BasicEnemyScript : MonoBehaviour
            // enemyInside.SetActive(true);
         }
 
+        //Tell the enemymanager that the enemy is dead 
         if(enemyBehaviourManagerScript.currentenemiesInScene.Contains(thisScript)) enemyBehaviourManagerScript.currentenemiesInScene.Remove(thisScript);
-        enemyBehaviourManagerScript.allDeadEnemiesInScene.Add(thisScript); 
+        enemyBehaviourManagerScript.allDeadEnemiesInScene.Add(thisScript);
+        transform.parent = enemyBehaviourManagerScript.deadEnemyParent.transform;
+        enemyBehaviourManagerScript.spawnManager.enemiesLeft--;
 
+        //Add soul object if there are active pilars nearby 
+       // if (enemyBehaviourManagerScript.rewardPilar.activePilarInScene)
+        //{
+      //     // Instantiate
+      //  }
+
+        //Enter death state
         enemyRb.mass = originalRbMass;
         enemyMeshr.materials = deadSkinMat;
         isDead = true;
@@ -676,7 +690,8 @@ public class BasicEnemyScript : MonoBehaviour
         EnableRagdoll();
         stunnedEffect.SetActive(false); 
         enemyState = (int)currentState.DEAD;
-        playerController.attackTargetScript.limbCheckerScript.CheckForBloodDrip(); 
+        playerController.attackTargetScript.limbCheckerScript.CheckForBloodDrip();
+        gameObject.layer = LayerMask.NameToLayer("DeadEnemy"); 
     }
 
 

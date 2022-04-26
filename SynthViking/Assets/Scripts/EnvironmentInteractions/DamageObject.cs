@@ -7,7 +7,8 @@ public class DamageObject : MonoBehaviour
 
     public float damageAmount;
     public GameObject lavaDeathVisual;
-    public bool isLava; 
+    public bool isLava;
+    public bool isHammer; 
     public enum trapType
     {
         lava,
@@ -35,7 +36,8 @@ public class DamageObject : MonoBehaviour
             {
                 BasicEnemyScript enemyScript = other.gameObject.GetComponent<BasicEnemyScript>(); 
                 enemyScript.TakeDamage(enemyScript.maxHealth, "EnvironmentDamage");
-               // DoType(other.transform); 
+                // DoType(other.transform); 
+                DoType(enemyScript); 
             }
         }
     }
@@ -45,12 +47,19 @@ public class DamageObject : MonoBehaviour
         
     }
 
-    void DoType(Transform target)
+    void DoType(BasicEnemyScript target)
     {
         if (isLava)
         {
          //   GameObject deathEffect = Instantiate(lavaDeathVisual, target.transform.position + new Vector3(0,3,0), transform.rotation);
           //  deathEffect.AddComponent<CleanUpScript>().SetCleanUp(4f); 
         }
+
+        if (isHammer)
+        {
+            target.LaunchEnemy(transform.forward, 25f, 6f); 
+        }
     }
+
+
 }

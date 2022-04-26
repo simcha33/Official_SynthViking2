@@ -121,6 +121,38 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Dpad-Up"",
+                    ""type"": ""Value"",
+                    ""id"": ""8908142f-9eed-4990-921f-72f3083c26e6"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Dpad-Down"",
+                    ""type"": ""Value"",
+                    ""id"": ""fff86f4d-e508-40b5-ab9f-b576684a8fa6"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Dpad-Left"",
+                    ""type"": ""Value"",
+                    ""id"": ""bf89defa-9f7c-4cb0-99ae-fa21378c48f4"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Dpad-Right"",
+                    ""type"": ""Value"",
+                    ""id"": ""c56c602b-f2f8-4c05-985b-6f51c292686a"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -376,6 +408,50 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""PauseGame"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2a1902c2-6601-4c0c-bd61-3ab1d24b6471"",
+                    ""path"": ""<Gamepad>/dpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Dpad-Up"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6b0339dd-a122-402d-a8e7-620de3c10eea"",
+                    ""path"": ""<Gamepad>/dpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Dpad-Down"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cc66f281-483e-4264-bd1b-cfd11906a385"",
+                    ""path"": ""<Gamepad>/dpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Dpad-Left"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""6e7b6419-e4b1-4d7c-acad-e924053adbf8"",
+                    ""path"": ""<Gamepad>/dpad"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Dpad-Right"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -479,6 +555,10 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Gameplay_UltimateMove = m_Gameplay.FindAction("UltimateMove ", throwIfNotFound: true);
         m_Gameplay_RestartScene = m_Gameplay.FindAction("RestartScene", throwIfNotFound: true);
         m_Gameplay_PauseGame = m_Gameplay.FindAction("PauseGame", throwIfNotFound: true);
+        m_Gameplay_DpadUp = m_Gameplay.FindAction("Dpad-Up", throwIfNotFound: true);
+        m_Gameplay_DpadDown = m_Gameplay.FindAction("Dpad-Down", throwIfNotFound: true);
+        m_Gameplay_DpadLeft = m_Gameplay.FindAction("Dpad-Left", throwIfNotFound: true);
+        m_Gameplay_DpadRight = m_Gameplay.FindAction("Dpad-Right", throwIfNotFound: true);
         // Test controller
         m_Testcontroller = asset.FindActionMap("Test controller", throwIfNotFound: true);
         m_Testcontroller_Move = m_Testcontroller.FindAction("Move", throwIfNotFound: true);
@@ -546,6 +626,10 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_UltimateMove;
     private readonly InputAction m_Gameplay_RestartScene;
     private readonly InputAction m_Gameplay_PauseGame;
+    private readonly InputAction m_Gameplay_DpadUp;
+    private readonly InputAction m_Gameplay_DpadDown;
+    private readonly InputAction m_Gameplay_DpadLeft;
+    private readonly InputAction m_Gameplay_DpadRight;
     public struct GameplayActions
     {
         private @PlayerControls m_Wrapper;
@@ -563,6 +647,10 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @UltimateMove => m_Wrapper.m_Gameplay_UltimateMove;
         public InputAction @RestartScene => m_Wrapper.m_Gameplay_RestartScene;
         public InputAction @PauseGame => m_Wrapper.m_Gameplay_PauseGame;
+        public InputAction @DpadUp => m_Wrapper.m_Gameplay_DpadUp;
+        public InputAction @DpadDown => m_Wrapper.m_Gameplay_DpadDown;
+        public InputAction @DpadLeft => m_Wrapper.m_Gameplay_DpadLeft;
+        public InputAction @DpadRight => m_Wrapper.m_Gameplay_DpadRight;
         public InputActionMap Get() { return m_Wrapper.m_Gameplay; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -611,6 +699,18 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @PauseGame.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPauseGame;
                 @PauseGame.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPauseGame;
                 @PauseGame.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnPauseGame;
+                @DpadUp.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDpadUp;
+                @DpadUp.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDpadUp;
+                @DpadUp.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDpadUp;
+                @DpadDown.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDpadDown;
+                @DpadDown.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDpadDown;
+                @DpadDown.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDpadDown;
+                @DpadLeft.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDpadLeft;
+                @DpadLeft.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDpadLeft;
+                @DpadLeft.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDpadLeft;
+                @DpadRight.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDpadRight;
+                @DpadRight.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDpadRight;
+                @DpadRight.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnDpadRight;
             }
             m_Wrapper.m_GameplayActionsCallbackInterface = instance;
             if (instance != null)
@@ -654,6 +754,18 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @PauseGame.started += instance.OnPauseGame;
                 @PauseGame.performed += instance.OnPauseGame;
                 @PauseGame.canceled += instance.OnPauseGame;
+                @DpadUp.started += instance.OnDpadUp;
+                @DpadUp.performed += instance.OnDpadUp;
+                @DpadUp.canceled += instance.OnDpadUp;
+                @DpadDown.started += instance.OnDpadDown;
+                @DpadDown.performed += instance.OnDpadDown;
+                @DpadDown.canceled += instance.OnDpadDown;
+                @DpadLeft.started += instance.OnDpadLeft;
+                @DpadLeft.performed += instance.OnDpadLeft;
+                @DpadLeft.canceled += instance.OnDpadLeft;
+                @DpadRight.started += instance.OnDpadRight;
+                @DpadRight.performed += instance.OnDpadRight;
+                @DpadRight.canceled += instance.OnDpadRight;
             }
         }
     }
@@ -740,6 +852,10 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnUltimateMove(InputAction.CallbackContext context);
         void OnRestartScene(InputAction.CallbackContext context);
         void OnPauseGame(InputAction.CallbackContext context);
+        void OnDpadUp(InputAction.CallbackContext context);
+        void OnDpadDown(InputAction.CallbackContext context);
+        void OnDpadLeft(InputAction.CallbackContext context);
+        void OnDpadRight(InputAction.CallbackContext context);
     }
     public interface ITestcontrollerActions
     {

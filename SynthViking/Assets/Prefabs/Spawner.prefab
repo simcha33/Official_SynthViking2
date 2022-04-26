@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 9146742967086788832}
   - component: {fileID: 9146742967086788847}
   - component: {fileID: 9146742967086788836}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}

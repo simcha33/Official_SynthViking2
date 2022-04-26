@@ -34,7 +34,7 @@ public class DashPathChecker : MonoBehaviour
                 other.GetComponent<BasicEnemyScript>().enemyRb.velocity = new Vector3(0,0,0); 
                 
                 playerController.dashAttackTarget = other.gameObject;
-                playerController.transform.position -= Vector3.up * .5f;
+           //     playerController.transform.position -= Vector3.up * .5f;
                 playerController.transform.LookAt(other.transform.position, Vector3.up);    
                 playerController.DashAttackFeedback?.PlayFeedbacks();
             }

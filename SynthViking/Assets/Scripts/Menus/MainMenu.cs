@@ -6,7 +6,8 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
 
-    public string selectedLevel; 
+    public string selectedLevel;
+    public PlayerInputCheck inputCheck; 
     // Start is called before the first frame update
     void Start()
     {
@@ -16,7 +17,13 @@ public class MainMenu : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        CheckForControllerInput();
+    }
+
+    void CheckForControllerInput()
+    {
+        if (inputCheck.jumpButtonPressed) StartGame();
+        if (inputCheck.airSmashButtonPressed) QuitGame(); 
     }
 
     public void StartGame()

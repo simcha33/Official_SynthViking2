@@ -47,8 +47,10 @@ public class AttackTargetScript : MonoBehaviour
     #region
     public float targetCheckRadius; 
     public float targetCheckRange;
-    public bool canTarget; 
+    public bool canTarget;
+    private float attackBackForce = 1.1f; 
     public List<GameObject> targetsInRange = new List<GameObject>();
+    public List<GameObject> hitTargets = new List<GameObject>(); 
     #endregion
 
      [Header("VISUALS")] //GROUND MOVEMENT
@@ -182,6 +184,16 @@ public class AttackTargetScript : MonoBehaviour
         }
     }
 
+    public void BackCheck()
+    {
+        foreach (GameObject enemy in targetsInRange)
+        {
+            BasicEnemyScript enemyScript = enemy.GetComponent<BasicEnemyScript>();
+            Vector3 backDirection = playerController.transform.position + transform.forward * playerController.currentAttackForwardForce * attackBackForce;
+            enemyScript.transform.DOMove(backDirection, .3f).SetUpdate(UpdateType.Fixed);  //Move enemy backwards enemyScript.enemyRb.AddForce(playerController.transform.position + transform.forward * playerController.currentAttackForwardForce, ForceMode.VelocityChange);  
+        }
+    }
+
     
 
 
@@ -193,6 +205,7 @@ public class AttackTargetScript : MonoBehaviour
         {
             foreach (GameObject obj in targetsInRange)
             {
+
                 //Deal damage to hit target
                 BasicEnemyScript enemyScript = obj.GetComponent<BasicEnemyScript>();
                 if (!enemyScript.isDead)
@@ -200,20 +213,16 @@ public class AttackTargetScript : MonoBehaviour
                     enemyScript.TakeDamage(playerController.currentAttackDamage, playerAttackType.LightAxeHit.ToString());
                     hitpauseScript.theHitPaused.Add(obj);
                 }
-                Vector3 backDirection = playerController.transform.position + transform.forward * playerController.currentAttackForwardForce * 1.5f; 
-                
+                Vector3 backDirection = playerController.transform.position + transform.forward * playerController.currentAttackForwardForce * attackBackForce;
+
                 GameObject blood = Instantiate(axeHitBloodVFX, enemyScript.bloodSpawnPoint.position, enemyScript.bloodSpawnPoint.rotation);
-                blood.AddComponent<CleanUpScript>(); 
+                blood.AddComponent<CleanUpScript>();
                 weapinFirstImpactFeedback?.PlayFeedbacks();
-                
+
 
                 //Is the enemy dead after our hit?            
                 if (enemyScript.isDead)
                 {
-
-                 //   limbCheckerScript.bloodDrip = true; //Blood drip effect axe
-
-
                     //Collect and detach limbs
                     foreach (Rigidbody limb in limbCheckerScript.hitLimbs)
                     {
@@ -226,15 +235,15 @@ public class AttackTargetScript : MonoBehaviour
                             limb.transform.parent = null;
 
                             limb.velocity = new Vector3(0, 0, 0);
-                            limb.AddExplosionForce(10f, limb.position, 2f, 4f, ForceMode.Impulse); 
+                            limb.AddExplosionForce(10f, limb.position, 2f, 4f, ForceMode.Impulse);
                             if (enemyScript.canBeTargeted) limb.mass *= 3f;
-                           // limb.GetComponent<SetEnemyInside>().ActivateLimbInside(); 
+                            // limb.GetComponent<SetEnemyInside>().ActivateLimbInside(); 
                         }
                     }
 
                     foreach (GameObject enemyInside in limbCheckerScript.hitInsides)
                     {
-                        enemyInside.GetComponent<MeshRenderer>().enabled = true; 
+                        enemyInside.GetComponent<MeshRenderer>().enabled = true;
                     }
 
                     if (enemyScript.canBeTargeted)
@@ -243,17 +252,17 @@ public class AttackTargetScript : MonoBehaviour
                         //Unhand enemies weapon
                         if (enemyScript.weapon != null)
                         {
-                            enemyScript.enemyRb.velocity = new Vector3(0,0,0);           
+                            enemyScript.enemyRb.velocity = new Vector3(0, 0, 0);
                             Destroy(enemyScript.weapon.GetComponent<FixedJoint>());
                             enemyScript.weapon.parent = null;
                             Rigidbody swordrb = enemyScript.weapon.GetComponent<Rigidbody>();
                             swordrb.useGravity = true;
                             swordrb.isKinematic = false;
                             swordrb.velocity = new Vector3(0, 0, 0);
-                            swordrb.AddForce(Vector3.up * 5f, ForceMode.VelocityChange);                       
+                            swordrb.AddForce(Vector3.up * 5f, ForceMode.VelocityChange);
                         }
 
-                       // targetsInRange.Remove(obj);
+                        // targetsInRange.Remove(obj);
                         enemyScript.canBeTargeted = false;
                         weaponKillFeedback?.PlayFeedbacks();
                     }
@@ -261,24 +270,22 @@ public class AttackTargetScript : MonoBehaviour
                 }
                 else
                 {
-                  //  hitpauseScript.objectsToPause.Add(enemyScript.enemyAnim);
+                    //  hitpauseScript.objectsToPause.Add(enemyScript.enemyAnim);
                     hitpauseScript.doHitPause = true;
                 }
 
                 // targetsInRange.Remove(obj); 
 
-                enemyScript.enemyRb.velocity = new Vector3(0, 0, 0); 
+                enemyScript.enemyRb.velocity = new Vector3(0, 0, 0);
                 enemyScript.transform.DOMove(backDirection, .3f).SetUpdate(UpdateType.Fixed);  //Move enemy backwards enemyScript.enemyRb.AddForce(playerController.transform.position + transform.forward * playerController.currentAttackForwardForce, ForceMode.VelocityChange);            
-                if(enemyScript.isRagdolling || enemyScript.isDead) enemyScript.enemyRb.AddForce(Vector3.up * 10f, ForceMode.VelocityChange); 
-                                                                                                                                                                                              // targetsInRange.Clear();
+                if (enemyScript.isRagdolling ||  enemyScript.isDead) enemyScript.enemyRb.AddForce(Vector3.up * 10f, ForceMode.VelocityChange);
 
+
+                limbCheckerScript.hitLimbs.Clear();
+                limbCheckerScript.hitInsides.Clear();
             }
-
-            limbCheckerScript.hitLimbs.Clear();
-            limbCheckerScript.hitInsides.Clear(); 
-          //  targetsInRange.Clear();
-        }//Player hits enemy
-
+        }
+        
 
 
         if (isEnemy)

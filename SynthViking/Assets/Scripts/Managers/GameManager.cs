@@ -1,18 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement; 
+using UnityEngine.SceneManagement;
+using MoreMountains.Feedbacks;
+using TMPro; 
 
 public class GameManager : MonoBehaviour
 {
 
     public ThirdPerson_PlayerControler playerController;
     public PlayerState playerState;
-    public bool gameIsPaused; 
+    public bool gameIsPaused;
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -30,4 +32,6 @@ public class GameManager : MonoBehaviour
     {
 
     }
+
+
 }

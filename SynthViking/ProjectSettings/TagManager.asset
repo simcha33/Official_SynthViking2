@@ -12,6 +12,7 @@ TagManager:
   - Limb
   - BasicEnemy
   - EnemyInside
+  - SoulObject
   layers:
   - Default
   - TransparentFX
@@ -29,7 +30,7 @@ TagManager:
   - KillFloor
   - DamagePlane
   - UI
-  - 
+  - Player
   - 
   - 
   - 

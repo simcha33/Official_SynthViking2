@@ -135,8 +135,9 @@ public class PlayerState : MonoBehaviour
 
     public void TakeDamage(float damageAmount, string DamageType)
     {
-        if (canBeHit && currentHealth - damageAmount > 0 || DamageType == "EnvironmentDamage")
+        if (canBeHit || DamageType == "EnvironmentDamage")
         {
+            print("TAKINGDAMAGEEE"); 
             currentHealth -= damageAmount;
             healthText.text = currentHealth.ToString(); 
             helathSlider.value = currentHealth / maxHealth;
@@ -173,10 +174,19 @@ public class PlayerState : MonoBehaviour
         
         }
 
-        else if(currentHealth - damageAmount <= 0)
+        if(currentHealth  <= 0)
         {
+            currentHealth = 0f;
             KillPlayer(); 
         }
+    }
+
+    public void AddHealth(float addAmount)
+    {
+        currentHealth += addAmount;
+        if (currentHealth >= maxHealth) currentHealth = maxHealth;
+        healthText.text = currentHealth.ToString(); 
+        helathSlider.value = currentHealth / maxHealth;
     }
 
     void StunPlayer()
@@ -203,8 +213,6 @@ public class PlayerState : MonoBehaviour
     {
         //gameManager.ResetScene(); 
         playerIsDead = true;
-
-
     }
 
     void PlayerRecovery()

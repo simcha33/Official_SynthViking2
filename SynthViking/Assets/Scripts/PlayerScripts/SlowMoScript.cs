@@ -34,7 +34,7 @@ public class SlowMoScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CheckForSlowmo();
+        if (!playerController.mainGameManager.gameIsPaused) CheckForSlowmo();
     }
 
     
