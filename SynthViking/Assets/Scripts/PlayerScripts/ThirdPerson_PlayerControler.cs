@@ -32,6 +32,9 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public float minRunningMoveSpeed;
     private float currentMinMoveSpeed;
     private bool topSpeedReached;
+    public float currentRotateSpeed;
+    public float defaultRotateSpeed;
+    public float attackingRotateSpeed; 
 
     public float currentMoveSpeed;
     private float moveVelocity = 0.0f;
@@ -153,7 +156,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     [HideInInspector] public Vector3 attackDirection; 
 
-    private float attackMoveSpeed = 1f;
+    public float attackMoveSpeed = 1f;
     [HideInInspector]public bool attackTargetInRange;
     [HideInInspector] public bool canDamageTarget;
     [HideInInspector]public Transform currentAttackTarget;
@@ -368,6 +371,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         currentMoveSpeed = maxMoveSpeed;
         currentDashDistance = minDashDistance;
         dashDelayTimer = dashDelayDuration;
+        currentRotateSpeed = defaultRotateSpeed; 
         // sprintTrailDuration = sprintTrail.time; sprintTrail.time = -.1f;
         sprintTrailDuration = footTrail[1].time;
         foreach (TrailRenderer trail in footTrail) trail.time = -.1f; 
@@ -406,7 +410,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                     CheckForAirSmash();
                     CheckForBlock();
                     HandleSprinting();
-                    // HandleWeaponSwaping(); 
                     break;
 
                 case (int)currentState.WALLRUNNING:
@@ -420,8 +423,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                     HandleDrag();
                     CheckForBlock();
                     CheckForAirSmash();
-
-                    // HandleWeaponSwaping(); 
                     break;
 
                 case (int)currentState.ATTACKING:
@@ -429,18 +430,16 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                     CheckForAirSmash();
                     CheckForDash();
                     CheckForMoveInput();
-                    //    GroundCheck();
                     HandleRotation();
                     CheckForBlock();
                     CheckForJump();
-                    //   HandleWeaponSwaping(); 
+                    //HandleMoveSpeed(); 
                     break;
 
                 case (int)currentState.DASHING:
                     CheckForDash();
                     CheckForAirSmash();
                     CheckForBlock();
-                    // GroundCheck(); 
                     break;
 
                 case (int)currentState.AIRSMASHING:
@@ -453,9 +452,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
                 case (int)currentState.BLOCKING:
                     DoBlock(previousState);
-                    //   if(hasParriedAttack) CheckForAttack(); 
-
-
+                   // CheckForAttack(); 
                     break;
 
                 case (int)currentState.STUNNED:
@@ -487,10 +484,12 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                     break;
                 case (int)currentState.ATTACKING:
                     //  MovePlayer(); 
+                    MovePlayer(); 
                     // MovePlayer();
                     break;
                 case (int)currentState.AIRSMASHING:
                     MovePlayer();
+                    DoAirSmash(); 
                     break;
                 case (int)currentState.STUNNED:
                     break;
@@ -521,7 +520,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         playerAnim.SetBool("IsLanding", isLanding);
         playerAnim.SetBool("IsSprinting", isSprinting);
         playerAnim.SetBool("IsDashing", isDashing);
-    //    playerAnim.SetBool("IsAiming", isChargingDash);
         playerAnim.SetBool("IsAirSmashing", isAirSmashing);
         playerAnim.SetBool("IsStunned", isStunned);
         playerAnim.SetBool("IsBlocking", isBlocking);  
@@ -529,11 +527,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //Checks
         playerAnim.SetBool("CanJump", canJump);
         playerAnim.SetBool("CanFall", canFall); 
-       // playerAnim.SetBool("canStartAirSmash", canStartAirSmash); 
         playerAnim.SetBool("CanMove", canMove);
-      //  playerAnim.SetBool("CandDash", canDash);
-       // playerAnim.SetBool("canStartWallrun", canStartWallrun);
-     //   playerAnim.SetBool("CanLand", canLand);
+
     }
 
     void HolsterWeapon(bool holsterWeapon)
@@ -759,8 +754,9 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         {
             //Player ground rotation 
             {
-                float speed = 10f;
-                float singleStep = speed * Time.deltaTime;
+                if (isAttacking) currentRotateSpeed = attackingRotateSpeed;
+                else currentRotateSpeed = defaultRotateSpeed; 
+                float singleStep = currentRotateSpeed * Time.deltaTime;
 
                 Vector3 newDirection = Vector3.RotateTowards(playerRb.transform.forward, new Vector3(inputDir.x, 0, inputDir.z), singleStep, 0f);
                 transform.rotation = Quaternion.LookRotation(newDirection);
@@ -1198,6 +1194,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     }
 
 
+
     //Air smashing 
     void CheckForAirSmash()
     { 
@@ -1217,7 +1214,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 isAirSmashing = true;
                // AirSlamStartFeeback?.PlayFeedbacks(); 
                 controllerState = (int)currentState.AIRSMASHING;
-                fixedControllerState = (int)currentState.AIRSMASHING; 
+               // fixedControllerState = (int)currentState.AIRSMASHING; 
             }
 
 
@@ -1249,12 +1246,14 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             airSmashDelayTimer += Time.deltaTime;
 
             EndAirSmash();
+            fixedControllerState = (int)currentState.MOVING; 
 
         }
         else if (isAirSmashing && airSmashDelayTimer >= airSmashDelayDuration)
-        {          
-            DoAirSmash();
-          //  mainCollider.isTrigger = true; 
+        {
+            //DoAirSmash();
+            fixedControllerState = (int)currentState.AIRSMASHING;
+            //  mainCollider.isTrigger = true; 
         }
         
 
@@ -1310,9 +1309,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //Have we hit the ground with our slam?
         if (isGroundSmash)
         {
-
             playerState.canBeHit = true; 
-
         }
 
         canEndAirSmash = false; 
@@ -1348,10 +1345,12 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     {
         if(input.blockButtonPressed && canBlock) //Check if the player is blocking
         {
+            ResetStates(); 
             isBlocking = true;
             canBlock = false;  
             HolsterWeapon(false); 
-            previousState = controllerState; 
+            previousState = controllerState;
+            playerAnim.SetBool("IsAttacking", false);
             playerAnim.SetTrigger("BlockTrigger"); 
             controllerState = (int)currentState.BLOCKING; 
         }
@@ -1373,7 +1372,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         blockTimer+= Time.deltaTime; 
         playerState.canBeHit = false; 
 
-        if(blockTimer >= blockDuration)
+        if(blockTimer >= blockDuration || isAttacking)
         {
             canBlockStun = true; 
             isBlocking = false;  
@@ -1519,7 +1518,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         }
 
         //Check if the combo is broken 
-        if (nextAttackTimer >= nextAttackDuration - .25f)
+        if (nextAttackTimer >= nextAttackDuration)
         {
             playerAnim.SetBool("IsAttacking", false);
             fixedControllerState = (int)currentState.MOVING;
@@ -1535,7 +1534,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         else if (nextAttackTimer < nextAttackDuration)
         {
             //HandleRotation();
-            playerRb.isKinematic = true;
+            if(jumpCount < 1) playerRb.isKinematic = true;    
+            currentMoveSpeed = attackMoveSpeed; 
             isAttacking = true;
         }
 
@@ -1551,6 +1551,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
         nextAttackTimer += Time.deltaTime;
     }
+
 
     //Resets
     public void ResetStates()
@@ -1592,6 +1593,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         isDashAttacking = false;
         isAirSmashing = false;
         isGroundSmash = false;
+
 
        // wasSprintingBeforeJump = false;
         playerRb.isKinematic = false;
