@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using MoreMountains.Feedbacks;
 using TMPro; 
+using UnityEngine.InputSystem; 
 
 public class GameManager : MonoBehaviour
 {
@@ -11,16 +12,21 @@ public class GameManager : MonoBehaviour
     public ThirdPerson_PlayerControler playerController;
     public PlayerState playerState;
     public bool gameIsPaused;
+    public float hapticDuration = 0f; 
+    public float curLowFreq, cureHighFreq; 
+    private Gamepad gamepad; 
     // Start is called before the first frame update
     void Start()
     {
-
+          gamepad = Gamepad.current;
+         // hapticDuration = 2f; 
+          //DoHaptics(2f, .1f ,.3f); 
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if(hapticDuration > 0) DoHaptics(hapticDuration, curLowFreq, cureHighFreq);
     }
 
     public void ResetScene()
@@ -32,6 +38,19 @@ public class GameManager : MonoBehaviour
     {
 
     }
+
+    public void DoHaptics(float duration, float lowFreq, float highFreq)
+    {
+        curLowFreq = lowFreq; 
+        cureHighFreq = highFreq; 
+        hapticDuration = duration; 
+        hapticDuration -= Time.deltaTime; 
+        gamepad.SetMotorSpeeds(lowFreq, highFreq);
+
+        if(hapticDuration <= 0) InputSystem.ResetHaptics(); 
+    }
+
+
 
 
 }

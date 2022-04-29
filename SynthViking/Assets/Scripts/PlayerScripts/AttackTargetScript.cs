@@ -165,10 +165,13 @@ public class AttackTargetScript : MonoBehaviour
                                 enemyScript.TakeDamage(enemyController.chainHitScript.blockChainDamage, playerAttackType.BlockStun.ToString());
                                 enemyScript.isLaunched = true;
                                 enemyScript.isBlockStunned = true;
+                                
+                                //Feedback
                                 GameObject lightningVFX =  Instantiate(parryLightningVFX, enemy.transform.position, transform.rotation);
                                 lightningVFX.transform.eulerAngles = new Vector3(-90, lightningVFX.transform.eulerAngles.y, lightningVFX.transform.eulerAngles.z);  
                                 lightningVFX.AddComponent<CleanUpScript>();
                                 parriedFeedback?.PlayFeedbacks();
+                                playerController.mainGameManager.DoHaptics(.2f, .4f, .7f); 
                             }
                         }
 
@@ -215,9 +218,11 @@ public class AttackTargetScript : MonoBehaviour
                 }
                 Vector3 backDirection = playerController.transform.position + transform.forward * playerController.currentAttackForwardForce * attackBackForce;
 
+                //Feedback
                 GameObject blood = Instantiate(axeHitBloodVFX, enemyScript.bloodSpawnPoint.position, enemyScript.bloodSpawnPoint.rotation);
                 blood.AddComponent<CleanUpScript>();
                 weapinFirstImpactFeedback?.PlayFeedbacks();
+                playerController.mainGameManager.DoHaptics(.3f, .2f, .4f); 
 
 
                 //Is the enemy dead after our hit?            
@@ -259,11 +264,12 @@ public class AttackTargetScript : MonoBehaviour
                             swordrb.useGravity = true;
                             swordrb.isKinematic = false;
                             swordrb.velocity = new Vector3(0, 0, 0);
-                            swordrb.AddForce(Vector3.up * 5f, ForceMode.VelocityChange);
+                            swordrb.AddForce(Vector3.up * 5f, ForceMode.VelocityChange);                        
                         }
 
                         // targetsInRange.Remove(obj);
                         enemyScript.canBeTargeted = false;
+                        playerController.mainGameManager.DoHaptics(.2f, .55f, .75f); 
                         weaponKillFeedback?.PlayFeedbacks();
                     }
 
@@ -273,9 +279,6 @@ public class AttackTargetScript : MonoBehaviour
                     //  hitpauseScript.objectsToPause.Add(enemyScript.enemyAnim);
                     hitpauseScript.doHitPause = true;
                 }
-
-                // targetsInRange.Remove(obj); 
-
                 enemyScript.enemyRb.velocity = new Vector3(0, 0, 0);
                 enemyScript.transform.DOMove(backDirection, .3f).SetUpdate(UpdateType.Fixed);  //Move enemy backwards enemyScript.enemyRb.AddForce(playerController.transform.position + transform.forward * playerController.currentAttackForwardForce, ForceMode.VelocityChange);            
                 if (enemyScript.isRagdolling ||  enemyScript.isDead) enemyScript.enemyRb.AddForce(Vector3.up * 10f, ForceMode.VelocityChange);

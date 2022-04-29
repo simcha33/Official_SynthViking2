@@ -16,4 +16,4 @@ MonoBehaviour:
   maxEnemiesInScene: 15
   minGroupSpawnSize: 6
   maxGroupSpawnSize: 10
-  WaveTitle: A CHALLANGE
+  WaveTitle: A CHALLENGE

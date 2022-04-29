@@ -810,6 +810,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 Physics.IgnoreLayerCollision(enemyLayer, this.gameObject.layer, true); 
 
                 //dashDirection = aimPoint.forward;
+                
+                mainGameManager.DoHaptics(.2f, .3f, .5f); 
                 DashStartFeeback?.PlayFeedbacks();
                 meshR.materials = holoSkinMat;
 
@@ -845,6 +847,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 groundCheckTimer = .05f;
                 if (jumpCount < 1) jumpCount += 1;
                 playerAnim.SetTrigger("DashEndTrigger");
+               
             }
         }
         else if (isDashing && canEndDash) //End dash
@@ -897,6 +900,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         }
 
         script.LaunchEnemy(aimPoint.forward, Random.Range( dashAttackForce -5, dashAttackForce + 5), 5f);  
+        mainGameManager.DoHaptics(.2f, .4f, .6f); 
         
     }
 
@@ -905,6 +909,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
      
         playerRb.velocity = new Vector3(0, 0, 0); 
         DashEndFeeback?.PlayFeedbacks();
+        mainGameManager.DoHaptics(.15f, .1f, .2f); 
         transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
         solidDashObjectReached = false;
         enemyDashObjectReached = false;
@@ -987,6 +992,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         playerRb.constraints = airConstraints.constraints; 
         playerRb.velocity = new Vector3(playerRb.velocity.x, 0, playerRb.velocity.z);
 
+        mainGameManager.DoHaptics(.1f, .04f, .07f); 
         JumpFeedback?.PlayFeedbacks();
         GameObject jumpEffect = Instantiate(jumpVFX, transform.position + new Vector3(0f, .3f, 0f), transform.rotation);
         jumpEffect.transform.eulerAngles = new Vector3(-90, jumpEffect.transform.eulerAngles.y, jumpEffect.transform.eulerAngles.z);
@@ -1027,6 +1033,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 {                
                     if(!isGrounded && inAirTime >= .2f)
                     {  
+                        mainGameManager.DoHaptics(.1f, .03f, .05f);    
                         GameObject landEffect = Instantiate(landVFX, transform.position, transform.rotation); 
                         landEffect.AddComponent<CleanUpScript>();
                     }
@@ -1062,7 +1069,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                     isInAir = false;
                     isLanding = true;
                     landingDelayTimer = 0f;
-                    playerAnim.SetTrigger("LandingTrigger");     
+                    playerAnim.SetTrigger("LandingTrigger");               
                                
                 }
 
@@ -1208,13 +1215,11 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 ResetStates(); 
                 playerRb.velocity = new Vector3(0, 0, 0);            
                 
-                canFall = false; 
+                canFall = false;          
                 playerAnim.SetTrigger("AirSmashStartTrigger");
                 playerRb.useGravity = false;
                 isAirSmashing = true;
-               // AirSlamStartFeeback?.PlayFeedbacks(); 
-                controllerState = (int)currentState.AIRSMASHING;
-               // fixedControllerState = (int)currentState.AIRSMASHING; 
+                controllerState = (int)currentState.AIRSMASHING;               
             }
 
 
@@ -1223,6 +1228,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
             if (airSmashDelayTimer >= airSmashDelayDuration)
             {
+                
+                mainGameManager.DoHaptics(.2f, .4f, .6f); 
                 AirSlamStartFeeback?.PlayFeedbacks();
                 //isAirSmashing = true;
                 meshR.materials = holoSkinMat;
@@ -1233,7 +1240,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //Handle air smash start and stop 
         if (isAirSmashing && !input.airSmashButtonPressed || isGroundSmash)
         {
-          
             //Only do this once at the start of the end
             if (canEndAirSmash)  
             {
@@ -1295,10 +1301,9 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                     }
                 }
 
-                GameObject slamEffect = Instantiate(groundSlamVFX, hit.point, transform.rotation);
+                mainGameManager.DoHaptics(.37f, 1f, 1.8f); 
+                GameObject slamEffect = Instantiate(groundSlamVFX, hit.point, transform.rotation);               
                 slamEffect.AddComponent<CleanUpScript>(); 
-
-
             }
         }
 
@@ -1637,6 +1642,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         if (attackState == currentAttackType.BasicLightAttack.ToString())
         {
             attackDirection = transform.position + inputDir;
+            mainGameManager.DoHaptics(.1f, .02f, .04f); 
             attackTargetScript.BackCheck(); 
             transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .35f).SetUpdate(UpdateType.Fixed);
         }
