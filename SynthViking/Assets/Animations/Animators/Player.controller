@@ -5646,7 +5646,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: L_Attack_4
-  m_Speed: 1.65
+  m_Speed: 1.55
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours: []
