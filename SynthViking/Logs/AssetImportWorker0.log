@@ -15,12 +15,12 @@ C:/Users/Student/Desktop/Official_SynthViking2/SynthViking
 -logFile
 Logs/AssetImportWorker0.log
 -srvPort
-63199
+54286
 Successfully changed project path to: C:/Users/Student/Desktop/Official_SynthViking2/SynthViking
 C:/Users/Student/Desktop/Official_SynthViking2/SynthViking
 Using Asset Import Pipeline V2.
 Default GameObject BitMask: UI already registered
-Refreshing native plugins compatible for Editor in 143.12 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 122.70 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Initialize engine version: 2020.3.18f1 (a7d1c678663c)
 [Subsystems] Discovering subsystems at path C:/Program Files/Unity/Hub/Editor/2020.3.18f1/Editor/Data/Resources/UnitySubsystems
@@ -37,72 +37,72 @@ Initialize mono
 Mono path[0] = 'C:/Program Files/Unity/Hub/Editor/2020.3.18f1/Editor/Data/Managed'
 Mono path[1] = 'C:/Program Files/Unity/Hub/Editor/2020.3.18f1/Editor/Data/MonoBleedingEdge/lib/mono/unityjit'
 Mono config path = 'C:/Program Files/Unity/Hub/Editor/2020.3.18f1/Editor/Data/MonoBleedingEdge/etc'
-Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56444
+Using monoOptions --debugger-agent=transport=dt_socket,embedding=1,server=y,suspend=n,address=127.0.0.1:56060
 Begin MonoManager ReloadAssembly
 Registering precompiled unity dll's ...
 Register platform support module: C:/Program Files/Unity/Hub/Editor/2020.3.18f1/Editor/Data/PlaybackEngines/WindowsStandaloneSupport/UnityEditor.WindowsStandalone.Extensions.dll
-Registered in 0.001287 seconds.
+Registered in 0.001197 seconds.
 Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 138.09 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 121.12 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Mono: successfully reloaded assembly
-- Completed reload, in  0.915 seconds
+- Completed reload, in  0.835 seconds
 Domain Reload Profiling:
-	ReloadAssembly (916ms)
-		BeginReloadAssembly (39ms)
+	ReloadAssembly (835ms)
+		BeginReloadAssembly (38ms)
 			ExecutionOrderSort (0ms)
 			DisableScriptedObjects (0ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
 			CreateAndSetChildDomain (1ms)
-		EndReloadAssembly (464ms)
-			LoadAssemblies (38ms)
+		EndReloadAssembly (405ms)
+			LoadAssemblies (37ms)
 			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (128ms)
+			SetupTypeCache (111ms)
 			ReleaseScriptCaches (0ms)
-			RebuildScriptCaches (28ms)
-			SetupLoadedEditorAssemblies (247ms)
+			RebuildScriptCaches (24ms)
+			SetupLoadedEditorAssemblies (217ms)
 				LogAssemblyErrors (0ms)
 				InitializePlatformSupportModulesInManaged (3ms)
 				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (138ms)
-				BeforeProcessingInitializeOnLoad (11ms)
-				ProcessInitializeOnLoadAttributes (71ms)
-				ProcessInitializeOnLoadMethodAttributes (24ms)
+				RefreshPlugins (121ms)
+				BeforeProcessingInitializeOnLoad (10ms)
+				ProcessInitializeOnLoadAttributes (61ms)
+				ProcessInitializeOnLoadMethodAttributes (22ms)
 				AfterProcessingInitializeOnLoad (0ms)
 				EditorAssembliesLoaded (0ms)
 			ExecutionOrderSort2 (0ms)
 			AwakeInstancesAfterBackupRestoration (0ms)
 Platform modules already initialized, skipping
 Registering precompiled user dll's ...
-Registered in 0.005033 seconds.
+Registered in 0.004865 seconds.
 Begin MonoManager ReloadAssembly
 Native extension for WindowsStandalone target not found
-Refreshing native plugins compatible for Editor in 127.45 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 131.92 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Mono: successfully reloaded assembly
-- Completed reload, in  1.138 seconds
+- Completed reload, in  1.148 seconds
 Domain Reload Profiling:
-	ReloadAssembly (1138ms)
-		BeginReloadAssembly (111ms)
+	ReloadAssembly (1149ms)
+		BeginReloadAssembly (108ms)
 			ExecutionOrderSort (0ms)
 			DisableScriptedObjects (4ms)
 			BackupInstance (0ms)
 			ReleaseScriptingObjects (0ms)
-			CreateAndSetChildDomain (16ms)
-		EndReloadAssembly (979ms)
-			LoadAssemblies (78ms)
+			CreateAndSetChildDomain (15ms)
+		EndReloadAssembly (994ms)
+			LoadAssemblies (76ms)
 			RebuildTransferFunctionScriptingTraits (0ms)
-			SetupTypeCache (290ms)
+			SetupTypeCache (280ms)
 			ReleaseScriptCaches (1ms)
-			RebuildScriptCaches (63ms)
-			SetupLoadedEditorAssemblies (446ms)
+			RebuildScriptCaches (68ms)
+			SetupLoadedEditorAssemblies (455ms)
 				LogAssemblyErrors (0ms)
 				InitializePlatformSupportModulesInManaged (3ms)
 				SetLoadedEditorAssemblies (0ms)
-				RefreshPlugins (128ms)
-				BeforeProcessingInitializeOnLoad (84ms)
-				ProcessInitializeOnLoadAttributes (220ms)
+				RefreshPlugins (132ms)
+				BeforeProcessingInitializeOnLoad (87ms)
+				ProcessInitializeOnLoadAttributes (222ms)
 				ProcessInitializeOnLoadMethodAttributes (7ms)
 				AfterProcessingInitializeOnLoad (4ms)
 				EditorAssembliesLoaded (0ms)
@@ -114,14 +114,14 @@ Worker process is ready to serve import requests
 Default GameObject BitMask: UI already registered
 Shader 'MoreMountains/MMRipple': fallback shader 'Particle/AlphaBlended' not found
 Launched and connected shader compiler UnityShaderCompiler.exe after 0.05 seconds
-Refreshing native plugins compatible for Editor in 1.65 ms, found 3 plugins.
+Refreshing native plugins compatible for Editor in 1.67 ms, found 3 plugins.
 Preloading 0 native plugins for Editor in 0.00 ms.
 Unloading 4419 Unused Serialized files (Serialized files now loaded: 0)
-System memory in use before: 492.5 MB.
-System memory in use after: 492.7 MB.
+System memory in use before: 492.8 MB.
+System memory in use after: 493.0 MB.
 
 Unloading 39 unused Assets to reduce memory usage. Loaded Objects now: 4865.
-Total: 3.608800 ms (FindLiveObjects: 0.507000 ms CreateObjectMapping: 0.287600 ms MarkObjects: 2.708400 ms  DeleteObjects: 0.105100 ms)
+Total: 3.953000 ms (FindLiveObjects: 0.443100 ms CreateObjectMapping: 0.311800 ms MarkObjects: 3.089400 ms  DeleteObjects: 0.107700 ms)
 
 AssetImportParameters requested are different than current active one (requested -> active):
   custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
@@ -135,1200 +135,689 @@ AssetImportParameters requested are different than current active one (requested
   custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
 ========================================================================
 Received Import Request.
-  path: Assets/Art/Torti/TortiMats/TortiSkin.mat
-  artifactKey: Guid(24fe9bca79f38e243a2d7b3099d46f95) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Torti/TortiMats/TortiSkin.mat using Guid(24fe9bca79f38e243a2d7b3099d46f95) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ab63f409a336a33ca7d4e75a0091037f') in 0.172836 seconds 
-  Import took 0.178505 seconds .
+  path: Assets/Art/Torti/TortiMats/Pillar/PM3D_Cube3D1_3_Normal_OpenGL.png
+  artifactKey: Guid(1b5cd602c4f4b1742bb4cdb83785c40e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/TortiMats/Pillar/PM3D_Cube3D1_3_Normal_OpenGL.png using Guid(1b5cd602c4f4b1742bb4cdb83785c40e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '04cf6cf083bfa208f726c5bb3cf66f32') in 0.049775 seconds 
+  Import took 0.055592 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000181 seconds.
-  path: Assets/Art/Torti/TortiMats/Tubes2.mat
-  artifactKey: Guid(a638f44438f568e4faaa50d6ca63d515) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Torti/TortiMats/Tubes2.mat using Guid(a638f44438f568e4faaa50d6ca63d515) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8d5dae12d2e670545acc1a51a8fcf2d9') in 0.012875 seconds 
-  Import took 0.019958 seconds .
+  Time since last request: 0.000205 seconds.
+  path: Assets/Art/Torti/TortiMats/Pillar/tree_LOW.fbx
+  artifactKey: Guid(8415f26a67c185745ac4ef42dab6c465) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/TortiMats/Pillar/tree_LOW.fbx using Guid(8415f26a67c185745ac4ef42dab6c465) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '45ca80185f73353266c1eb8e81e9c00a') in 0.171890 seconds 
+  Import took 0.177281 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000186 seconds.
-  path: Assets/Art/Torti/TortiMats/MetalArm.001.mat
-  artifactKey: Guid(fa72717159163fd43a56d72c31accf37) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Torti/TortiMats/MetalArm.001.mat using Guid(fa72717159163fd43a56d72c31accf37) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '96ce114a2878aae5e15136968dbff050') in 0.009447 seconds 
-  Import took 0.016096 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 98.435201 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/Materials/M_Anglerox.mat
-  artifactKey: Guid(00efc4ad6958dac41bad90463dfe4296) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/Materials/M_Anglerox.mat using Guid(00efc4ad6958dac41bad90463dfe4296) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0798bf5cca5e9b49f6f3b01df9623569') in 0.043824 seconds 
-  Import took 0.051433 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.006655 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/Materials/M_Anglerox.mat
-  artifactKey: Guid(00efc4ad6958dac41bad90463dfe4296) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/Materials/M_Anglerox.mat using Guid(00efc4ad6958dac41bad90463dfe4296) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0798bf5cca5e9b49f6f3b01df9623569') in 0.022018 seconds 
-  Import took 0.028755 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 226.609297 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/Textures/T_Anglerox_BaseColor.png
-  artifactKey: Guid(e7e5e2b072d00c045897c6b7b585c890) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/Textures/T_Anglerox_BaseColor.png using Guid(e7e5e2b072d00c045897c6b7b585c890) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8b13ab4da958ddffb205cea347a1632a') in 0.048619 seconds 
-  Import took 0.054759 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000166 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/Textures/T_Anglerox_Occlusion.png
-  artifactKey: Guid(63864a473d2698c499fdffc36d3c2f6c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/Textures/T_Anglerox_Occlusion.png using Guid(63864a473d2698c499fdffc36d3c2f6c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c4f33cc1c78bf68fb0ce8b10b80f7f7b') in 0.013208 seconds 
-  Import took 0.019319 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000233 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/Textures/T_Anglerox_MetallicSmoothness.tga
-  artifactKey: Guid(2c3ae717680e36c438c3f5397b97c622) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/Textures/T_Anglerox_MetallicSmoothness.tga using Guid(2c3ae717680e36c438c3f5397b97c622) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b2a56cd0595561c28547b93f9cc879cd') in 0.016015 seconds 
-  Import took 0.022174 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000199 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/Textures/T_Anglerox_Normal.png
-  artifactKey: Guid(9201f9b89917e32498fc16b096c21e7a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/Textures/T_Anglerox_Normal.png using Guid(9201f9b89917e32498fc16b096c21e7a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '568721aadc227fe6c9b4f182d71911a7') in 0.013604 seconds 
-  Import took 0.019352 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000235 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/Textures/T_Anglerox_BaseColor.png
-  artifactKey: Guid(e7e5e2b072d00c045897c6b7b585c890) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/Textures/T_Anglerox_BaseColor.png using Guid(e7e5e2b072d00c045897c6b7b585c890) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8b13ab4da958ddffb205cea347a1632a') in 0.016737 seconds 
-  Import took 0.022481 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000108 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/Textures/T_Anglerox_Emissive.png
-  artifactKey: Guid(2214b023a334c4746a9a62965e7cd458) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/Textures/T_Anglerox_Emissive.png using Guid(2214b023a334c4746a9a62965e7cd458) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '50b4ff64d447f7fb5f37700439b461c0') in 0.012311 seconds 
-  Import took 0.017745 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 7.451930 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/Textures/T_Anglerox_BaseColor.png
-  artifactKey: Guid(e7e5e2b072d00c045897c6b7b585c890) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/Textures/T_Anglerox_BaseColor.png using Guid(e7e5e2b072d00c045897c6b7b585c890) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '114cc92ab59580c440440037db212d1a') in 0.014176 seconds 
-  Import took 0.020133 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 21.399540 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/Textures/T_Anglerox_BaseColor.png
-  artifactKey: Guid(e7e5e2b072d00c045897c6b7b585c890) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/Textures/T_Anglerox_BaseColor.png using Guid(e7e5e2b072d00c045897c6b7b585c890) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3bc1e62e1a39dc0298b9737c67d996bd') in 0.011144 seconds 
-  Import took 0.017599 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 79.639990 seconds.
-  path: Assets/Art/Protofactor
-  artifactKey: Guid(228afffd5d0d5be49b35ffcbb4d43fee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor using Guid(228afffd5d0d5be49b35ffcbb4d43fee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'af63e39f624c781b8ca403e9ae274fc9') in 0.004761 seconds 
-  Import took 0.011058 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.959526 seconds.
-  path: Assets/Art/Protofactor/Sci Fi
-  artifactKey: Guid(ad23e21d86ccec44b8f60ba3da8c5a33) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi using Guid(ad23e21d86ccec44b8f60ba3da8c5a33) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7f9711f9df411fe98b2db2ec530465ea') in 0.004176 seconds 
-  Import took 0.010130 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.754919 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2
-  artifactKey: Guid(fec1e17061c903242bc5ea2babc20102) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2 using Guid(fec1e17061c903242bc5ea2babc20102) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f3033ae4152185a8aa8c8b14e5ac604d') in 0.004370 seconds 
-  Import took 0.010263 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 1.558916 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2
-  artifactKey: Guid(6281e3f06a306ba4793c7ac7f149839a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2 using Guid(6281e3f06a306ba4793c7ac7f149839a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '47bd411df2c8c8a85b7a31647f30a7c0') in 0.004872 seconds 
-  Import took 0.010647 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 1.996123 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox
-  artifactKey: Guid(e9bcee0755e406247a8748cfc7e7d634) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox using Guid(e9bcee0755e406247a8748cfc7e7d634) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3a752c50602ad5fa07f50c210ff48a5b') in 0.004778 seconds 
-  Import took 0.011127 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 1.003741 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/Prefab
-  artifactKey: Guid(445768d060a023441a381c13fbb94f5a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/Prefab using Guid(445768d060a023441a381c13fbb94f5a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '184d71dfa1c65e09a7a8ef2a03be1576') in 0.004660 seconds 
-  Import took 0.010586 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.028768 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/Prefab/Anglerox.prefab
-  artifactKey: Guid(523607d74500f59438ef678ce1d0b29d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/Prefab/Anglerox.prefab using Guid(523607d74500f59438ef678ce1d0b29d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9b17da458e0c4238533fcef5dcb79775') in 0.210271 seconds 
-  Import took 0.221363 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 8.915148 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Arack
-  artifactKey: Guid(de5a1c742ea2a9e45b7d017b12229552) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Arack using Guid(de5a1c742ea2a9e45b7d017b12229552) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ac78cae876edc1abc4e1b5e8152c957c') in 0.004240 seconds 
-  Import took 0.010523 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 1.069336 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Arack/Prefabs
-  artifactKey: Guid(a1c24a56e13777440937795a81964ead) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Arack/Prefabs using Guid(a1c24a56e13777440937795a81964ead) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd0f9bc069bce65bf700e5131dae8c6cb') in 0.004257 seconds 
-  Import took 0.010224 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.040687 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Arack/Prefabs/Arack_Dark Variant.prefab
-  artifactKey: Guid(2f59be481e777fe43a9af3cd80840786) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Arack/Prefabs/Arack_Dark Variant.prefab using Guid(2f59be481e777fe43a9af3cd80840786) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a5aa4ccf2089bccee15a2ddd31d7ad14') in 0.151137 seconds 
-  Import took 0.163251 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000124 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Arack/Prefabs/Arack_Orange.prefab
-  artifactKey: Guid(24c3b49c6355bb74fad0e40a1b391c7f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Arack/Prefabs/Arack_Orange.prefab using Guid(24c3b49c6355bb74fad0e40a1b391c7f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'bec4e825b94407b65e2be947c631eae0') in 0.123056 seconds 
-  Import took 0.135088 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000202 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Arack/Prefabs/Arack_Red Variant.prefab
-  artifactKey: Guid(2ed5d3989c3d040469e0cfdb881becaf) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Arack/Prefabs/Arack_Red Variant.prefab using Guid(2ed5d3989c3d040469e0cfdb881becaf) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c7b28cc10c3cac2bb116c5e119febf60') in 0.095611 seconds 
-  Import took 0.107534 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000218 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Arack/Prefabs/Arack_Green Variant.prefab
-  artifactKey: Guid(e82b786cd73a50f40a42b9a355ebde92) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Arack/Prefabs/Arack_Green Variant.prefab using Guid(e82b786cd73a50f40a42b9a355ebde92) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '55b037e125e02358a4a186e7272d0a7f') in 0.102252 seconds 
-  Import took 0.114512 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 5.826491 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Ceratoferox
-  artifactKey: Guid(b87e71a73eb284346874b713c1210b02) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Ceratoferox using Guid(b87e71a73eb284346874b713c1210b02) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '374979233c7cf9602276994075c98efe') in 0.005831 seconds 
-  Import took 0.012477 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.797137 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Ceratoferox/Prefab
-  artifactKey: Guid(661ea9e6616496f49bf46b95a541d398) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Ceratoferox/Prefab using Guid(661ea9e6616496f49bf46b95a541d398) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a032b3001860daf13f61d39bf19e5c97') in 0.001501 seconds 
-  Import took 0.007475 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.032545 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Ceratoferox/Prefab/Ceratoferox.prefab
-  artifactKey: Guid(f615bb15a8382e14b85c9c065104303d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Ceratoferox/Prefab/Ceratoferox.prefab using Guid(f615bb15a8382e14b85c9c065104303d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd56552e617e44540c2703b7ba129bc2a') in 0.267079 seconds 
-  Import took 0.279312 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 2.080001 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Gasterobrach
-  artifactKey: Guid(c19b6a639a4d39d4eaa8b9e6f713c659) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Gasterobrach using Guid(c19b6a639a4d39d4eaa8b9e6f713c659) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9746bc38bb11bf377fe29ac8ab4410a1') in 0.004260 seconds 
-  Import took 0.010627 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 1.030544 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Gasterobrach/Prefab
-  artifactKey: Guid(7f87e1d10cd5a924bbfa5ac8f4555d67) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Gasterobrach/Prefab using Guid(7f87e1d10cd5a924bbfa5ac8f4555d67) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'aadc1aca8b947c8458420d680daea3f2') in 0.001655 seconds 
-  Import took 0.008049 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.042644 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Gasterobrach/Prefab/Gasterobrach.prefab
-  artifactKey: Guid(1bc78eb3fce5e6740968f96f2fc769f7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Gasterobrach/Prefab/Gasterobrach.prefab using Guid(1bc78eb3fce5e6740968f96f2fc769f7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'fb297fddce911085e2a4385f96fd5f7c') in 0.201631 seconds 
-  Import took 0.212790 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 1.566712 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Gobbler
-  artifactKey: Guid(1fba580dae954b24291c72df88b8e39f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Gobbler using Guid(1fba580dae954b24291c72df88b8e39f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3ae9b217bf3da342ff747de76d13db82') in 0.004159 seconds 
-  Import took 0.010225 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 1.062317 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Gobbler/Prefabs
-  artifactKey: Guid(18b9401e125dc904fac977d040f54666) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Gobbler/Prefabs using Guid(18b9401e125dc904fac977d040f54666) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ebb9a73fcfa1dc8de2eb5cbf844a591a') in 0.001650 seconds 
-  Import took 0.009592 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.058437 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Gobbler/Prefabs/Gobbler_TintDark Variant.prefab
-  artifactKey: Guid(8ef1f7faf92f70148a2237a31aac204a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Gobbler/Prefabs/Gobbler_TintDark Variant.prefab using Guid(8ef1f7faf92f70148a2237a31aac204a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'dfa3efaca8f4ad7b8a18eb2396093cbe') in 0.117318 seconds 
-  Import took 0.129921 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000240 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Gobbler/Prefabs/Gobbler_TintRed Variant.prefab
-  artifactKey: Guid(dc25a6bc3872048438c56a7e3f3f59ba) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Gobbler/Prefabs/Gobbler_TintRed Variant.prefab using Guid(dc25a6bc3872048438c56a7e3f3f59ba) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '53056c9b29a17d56e554b704f1d12384') in 0.116410 seconds 
-  Import took 0.128614 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000176 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Gobbler/Prefabs/Gobbler_TintYellow.prefab
-  artifactKey: Guid(b31b5231d06d4044589d7f76777bc99f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Gobbler/Prefabs/Gobbler_TintYellow.prefab using Guid(b31b5231d06d4044589d7f76777bc99f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd47b3b44656f41af8f95196d3c538bbf') in 0.121786 seconds 
-  Import took 0.134752 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000166 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Gobbler/Prefabs/Gobbler_TintGreen Variant.prefab
-  artifactKey: Guid(63eab75d5d03845488ab034b61f38141) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Gobbler/Prefabs/Gobbler_TintGreen Variant.prefab using Guid(63eab75d5d03845488ab034b61f38141) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '16f9c0ad20eea4089c21f22836986c9c') in 0.119714 seconds 
-  Import took 0.133202 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 1.836762 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Rapax
-  artifactKey: Guid(3239e026a589c4f44864302e1b85e3fb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Rapax using Guid(3239e026a589c4f44864302e1b85e3fb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '93cdbc2b598df51dac25d1ae86ae3fa2') in 0.005127 seconds 
-  Import took 0.011394 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 1.206022 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Onyscidus
-  artifactKey: Guid(575f9970a4f82f7408850c7a566ecf91) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Onyscidus using Guid(575f9970a4f82f7408850c7a566ecf91) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a5a4eb2c36ab7d5d1c8d413f72d6c35a') in 0.004791 seconds 
-  Import took 0.010923 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 1.003423 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Onyscidus/Prefab
-  artifactKey: Guid(e5cfa1fdf0c5a6c478fb11297da2c95f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Onyscidus/Prefab using Guid(e5cfa1fdf0c5a6c478fb11297da2c95f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c21092692f8ce81b5b9207aa734047d1') in 0.001899 seconds 
-  Import took 0.007812 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.052756 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Onyscidus/Prefab/Onyscidus.prefab
-  artifactKey: Guid(e9be7be0a27ec154dbd5df87ce6c500c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Onyscidus/Prefab/Onyscidus.prefab using Guid(e9be7be0a27ec154dbd5df87ce6c500c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8aa66bc46b879104b61ba9c6673404c5') in 0.141049 seconds 
-  Import took 0.153503 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 2.361413 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Rapax/Prefabs
-  artifactKey: Guid(45b40be58fa2ef849ac2772a09355270) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Rapax/Prefabs using Guid(45b40be58fa2ef849ac2772a09355270) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e5570fe73c1c2df068da8eeb59ffe293') in 0.002121 seconds 
-  Import took 0.008906 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.044575 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Rapax/Prefabs/Rapax_Blue Variant.prefab
-  artifactKey: Guid(d2b209503aec91e49bdc44daa81c0a6f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Rapax/Prefabs/Rapax_Blue Variant.prefab using Guid(d2b209503aec91e49bdc44daa81c0a6f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '112526d2acb50c28f0e563051b1b5c69') in 0.115206 seconds 
-  Import took 0.129174 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000198 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Rapax/Prefabs/Rapax_Red.prefab
-  artifactKey: Guid(02ab46ef7501bec47a006d5bb22f0f93) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Rapax/Prefabs/Rapax_Red.prefab using Guid(02ab46ef7501bec47a006d5bb22f0f93) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5560ae0dc9c2b3bda3e43442dcb52ae1') in 0.115214 seconds 
-  Import took 0.128950 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000175 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Rapax/Prefabs/Rapax_Yellow Variant.prefab
-  artifactKey: Guid(ddea4379f1e5a444eae5656f453f0769) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Rapax/Prefabs/Rapax_Yellow Variant.prefab using Guid(ddea4379f1e5a444eae5656f453f0769) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0733c0a7691ca29df8490bea6baf31f9') in 0.116444 seconds 
-  Import took 0.130417 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000189 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Rapax/Prefabs/Rapax_Green Variant.prefab
-  artifactKey: Guid(d12705d6fe979fb4890b839855f6d9b0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Rapax/Prefabs/Rapax_Green Variant.prefab using Guid(d12705d6fe979fb4890b839855f6d9b0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cca7b23d865310acc28c9febf2318133') in 0.115125 seconds 
-  Import took 0.129250 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 1392.936798 seconds.
-  path: Assets/Art/Torti/M_Anglerox 1.mat
-  artifactKey: Guid(d5b9797e0c7e6a4458241285009e3518) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Torti/M_Anglerox 1.mat using Guid(d5b9797e0c7e6a4458241285009e3518) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'bdd0aed945fa889d396353e3776db55a') in 0.022716 seconds 
-  Import took 0.030353 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000121 seconds.
-  path: Assets/Art/Torti/TortiTime.fbx
-  artifactKey: Guid(3d52acd5a4fa60a4da7c5c6ffda2ce26) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Torti/TortiTime.fbx using Guid(3d52acd5a4fa60a4da7c5c6ffda2ce26) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '64a857b51a8d691a7d8739aff6c82e00') in 0.062048 seconds 
-  Import took 0.067604 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000228 seconds.
-  path: Assets/Art/Torti/M_Anglerox 2.mat
-  artifactKey: Guid(81ec22f5f358846468493bbdc3bbb045) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Torti/M_Anglerox 2.mat using Guid(81ec22f5f358846468493bbdc3bbb045) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'fbf85347808a33a109a57f7f3dfc3194') in 0.019144 seconds 
-  Import took 0.025225 seconds .
+  Time since last request: 0.000182 seconds.
+  path: Assets/Art/Torti/TortiMats/Pillar
+  artifactKey: Guid(4f5ed2834bb8ae84cbffeefc8f7a6acb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/TortiMats/Pillar using Guid(4f5ed2834bb8ae84cbffeefc8f7a6acb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b8527e7eca39c3b8959d3040d8583daa') in 0.003817 seconds 
+  Import took 0.008364 seconds .
 
 ========================================================================
 Received Import Request.
   Time since last request: 0.000190 seconds.
-  path: Assets/Art/Torti/M_Rapax_3.mat
-  artifactKey: Guid(bc6bad2b08e71bc4fbe121765b01d2ed) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Torti/M_Rapax_3.mat using Guid(bc6bad2b08e71bc4fbe121765b01d2ed) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '57c2fdae34097f3df0455dd905dff560') in 0.071177 seconds 
-  Import took 0.082446 seconds .
+  path: Assets/Art/Torti/TortiMats/Pillar/TGore_LOW.fbx
+  artifactKey: Guid(17aa137c097f3054b8512b6c6b56150a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/TortiMats/Pillar/TGore_LOW.fbx using Guid(17aa137c097f3054b8512b6c6b56150a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '005c57cf4854236337fcb68a293d99f2') in 0.017603 seconds 
+  Import took 0.022657 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000217 seconds.
-  path: Assets/Art/Torti/M_Ceratoferox 1.mat
-  artifactKey: Guid(85c27db6cfaf7824da889640b878164b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Torti/M_Ceratoferox 1.mat using Guid(85c27db6cfaf7824da889640b878164b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0762be465fcea6e8aebb9a6662fe788d') in 0.019041 seconds 
-  Import took 0.025758 seconds .
+  Time since last request: 10.166818 seconds.
+  path: Assets/Art/Torti/TortiMats/Pillar/Materials
+  artifactKey: Guid(2118573f15bbb2a499e22951ce739036) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/TortiMats/Pillar/Materials using Guid(2118573f15bbb2a499e22951ce739036) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '10d96a7baca9abbc536336c423d524bb') in 0.004474 seconds 
+  Import took 0.010426 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000186 seconds.
-  path: Assets/Art/Torti/M_Gobbler_TintGreen 1.mat
-  artifactKey: Guid(600074c37f7544f42b0e51422d7e383d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Torti/M_Gobbler_TintGreen 1.mat using Guid(600074c37f7544f42b0e51422d7e383d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2f1cd077c56335a7e6481295c87252ad') in 0.055086 seconds 
-  Import took 0.065198 seconds .
+  Time since last request: 0.057095 seconds.
+  path: Assets/Art/Torti/TortiMats/Pillar/Materials/PM3D_Cube3D1_3_Normal_OpenGL.mat
+  artifactKey: Guid(459ef896daff5be44943b0ed492d1a35) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/TortiMats/Pillar/Materials/PM3D_Cube3D1_3_Normal_OpenGL.mat using Guid(459ef896daff5be44943b0ed492d1a35) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'bc6ffdce87e051cedc3f52fcac2b5da4') in 0.014317 seconds 
+  Import took 0.019974 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 173.143544 seconds.
-  path: Assets/Art/Torti/TortiTime.fbx
-  artifactKey: Guid(3d52acd5a4fa60a4da7c5c6ffda2ce26) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Torti/TortiTime.fbx using Guid(3d52acd5a4fa60a4da7c5c6ffda2ce26) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8aa683e6d6444cd019bd3d3329aff40e') in 0.051422 seconds 
-  Import took 0.057938 seconds .
+  Time since last request: 5.168580 seconds.
+  path: Assets/Art/Torti/TortiMats/Pillar/TreeTexture1
+  artifactKey: Guid(4e9d721672d02a54baf0fc8e8cd38f74) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/TortiMats/Pillar/TreeTexture1 using Guid(4e9d721672d02a54baf0fc8e8cd38f74) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '66600fb6613c606be10752fb7363549b') in 0.004665 seconds 
+  Import took 0.010790 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 221.782205 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@ClawsAttackRightForward_RM.fbx
-  artifactKey: Guid(ed3e1e09b9643d2499c47b3c23327e8f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@ClawsAttackRightForward_RM.fbx using Guid(ed3e1e09b9643d2499c47b3c23327e8f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '66d796d267601ea9094aa9e69d224651') in 0.014787 seconds 
-  Import took 0.022224 seconds .
+  Time since last request: 0.607021 seconds.
+  path: Assets/Art/Torti/TortiMats/Pillar/goreTexture
+  artifactKey: Guid(286ca7346ed34fd4e96ca5e67ac8bf79) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/TortiMats/Pillar/goreTexture using Guid(286ca7346ed34fd4e96ca5e67ac8bf79) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a00b7dfe0c01bd98ccb546ed4451527e') in 0.005103 seconds 
+  Import took 0.011273 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000234 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@ClawsAttackLeftForward.fbx
-  artifactKey: Guid(7182299c1739e5c499ac51d38e0bf689) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@ClawsAttackLeftForward.fbx using Guid(7182299c1739e5c499ac51d38e0bf689) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f8f7b8b1ad0b8db4b552a074d4707a40') in 0.018336 seconds 
-  Import took 0.024131 seconds .
+  Time since last request: 0.059153 seconds.
+  path: Assets/Art/Torti/TortiMats/Pillar/goreTexture/PM3D_Sphere3D1_1_Base_Color.png
+  artifactKey: Guid(e0fb5df19894cc74884abcdfe4c0efe4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/TortiMats/Pillar/goreTexture/PM3D_Sphere3D1_1_Base_Color.png using Guid(e0fb5df19894cc74884abcdfe4c0efe4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8d98012675fcf40f84efdd281ca85529') in 0.011751 seconds 
+  Import took 0.018426 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000439 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@Turn90Right_RM.fbx
-  artifactKey: Guid(b09c7c281f713ae4586d3e6e96044635) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@Turn90Right_RM.fbx using Guid(b09c7c281f713ae4586d3e6e96044635) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c9ee7956cde4f2c2e280c2a543b1a57c') in 0.012249 seconds 
-  Import took 0.019085 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000202 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@JumpLeft_RM.fbx
-  artifactKey: Guid(c6e290a9e5b94c24598fac03b1a67ade) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@JumpLeft_RM.fbx using Guid(c6e290a9e5b94c24598fac03b1a67ade) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a5da8140deb242b3de089a499d67aa23') in 0.013565 seconds 
-  Import took 0.019767 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000117 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@JumpLeft.fbx
-  artifactKey: Guid(e877aa9a32d288647ac687c771ee77ca) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@JumpLeft.fbx using Guid(e877aa9a32d288647ac687c771ee77ca) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f42028a5f9135910906efe78d2cc8ab0') in 0.013403 seconds 
-  Import took 0.019399 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000145 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@JumpClawsAttack_RM.fbx
-  artifactKey: Guid(7c117218c565de04eafedca36606fa21) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@JumpClawsAttack_RM.fbx using Guid(7c117218c565de04eafedca36606fa21) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd0fc11c58f268a80d1d87e5eb6942a07') in 0.013341 seconds 
-  Import took 0.019461 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000156 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@Roar2.fbx
-  artifactKey: Guid(1e3369807178b75488f1be7316a4bea9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@Roar2.fbx using Guid(1e3369807178b75488f1be7316a4bea9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '05a28c78dfe73135cab65eeaf990f9dc') in 0.015201 seconds 
-  Import took 0.021540 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000124 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@Walk_RM.fbx
-  artifactKey: Guid(0164eb62c0a4b7b4d815fc9b537c502a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@Walk_RM.fbx using Guid(0164eb62c0a4b7b4d815fc9b537c502a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b84486ee22e4ad2198eebfb64c116c05') in 0.013784 seconds 
-  Import took 0.019851 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000205 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@GetHitFront.fbx
-  artifactKey: Guid(92095dfe6adde61469d1a7b2b686bfcb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@GetHitFront.fbx using Guid(92095dfe6adde61469d1a7b2b686bfcb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '226deed2270285148b9e6f80ee7740e5') in 0.011947 seconds 
-  Import took 0.017767 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000168 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@ClawsAttackLeft.fbx
-  artifactKey: Guid(534c4578827f2cd4787dd262b7a1d210) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@ClawsAttackLeft.fbx using Guid(534c4578827f2cd4787dd262b7a1d210) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c9af2e203fa34d69c00a1376aea309d7') in 0.014094 seconds 
-  Import took 0.019780 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000189 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@Run.fbx
-  artifactKey: Guid(d1cdf5da9bfe4524881e506d53229ef0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@Run.fbx using Guid(d1cdf5da9bfe4524881e506d53229ef0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '706f0335342dd1c0e6acfafe9a805dcd') in 0.010882 seconds 
-  Import took 0.017051 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000206 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/SK_Anglerox.fbx
-  artifactKey: Guid(07f33cee22a1b194e9acf9165c916191) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/SK_Anglerox.fbx using Guid(07f33cee22a1b194e9acf9165c916191) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c70afda2f7969486c1f9691d34eb76c4') in 0.033714 seconds 
-  Import took 0.040445 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000243 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@GetHitBack.fbx
-  artifactKey: Guid(4773ca2d8e7563a47afc6c5fc29b45db) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@GetHitBack.fbx using Guid(4773ca2d8e7563a47afc6c5fc29b45db) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd0b1429ae920147b2fbd8b7ab8a797d1') in 0.012149 seconds 
-  Import took 0.018676 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000214 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@ClawsAttackRightForward.fbx
-  artifactKey: Guid(83d6fba8991fa7f478e0713edf0ed953) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@ClawsAttackRightForward.fbx using Guid(83d6fba8991fa7f478e0713edf0ed953) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '817a106582581013d1b0668c930591d4') in 0.012911 seconds 
-  Import took 0.018897 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000185 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@IdleBreathe.fbx
-  artifactKey: Guid(3e657145eb459f548a4419f888b24b7f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@IdleBreathe.fbx using Guid(3e657145eb459f548a4419f888b24b7f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0c3a0b0aa486315540ddb94071272611') in 0.013770 seconds 
-  Import took 0.019556 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000181 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@ClawsAttackLeftForward_RM.fbx
-  artifactKey: Guid(138e1b7db155f7840b18c0a7e875ed00) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@ClawsAttackLeftForward_RM.fbx using Guid(138e1b7db155f7840b18c0a7e875ed00) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '98c5f2b20d0b69ca311a2c0b7f9f12f5') in 0.012990 seconds 
-  Import took 0.018757 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000213 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@Walk.fbx
-  artifactKey: Guid(136987a8c73f66f4baab10d195528a51) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@Walk.fbx using Guid(136987a8c73f66f4baab10d195528a51) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6159358fa0257ea474d2913d251274c3') in 0.012478 seconds 
-  Import took 0.018392 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000294 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@ClawsAttackRight.fbx
-  artifactKey: Guid(4310aa66c745d014dade595f0c22d529) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@ClawsAttackRight.fbx using Guid(4310aa66c745d014dade595f0c22d529) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4e307c1183ff42b3e3ac847edd24d9c5') in 0.012944 seconds 
-  Import took 0.019646 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000120 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@Death.fbx
-  artifactKey: Guid(1f6e842ea67538545934bab5238eb752) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@Death.fbx using Guid(1f6e842ea67538545934bab5238eb752) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6176cf26396ffe9e647b4c8692b3f72b') in 0.015274 seconds 
-  Import took 0.021752 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000179 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@JumpForward.fbx
-  artifactKey: Guid(a0fb9fb0b717da54db21f57e68d29f78) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@JumpForward.fbx using Guid(a0fb9fb0b717da54db21f57e68d29f78) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '74438a231e480f6749883384ca590abf') in 0.012271 seconds 
-  Import took 0.018119 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000160 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@GetHitRight.fbx
-  artifactKey: Guid(64bf128f04bc39549a3c80f30113f924) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@GetHitRight.fbx using Guid(64bf128f04bc39549a3c80f30113f924) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3efa0d5c40e18925beec33c166a56025') in 0.012583 seconds 
-  Import took 0.018706 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000195 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@GetHitLeft.fbx
-  artifactKey: Guid(728a9e43040317d4994539568a0d07d3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@GetHitLeft.fbx using Guid(728a9e43040317d4994539568a0d07d3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '11f9ecc04adfa4a5fc5a2a2ce2a750f5') in 0.012585 seconds 
-  Import took 0.018799 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000154 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@JumpBackwards.fbx
-  artifactKey: Guid(8745adce1652bb74ab21679968ed4937) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@JumpBackwards.fbx using Guid(8745adce1652bb74ab21679968ed4937) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '828e8fef4280135e66098b58150b7b98') in 0.013375 seconds 
-  Import took 0.019750 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000155 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@IdleLookAround.fbx
-  artifactKey: Guid(9454a4ef888bc584f92d32e8a41ad37c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@IdleLookAround.fbx using Guid(9454a4ef888bc584f92d32e8a41ad37c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '73b8bf72d420350c7a069ab03085f482') in 0.026693 seconds 
-  Import took 0.032802 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000192 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@JumpRight.fbx
-  artifactKey: Guid(c34505c856cc7404ab706f06ec89a672) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@JumpRight.fbx using Guid(c34505c856cc7404ab706f06ec89a672) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '25d4df0219c2ffa51a564deefa67c6aa') in 0.011695 seconds 
-  Import took 0.018152 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000228 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@ClawsAttack2HitCombo.fbx
-  artifactKey: Guid(10ad53754b0d33742910a8310f0e5bc1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@ClawsAttack2HitCombo.fbx using Guid(10ad53754b0d33742910a8310f0e5bc1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6f2ed9313b607a5c8f41dcfbf2f62641') in 0.013707 seconds 
-  Import took 0.020144 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000179 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@ClawsAttack2HitComboForward.fbx
-  artifactKey: Guid(3ad7571cb9d0f9c4e8d6f839d285454a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@ClawsAttack2HitComboForward.fbx using Guid(3ad7571cb9d0f9c4e8d6f839d285454a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5cd59ee13455499efc5c3f4e75753713') in 0.014641 seconds 
-  Import took 0.020417 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000199 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@JumpClawsAttack.fbx
-  artifactKey: Guid(7fa3e465953c20f4e92dc1eb21b86e78) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@JumpClawsAttack.fbx using Guid(7fa3e465953c20f4e92dc1eb21b86e78) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f742356c264557f96ca7b52892849a79') in 0.013466 seconds 
-  Import took 0.019333 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000155 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@JumpRight_RM.fbx
-  artifactKey: Guid(80ea2c79b6175d54c8c785297c0cce9b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@JumpRight_RM.fbx using Guid(80ea2c79b6175d54c8c785297c0cce9b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'edd4e35a832356bf4bd271234209c67e') in 0.012560 seconds 
-  Import took 0.018603 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000116 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@Roar1.fbx
-  artifactKey: Guid(0c3bbddc56af1144cb4d81532f9653f9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@Roar1.fbx using Guid(0c3bbddc56af1144cb4d81532f9653f9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a45c24b2bb280142811febb909453bc6') in 0.014063 seconds 
-  Import took 0.020329 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000201 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@Turn90Right.fbx
-  artifactKey: Guid(3d68eb63a2281294e8dd554db6994918) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@Turn90Right.fbx using Guid(3d68eb63a2281294e8dd554db6994918) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '87fb1da56ca47e65925166e9c5e40f59') in 0.012135 seconds 
-  Import took 0.018676 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000123 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@JumpBackwards_RM.fbx
-  artifactKey: Guid(26c7ecb9ec11a304ab61ffaf77b94878) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@JumpBackwards_RM.fbx using Guid(26c7ecb9ec11a304ab61ffaf77b94878) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e1239cc3c8b95280b780b922a6ae4c9d') in 0.012686 seconds 
-  Import took 0.018761 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000163 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@ClawsAttack2HitComboForward_RM.fbx
-  artifactKey: Guid(2e3a7c3397d930743b2fc96b58564839) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@ClawsAttack2HitComboForward_RM.fbx using Guid(2e3a7c3397d930743b2fc96b58564839) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '06c8a9043249b8200ae26e57834cb1e9') in 0.014136 seconds 
-  Import took 0.020565 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000170 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@Turn90Left.fbx
-  artifactKey: Guid(a2cac8e37cba5e14f9a1cb93bcf38e59) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@Turn90Left.fbx using Guid(a2cac8e37cba5e14f9a1cb93bcf38e59) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '59b23123961eee23d5508582f9e6fad2') in 0.012561 seconds 
-  Import took 0.018719 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000203 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@Run_RM.fbx
-  artifactKey: Guid(11d99b2615dded646ac3ca01b32fcf60) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@Run_RM.fbx using Guid(11d99b2615dded646ac3ca01b32fcf60) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0d73add3a0651ee88b77fa4567575e9f') in 0.011504 seconds 
-  Import took 0.018111 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000172 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@Turn90Left_RM.fbx
-  artifactKey: Guid(5c60aba83853cc143bf742c273781ead) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@Turn90Left_RM.fbx using Guid(5c60aba83853cc143bf742c273781ead) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '22c63dc686a829fc83cd9179d75834f7') in 0.012506 seconds 
-  Import took 0.018955 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000340 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@JumpForward_RM.fbx
-  artifactKey: Guid(0ef165b11b5ebfc4e86f6d0475659cb4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files/Anglerox@JumpForward_RM.fbx using Guid(0ef165b11b5ebfc4e86f6d0475659cb4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '06bf06855603d8840678180f62bf3aa4') in 0.012306 seconds 
-  Import took 0.018981 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 2.082363 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files
-  artifactKey: Guid(53c02e69bb1733846b8df70f18fa9df8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Anglerox/FBX Files using Guid(53c02e69bb1733846b8df70f18fa9df8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a8e0ccdaf7fcab649fb4e68913338df4') in 0.004720 seconds 
-  Import took 0.011967 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 89.787560 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Arack/FBX Files/Arack@Bite.fbx
-  artifactKey: Guid(cd1dcf454b8961f41aeafe2bfb46433a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Arack/FBX Files/Arack@Bite.fbx using Guid(cd1dcf454b8961f41aeafe2bfb46433a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1012eef3abcd7f6c3015fb276472bddd') in 0.011278 seconds 
-  Import took 0.017881 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000230 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Arack/FBX Files/SK_Arack.fbx
-  artifactKey: Guid(9edbcaf172ed4fe42a3c523ab930094d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Arack/FBX Files/SK_Arack.fbx using Guid(9edbcaf172ed4fe42a3c523ab930094d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1f22c7426c4da53e58fa36944cdf3242') in 0.083869 seconds 
-  Import took 0.095259 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000173 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Arack/FBX Files/Arack@Bite.fbx
-  artifactKey: Guid(cd1dcf454b8961f41aeafe2bfb46433a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Arack/FBX Files/Arack@Bite.fbx using Guid(cd1dcf454b8961f41aeafe2bfb46433a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1012eef3abcd7f6c3015fb276472bddd') in 0.007045 seconds 
-  Import took 0.013867 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000126 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Arack/FBX Files/SK_Arack.fbx
-  artifactKey: Guid(9edbcaf172ed4fe42a3c523ab930094d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Arack/FBX Files/SK_Arack.fbx using Guid(9edbcaf172ed4fe42a3c523ab930094d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1f22c7426c4da53e58fa36944cdf3242') in 0.078647 seconds 
-  Import took 0.089670 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 6.331268 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Ceratoferox/FBX Files/SK_Ceratoferox.fbx
-  artifactKey: Guid(c6263e24721ddb34c91a8904b38475ce) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Ceratoferox/FBX Files/SK_Ceratoferox.fbx using Guid(c6263e24721ddb34c91a8904b38475ce) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b2055669363f88be1f31b4a3db11eb94') in 0.032219 seconds 
-  Import took 0.039572 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000232 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Gasterobrach/FBX files/SK_Gasterobrach.fbx
-  artifactKey: Guid(e18129ae62114b34789da3a626f45a79) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Gasterobrach/FBX files/SK_Gasterobrach.fbx using Guid(e18129ae62114b34789da3a626f45a79) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'cc2d86eaa542b43b7a2cf484c4a0b90c') in 0.032950 seconds 
-  Import took 0.038911 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000143 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Onyscidus/FBX Files/SK_Onyscidus.fbx
-  artifactKey: Guid(31d7511636360e046a439c1b7e1c27ec) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Onyscidus/FBX Files/SK_Onyscidus.fbx using Guid(31d7511636360e046a439c1b7e1c27ec) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4de4aff33b1e25293d8879203dcfda05') in 0.061414 seconds 
-  Import took 0.070693 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000216 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Shooter Characters Pack Vol 2/Elite Trooper/FBX Files/SK_EliteTrooper.FBX
-  artifactKey: Guid(073374ff34a2c3d458f66bdef5aad330) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Shooter Characters Pack Vol 2/Elite Trooper/FBX Files/SK_EliteTrooper.FBX using Guid(073374ff34a2c3d458f66bdef5aad330) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5f1f1b9c9ff1b1e697b259f7310b302f') in 0.084538 seconds 
-  Import took 0.096292 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000211 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Gobbler/FBX Files/SK_Gobbler.fbx
-  artifactKey: Guid(8c6b85b935a800948ac3e15a191eab19) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Gobbler/FBX Files/SK_Gobbler.fbx using Guid(8c6b85b935a800948ac3e15a191eab19) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5452a362809271d2b657e767f2a279a9') in 0.066704 seconds 
-  Import took 0.077286 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000240 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Rapax/FBX Files/SK_Rapax.fbx
-  artifactKey: Guid(9062d006fd934ab4fb65403f273708e3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Rapax/FBX Files/SK_Rapax.fbx using Guid(9062d006fd934ab4fb65403f273708e3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '92a653a412272fc374f70a109754afc0') in 0.077377 seconds 
-  Import took 0.089243 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.058465 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Shooter Characters Pack Vol 2/Sci Fi  Juggernaut/FBX Files/SK_SciFiJuggernaut.fbx
-  artifactKey: Guid(8288792365b694a49ab08fe3e40c82d7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Shooter Characters Pack Vol 2/Sci Fi  Juggernaut/FBX Files/SK_SciFiJuggernaut.fbx using Guid(8288792365b694a49ab08fe3e40c82d7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'fb6d35dbba55db790ae8f5347b174f53') in 0.075356 seconds 
-  Import took 0.087557 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000247 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Ursacetus/FBX Files/SK_Ursacetus.fbx
-  artifactKey: Guid(d33c7d7f2ee2e1741beb56220b871195) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Ursacetus/FBX Files/SK_Ursacetus.fbx using Guid(d33c7d7f2ee2e1741beb56220b871195) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '0f2d0036c414fe44de1dc05cf1954c7e') in 0.666482 seconds 
-  Import took 0.685691 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 60.061746 seconds.
-  path: Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Modeling/Weapon_Avatar Mask.mask
-  artifactKey: Guid(b038f001f1b41254e8e6cdb37c9fab85) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Modeling/Weapon_Avatar Mask.mask using Guid(b038f001f1b41254e8e6cdb37c9fab85) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '471a36209af31080e06fc1df0ac99529') in 0.010408 seconds 
-  Import took 0.017556 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.001768 seconds.
-  path: Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Modeling/Weapon_Avatar Mask.mask
-  artifactKey: Guid(b038f001f1b41254e8e6cdb37c9fab85) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Modeling/Weapon_Avatar Mask.mask using Guid(b038f001f1b41254e8e6cdb37c9fab85) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '471a36209af31080e06fc1df0ac99529') in 0.002402 seconds 
-  Import took 0.009505 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 4.917838 seconds.
-  path: Assets/ParticleEffects/SineVFX/TopDownEffects/Resources/Textures/ForVFX/Misc/DistortionFix_01.png
-  artifactKey: Guid(dc92c400d22b4166aa9e289419dd9fd4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ParticleEffects/SineVFX/TopDownEffects/Resources/Textures/ForVFX/Misc/DistortionFix_01.png using Guid(dc92c400d22b4166aa9e289419dd9fd4) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c418de31503433e9d324d2ccaf8c69f2') in 0.010223 seconds 
-  Import took 0.017359 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000182 seconds.
-  path: Assets/ParticleEffects/SineVFX/TopDownEffects/Resources/Materials/SeparateEffects/Flames/Flames_01nodistortion_Example.mat
-  artifactKey: Guid(d45c7cee54c6406e957af15a9614ea87) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/ParticleEffects/SineVFX/TopDownEffects/Resources/Materials/SeparateEffects/Flames/Flames_01nodistortion_Example.mat using Guid(d45c7cee54c6406e957af15a9614ea87) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '45a4e9c84b61c3e9a1beb3c917dd8ec3') in 0.028360 seconds 
-  Import took 0.035085 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 6.966913 seconds.
-  path: Assets/Animations/Animators/TortiAnim.controller
-  artifactKey: Guid(9131b30d88774cd4badf5ff185b1aa83) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Animations/Animators/TortiAnim.controller using Guid(9131b30d88774cd4badf5ff185b1aa83) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd25c35dba446623ae0116a6cbaa6bb5d') in 0.067274 seconds 
-  Import took 0.073846 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 14.754936 seconds.
-  path: Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Animation/M_Katana_Blade/1_Movements/9__Idle_To_Move/M_katana_Blade@Idle_To_Walk_ver_A_Root.FBX
-  artifactKey: Guid(c1cd36f7d24e64746b65d65ef794b5d1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Animation/M_Katana_Blade/1_Movements/9__Idle_To_Move/M_katana_Blade@Idle_To_Walk_ver_A_Root.FBX using Guid(c1cd36f7d24e64746b65d65ef794b5d1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '324a9e86a59671e8a5a0deba05aec0cf') in 0.031101 seconds 
-  Import took 0.037427 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000134 seconds.
-  path: Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Animation/M_Katana_Blade/1_Movements/9__Idle_To_Move/M_katana_Blade@Idle_To_Walk_ver_B_Root.FBX
-  artifactKey: Guid(23bea49deff8e3c488864df759a596c3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Animation/M_Katana_Blade/1_Movements/9__Idle_To_Move/M_katana_Blade@Idle_To_Walk_ver_B_Root.FBX using Guid(23bea49deff8e3c488864df759a596c3) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '65ae9071af746fcd27febec838cb9303') in 0.023508 seconds 
-  Import took 0.030318 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000120 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Ursacetus/FBX Files/Ursacetus@IdleBreathe.fbx
-  artifactKey: Guid(b067b228ddc3b3543a5c9806cff35a2b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Ursacetus/FBX Files/Ursacetus@IdleBreathe.fbx using Guid(b067b228ddc3b3543a5c9806cff35a2b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '91a1ebb6025e680f3450ae05886f9819') in 0.013997 seconds 
-  Import took 0.021513 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000133 seconds.
-  path: Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Animation/M_Katana_Blade/1_Movements/14__Idle_To_Crouch/M_katana_Blade@Idle_ver_B_To_Crouch_ver_B_Idle_Root.FBX
-  artifactKey: Guid(0cb5f28c160a4f14c8179b154039e179) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Animation/M_Katana_Blade/1_Movements/14__Idle_To_Crouch/M_katana_Blade@Idle_ver_B_To_Crouch_ver_B_Idle_Root.FBX using Guid(0cb5f28c160a4f14c8179b154039e179) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'be44fa9b315bdf8f9e96aca1ea3ed724') in 0.017953 seconds 
-  Import took 0.024460 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000149 seconds.
-  path: Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Animation/M_Katana_Blade/1_Movements/14__Idle_To_Crouch/M_katana_Blade@Idle_ver_B_To_Crouch_ver_A_Idle_Root.FBX
-  artifactKey: Guid(ad8a7c7e8e909584ea7e2d30501f7344) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Animation/M_Katana_Blade/1_Movements/14__Idle_To_Crouch/M_katana_Blade@Idle_ver_B_To_Crouch_ver_A_Idle_Root.FBX using Guid(ad8a7c7e8e909584ea7e2d30501f7344) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '35d076dc629ef0f9421afec10988af12') in 0.018565 seconds 
-  Import took 0.024318 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000157 seconds.
-  path: Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Animation/M_Katana_Blade/1_Movements/14__Idle_To_Crouch/M_katana_Blade@Idle_ver_A_To_Crouch_ver_B_Idle.FBX
-  artifactKey: Guid(1bfa748a78838d54e9d5e2ddbee9924f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Animation/M_Katana_Blade/1_Movements/14__Idle_To_Crouch/M_katana_Blade@Idle_ver_A_To_Crouch_ver_B_Idle.FBX using Guid(1bfa748a78838d54e9d5e2ddbee9924f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd09cbbd60dceb61f03eff6daaa92b00e') in 0.019072 seconds 
-  Import took 0.025325 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000124 seconds.
-  path: Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Animation/M_Katana_Blade/1_Movements/9__Idle_To_Move/M_katana_Blade@Idle_To_Walk_ver_B.FBX
-  artifactKey: Guid(2047e28c372d7564ca25757e1b0c7a42) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Animation/M_Katana_Blade/1_Movements/9__Idle_To_Move/M_katana_Blade@Idle_To_Walk_ver_B.FBX using Guid(2047e28c372d7564ca25757e1b0c7a42) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '7ff98a6ecb9b94d4dc2671147f03f324') in 0.017291 seconds 
-  Import took 0.023702 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000163 seconds.
-  path: Assets/Animations/Clips/CLazyRunnerActionAnimPack/Animations/P1_CLazyMovement/Mvm_Idle/CLazy@Idle_Wait_A.FBX
-  artifactKey: Guid(4f9b2cc802bffcd468bf59be5599a8d1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Animations/Clips/CLazyRunnerActionAnimPack/Animations/P1_CLazyMovement/Mvm_Idle/CLazy@Idle_Wait_A.FBX using Guid(4f9b2cc802bffcd468bf59be5599a8d1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '6fb5d606b53a8e24a4c9cb26be07517d') in 0.039780 seconds 
-  Import took 0.046763 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000145 seconds.
-  path: Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Animation/M_Katana_Blade/1_Movements/14__Idle_To_Crouch/M_katana_Blade@Idle_ver_A_To_Crouch_ver_A_Idle.FBX
-  artifactKey: Guid(a5617ef9abf458c41b357010d3971edd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Animation/M_Katana_Blade/1_Movements/14__Idle_To_Crouch/M_katana_Blade@Idle_ver_A_To_Crouch_ver_A_Idle.FBX using Guid(a5617ef9abf458c41b357010d3971edd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '66b69fbb8c9f3227e23c1830a2d5c2a4') in 0.016858 seconds 
-  Import took 0.023422 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000186 seconds.
-  path: Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Animation/M_Katana_Blade/1_Movements/14__Idle_To_Crouch/M_katana_Blade@Idle_ver_A_To_Crouch_ver_A_Idle_Root.FBX
-  artifactKey: Guid(84e5455e577ab9644acdfee37f6bccdb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Animation/M_Katana_Blade/1_Movements/14__Idle_To_Crouch/M_katana_Blade@Idle_ver_A_To_Crouch_ver_A_Idle_Root.FBX using Guid(84e5455e577ab9644acdfee37f6bccdb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd81ccab0fc05330548672b49c4344abf') in 0.018038 seconds 
-  Import took 0.024525 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000145 seconds.
-  path: Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Animation/M_Katana_Blade/1_Movements/14__Idle_To_Crouch/M_katana_Blade@Idle_ver_B_To_Crouch_ver_A_Idle.FBX
-  artifactKey: Guid(b27aeaebddd2aac4484f0f1c97ca93b5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Animation/M_Katana_Blade/1_Movements/14__Idle_To_Crouch/M_katana_Blade@Idle_ver_B_To_Crouch_ver_A_Idle.FBX using Guid(b27aeaebddd2aac4484f0f1c97ca93b5) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2f6bdb8b9d39c36179c31f97fe31d182') in 0.019889 seconds 
-  Import took 0.026121 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000176 seconds.
-  path: Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Animation/M_Katana_Blade/1_Movements/14__Idle_To_Crouch/M_katana_Blade@Idle_ver_A_To_Crouch_ver_A_Idle_Root.FBX
-  artifactKey: Guid(84e5455e577ab9644acdfee37f6bccdb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Animation/M_Katana_Blade/1_Movements/14__Idle_To_Crouch/M_katana_Blade@Idle_ver_A_To_Crouch_ver_A_Idle_Root.FBX using Guid(84e5455e577ab9644acdfee37f6bccdb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'd81ccab0fc05330548672b49c4344abf') in 0.010985 seconds 
-  Import took 0.017730 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000164 seconds.
-  path: Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Animation/M_Katana_Blade/1_Movements/14__Idle_To_Crouch/M_katana_Blade@Idle_ver_A_To_Crouch_ver_B_Idle_Root.FBX
-  artifactKey: Guid(916d101409d7f1c48afba6fa0847d302) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Animation/M_Katana_Blade/1_Movements/14__Idle_To_Crouch/M_katana_Blade@Idle_ver_A_To_Crouch_ver_B_Idle_Root.FBX using Guid(916d101409d7f1c48afba6fa0847d302) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4dc4b4a5583c25398e3f805132f14a9c') in 0.018222 seconds 
-  Import took 0.024423 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000205 seconds.
-  path: Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Animation/M_Katana_Blade/1_Movements/14__Idle_To_Crouch/M_katana_Blade@Idle_ver_B_To_Crouch_ver_B_Idle.FBX
-  artifactKey: Guid(df68a207dcf7a234183a50ca57fac79f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Animation/M_Katana_Blade/1_Movements/14__Idle_To_Crouch/M_katana_Blade@Idle_ver_B_To_Crouch_ver_B_Idle.FBX using Guid(df68a207dcf7a234183a50ca57fac79f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '47932e2a2673086730757d96967a220d') in 0.018558 seconds 
-  Import took 0.024700 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000188 seconds.
-  path: Assets/Animations/Clips/CLazyRunnerActionAnimPack/Animations/P1_CLazyMovement/Mvm_Idle/CLazy@Idle_Wait_C.FBX
-  artifactKey: Guid(b9f1bbc832c544e40a9ab65baf558358) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Animations/Clips/CLazyRunnerActionAnimPack/Animations/P1_CLazyMovement/Mvm_Idle/CLazy@Idle_Wait_C.FBX using Guid(b9f1bbc832c544e40a9ab65baf558358) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'fb64f0a129da564f3cc7992c43c98110') in 0.035715 seconds 
-  Import took 0.041545 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000127 seconds.
-  path: Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Animation/M_Katana_Blade/1_Movements/14__Idle_To_Crouch/M_katana_Blade@Idle_ver_B_To_Crouch_ver_B_Idle.FBX
-  artifactKey: Guid(df68a207dcf7a234183a50ca57fac79f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Animation/M_Katana_Blade/1_Movements/14__Idle_To_Crouch/M_katana_Blade@Idle_ver_B_To_Crouch_ver_B_Idle.FBX using Guid(df68a207dcf7a234183a50ca57fac79f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '47932e2a2673086730757d96967a220d') in 0.011121 seconds 
-  Import took 0.018177 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000182 seconds.
-  path: Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Animation/M_Katana_Blade/1_Movements/9__Idle_To_Move/M_katana_Blade@Idle_To_Walk_ver_A_Root.FBX
-  artifactKey: Guid(c1cd36f7d24e64746b65d65ef794b5d1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Animations/Clips/Grruzam Powerful Sword Animation(Great Sword, Katana)/Animation/M_Katana_Blade/1_Movements/9__Idle_To_Move/M_katana_Blade@Idle_To_Walk_ver_A_Root.FBX using Guid(c1cd36f7d24e64746b65d65ef794b5d1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '324a9e86a59671e8a5a0deba05aec0cf') in 0.007181 seconds 
-  Import took 0.013396 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000141 seconds.
-  path: Assets/Animations/Clips/CLazyRunnerActionAnimPack/Animations/P1_CLazyMovement/Mvm_Idle/CLazy@Idle_Wait_B.FBX
-  artifactKey: Guid(57ba4920ed5811e4ea680744879a1c3a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Animations/Clips/CLazyRunnerActionAnimPack/Animations/P1_CLazyMovement/Mvm_Idle/CLazy@Idle_Wait_B.FBX using Guid(57ba4920ed5811e4ea680744879a1c3a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4278955b8c8f9048506baffdb2e9183e') in 0.033145 seconds 
-  Import took 0.039679 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000532 seconds.
-  path: Assets/Animations/Clips/CLazyRunnerActionAnimPack/Animations/P1_CLazyMovement/Mvm_Idle/CLazy@Idle_Wait_B.FBX
-  artifactKey: Guid(57ba4920ed5811e4ea680744879a1c3a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Animations/Clips/CLazyRunnerActionAnimPack/Animations/P1_CLazyMovement/Mvm_Idle/CLazy@Idle_Wait_B.FBX using Guid(57ba4920ed5811e4ea680744879a1c3a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '4278955b8c8f9048506baffdb2e9183e') in 0.024439 seconds 
-  Import took 0.031533 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 4.425370 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Ursacetus/FBX Files/Ursacetus@2HandsSmashAttack.fbx
-  artifactKey: Guid(3faf891af64d44047b858668dc875df1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Ursacetus/FBX Files/Ursacetus@2HandsSmashAttack.fbx using Guid(3faf891af64d44047b858668dc875df1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '07c70887738b6ca315b0bd5dc0fa6de7') in 0.018181 seconds 
-  Import took 0.024431 seconds .
-
-========================================================================
-Received Import Request.
-  Time since last request: 0.000230 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Ursacetus/FBX Files/Ursacetus@2HitComboAttack.fbx
-  artifactKey: Guid(f028759b58dd06e46a5cc0bf0cd2586b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Ursacetus/FBX Files/Ursacetus@2HitComboAttack.fbx using Guid(f028759b58dd06e46a5cc0bf0cd2586b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e5d2a7ec562fccffd41973c35f78df12') in 0.018639 seconds 
-  Import took 0.024637 seconds .
+  Time since last request: 0.000221 seconds.
+  path: Assets/Art/Torti/TortiMats/Pillar/goreTexture/PM3D_Sphere3D1_1_Normal.png
+  artifactKey: Guid(862a30a177375ca459e2fe138402f4ef) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/TortiMats/Pillar/goreTexture/PM3D_Sphere3D1_1_Normal.png using Guid(862a30a177375ca459e2fe138402f4ef) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ee93a2d88d401cbb63ed4896f3cb1e44') in 0.011761 seconds 
+  Import took 0.017428 seconds .
 
 ========================================================================
 Received Import Request.
   Time since last request: 0.000233 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Rapax/FBX Files/Rapax@2HitComboClawsAttack_RM.fbx
-  artifactKey: Guid(de8101337e44c5e4a9d0e5c6c1cf7d52) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Rapax/FBX Files/Rapax@2HitComboClawsAttack_RM.fbx using Guid(de8101337e44c5e4a9d0e5c6c1cf7d52) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e3974ce275ebdf4da2e12f2a558dedb2') in 0.010996 seconds 
-  Import took 0.017075 seconds .
+  path: Assets/Art/Torti/TortiMats/Pillar/goreTexture/PM3D_Sphere3D1_1_Metallic.png
+  artifactKey: Guid(7c60e5928c47b824d92210d9c276adf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/TortiMats/Pillar/goreTexture/PM3D_Sphere3D1_1_Metallic.png using Guid(7c60e5928c47b824d92210d9c276adf7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'dc316b7051d83eceadaecd8bd23e71fe') in 0.009612 seconds 
+  Import took 0.015802 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000146 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Ursacetus/FBX Files/Ursacetus@2HandsSmashAttack_RM.fbx
-  artifactKey: Guid(f331014a5241eab4aa9d58a791ea0c33) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Ursacetus/FBX Files/Ursacetus@2HandsSmashAttack_RM.fbx using Guid(f331014a5241eab4aa9d58a791ea0c33) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2970867a0911617db74b621db3b8c968') in 0.019976 seconds 
-  Import took 0.026007 seconds .
+  Time since last request: 0.000153 seconds.
+  path: Assets/Art/Torti/TortiMats/Pillar/goreTexture/PM3D_Sphere3D1_1_Roughness.png
+  artifactKey: Guid(87a0a152d24878d40ad9eeebf01ed8db) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/TortiMats/Pillar/goreTexture/PM3D_Sphere3D1_1_Roughness.png using Guid(87a0a152d24878d40ad9eeebf01ed8db) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '40c9575db60f5897081049f7cce05a66') in 0.010709 seconds 
+  Import took 0.016221 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000182 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Onyscidus/FBX Files/Onyscidus@2HitComboClawsAttack.fbx
-  artifactKey: Guid(82d244c1b15e56d449a23594dff88f3b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Onyscidus/FBX Files/Onyscidus@2HitComboClawsAttack.fbx using Guid(82d244c1b15e56d449a23594dff88f3b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '949e7fde61b520b9ccb1eae416be4b32') in 0.012308 seconds 
-  Import took 0.018749 seconds .
+  Time since last request: 0.000209 seconds.
+  path: Assets/Art/Torti/TortiMats/Pillar/goreTexture/PM3D_Sphere3D1_1_Mixed_AO.png
+  artifactKey: Guid(0853c5d6b69d6e24c935eddf7e38183d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/TortiMats/Pillar/goreTexture/PM3D_Sphere3D1_1_Mixed_AO.png using Guid(0853c5d6b69d6e24c935eddf7e38183d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '18dc076c199b30e88d089a8e5961d8e5') in 0.011572 seconds 
+  Import took 0.017460 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000169 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Ceratoferox/FBX Files/Ceratoferox@2HitClawsAttackForward_RM.fbx
-  artifactKey: Guid(ba9bcba63afda9d49848ffac613a87c2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Ceratoferox/FBX Files/Ceratoferox@2HitClawsAttackForward_RM.fbx using Guid(ba9bcba63afda9d49848ffac613a87c2) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5ac737552fb44eac65821d8072ba87f2') in 0.019760 seconds 
-  Import took 0.041060 seconds .
+  Time since last request: 0.000224 seconds.
+  path: Assets/Art/Torti/TortiMats/Pillar/goreTexture/PM3D_Sphere3D1_1_Height.png
+  artifactKey: Guid(20feb76183b904542b491d8886581c46) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/TortiMats/Pillar/goreTexture/PM3D_Sphere3D1_1_Height.png using Guid(20feb76183b904542b491d8886581c46) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '13d89cf2572860017e81ecc11c5464a7') in 0.010302 seconds 
+  Import took 0.016277 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000199 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Onyscidus/FBX Files/Onyscidus@2HitComboClawsAttackForward.fbx
-  artifactKey: Guid(a6eb79857f3537d4aa521ca1a57e4ec1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Onyscidus/FBX Files/Onyscidus@2HitComboClawsAttackForward.fbx using Guid(a6eb79857f3537d4aa521ca1a57e4ec1) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2860ae52966800cb2416b49ab17f8551') in 0.012340 seconds 
-  Import took 0.017945 seconds .
+  Time since last request: 0.000196 seconds.
+  path: Assets/Art/Torti/TortiMats/Pillar/goreTexture/PM3D_Sphere3D1_1_Normal_OpenGL.png
+  artifactKey: Guid(b995a958ef6ea4148bda3c3b3e71a5a6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/TortiMats/Pillar/goreTexture/PM3D_Sphere3D1_1_Normal_OpenGL.png using Guid(b995a958ef6ea4148bda3c3b3e71a5a6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2facf8953bab20b6517e56dd44592d23') in 0.010362 seconds 
+  Import took 0.016545 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000201 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Onyscidus/FBX Files/Onyscidus@2HitComboClawsAttackForward_RM.fbx
-  artifactKey: Guid(31cc89aacadeb9d4b843477b35b5528c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Onyscidus/FBX Files/Onyscidus@2HitComboClawsAttackForward_RM.fbx using Guid(31cc89aacadeb9d4b843477b35b5528c) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '74d78c11614c1f7dbbab21f2ec6c2fec') in 0.013295 seconds 
-  Import took 0.019160 seconds .
+  Time since last request: 4.472909 seconds.
+  path: Assets/Art/Torti/TortiMats/Pillar/goreTexture/Materials
+  artifactKey: Guid(d84818a44ef4dad418952fbbdcacb9cb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/TortiMats/Pillar/goreTexture/Materials using Guid(d84818a44ef4dad418952fbbdcacb9cb) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2c8adebf672470109f42463bce1611e0') in 0.001803 seconds 
+  Import took 0.008164 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000137 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Ceratoferox/FBX Files/Ceratoferox@2HitClawsAttackForward.fbx
-  artifactKey: Guid(8a5af59e6bda1a648a10385d1b3d8574) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Ceratoferox/FBX Files/Ceratoferox@2HitClawsAttackForward.fbx using Guid(8a5af59e6bda1a648a10385d1b3d8574) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'bba06a2a59eb548c39c146ebee23575f') in 0.020854 seconds 
-  Import took 0.028853 seconds .
+  Time since last request: 0.045078 seconds.
+  path: Assets/Art/Torti/TortiMats/Pillar/goreTexture/Materials/PM3D_Sphere3D1_1_Base_Color.mat
+  artifactKey: Guid(eb66538193a3b02489476594fab40079) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/TortiMats/Pillar/goreTexture/Materials/PM3D_Sphere3D1_1_Base_Color.mat using Guid(eb66538193a3b02489476594fab40079) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5348121e28d56f7d477aee71219bc8b2') in 0.012261 seconds 
+  Import took 0.019676 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000361 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Rapax/FBX Files/Rapax@2HitComboClawsAttack.fbx
-  artifactKey: Guid(d99b26da6e44f244cad643a2588d37ba) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Rapax/FBX Files/Rapax@2HitComboClawsAttack.fbx using Guid(d99b26da6e44f244cad643a2588d37ba) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'e3845174ca6b17a296f7a4b2b53b1465') in 0.012034 seconds 
-  Import took 0.020474 seconds .
+  Time since last request: 6.534388 seconds.
+  path: Assets/Art/Torti/TortiMats/Pillar/goreTexture/Materials/PM3D_Sphere3D1_1_Height.mat
+  artifactKey: Guid(31c260f4e38438c4b8fd8c470e8ec262) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/TortiMats/Pillar/goreTexture/Materials/PM3D_Sphere3D1_1_Height.mat using Guid(31c260f4e38438c4b8fd8c470e8ec262) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b3a73fc792083f68c1a2f47d4500da80') in 0.013369 seconds 
+  Import took 0.019473 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000150 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Ursacetus/FBX Files/Ursacetus@2HitComboAttackForward.fbx
-  artifactKey: Guid(3e7034f5eea7ff14e8659fb025af1ff0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Ursacetus/FBX Files/Ursacetus@2HitComboAttackForward.fbx using Guid(3e7034f5eea7ff14e8659fb025af1ff0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '97ae921b2c5b1c0665153211209d13e5') in 0.020742 seconds 
-  Import took 0.027119 seconds .
+  Time since last request: 111.196444 seconds.
+  path: Assets/Art/Torti/TortiMats/Pillar/TreeTexture1/PM3D_Cube3D1_3_Base_Color.png
+  artifactKey: Guid(8d417b069c1808d4b8b7fd600f61ec83) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/TortiMats/Pillar/TreeTexture1/PM3D_Cube3D1_3_Base_Color.png using Guid(8d417b069c1808d4b8b7fd600f61ec83) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'fe393cfe7f460dbd5c59fa9e55ea58bf') in 0.011444 seconds 
+  Import took 0.032631 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000158 seconds.
-  path: Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Ursacetus/FBX Files/Ursacetus@2HitComboAttackForward_RM.fbx
-  artifactKey: Guid(261d579158537964fa382db0f92ac9a6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Protofactor/Sci Fi/Sci Fi Characters Mega Pack Vol 2/Sci Fi Creatures Vol 2/Ursacetus/FBX Files/Ursacetus@2HitComboAttackForward_RM.fbx using Guid(261d579158537964fa382db0f92ac9a6) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c57774c577333bb960356550698aa29c') in 0.020354 seconds 
-  Import took 0.026543 seconds .
+  Time since last request: 0.000239 seconds.
+  path: Assets/Art/Torti/TortiMats/Pillar/TreeTexture1/PM3D_Cube3D1_3_Metallic.png
+  artifactKey: Guid(dc20b0131a035c04997c22991477b547) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/TortiMats/Pillar/TreeTexture1/PM3D_Cube3D1_3_Metallic.png using Guid(dc20b0131a035c04997c22991477b547) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'aa730a5ca181c60ea2afbdb799eb8bc7') in 0.009371 seconds 
+  Import took 0.014665 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 204.929822 seconds.
-  path: Assets/Art/Torti/TortiTime.fbx
-  artifactKey: Guid(3d52acd5a4fa60a4da7c5c6ffda2ce26) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Torti/TortiTime.fbx using Guid(3d52acd5a4fa60a4da7c5c6ffda2ce26) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '796ccec7652c88f1cc2c7870a03dfbcc') in 0.050814 seconds 
-  Import took 0.057948 seconds .
+  Time since last request: 0.000155 seconds.
+  path: Assets/Art/Torti/TortiMats/Pillar/TreeTexture1/PM3D_Cube3D1_3_Normal.png
+  artifactKey: Guid(e79598ee3539e13448ad9b4999fa004f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/TortiMats/Pillar/TreeTexture1/PM3D_Cube3D1_3_Normal.png using Guid(e79598ee3539e13448ad9b4999fa004f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '75db4885f9dd0175ff9aee4d4274cfcd') in 0.011572 seconds 
+  Import took 0.017381 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 270.004980 seconds.
-  path: Assets/Materials/Blade.mat
-  artifactKey: Guid(34f6a6d29fc578c46a31a700d46f6f34) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Materials/Blade.mat using Guid(34f6a6d29fc578c46a31a700d46f6f34) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8a7a95a3458b49e0f1f786f220e865b4') in 0.020793 seconds 
-  Import took 0.028517 seconds .
+  Time since last request: 0.000127 seconds.
+  path: Assets/Art/Torti/TortiMats/Pillar/TreeTexture1/PM3D_Cube3D1_3_Height.png
+  artifactKey: Guid(c30a908575536e04686305d13f6aee39) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/TortiMats/Pillar/TreeTexture1/PM3D_Cube3D1_3_Height.png using Guid(c30a908575536e04686305d13f6aee39) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f4cb987b3ad67d107a4a91ca680bbb1a') in 0.009382 seconds 
+  Import took 0.014996 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 53.962049 seconds.
-  path: Assets/Art/Torti/Torti2
-  artifactKey: Guid(7899573457ac4d74db3d8c90f80342c9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Torti/Torti2 using Guid(7899573457ac4d74db3d8c90f80342c9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '051934360e6bfb2b9f878282b43a3def') in 0.004628 seconds 
-  Import took 0.011158 seconds .
+  Time since last request: 0.000133 seconds.
+  path: Assets/Art/Torti/TortiMats/Pillar/TreeTexture1/PM3D_Cube3D1_3_Normal_OpenGL.png
+  artifactKey: Guid(3b9d9ec2af625a648b15e9ff81dca390) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/TortiMats/Pillar/TreeTexture1/PM3D_Cube3D1_3_Normal_OpenGL.png using Guid(3b9d9ec2af625a648b15e9ff81dca390) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '92e350e6c3e45623ed36616052a9dda7') in 0.010139 seconds 
+  Import took 0.015912 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 15.141767 seconds.
-  path: Assets/Art/Torti/Torti2/Torti_Albedo (1).png
-  artifactKey: Guid(1fc2e9f77c5cd52409e14fcedded4df7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Torti/Torti2/Torti_Albedo (1).png using Guid(1fc2e9f77c5cd52409e14fcedded4df7) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '20bbab6e78419221b4e4566e173ed152') in 0.012618 seconds 
-  Import took 0.018705 seconds .
+  Time since last request: 0.000178 seconds.
+  path: Assets/Art/Torti/TortiMats/Pillar/TreeTexture1/PM3D_Cube3D1_3_Roughness.png
+  artifactKey: Guid(78f074686ca91264880d2f47d511bb91) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/TortiMats/Pillar/TreeTexture1/PM3D_Cube3D1_3_Roughness.png using Guid(78f074686ca91264880d2f47d511bb91) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9e593f3e5d454b0f530a4c4433f30cc2') in 0.008954 seconds 
+  Import took 0.014369 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 0.000226 seconds.
-  path: Assets/Art/Torti/Torti2/TortiHat.fbx
-  artifactKey: Guid(0a196177a0810a64485860cedf44eba9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Torti/Torti2/TortiHat.fbx using Guid(0a196177a0810a64485860cedf44eba9) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9d0e5b21c73713247015d885d98632f9') in 0.022488 seconds 
-  Import took 0.028631 seconds .
+  Time since last request: 0.000165 seconds.
+  path: Assets/Art/Torti/TortiMats/Pillar/TreeTexture1/PM3D_Cube3D1_3_Mixed_AO.png
+  artifactKey: Guid(10388298819edd84180b5acd27795e8f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/TortiMats/Pillar/TreeTexture1/PM3D_Cube3D1_3_Mixed_AO.png using Guid(10388298819edd84180b5acd27795e8f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5decef5118aa2651d0a92264276ac2d6') in 0.009770 seconds 
+  Import took 0.015520 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 3993.364765 seconds.
-  path: Assets/Art/Torti/Torti3
-  artifactKey: Guid(807fc59870c2d6e48942edba4bc5ace0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Torti/Torti3 using Guid(807fc59870c2d6e48942edba4bc5ace0) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c1f918a954e9549875ead6bdce476b06') in 0.004609 seconds 
-  Import took 0.012176 seconds .
+  Time since last request: 3.956718 seconds.
+  path: Assets/Art/Torti/TortiMats/Pillar/TreeTexture1/Materials
+  artifactKey: Guid(832d19028b36fac4493772f09732d32d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/TortiMats/Pillar/TreeTexture1/Materials using Guid(832d19028b36fac4493772f09732d32d) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c24a11feb1317d836a6aeb384d7ecb44') in 0.002376 seconds 
+  Import took 0.008926 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 119.666876 seconds.
-  path: Assets/Art/Torti/Torti3/TortiClothes.fbx
-  artifactKey: Guid(4138fc2945b758c4683c5d689d9e7b43) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Torti/Torti3/TortiClothes.fbx using Guid(4138fc2945b758c4683c5d689d9e7b43) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '899b41d328662590824a9e5e4f238247') in 0.188001 seconds 
-  Import took 0.194677 seconds .
+  Time since last request: 0.043368 seconds.
+  path: Assets/Art/Torti/TortiMats/Pillar/TreeTexture1/Materials/PM3D_Cube3D1_3_Base_Color.mat
+  artifactKey: Guid(4963ef07c4a6ea14883a35a9d438547a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/TortiMats/Pillar/TreeTexture1/Materials/PM3D_Cube3D1_3_Base_Color.mat using Guid(4963ef07c4a6ea14883a35a9d438547a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b6b1e7ad9d3a032c452a783278a8b44f') in 0.007733 seconds 
+  Import took 0.013388 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 69.311042 seconds.
-  path: Assets/Art/Torti/Torti3/TortiClothes.fbx
-  artifactKey: Guid(4138fc2945b758c4683c5d689d9e7b43) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Torti/Torti3/TortiClothes.fbx using Guid(4138fc2945b758c4683c5d689d9e7b43) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '30db58a616e2161a99b779858a99b68d') in 0.186120 seconds 
-  Import took 0.193193 seconds .
+  Time since last request: 104.447023 seconds.
+  path: Assets/Art/Torti/TortiMats/Pillar/TreeTexture1/Materials/PM3D_Cube3D1_3_Base_Color.mat
+  artifactKey: Guid(4963ef07c4a6ea14883a35a9d438547a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/TortiMats/Pillar/TreeTexture1/Materials/PM3D_Cube3D1_3_Base_Color.mat using Guid(4963ef07c4a6ea14883a35a9d438547a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b384b1c79dd3431d9e6508f27fe05f13') in 0.033971 seconds 
+  Import took 0.040108 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 256.795662 seconds.
+  Time since last request: 3.456129 seconds.
+  path: Assets/Art/Torti/TortiMats/Pillar/TreeTexture1/Materials/Materials
+  artifactKey: Guid(dd41a9962502e4f49993ebfa2becfc31) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/TortiMats/Pillar/TreeTexture1/Materials/Materials using Guid(dd41a9962502e4f49993ebfa2becfc31) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3c34a3a66cdeda9b5cdeb36abcf209ce') in 0.001720 seconds 
+  Import took 0.008108 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 1754.251671 seconds.
+  path: Assets/Art/Torti/Torti3/TortiAnims
+  artifactKey: Guid(335bcff3ce3d2e9468bfc77bc3665948) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/Torti3/TortiAnims using Guid(335bcff3ce3d2e9468bfc77bc3665948) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8669eef15b4b2099c21838b36b4cab97') in 0.004815 seconds 
+  Import took 0.011842 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 14.225089 seconds.
+  path: Assets/Art/Torti/Torti3/Armature.001_ArmatureAction.anim
+  artifactKey: Guid(b183902875ccd874783c90f0cbda10fd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/Torti3/Armature.001_ArmatureAction.anim using Guid(b183902875ccd874783c90f0cbda10fd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '80e592367bf0e7f48ed6252561554a80') in 0.022808 seconds 
+  Import took 0.028923 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000231 seconds.
+  path: Assets/Art/Torti/Torti3/Armature.001_ArmatureAction.anim
+  artifactKey: Guid(b183902875ccd874783c90f0cbda10fd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/Torti3/Armature.001_ArmatureAction.anim using Guid(b183902875ccd874783c90f0cbda10fd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '80e592367bf0e7f48ed6252561554a80') in 0.017406 seconds 
+  Import took 0.022782 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 35.526407 seconds.
   path: Assets/Animations/Animators/TortiAnim.controller
   artifactKey: Guid(9131b30d88774cd4badf5ff185b1aa83) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Animations/Animators/TortiAnim.controller using Guid(9131b30d88774cd4badf5ff185b1aa83) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '5f5c65c72ddb85d02b28c0e192cd8517') in 0.065953 seconds 
-  Import took 0.073100 seconds .
+Start importing Assets/Animations/Animators/TortiAnim.controller using Guid(9131b30d88774cd4badf5ff185b1aa83) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '33d1981dc9cf5e431c42dae981ae986a') in 0.068080 seconds 
+  Import took 0.074277 seconds .
 
 ========================================================================
 Received Import Request.
-  Time since last request: 174.146267 seconds.
+  Time since last request: 138.891099 seconds.
+  path: Assets/Art/Torti/Torti3/Armature.001_ArmatureAction 1.anim
+  artifactKey: Guid(f446f629d95d403489e2872b6906599e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/Torti3/Armature.001_ArmatureAction 1.anim using Guid(f446f629d95d403489e2872b6906599e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '19bade20babec7bce156af6f876c956b') in 0.020322 seconds 
+  Import took 0.027118 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 171.680822 seconds.
+  path: Assets/Animations/Animators/TortiAnim.controller
+  artifactKey: Guid(9131b30d88774cd4badf5ff185b1aa83) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animations/Animators/TortiAnim.controller using Guid(9131b30d88774cd4badf5ff185b1aa83) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b4b983d49c7aed6513772051e3c00b76') in 0.077583 seconds 
+  Import took 0.084402 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 10.885043 seconds.
+  path: Assets/Art/Torti/Torti3/Run.anim
+  artifactKey: Guid(b183902875ccd874783c90f0cbda10fd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/Torti3/Run.anim using Guid(b183902875ccd874783c90f0cbda10fd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '00fd5efe60ade318335dd2cf79b45a09') in 0.015728 seconds 
+  Import took 0.022299 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 131.078044 seconds.
+  path: Assets/Art/Torti/Torti3/All.anim
+  artifactKey: Guid(f446f629d95d403489e2872b6906599e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/Torti3/All.anim using Guid(f446f629d95d403489e2872b6906599e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '889bfb7389df0413354face1857a78c8') in 0.063029 seconds 
+  Import took 0.070404 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 35.665644 seconds.
+  path: Assets/Art/Torti/Torti3/Run 1.anim
+  artifactKey: Guid(3ee8309b752a0ef4296ac095d3300eee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/Torti3/Run 1.anim using Guid(3ee8309b752a0ef4296ac095d3300eee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f817e2abf75a6ad0419506e49d1d8dfe') in 0.015460 seconds 
+  Import took 0.021409 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 68.534622 seconds.
+  path: Assets/Animations/Animators/TortiAnim.controller
+  artifactKey: Guid(9131b30d88774cd4badf5ff185b1aa83) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animations/Animators/TortiAnim.controller using Guid(9131b30d88774cd4badf5ff185b1aa83) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f4a79954ec8e804b4f5827f557d92b9f') in 0.128802 seconds 
+  Import took 0.135106 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 203.367618 seconds.
   path: Assets/Art/Torti/Torti3/TortiClothes.fbx
   artifactKey: Guid(4138fc2945b758c4683c5d689d9e7b43) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
-Start importing Assets/Art/Torti/Torti3/TortiClothes.fbx using Guid(4138fc2945b758c4683c5d689d9e7b43) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '1a8d4ae21b4be86e160b35b45b3542ac') in 0.184237 seconds 
-  Import took 0.192018 seconds .
+Start importing Assets/Art/Torti/Torti3/TortiClothes.fbx using Guid(4138fc2945b758c4683c5d689d9e7b43) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '62e69db214ba3fdd649fd61d7965b532') in 0.240397 seconds 
+  Import took 0.248384 seconds .
 
+========================================================================
+Received Import Request.
+  Time since last request: 213.404537 seconds.
+  path: Assets/Art/Torti/Torti3/Walk.anim
+  artifactKey: Guid(b183902875ccd874783c90f0cbda10fd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/Torti3/Walk.anim using Guid(b183902875ccd874783c90f0cbda10fd) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ac2b0a7fa3ab37f40e0a9bb1fbdbb8e1') in 0.016197 seconds 
+  Import took 0.022550 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 5.105014 seconds.
+  path: Assets/Art/Torti/Torti3/All 1.anim
+  artifactKey: Guid(78662dc7654f9a8499fc760b06fc4730) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/Torti3/All 1.anim using Guid(78662dc7654f9a8499fc760b06fc4730) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '2dfa660f04f887d70cb69be1c85b9c75') in 0.062782 seconds 
+  Import took 0.069711 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 3.946572 seconds.
+  path: Assets/Art/Torti/Torti3/Run.anim
+  artifactKey: Guid(78662dc7654f9a8499fc760b06fc4730) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/Torti3/Run.anim using Guid(78662dc7654f9a8499fc760b06fc4730) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '09539f6cf5dbf183f240b8f1dc73871a') in 0.058271 seconds 
+  Import took 0.064621 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 18.201318 seconds.
+  path: Assets/Animations/Animators/TortiAnim.controller
+  artifactKey: Guid(9131b30d88774cd4badf5ff185b1aa83) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animations/Animators/TortiAnim.controller using Guid(9131b30d88774cd4badf5ff185b1aa83) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b4c4b30ff767472d8288893183cdf13c') in 0.128828 seconds 
+  Import took 0.137484 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 207.459680 seconds.
+  path: Assets/Art/Torti/Torti3/Alll.anim
+  artifactKey: Guid(78662dc7654f9a8499fc760b06fc4730) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/Torti3/Alll.anim using Guid(78662dc7654f9a8499fc760b06fc4730) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'c471336323966ced14ab567e769ebb6f') in 0.065190 seconds 
+  Import took 0.072691 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 3.662109 seconds.
+  path: Assets/Art/Torti/Torti3/Run.anim
+  artifactKey: Guid(f446f629d95d403489e2872b6906599e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Art/Torti/Torti3/Run.anim using Guid(f446f629d95d403489e2872b6906599e) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '8e04a233c7eee17db8ed00a7d79a84d4') in 0.016883 seconds 
+  Import took 0.023923 seconds .
+
+========================================================================
+Received Prepare
+Default GameObject BitMask: UI already registered
+Registering precompiled user dll's ...
+Registered in 0.005290 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 1.54 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  1.021 seconds
+Domain Reload Profiling:
+	ReloadAssembly (1022ms)
+		BeginReloadAssembly (171ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (5ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (37ms)
+		EndReloadAssembly (802ms)
+			LoadAssemblies (120ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (284ms)
+			ReleaseScriptCaches (1ms)
+			RebuildScriptCaches (39ms)
+			SetupLoadedEditorAssemblies (284ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (3ms)
+				SetLoadedEditorAssemblies (0ms)
+				RefreshPlugins (2ms)
+				BeforeProcessingInitializeOnLoad (83ms)
+				ProcessInitializeOnLoadAttributes (187ms)
+				ProcessInitializeOnLoadMethodAttributes (5ms)
+				AfterProcessingInitializeOnLoad (4ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (12ms)
+Platform modules already initialized, skipping
+Shader 'MoreMountains/MMRipple': fallback shader 'Particle/AlphaBlended' not found
+Refreshing native plugins compatible for Editor in 1.69 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 4224 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 496.4 MB.
+System memory in use after: 496.7 MB.
+
+Unloading 32 unused Assets to reduce memory usage. Loaded Objects now: 4952.
+Total: 3.555500 ms (FindLiveObjects: 0.365400 ms CreateObjectMapping: 0.189200 ms MarkObjects: 2.913900 ms  DeleteObjects: 0.086400 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Prepare
+Default GameObject BitMask: UI already registered
+Registering precompiled user dll's ...
+Registered in 0.005181 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 1.73 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.937 seconds
+Domain Reload Profiling:
+	ReloadAssembly (937ms)
+		BeginReloadAssembly (104ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (4ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (30ms)
+		EndReloadAssembly (785ms)
+			LoadAssemblies (75ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (273ms)
+			ReleaseScriptCaches (1ms)
+			RebuildScriptCaches (40ms)
+			SetupLoadedEditorAssemblies (281ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (3ms)
+				SetLoadedEditorAssemblies (0ms)
+				RefreshPlugins (2ms)
+				BeforeProcessingInitializeOnLoad (83ms)
+				ProcessInitializeOnLoadAttributes (183ms)
+				ProcessInitializeOnLoadMethodAttributes (5ms)
+				AfterProcessingInitializeOnLoad (4ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (12ms)
+Platform modules already initialized, skipping
+Shader 'MoreMountains/MMRipple': fallback shader 'Particle/AlphaBlended' not found
+Refreshing native plugins compatible for Editor in 1.54 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 4224 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 496.5 MB.
+System memory in use after: 496.7 MB.
+
+Unloading 32 unused Assets to reduce memory usage. Loaded Objects now: 4954.
+Total: 3.293100 ms (FindLiveObjects: 0.348200 ms CreateObjectMapping: 0.190600 ms MarkObjects: 2.627400 ms  DeleteObjects: 0.126000 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 1643.178593 seconds.
+  path: Assets/ParticleEffects/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/challenger_head_base_AO.TIF
+  artifactKey: Guid(3d1e09de2f39de845aab1015906cfdba) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/ParticleEffects/KriptoFX/VolumetricBloodFX/DemoScene/Character/Character/challenger_head_base_AO.TIF using Guid(3d1e09de2f39de845aab1015906cfdba) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '83e1ba54dd1b4c867e7f3d9d9cb6b7dc') in 0.063280 seconds 
+  Import took 0.069557 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000189 seconds.
+  path: Assets/Animations/Clips/CLazyRunnerActionAnimPack/Animations/P3_CLazyJump/Jmp_Land/CLazy@Land_Base_Move_Root.FBX
+  artifactKey: Guid(114a1c7e29fd23143bc35dfd66d4fc9a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animations/Clips/CLazyRunnerActionAnimPack/Animations/P3_CLazyJump/Jmp_Land/CLazy@Land_Base_Move_Root.FBX using Guid(114a1c7e29fd23143bc35dfd66d4fc9a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'b273ded81bf5d34de40d8a218f72b12e') in 0.144274 seconds 
+  Import took 0.150126 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000152 seconds.
+  path: Assets/Animations/Clips/CLazyRunnerActionAnimPack/Animations/P3_CLazyJump/Jmp_Land/CLazy@Land_Base_Move.FBX
+  artifactKey: Guid(b916280beb3c80c43af3717898d4340b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animations/Clips/CLazyRunnerActionAnimPack/Animations/P3_CLazyJump/Jmp_Land/CLazy@Land_Base_Move.FBX using Guid(b916280beb3c80c43af3717898d4340b) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '95e1cc3569b3c18c5b91e5fc3af696c5') in 0.050925 seconds 
+  Import took 0.056990 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000228 seconds.
+  path: Assets/Tools/Feel/FeelDemos/Snake/Sounds/FeelSnakePianoBass2.wav
+  artifactKey: Guid(1357053dfd2d25f4f82dee8f42cfe508) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Tools/Feel/FeelDemos/Snake/Sounds/FeelSnakePianoBass2.wav using Guid(1357053dfd2d25f4f82dee8f42cfe508) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'ae5720893a12a09f3cfd83ba50c4dccc') in 0.046829 seconds 
+  Import took 0.052925 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000123 seconds.
+  path: Assets/Tools/Feel/FeelDemos/Snake/Sounds/FeelSnakePianoBass3.wav
+  artifactKey: Guid(7f4476c2081b5bf419843ed4de9019de) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Tools/Feel/FeelDemos/Snake/Sounds/FeelSnakePianoBass3.wav using Guid(7f4476c2081b5bf419843ed4de9019de) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '9f714b7dda7e0f0a327210ec8da68c63') in 0.024008 seconds 
+  Import took 0.029706 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000184 seconds.
+  path: Assets/Animations/Clips/CLazyRunnerActionAnimPack/Animations/P3_CLazyJump/Jmp_Land/CLazy@Land_Base_Wait_Root.FBX
+  artifactKey: Guid(45a81a110ab001149a6bae464d23bfd8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animations/Clips/CLazyRunnerActionAnimPack/Animations/P3_CLazyJump/Jmp_Land/CLazy@Land_Base_Wait_Root.FBX using Guid(45a81a110ab001149a6bae464d23bfd8) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '693f62b58430c53831e713df80e4f258') in 0.058700 seconds 
+  Import took 0.064556 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000160 seconds.
+  path: Assets/Tools/Feel/FeelDemos/Snake/Sounds/FeelSnakePianoBass1.wav
+  artifactKey: Guid(4918d495582b2c74dba9ef90acb15aee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Tools/Feel/FeelDemos/Snake/Sounds/FeelSnakePianoBass1.wav using Guid(4918d495582b2c74dba9ef90acb15aee) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'a1994e7756e82f5973c0b7385acef5dd') in 0.015263 seconds 
+  Import took 0.020810 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.000164 seconds.
+  path: Assets/Animations/Clips/CLazyRunnerActionAnimPack/Animations/P3_CLazyJump/Jmp_Land/CLazy@Land_Base_Wait.FBX
+  artifactKey: Guid(c6272b90eb4fa5446b4f925cbd211b1a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animations/Clips/CLazyRunnerActionAnimPack/Animations/P3_CLazyJump/Jmp_Land/CLazy@Land_Base_Wait.FBX using Guid(c6272b90eb4fa5446b4f925cbd211b1a) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: 'f08398630448fbd0ceb89615248ed8e0') in 0.055609 seconds 
+  Import took 0.061823 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 2.077150 seconds.
+  path: Assets/Scripts/EnemeyScripts/BasicEnemyScript.cs
+  artifactKey: Guid(78ff2fd18f28dc547a90e79a655508ed) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/EnemeyScripts/BasicEnemyScript.cs using Guid(78ff2fd18f28dc547a90e79a655508ed) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '46ce8e002b4ca79db17f37cf39a4bfca') in 0.006953 seconds 
+  Import took 0.013032 seconds .
+
+========================================================================
+Received Import Request.
+  Time since last request: 0.023499 seconds.
+  path: Assets/Scripts/EnemeyScripts/BasicEnemyScript.cs
+  artifactKey: Guid(78ff2fd18f28dc547a90e79a655508ed) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Scripts/EnemeyScripts/BasicEnemyScript.cs using Guid(78ff2fd18f28dc547a90e79a655508ed) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '46ce8e002b4ca79db17f37cf39a4bfca') in 0.002208 seconds 
+  Import took 0.008459 seconds .
+
+========================================================================
+Received Prepare
+Default GameObject BitMask: UI already registered
+Registering precompiled user dll's ...
+Registered in 0.005991 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 1.53 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.957 seconds
+Domain Reload Profiling:
+	ReloadAssembly (958ms)
+		BeginReloadAssembly (107ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (5ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (35ms)
+		EndReloadAssembly (804ms)
+			LoadAssemblies (76ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (279ms)
+			ReleaseScriptCaches (1ms)
+			RebuildScriptCaches (40ms)
+			SetupLoadedEditorAssemblies (289ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (3ms)
+				SetLoadedEditorAssemblies (0ms)
+				RefreshPlugins (2ms)
+				BeforeProcessingInitializeOnLoad (84ms)
+				ProcessInitializeOnLoadAttributes (190ms)
+				ProcessInitializeOnLoadMethodAttributes (5ms)
+				AfterProcessingInitializeOnLoad (4ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (12ms)
+Platform modules already initialized, skipping
+Shader 'MoreMountains/MMRipple': fallback shader 'Particle/AlphaBlended' not found
+Refreshing native plugins compatible for Editor in 1.58 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 4224 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 496.8 MB.
+System memory in use after: 497.0 MB.
+
+Unloading 32 unused Assets to reduce memory usage. Loaded Objects now: 4994.
+Total: 3.493300 ms (FindLiveObjects: 0.459800 ms CreateObjectMapping: 0.196200 ms MarkObjects: 2.740700 ms  DeleteObjects: 0.095400 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Prepare
+Default GameObject BitMask: UI already registered
+Registering precompiled user dll's ...
+Registered in 0.005289 seconds.
+Begin MonoManager ReloadAssembly
+Native extension for WindowsStandalone target not found
+Refreshing native plugins compatible for Editor in 1.77 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Mono: successfully reloaded assembly
+- Completed reload, in  0.944 seconds
+Domain Reload Profiling:
+	ReloadAssembly (944ms)
+		BeginReloadAssembly (101ms)
+			ExecutionOrderSort (0ms)
+			DisableScriptedObjects (4ms)
+			BackupInstance (0ms)
+			ReleaseScriptingObjects (0ms)
+			CreateAndSetChildDomain (30ms)
+		EndReloadAssembly (796ms)
+			LoadAssemblies (76ms)
+			RebuildTransferFunctionScriptingTraits (0ms)
+			SetupTypeCache (272ms)
+			ReleaseScriptCaches (1ms)
+			RebuildScriptCaches (40ms)
+			SetupLoadedEditorAssemblies (288ms)
+				LogAssemblyErrors (0ms)
+				InitializePlatformSupportModulesInManaged (3ms)
+				SetLoadedEditorAssemblies (0ms)
+				RefreshPlugins (2ms)
+				BeforeProcessingInitializeOnLoad (85ms)
+				ProcessInitializeOnLoadAttributes (187ms)
+				ProcessInitializeOnLoadMethodAttributes (6ms)
+				AfterProcessingInitializeOnLoad (4ms)
+				EditorAssembliesLoaded (0ms)
+			ExecutionOrderSort2 (0ms)
+			AwakeInstancesAfterBackupRestoration (12ms)
+Platform modules already initialized, skipping
+Shader 'MoreMountains/MMRipple': fallback shader 'Particle/AlphaBlended' not found
+Refreshing native plugins compatible for Editor in 1.56 ms, found 3 plugins.
+Preloading 0 native plugins for Editor in 0.00 ms.
+Unloading 4224 Unused Serialized files (Serialized files now loaded: 0)
+System memory in use before: 496.8 MB.
+System memory in use after: 497.0 MB.
+
+Unloading 32 unused Assets to reduce memory usage. Loaded Objects now: 4996.
+Total: 4.051000 ms (FindLiveObjects: 0.584700 ms CreateObjectMapping: 0.377100 ms MarkObjects: 2.963500 ms  DeleteObjects: 0.125000 ms)
+
+AssetImportParameters requested are different than current active one (requested -> active):
+  custom:framework-win-MediaFoundation: 216162199b28c13a410421893ffa2e32 -> 
+  custom:video-decoder-ogg-theora: a1e56fd34408186e4bbccfd4996cb3dc -> 
+  custom:container-muxer-webm: aa71ff27fc2769a1b78a27578f13a17b -> 
+  custom:container-demuxer-webm: 4f35f7cbe854078d1ac9338744f61a02 -> 
+  custom:container-demuxer-ogg: 62fdf1f143b41e24485cea50d1cbac27 -> 
+  custom:video-encoder-webm-vp8: eb34c28f22e8b96e1ab97ce403110664 -> 
+  custom:video-decoder-webm-vp8: 9c59270c3fd7afecdb556c50c9e8de78 -> 
+  custom:audio-decoder-ogg-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+  custom:audio-encoder-webm-vorbis: bf7c407c2cedff20999df2af8eb42d56 -> 
+========================================================================
+Received Import Request.
+  Time since last request: 2704.546315 seconds.
+  path: Assets/Animations/Animators/Player.controller
+  artifactKey: Guid(c11a7abcc881ef3428f544b1db068e0f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)
+Start importing Assets/Animations/Animators/Player.controller using Guid(c11a7abcc881ef3428f544b1db068e0f) Importer(815301076,1909f56bfc062723c751e8b465ee728b)  -> (artifact id: '3244c11c7ee187075716b48739ffaa13') in 0.502865 seconds 
+  Import took 0.514769 seconds .
+
+AssetImportWorkerClient::OnTransportError - code=2 error=End of file
