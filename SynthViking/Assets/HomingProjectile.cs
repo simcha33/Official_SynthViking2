@@ -5,18 +5,21 @@ using MoreMountains.Feedbacks;
 
 public class HomingProjectile : MonoBehaviour
 {
-
+    [Header("STATS")]
+    public float projectileDamage;
     public float aliveDuration;
-    public float aliveTimer;
+    public float moveSpeed;
+    public float rotateSpeed; 
+
+    private float aliveTimer;
     [HideInInspector] public bool hasTouchedTarget;
     private Rigidbody rb; 
-    public float moveSpeed;
-    private float targetDistance;
-    public bool maxSpeedReached; 
-     Vector3 maxvelocity; 
-    public Transform target; 
+    private Transform target;
 
-    public float projectileDamage; 
+    [Header("VISUALS")]
+    public GameObject destructionEffect;  
+
+
 
     public 
 
@@ -41,13 +44,33 @@ public class HomingProjectile : MonoBehaviour
     void SetTarget()
     {
         target = GameObject.Find("Player").transform; 
+        
     }
 
     void ChaseTarget()
     {
-       // transform.position = Vector3.MoveTowards(transform.position, target.position  + new Vector3(0,2f,0), moveSpeed * Time.fixedDeltaTime); 
-        rb.AddForce((target.transform.position- transform.position) * moveSpeed * Time.fixedDeltaTime, ForceMode.VelocityChange); 
-        rb.velocity = Vector3.ClampMagnitude(rb.velocity, moveSpeed); 
+        // transform.position = Vector3.MoveTowards(transform.position, target.position  + new Vector3(0,2f,0), moveSpeed * Time.fixedDeltaTime); 
+
+        //  rb.AddForce((targetPos - transform.position) * moveSpeed * Time.fixedDeltaTime, ForceMode.VelocityChange); //Steering force
+        // rb.AddForce((targetPos - transform.position) * moveSpeed * Time.fixedDeltaTime, ForceMode.VelocityChange);
+
+        Vector3 targetPos = target.transform.position + new Vector3(0, 2f, 0);
+        Vector3 dir = targetPos - transform.position;
+        dir.Normalize();    
+        rb.angularVelocity = -Vector3.Cross(dir, transform.forward) * rotateSpeed;
+        rb.velocity = transform.forward * moveSpeed; 
+   
+        /*
+        //Look at target
+      
+        Vector3 relativePos = targetPos - transform.position;
+        Quaternion toRotation = Quaternion.LookRotation(relativePos);
+        transform.rotation = Quaternion.Lerp(transform.rotation, toRotation, lookSpeed * Time.fixedDeltaTime);
+
+        //Add force
+        rb.AddForce(transform.forward * moveSpeed * Time.fixedDeltaTime, ForceMode.VelocityChange);
+        rb.velocity = Vector3.ClampMagnitude(rb.velocity, moveSpeed);
+        */
 
         /*
         if(rb.velocity.magnitude >= moveSpeed)
@@ -81,7 +104,7 @@ public class HomingProjectile : MonoBehaviour
             DestroyProjectile();  
         }
 
-        if(other.gameObject.layer == LayerMask.NameToLayer("Envorinment"))
+        if(other.gameObject.layer == LayerMask.NameToLayer("Environment"))
         {
             DestroyProjectile();  
         }
@@ -100,6 +123,7 @@ public class HomingProjectile : MonoBehaviour
     void DestroyProjectile()
     {   
         //Play some kind of an effect
+
         Destroy(gameObject); 
     }
 

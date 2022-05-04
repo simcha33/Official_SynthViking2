@@ -251,7 +251,7 @@ public class BasicEnemyScript : MonoBehaviour
                 CheckForPlayer(); 
                 CheckForMovement(); 
                 CheckForAttack(); 
-                MoveTowardsPlayer();
+                MoveTowardsTarget();
                 HandleAnimation();
                 GroundCheck();
                 CheckForLinkJumping(); 
@@ -353,7 +353,7 @@ public class BasicEnemyScript : MonoBehaviour
         }
 
         playerLocationIsKnown = true; 
-    }
+    } /*[MOVE]*/
 
     public void CheckForAttack()
     {
@@ -367,7 +367,7 @@ public class BasicEnemyScript : MonoBehaviour
         }
     }
 
-    public void CheckForMovement()
+    public void CheckForMovement() /*[MOVE]*/
     {
         if(playerLocationIsKnown && canFollow && !isFollowing) 
         {
@@ -414,17 +414,17 @@ public class BasicEnemyScript : MonoBehaviour
 
     }
 
-    public void MoveTowardsPlayer()
+    public void MoveTowardsTarget()
     {
         if(canMove)
         {
             enemyAgent.destination = target.position - transform.forward * currentRequiredDistance; 
-        }   
+        }
     }
 
-    
+
     //Attacking
-    void HandleAttack()
+    void HandleAttack() /*[MOVE]*/
     {
         //Set a new attack
         if(!isAttacking && isInAttackRange)
@@ -448,7 +448,7 @@ public class BasicEnemyScript : MonoBehaviour
         DoAttack();
     }
 
-    void SetAttackType()
+    void SetAttackType() /*[MOVE]*/
     {
         int totalAttackTrees = 1;
 
@@ -466,7 +466,7 @@ public class BasicEnemyScript : MonoBehaviour
         if(enemyAnim.GetInteger("AttackType") == 1) totalComboLength = 3f; //Check length of combo attack tree 
     }
 
-    public void DoAttack()
+    public void DoAttack() /*[MOVE]*/
     {
         nextAttackDuration = enemyAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / enemyAnim.GetCurrentAnimatorStateInfo(0).speed;
 
@@ -499,14 +499,14 @@ public class BasicEnemyScript : MonoBehaviour
         nextAttackTimer += Time.deltaTime; 
     }
 
-    public void AttackEventTrigger()
+    public void AttackEventTrigger() /*[MOVE]*/
     {
         canBeParried = true;
         // weapon.gameObject.GetComponent<MeshRenderer>().material = attackIndicationMat;
         //if (attackState != currentAttackType.SprintAttack.ToString()) transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .4f).SetUpdate(UpdateType.Fixed);
     }
 
-    public void AllowAttackDamage()
+    public void AllowAttackDamage() /*[MOVE]*/
     {
         if (canBeParried)
         {

@@ -42,7 +42,7 @@ public class MusicManager : MonoBehaviour
     void ChooseNextSong()
     {
         //Set next song
-        int choosenSong = Random.Range(0, unplayedmusicList.Count + 1); 
+        int choosenSong = Random.Range(0, unplayedmusicList.Count); 
         currentSong = unplayedmusicList[choosenSong];
         songDuration = currentSong.GetComponent<MMFeedbackSound>().FeedbackDuration;
         currentTextString = currentSong.GetComponent<MMFeedbackSound>().name;

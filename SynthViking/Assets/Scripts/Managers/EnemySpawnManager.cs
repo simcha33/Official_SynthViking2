@@ -133,7 +133,7 @@ public class EnemySpawnManager : MonoBehaviour
 
     void SetSpawnLocation()
     {
-        int choosenSpawner = Random.Range(0, enemySpawners.Count + 1);
+        int choosenSpawner = Random.Range(0, enemySpawners.Count);
         choosenSpawnLocation = enemySpawners[choosenSpawner].spawnPoint; 
     }
 

@@ -22,7 +22,7 @@ public class UIFloat : MonoBehaviour {
 
     void SetRandomScale()
     {
-        scaleDir = new Vector3(Random.Range(.3f, .5f), Random.Range(.3f, .5f), Random.Range(.3f, .5f)); 
+        scaleDir = new Vector3(Random.Range(.3f, .55f), Random.Range(.3f, .55f), Random.Range(.3f, .55f)); 
         scaleFreq = Random.Range(.9f, 1.9f);     
     }
 	

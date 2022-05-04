@@ -198,6 +198,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public float wallRunUpSpeed;
     public float frontWallCheckDist;
     public float sideWallCheckDist;
+    public float exitJumpDistance; 
     public Transform frontWallChecker;
 
     private Vector3 jumpOffPoint;
@@ -944,6 +945,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             //Player presses the jump key
             if (input.jumpButtonPressed && canJump)
             {
+                print("JUMP??"); 
                 jumpCount++;
                 if (isSprinting && jumpCount == 1) wasSprintingBeforeJump = true; //check if we we're running before the jump
 
@@ -1141,7 +1143,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         {
             if(input.jumpButtonPressed || !input.sprintButtonPressed)
             { 
-                jumpOffPoint = transform.position - transform.forward * 3f; 
+                jumpOffPoint = transform.position - transform.forward * exitJumpDistance; 
                 wallRunExitWithJump = true; 
             }
        
