@@ -101,7 +101,7 @@ MonoBehaviour:
     m_Value: {x: 0.5, y: 0.5}
   intensity:
     m_OverrideState: 1
-    m_Value: 0.27
+    m_Value: 0.31
     min: 0
     max: 1
   smoothness:
@@ -128,7 +128,7 @@ MonoBehaviour:
   m_AdvancedMode: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 0.25
+    m_Value: 0.2
     min: 0
     max: 1
 --- !u!114 &-4803825905945671550
@@ -191,7 +191,7 @@ MonoBehaviour:
     showEyeDropper: 1
   hueShift:
     m_OverrideState: 1
-    m_Value: -2
+    m_Value: -5
     min: -180
     max: 180
   saturation:
@@ -282,7 +282,7 @@ MonoBehaviour:
   m_AdvancedMode: 0
   temperature:
     m_OverrideState: 1
-    m_Value: 7
+    m_Value: -10
     min: -100
     max: 100
   tint:
@@ -348,7 +348,7 @@ MonoBehaviour:
   m_AdvancedMode: 0
   redOutRedIn:
     m_OverrideState: 1
-    m_Value: 95
+    m_Value: 130
     min: -200
     max: 200
   redOutGreenIn:
@@ -358,7 +358,7 @@ MonoBehaviour:
     max: 200
   redOutBlueIn:
     m_OverrideState: 1
-    m_Value: -2
+    m_Value: -26
     min: -200
     max: 200
   greenOutRedIn:
