@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
     public float hapticDuration = 0f; 
     public float curLowFreq, cureHighFreq; 
     private Gamepad gamepad; 
+
     // Start is called before the first frame update
     void Start()
     {

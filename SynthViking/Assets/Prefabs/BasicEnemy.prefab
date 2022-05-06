@@ -4203,6 +4203,7 @@ MonoBehaviour:
   targetCheckRange: 10
   canTarget: 0
   targetsInRange: []
+  hitTargets: []
   axeHitBloodVFX: {fileID: 5170585893340993107, guid: 7b88f11816abaa34c9e02cbaa8485321, type: 3}
   axeKillBloodVFX: {fileID: 5170585893340993107, guid: e333dc4c486756844b1719e55212914b, type: 3}
   parryLightningVFX: {fileID: 124998, guid: 16f393fea92971c4f9d155ff0adab5a5, type: 3}

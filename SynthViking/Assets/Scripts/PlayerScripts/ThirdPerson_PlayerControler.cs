@@ -435,6 +435,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                     CheckForBlock();
                     CheckForJump();
                     //HandleMoveSpeed(); 
+                    //HandleMoveSpeed(); 
                     break;
 
                 case (int)currentState.DASHING:
@@ -453,6 +454,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
                 case (int)currentState.BLOCKING:
                     DoBlock(previousState);
+                    GroundCheck(); 
                    // CheckForAttack(); 
                     break;
 
@@ -615,6 +617,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     void HandleMoveSpeed()
     {
+      
         //Check for sprinting 
         if (input.sprintButtonPressed && canSprint && (isMoving || isWallRunning))
         {
@@ -633,10 +636,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             isSprinting = false;
         }
 
-        //Fix weird rotation big
-        //   if (!isMoving && !isWallRunning && isGrounded && !isAttacking) playerRb.isKinematic = true;
-        //  else playerRb.isKinematic = false;
-
 
         //Set min movespeed 
         if (isRunning) currentMinMoveSpeed = minRunningMoveSpeed;
@@ -646,14 +645,16 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //Set move speed 
         if (isGrounded)  //Handle ground move speed changes
         {
-            //if (isAttacking && nextAttackTimer < nextAttackDuration) currentMoveSpeed = attackMoveSpeed;
+
             if (isSprinting) currentMoveSpeed = sprintMoveSpeed;  //Sprinting 
             else if (isMoving && !isSprinting)
             {
+                
                 if (!isRunning) currentMoveSpeed = maxMoveSpeed * moveVelocity; //Walking
                 else if (isRunning) currentMoveSpeed = maxMoveSpeed; //Running 
                 if (currentMoveSpeed < currentMinMoveSpeed) currentMoveSpeed = currentMinMoveSpeed; //Check for min move speed 
             }
+         
         }
 
         //Special cases 
@@ -664,6 +665,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             //wasSprintingBeforeJump = false; 
             currentMoveSpeed = airMoveSpeed;
         }
+
     }
 
     void HandleDrag()
@@ -1231,8 +1233,9 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             if (airSmashDelayTimer >= airSmashDelayDuration)
             {
                 
-                mainGameManager.DoHaptics(.2f, .4f, .6f); 
+               
                 AirSlamStartFeeback?.PlayFeedbacks();
+                mainGameManager.DoHaptics(.2f, .2f, .3f);
                 //isAirSmashing = true;
                 meshR.materials = holoSkinMat;
                 canStartAirSmash = false;
@@ -1259,6 +1262,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         }
         else if (isAirSmashing && airSmashDelayTimer >= airSmashDelayDuration)
         {
+            //DoAirSmash();
             //DoAirSmash();
             fixedControllerState = (int)currentState.AIRSMASHING;
             //  mainCollider.isTrigger = true; 
@@ -1385,8 +1389,11 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             isBlocking = false;  
             playerState.canBeHit = true; 
             blockTimer = 0f;
-            controllerState = previousState; 
+            //controllerState = previousState; 
+            controllerState = (int)currentState.MOVING; 
         }
+
+      
     }
 
 
