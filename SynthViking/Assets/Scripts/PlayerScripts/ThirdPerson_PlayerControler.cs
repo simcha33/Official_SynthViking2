@@ -947,7 +947,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             //Player presses the jump key
             if (input.jumpButtonPressed && canJump)
             {
-                print("JUMP??"); 
                 jumpCount++;
                 if (isSprinting && jumpCount == 1) wasSprintingBeforeJump = true; //check if we we're running before the jump
 

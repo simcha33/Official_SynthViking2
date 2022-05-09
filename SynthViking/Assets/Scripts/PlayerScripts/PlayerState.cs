@@ -155,6 +155,12 @@ public class PlayerState : MonoBehaviour
 
                 }
 
+                if(DamageType == "ChargeAttack")
+                {
+                    canBeHit = false;
+                    wasHitByAttack = true; 
+                }
+
                 if(DamageType == "EnvironmentDamage")
                 {
                     playerController.DoJump(550); 

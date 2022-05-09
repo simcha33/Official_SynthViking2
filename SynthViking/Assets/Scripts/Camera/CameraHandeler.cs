@@ -13,6 +13,8 @@ public class CameraHandeler : MonoBehaviour
 
     public CinemachineFreeLook defaultCamera;
     public CinemachineFreeLook aimingCamera;
+    public CinemachineVirtualCamera mainCam; 
+
     
 
     PlayerState playerState; 
@@ -24,7 +26,7 @@ public class CameraHandeler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        mainCam.Priority = 9; 
     }
 
     // Update is called once per frame

@@ -17,7 +17,8 @@ public class TortiTest : MonoBehaviour
 
     [Header("Movement")]
     public float currentMoveSpeed;
-    public float walkMoveSpeed; 
+    public float walkMoveSpeed;
+    public bool canMove; 
 
     [Header("Target Selection")]
     public float targetDistance;
@@ -47,13 +48,25 @@ public class TortiTest : MonoBehaviour
     public bool isInAir;
     public bool hasLanded;
 
+    [Header("Stunned")]
+    public float stunTimer;
+    public float stunDuration;
+    public bool isStunned; 
+
+
+
     [Header("Charge Attack")]
     public float chargeMoveSpeed;
     public float chargeTimer;
-    public float chargeDuration;
+    public float maxChargeDuration;
+    public float minChargeDuration; 
+    private float chargeDuration;
+    public float chargeAttackDamage; 
     public bool isCharging;
+    public bool chargeHitTarget; 
     public float chargeStartDelayTimer; 
     public float chargeStartDelayDuration;
+    public float chargeEndStunDuration; 
     public MMFeedbacks chargeStartFeedback;
     public MMFeedbacks chargeLoopFeedback;
     public MMFeedback chargeEndFeedback; 
@@ -109,6 +122,8 @@ public class TortiTest : MonoBehaviour
                 break;
 
             case (int)currentState.Charge:
+
+            //    StartChargeAttack();
                 DoChargeAttack(); 
                 CheckForTarget(); 
                 FollowTarget();
@@ -122,10 +137,15 @@ public class TortiTest : MonoBehaviour
                 FollowTarget();
                 CheckForTarget();
                 break;
+
+            case (int)currentState.Stunned:
+                StunCoolDown(); 
+                break;
         }
 
         agent.speed = currentMoveSpeed; 
-        CheckForAnimation(); 
+        CheckForAnimation();
+        Debug.Log(tortiState.ToString()); 
     }
 
     void SetTarget()
@@ -173,9 +193,9 @@ public class TortiTest : MonoBehaviour
 
         if (choosenAttack == (int)attackType.ChargeAttack)
         {
-            StartChargeAttack();
+            //StartChargeAttack();
+            StartChargeAttack(); 
             tortiState = (int)currentState.Charge;
-
         }
 
         if (choosenAttack == (int)attackType.PunchAttack)
@@ -200,29 +220,103 @@ public class TortiTest : MonoBehaviour
 
     void StartChargeAttack()
     {
-        //currentAnimationDuration = tortiAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / tortiAnim.GetCurrentAnimatorStateInfo(0).speed;
         tortiAnim.SetTrigger("StartChargeTrigger");
         chargeStartDelayTimer = 0f;
-
-       // agent.enabled = false; 
-        isCharging = true; 
+        currentMoveSpeed = 0f;
+        canMove = false;
+        print("1. Start trigger");
+        chargeStartFeedback?.PlayFeedbacks();
     }
+
 
     void DoChargeAttack()
     {
-        chargeStartDelayTimer += Time.deltaTime; 
-        if(chargeStartDelayTimer >= chargeStartDelayDuration)
+        chargeStartDelayTimer += Time.deltaTime;
+
+        //Charge start
+        if (!isCharging && chargeStartDelayTimer >= chargeStartDelayDuration)
         {
-        //    agent.enabled = true; 
+            isCharging = true;
+            chargeStartDelayTimer = 0f;
+            chargeDuration = Random.Range(minChargeDuration, maxChargeDuration);
             currentMoveSpeed = chargeMoveSpeed;
+            chargeLoopFeedback.PlayFeedbacks();
+
             tortiAnim.SetTrigger("ChargeLoopTrigger");
+            tortiState = (int)currentState.Charge;
+
+            print("2. Start Loop trigger");
+        }
+
+        //Charge loop
+        if (isCharging && chargeTimer < chargeDuration)
+        {
+            chargeTimer += Time.deltaTime; 
+        }
+        else if(isCharging)
+        {
+            print("3. End charge Trigger");
+            
+            EndChargeAttack(); 
         }
     }
 
 
     void EndChargeAttack()
     {
+        ResetState();
+        chargeLoopFeedback.StopFeedbacks();
+        chargeTimer = 0;
 
+        if (!chargeHitTarget)
+        {
+            print("3.1 End no colllision");
+            stunDuration = chargeEndStunDuration; 
+            tortiState = (int)currentState.Stunned;
+        }
+        else
+        {
+            print("3.2 End yes collision");
+        }
+    }
+
+    void StunCoolDown()
+    {
+        stunTimer += Time.deltaTime;
+        isStunned = true; 
+
+        if(stunTimer >= stunDuration)
+        {
+            print("4. Exit cooldown state");
+            ResetState(); 
+            tortiState = (int)currentState.Follow;
+            stunTimer = 0f;
+       
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (isCharging)
+        {
+            if (other.gameObject.CompareTag("Player"))
+            {
+                chargeHitTarget = true;
+                chargeTimer = chargeDuration; //End charge
+
+                PlayerState playerstateScript = other.gameObject.GetComponent<PlayerState>();
+                playerstateScript.TakeDamage(chargeAttackDamage, attackType.ChargeAttack.ToString());
+                print("Player Was hit by charge attack");
+
+            }
+        }
+    }
+
+    void ResetState()
+    {
+        canMove = true;
+        isCharging = false;
+        isStunned = false; 
     }
 
    
