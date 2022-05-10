@@ -13,7 +13,12 @@ public class CameraHandeler : MonoBehaviour
 
     public CinemachineFreeLook defaultCamera;
     public CinemachineFreeLook aimingCamera;
-    public CinemachineVirtualCamera mainCam; 
+    public CinemachineFreeLook airSmashCamera; 
+    public CinemachineVirtualCamera mainCam;
+    private int highPrio = 10; 
+    private int LowPrio = 9; 
+
+    public List<CinemachineFreeLook> cameras = new List<CinemachineFreeLook>(); 
 
     
 
@@ -26,29 +31,36 @@ public class CameraHandeler : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        mainCam.Priority = 9; 
+        //mainCam.Priority = 9;    
     }
 
     // Update is called once per frame
     void Update()
     {
-        SwitchPriority(); 
+        CheckForCamera(); 
+
+        
     }
 
 
-    public void SwitchPriority()
+    public void CheckForCamera()
     {
 
-        if (input.dashButtonPressed && playerController.canDash)
+        string c; 
+        if (playerController.isAirSmashing) c = airSmashCamera.name;
+        else if (input.dashButtonPressed && playerController.canDash) c = aimingCamera.name;
+        else c = defaultCamera.name;
+        SwitchPriority(c); 
+    }
+
+    public void SwitchPriority(string camName)
+    {
+        
+        foreach (CinemachineFreeLook cam in cameras)
         {
-            aimingCamera.Priority = 10;
-            defaultCamera.Priority = 9;
+            if (cam.name == camName) cam.Priority = highPrio;
+            else cam.Priority = LowPrio;
         }
-        else
-        {
-            defaultCamera.Priority = 10;
-            aimingCamera.Priority = 9;                  
-        }  
     }
 
 

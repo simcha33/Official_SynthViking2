@@ -454,7 +454,9 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
                 case (int)currentState.BLOCKING:
                     DoBlock(previousState);
-                    GroundCheck(); 
+             //       GroundCheck();
+
+                    //CheckForAttack(); 
                    // CheckForAttack(); 
                     break;
 
@@ -1382,7 +1384,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         blockTimer+= Time.deltaTime; 
         playerState.canBeHit = false; 
 
-        if(blockTimer >= blockDuration || isAttacking)
+        if(blockTimer >= blockDuration)
         {
             canBlockStun = true; 
             isBlocking = false;  
@@ -1412,15 +1414,14 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             playerRb.isKinematic = false;
             //HandleWeaponSwaping(false);     
             playerAnim.speed = animAttackSpeed;
-            nextAttackTimer = 10f;   
-           
-            
+            nextAttackTimer = 10f;           
            
             controllerState = (int)currentState.ATTACKING;
             fixedControllerState = (int)currentState.ATTACKING;
         }
         else if (input.meleeButtonPressed && canStartNewAttack && isAttacking)
         {
+           // print("HEREREEEE   2??");
             playerAnim.speed = animAttackSpeed;
             //playerAnim.SetInteger("CurrentComboLength", currentComboLength);
            // ResetAnimator();
@@ -1441,6 +1442,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         int totalAttackTrees = 5;
         HolsterWeapon(false);
 
+       // print("Set attack type");
         if (isSprinting)
         {
             totalComboLength = 2;
@@ -1455,7 +1457,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         }
         else
         {
-            AttackFeedback = BasicLightAttackFeedback;
+           // print("HEREREEEE??");
+            AttackFeedback = BasicLightAttackFeedback;        
             currentAttackDamage = basicLightAttackDamage;
             currentAttackForwardForce = basicAttackForwardForce;
 
@@ -1481,7 +1484,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             else if (playerAnim.GetInteger("LightAttackType") == 3) totalComboLength = 4;
             else if (playerAnim.GetInteger("LightAttackType") == 4) totalComboLength = 4;
             else if (playerAnim.GetInteger("LightAttackType") == 5) totalComboLength = 6; //Done
-          //  else if (playerAnim.GetInteger("LightAttackType") == 6) totalComboLength = 5;
+                                                                                          //  else if (playerAnim.GetInteger("LightAttackType") == 6) totalComboLength = 5;
+            
         }
 
 
@@ -1490,12 +1494,14 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     void HandleAttack()
     {
+   
         //Set attack duration equel to current animation clip length and speed
-        nextAttackDuration = playerAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / playerAnim.GetCurrentAnimatorStateInfo(0).speed;
-
+        nextAttackDuration = playerAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / (playerAnim.GetCurrentAnimatorStateInfo(0).speed * playerAnim.speed);
+       
         //Check if we can continue to the next attack
         if (nextAttackTimer >= nextAttackDuration - .21f && input.meleeButtonPressed)
         {
+
             if (currentComboLength >= totalComboLength)
             {
                 currentComboLength = 0; //Reset combo tree
@@ -1505,10 +1511,9 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             CheckForMoveInput(); //Set attack direction 
             if(currentComboLength > 0) SetAttackType(); // Set attack type (skip first attack so we can do conditional start attacks)
             currentComboLength++;
-          //  ResetAnimator();
+
             //Trigger correct animation stuff
             AttackFeedback?.PlayFeedbacks();
-          
             playerAnim.SetBool("IsAttacking", true);
             playerAnim.SetInteger("CurrentComboLength", currentComboLength);
             playerAnim.SetTrigger(attackState + "Trigger");
@@ -1533,6 +1538,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //Check if the combo is broken 
         if (nextAttackTimer >= nextAttackDuration)
         {
+    
             playerAnim.SetBool("IsAttacking", false);
             fixedControllerState = (int)currentState.MOVING;
             controllerState = (int)currentState.MOVING;
@@ -1546,8 +1552,9 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         }
         else if (nextAttackTimer < nextAttackDuration)
         {
+
             //HandleRotation();
-            if(jumpCount < 1) playerRb.isKinematic = true;    
+            if (jumpCount < 1) playerRb.isKinematic = true;    
             currentMoveSpeed = attackMoveSpeed; 
             isAttacking = true;
         }
@@ -1563,6 +1570,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
 
         nextAttackTimer += Time.deltaTime;
+
+       
     }
 
 
@@ -1661,7 +1670,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     void AllowNextAttack()
     {
-        nextAttackTimer = nextAttackDuration;
+       nextAttackTimer = nextAttackDuration;
     }
 
     void SetTrailRender()

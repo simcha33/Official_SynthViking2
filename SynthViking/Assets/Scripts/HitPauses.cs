@@ -32,7 +32,7 @@ public class HitPauses : MonoBehaviour
         if (doHitPause)
         {
             playerController.canRotate = false;
-            hitPauseTimer += Time.unscaledDeltaTime;
+            hitPauseTimer += Time.deltaTime; 
 
             foreach (Animator anim in objectsToPause)
             {

@@ -180,7 +180,6 @@ public class AttackTargetScript : MonoBehaviour
                     playerController.attackTargetScript.playerBlockFeedback?.PlayFeedbacks();
                     playerController.hasParriedAttack = true; 
               
-                    print("block feedback");
                 }
             }
            // else targetScript.TakeDamage(enemyController.currentAttackDamage, enemyController.enemyAttackType); //Damage the player
@@ -219,8 +218,8 @@ public class AttackTargetScript : MonoBehaviour
                 Vector3 backDirection = playerController.transform.position + transform.forward * playerController.currentAttackForwardForce * attackBackForce;
 
                 //Feedback
-                GameObject blood = Instantiate(axeHitBloodVFX, enemyScript.bloodSpawnPoint.position, enemyScript.bloodSpawnPoint.rotation);
-                blood.AddComponent<CleanUpScript>();
+                //GameObject blood = Instantiate(axeHitBloodVFX, enemyScript.bloodSpawnPoint.position, enemyScript.bloodSpawnPoint.rotation);
+              //  blood.AddComponent<CleanUpScript>();
                 weapinFirstImpactFeedback?.PlayFeedbacks();
                 playerController.mainGameManager.DoHaptics(.3f, .2f, .4f); 
 
@@ -237,6 +236,7 @@ public class AttackTargetScript : MonoBehaviour
                             GameObject blood2 = Instantiate(axeKillBloodVFX, limb.position, limb.rotation);
                             blood2.AddComponent<CleanUpScript>();
                             Destroy(joint);
+                            print("Blood"); 
                             limb.transform.parent = null;
 
                             limb.velocity = new Vector3(0, 0, 0);

@@ -46,9 +46,8 @@ public class MusicManager : MonoBehaviour
         currentSong = unplayedmusicList[choosenSong];
         songDuration = currentSong.GetComponent<MMFeedbackSound>().FeedbackDuration;
         currentTextString = currentSong.GetComponent<MMFeedbackSound>().name;
-        songVolume = currentSong.GetComponent<MMFeedbackSound>().MaxVolume = currentSong.GetComponent<MMFeedbackSound>().MinVolume = 0f; 
+        currentSong.GetComponent<MMFeedbackSound>().MaxVolume = currentSong.GetComponent<MMFeedbackSound>().MinVolume = songVolume; 
         currentSong?.PlayFeedbacks();
-        print("TIMES??X"); 
    
         //Change lists
         if(unplayedmusicList.Contains(currentSong)) unplayedmusicList.Remove(currentSong);
