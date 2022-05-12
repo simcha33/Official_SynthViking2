@@ -236,7 +236,6 @@ public class AttackTargetScript : MonoBehaviour
                             GameObject blood2 = Instantiate(axeKillBloodVFX, limb.position, limb.rotation);
                             blood2.AddComponent<CleanUpScript>();
                             Destroy(joint);
-                            print("Blood"); 
                             limb.transform.parent = null;
 
                             limb.velocity = new Vector3(0, 0, 0);
@@ -296,7 +295,6 @@ public class AttackTargetScript : MonoBehaviour
 
             foreach (GameObject obj in targetsInRange)
             {
-                print("DamagePlayer"); 
                 PlayerState targetScript = obj.GetComponent<PlayerState>();
                 targetScript.TakeDamage(enemyController.currentAttackDamage, enemyController.enemyAttackType); //Damage the player
             }         

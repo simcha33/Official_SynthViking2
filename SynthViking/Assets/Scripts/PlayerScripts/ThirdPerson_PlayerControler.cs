@@ -1716,6 +1716,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             sprintTrailTimer -= Time.fixedDeltaTime * disableTrailDuration;
         }
     }
+    
 
 
     

@@ -7,31 +7,39 @@ using MoreMountains.Feedbacks;
 public class TortiTest : MonoBehaviour
 {
     //Components
-    private NavMeshAgent agent;  
+    private NavMeshAgent tortiAgent;  
     private Animator tortiAnim;
     private Rigidbody tortiRb;
+    public ThirdPerson_PlayerControler playerController;
 
     //Animations 
     public float currentAnimationTimer;
     public float currentAnimationDuration; 
 
     [Header("Movement")]
+    #region
     public float currentMoveSpeed;
     public float walkMoveSpeed;
     public bool canMove; 
+    #endregion
 
     [Header("Target Selection")]
+    #region
     public float targetDistance;
     public Transform target;
-
+    #endregion
+    
     [Header("Attack selection")]
+    #region
     public float minNextAttackDuration;
     public float maxNextAttackDuration;
     private float nextAttackDuration;
     public float nextAttackTimer;
     public bool attackIsChoosen;
+    #endregion
 
     [Header ("AirAttack")]
+    #region
     public float airAttackMinDistance;
     public float airAttackMaxDistance;
     public float inAirMoveSpeed;
@@ -47,29 +55,55 @@ public class TortiTest : MonoBehaviour
     public bool canAirAttack;
     public bool isInAir;
     public bool hasLanded;
+    #endregion
 
     [Header("Stunned")]
+    #region
     public float stunTimer;
     public float stunDuration;
     public bool isStunned; 
-
+    #endregion
 
 
     [Header("Charge Attack")]
+    #region
     public float chargeMoveSpeed;
-    public float chargeTimer;
-    public float maxChargeDuration;
-    public float minChargeDuration; 
-    private float chargeDuration;
     public float chargeAttackDamage; 
-    public bool isCharging;
-    public bool chargeHitTarget; 
-    public float chargeStartDelayTimer; 
+    private float chargeTimer;
+    public float maxChargeDuration, minChargeDuration; 
+    private float chargeDuration;
+    private bool isCharging;
+    private bool isChargeAttacking; 
+    private bool chargeHitTarget; 
+    private float chargeStartDelayTimer; 
     public float chargeStartDelayDuration;
-    public float chargeEndStunDuration; 
+   // public float chargeEndStunDuration; 
     public MMFeedbacks chargeStartFeedback;
     public MMFeedbacks chargeLoopFeedback;
     public MMFeedback chargeEndFeedback; 
+
+    //Grab attack
+    public float grabAttackTimer;
+    public bool canEndGrabAttack; 
+    public float grabAttackDuration; 
+
+    private float grabAirSpeed; 
+    public Vector3 jumpPoint;
+    #endregion
+
+    [Header("Visuals")]
+    #region
+    public SkinnedMeshRenderer backOrbMeshr; 
+
+    public List <SkinnedMeshRenderer> litMeshes = new List <SkinnedMeshRenderer>(); 
+    public Material backOrbDefaultMat; 
+    public Material backOrbStunnedMat;
+    public Material backOrbDeadMat; 
+
+    public GameObject stunnedEffect;
+
+    public GameObject hatFire;
+    #endregion
 
     
 
@@ -77,6 +111,7 @@ public class TortiTest : MonoBehaviour
     {
         Follow,
         Charge,
+        ChargeAttack,
         AirAttack,
         Dead,
         Stunned,
@@ -88,7 +123,8 @@ public class TortiTest : MonoBehaviour
     {
         AirAttack,
         PunchAttack,
-        ChargeAttack
+        ChargingForward,
+        ChargeAttack,
     }
 
     private int choosenAttack; 
@@ -100,13 +136,15 @@ public class TortiTest : MonoBehaviour
   
         //Components 
         target = GameObject.Find("Player").transform;
-        agent = GetComponent<NavMeshAgent>();
+        tortiAgent = GetComponent<NavMeshAgent>();
         tortiAnim = gameObject.GetComponent<Animator>(); 
         tortiRb = gameObject.GetComponent<Rigidbody>();
-
+       // litMeshes.Add(backOrbMeshr); 
+        
         //Set defeault states 
         tortiState = (int)currentState.Follow;
-        currentMoveSpeed = walkMoveSpeed;
+        currentMoveSpeed = walkMoveSpeed; 
+        ResetState(); 
         ResetAttack(); 
     }
 
@@ -124,7 +162,7 @@ public class TortiTest : MonoBehaviour
             case (int)currentState.Charge:
 
             //    StartChargeAttack();
-                DoChargeAttack(); 
+                DoChargeForward(); 
                 CheckForTarget(); 
                 FollowTarget();
                 break;
@@ -141,11 +179,13 @@ public class TortiTest : MonoBehaviour
             case (int)currentState.Stunned:
                 StunCoolDown(); 
                 break;
+            case(int)currentState.ChargeAttack:
+                DoChargeAttack(); 
+                break; 
         }
 
-        agent.speed = currentMoveSpeed; 
+        tortiAgent.speed = currentMoveSpeed; 
         CheckForAnimation();
-        Debug.Log(tortiState.ToString()); 
     }
 
     void SetTarget()
@@ -156,11 +196,13 @@ public class TortiTest : MonoBehaviour
     void CheckForAnimation()
     {
         tortiAnim.SetBool("IsCharging", isCharging); 
+        tortiAnim.SetBool("IsStunned", isStunned); 
+        tortiAnim.SetBool("IsChargeAttacking", isChargeAttacking); 
     }
 
     void FollowTarget()
     {
-        agent.destination = target.position - transform.forward;
+        tortiAgent.destination = target.position - transform.forward;
         transform.LookAt(target);
     }
 
@@ -183,7 +225,7 @@ public class TortiTest : MonoBehaviour
     void ChooseNewAttackType()
     {
         attackIsChoosen = true;
-        choosenAttack = (int)attackType.ChargeAttack; 
+        choosenAttack = (int)attackType.ChargingForward; 
 
 
         if (choosenAttack == (int)attackType.AirAttack)
@@ -191,7 +233,7 @@ public class TortiTest : MonoBehaviour
             tortiState = (int)currentState.AirAttack;
         }
 
-        if (choosenAttack == (int)attackType.ChargeAttack)
+        if (choosenAttack == (int)attackType.ChargingForward)
         {
             //StartChargeAttack();
             StartChargeAttack(); 
@@ -202,6 +244,10 @@ public class TortiTest : MonoBehaviour
         {
             tortiState = (int)currentState.Punch;
         }
+
+        ResetAttack(); 
+
+        
     }
 
     void ResetAttack()
@@ -218,18 +264,20 @@ public class TortiTest : MonoBehaviour
 
     }
 
+
+    //CHARGING
+
     void StartChargeAttack()
     {
         tortiAnim.SetTrigger("StartChargeTrigger");
         chargeStartDelayTimer = 0f;
         currentMoveSpeed = 0f;
         canMove = false;
-        print("1. Start trigger");
         chargeStartFeedback?.PlayFeedbacks();
     }
 
 
-    void DoChargeAttack()
+    void DoChargeForward()
     {
         chargeStartDelayTimer += Time.deltaTime;
 
@@ -244,8 +292,6 @@ public class TortiTest : MonoBehaviour
 
             tortiAnim.SetTrigger("ChargeLoopTrigger");
             tortiState = (int)currentState.Charge;
-
-            print("2. Start Loop trigger");
         }
 
         //Charge loop
@@ -254,45 +300,116 @@ public class TortiTest : MonoBehaviour
             chargeTimer += Time.deltaTime; 
         }
         else if(isCharging)
-        {
-            print("3. End charge Trigger");
-            
-            EndChargeAttack(); 
+        {     
+            EndChargeForward(); 
         }
     }
 
-
-    void EndChargeAttack()
+    void EndChargeForward()
     {
         ResetState();
         chargeLoopFeedback.StopFeedbacks();
         chargeTimer = 0;
 
-        if (!chargeHitTarget)
+        if (!chargeHitTarget) //Charge has ended without hitting target 
         {
-            print("3.1 End no colllision");
-            stunDuration = chargeEndStunDuration; 
-            tortiState = (int)currentState.Stunned;
-        }
-        else
+           // stunDuration = chargeEndStunDuration; 
+            tortiState = (int)currentState.Follow; 
+
+        }   
+        else //Charge has hit target
         {
-            print("3.2 End yes collision");
+            tortiState = (int)currentState.ChargeAttack; 
+            ParentPlayerToFist(); 
+
         }
     }
 
+    void ParentPlayerToFist()
+    {
+
+    }
+
+    void DoChargeAttack()
+    {
+        float jumpHeight = 7.5f; 
+         
+        if(!isChargeAttacking)        
+        {
+            jumpPoint = transform.position + new Vector3(0,jumpHeight,0); 
+            tortiAnim.SetTrigger("GrabAttackStartTrigger");   
+            isChargeAttacking = true; 
+            grabAttackTimer = 0f; 
+            tortiAgent.enabled = false;     
+            grabAirSpeed = 15f;  
+        }
+
+           float UpDistance = Vector3.Distance(transform.position, jumpPoint); 
+    
+
+
+        if(UpDistance < .5f || canEndGrabAttack)
+        {       
+            if(!canEndGrabAttack)
+            {
+                jumpPoint = transform.position - new Vector3(0,jumpHeight,0); 
+                tortiAnim.SetTrigger("GrabAttackEndTrigger");
+                canEndGrabAttack = true; 
+                grabAttackTimer = 0f; 
+                grabAirSpeed = 30f; 
+        
+            }               
+     
+            if(UpDistance <.5f && grabAttackTimer > 0)
+            {
+                print("Return To follow state" ); 
+                ResetState(); 
+                tortiState = (int)currentState.Follow; 
+            }
+
+        }
+        
+        
+        if(grabAttackTimer > .45f || canEndGrabAttack && grabAttackTimer > .5f)
+        {
+            print("Move torti up" ); 
+            transform.position = Vector3.MoveTowards(transform.position, jumpPoint, grabAirSpeed * Time.deltaTime); 
+        }
+
+
+
+        grabAttackTimer += Time.deltaTime; 
+        
+    }
+
+
+
+
     void StunCoolDown()
     {
-        stunTimer += Time.deltaTime;
-        isStunned = true; 
+        
+
+        if(!isStunned)
+        {                   
+            isStunned = true; 
+            tortiAgent.enabled = false;
+            stunnedEffect.SetActive(true); 
+            hatFire.SetActive(false); 
+            tortiAnim.SetTrigger("StunTrigger");         
+            foreach(SkinnedMeshRenderer meshR in litMeshes) meshR.material = backOrbStunnedMat;   
+        }
 
         if(stunTimer >= stunDuration)
         {
-            print("4. Exit cooldown state");
             ResetState(); 
+            tortiAgent.enabled = true; 
+            stunnedEffect.SetActive(false); 
+            hatFire.SetActive(true); 
             tortiState = (int)currentState.Follow;
-            stunTimer = 0f;
-       
+            stunTimer = 0f;     
         }
+
+        stunTimer += Time.deltaTime;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -302,11 +419,10 @@ public class TortiTest : MonoBehaviour
             if (other.gameObject.CompareTag("Player"))
             {
                 chargeHitTarget = true;
-                chargeTimer = chargeDuration; //End charge
-
+                EndChargeForward();
+            //    chargeTimer = chargeDuration; //End charge
                 PlayerState playerstateScript = other.gameObject.GetComponent<PlayerState>();
                 playerstateScript.TakeDamage(chargeAttackDamage, attackType.ChargeAttack.ToString());
-                print("Player Was hit by charge attack");
 
             }
         }
@@ -317,6 +433,9 @@ public class TortiTest : MonoBehaviour
         canMove = true;
         isCharging = false;
         isStunned = false; 
+        isChargeAttacking = false;
+        canEndGrabAttack = false;  
+        foreach(SkinnedMeshRenderer meshR in litMeshes) meshR.material = backOrbDefaultMat; 
     }
 
    

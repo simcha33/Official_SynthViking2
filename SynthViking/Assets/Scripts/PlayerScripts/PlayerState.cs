@@ -20,6 +20,8 @@ public class PlayerState : MonoBehaviour
     public float stunDuration;
     public float stunTimer;
     public bool isStunned;
+
+    public string stunString; 
     public bool canBeHit;
     public bool wasHitByAttack;
     private float recoveryTimer;
@@ -88,7 +90,7 @@ public class PlayerState : MonoBehaviour
                 PlayerRecovery();
                 break;
             case (int)currentState.STUNNED:
-                StunPlayer();
+                StunPlayer(stunDuration, stunString);
                 PlayerRecovery();
                 break;
         }
@@ -99,7 +101,7 @@ public class PlayerState : MonoBehaviour
 
     void CanBeHit()
     {
-
+      
     }
 
     void HandleUI()
@@ -137,7 +139,6 @@ public class PlayerState : MonoBehaviour
     {
         if (canBeHit || DamageType == "EnvironmentDamage")
         {
-            print("TAKINGDAMAGEEE"); 
             currentHealth -= damageAmount;
             healthText.text = currentHealth.ToString(); 
             helathSlider.value = currentHealth / maxHealth;
@@ -151,7 +152,9 @@ public class PlayerState : MonoBehaviour
                 if(DamageType == "BasicMeleeAttackDamage")
                 {
                     canBeHit = false;
-                    wasHitByAttack = true;                   
+                    wasHitByAttack = true; 
+                    stunString = "AttackHit";    
+                    stunDuration = 10f;                    
 
                 }
 
@@ -159,11 +162,16 @@ public class PlayerState : MonoBehaviour
                 {
                     canBeHit = false;
                     wasHitByAttack = true; 
+                    stunString = "AttackHit";
+                   // stunString = "Grappled"; 
+                   // stunDuration = 100f; 
                 }
 
                 if(DamageType == "EnvironmentDamage")
                 {
                     playerController.DoJump(550); 
+                    stunString = "AttackHit";
+                    stunDuration = 10f;      
                 }
 
               
@@ -175,7 +183,7 @@ public class PlayerState : MonoBehaviour
                 playerState = (int)currentState.STUNNED;
                 playerController.controllerState = (int)currentState.STUNNED;
                 playerController.fixedControllerState = (int)currentState.STUNNED;                                          
-                stunDuration = 10f;                                              
+                                                        
             }
         
         }
@@ -195,12 +203,12 @@ public class PlayerState : MonoBehaviour
         helathSlider.value = currentHealth / maxHealth;
     }
 
-    void StunPlayer()
+    public void StunPlayer(float stunTime, string stunType)
     {
   
         stunTimer += Time.deltaTime;
 
-        if (stunTimer >= stunDuration)
+        if (stunTimer >= stunTime)
         {
             //canBeHit = true;
             stunTimer = 0f;
@@ -210,7 +218,10 @@ public class PlayerState : MonoBehaviour
             playerController.fixedControllerState = (int)currentState.MOVING;
         }
 
-        stunDuration = playerAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / playerAnim.GetCurrentAnimatorStateInfo(0).speed;
+        if(stunType == "AttackHit")
+        {
+            stunDuration = playerAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / playerAnim.GetCurrentAnimatorStateInfo(0).speed;
+        }
 
 
     }
