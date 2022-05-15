@@ -78,6 +78,7 @@ public class BasicEnemyScript : MonoBehaviour
     public float canBeParriedTimer;
     public float canBeParriedDuration; 
     private string StunType;
+    [HideInInspector] public bool isDashTargeted; 
     #endregion
 
 
@@ -121,6 +122,7 @@ public class BasicEnemyScript : MonoBehaviour
     public Transform rootTransform; 
     public Transform bloodSpawnPoint; //Cube in waist
     public Transform weapon; //Weapon in hand
+    public CapsuleCollider dashPointCol; 
  
     public Rigidbody groundCheckPoint;
     private Vector3 weaponPos;
@@ -270,7 +272,7 @@ public class BasicEnemyScript : MonoBehaviour
                 CheckForPlayer(); 
                 CheckForImpactDamage();
                 HandleAnimation();
-                if(StunType != "PhysicsImpact") GroundCheck(); 
+                GroundCheck(); 
                // GroundCheck();
 
                 break; 
@@ -395,17 +397,22 @@ public class BasicEnemyScript : MonoBehaviour
         //Check for ground 
         if (Physics.Raycast(ray, out hit, groundCheckHeight, envorinmentLayer))
         {
-            isGrounded = true; 
+            isGrounded = true;
+          //  dashPointCol.enabled = false;  
 
         }
-        else isGrounded = false;
+        else
+        {
+          // dashPointCol.enabled = true; 
+            isGrounded = false;
+        }
 
         Debug.DrawRay(groundCheckPoint.position, Vector3.down * groundCheckHeight, Color.red);
 
         
         if(!isGrounded && isStunned && !isRagdolling && !isLaunched && !isGettingUp)
         {
-            isLaunched = true;
+            isLaunched = true; 
             EnableRagdoll();
             CheckForStunType("PhysicsImpact"); 
         }
@@ -530,6 +537,7 @@ public class BasicEnemyScript : MonoBehaviour
 
         if(canBeLaunched)
         {
+            dashPointCol.enabled = true; 
             canAddImpactDamage = true; 
             isLaunched = true; 
             isStunned = true;
@@ -773,7 +781,7 @@ public class BasicEnemyScript : MonoBehaviour
         {
             recoveryTimer += Time.deltaTime;
         } 
-        else if (isLaunched && currentVelocity >= maxRecoveryVel && !isGettingUp && !isBlockStunned) //If a launched enemy is moving to fast don't allow him to recover 
+        else if (isLaunched && currentVelocity >= maxRecoveryVel && !isGettingUp && !isBlockStunned || isDashTargeted) //If a launched enemy is moving to fast don't allow him to recover 
         {
             recoveryTimer = 0f;
             canRecover = false;
@@ -933,6 +941,7 @@ public class BasicEnemyScript : MonoBehaviour
         enemyAnim.enabled = true;
         enemyRb.useGravity = false;
         mainCollider.isTrigger = false;
+       // dashPointCol.enabled = false; 
 
 
         //disable ragdoll limbs
@@ -955,7 +964,8 @@ public class BasicEnemyScript : MonoBehaviour
         //    canDetectPlayer = true; 
         // canMove = true;  
         canAttack = true;
-        canBeParried = false; 
+        canBeParried = false;
+        canMove = true;
         //  canBeTargeted = true; 
         //   canAddImpactDamage = true; 
         //   canBeLaunched = true; 

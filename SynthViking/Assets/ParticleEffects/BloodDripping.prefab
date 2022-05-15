@@ -41,13 +41,13 @@ ParticleSystem:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 153674}
   serializedVersion: 7
-  lengthInSec: 1
-  simulationSpeed: 0.7
-  stopAction: 0
+  lengthInSec: 3
+  simulationSpeed: 0.2
+  stopAction: 2
   cullingMode: 3
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   useUnscaledTime: 0
@@ -56,7 +56,7 @@ ParticleSystem:
   startDelay:
     serializedVersion: 2
     minMaxState: 0
-    scalar: 0
+    scalar: 0.75
     minScalar: 0
     maxCurve:
       serializedVersion: 2

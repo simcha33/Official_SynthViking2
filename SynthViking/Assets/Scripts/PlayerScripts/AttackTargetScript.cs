@@ -56,8 +56,11 @@ public class AttackTargetScript : MonoBehaviour
      [Header("VISUALS")] //GROUND MOVEMENT
      #region 
     public GameObject axeHitBloodVFX;
-    public GameObject axeKillBloodVFX; 
-    public GameObject parryLightningVFX; 
+    public GameObject axeKillBloodVFX;
+    public GameObject bloodDrip;
+    public GameObject bloodPool;
+    public GameObject parryLightningVFX;
+    public GameObject limbBloodVFX; 
      #endregion
 
    
@@ -232,22 +235,31 @@ public class AttackTargetScript : MonoBehaviour
                     {
                         if (enemyScript.ragdollRbs.Contains(limb))
                         {
-                            CharacterJoint joint = limb.GetComponent<CharacterJoint>();
-                            GameObject blood2 = Instantiate(axeKillBloodVFX, limb.position, limb.rotation);
-                            blood2.AddComponent<CleanUpScript>();
-                            Destroy(joint);
-                            limb.transform.parent = null;
+                            if (limb.GetComponent<CharacterJoint>() != null)
+                            {
+                                CharacterJoint joint = limb.GetComponent<CharacterJoint>();
+                                GameObject blood2 = Instantiate(limbBloodVFX, joint.transform.position, joint.transform.rotation);
+                                GameObject blood3 = Instantiate(bloodDrip, joint.transform.position, joint.transform.rotation);
+                           //     GameObject blood4 = Instantiate(bloodPool, joint.transform.position, bloodPool.transform.rotation);
 
-                            limb.velocity = new Vector3(0, 0, 0);
-                            limb.AddExplosionForce(10f, limb.position, 2f, 4f, ForceMode.Impulse);
-                            if (enemyScript.canBeTargeted) limb.mass *= 3f;
-                            // limb.GetComponent<SetEnemyInside>().ActivateLimbInside(); 
+                                blood2.transform.parent = blood3.transform.parent = limb.transform;
+                                blood2.AddComponent<CleanUpScript>();
+                               // blood3.AddComponent<CleanUpScript>(); 
+                                Destroy(joint);
+                                limb.transform.parent = null;
+
+                                limb.velocity = new Vector3(0, 0, 0);
+                                limb.AddExplosionForce(10f, limb.position, 2f, 4f, ForceMode.Impulse);
+                                if (enemyScript.canBeTargeted) limb.mass *= 3f;
+                                // limb.GetComponent<SetEnemyInside>().ActivateLimbInside(); 
+                            }
                         }
                     }
 
+
                     foreach (GameObject enemyInside in limbCheckerScript.hitInsides)
                     {
-                        enemyInside.GetComponent<MeshRenderer>().enabled = true;
+                        if(enemyInside.GetComponent<MeshRenderer>() != null) enemyInside.GetComponent<MeshRenderer>().enabled = true;
                     }
 
                     if (enemyScript.canBeTargeted)
@@ -283,7 +295,7 @@ public class AttackTargetScript : MonoBehaviour
                 if (enemyScript.isRagdolling ||  enemyScript.isDead) enemyScript.enemyRb.AddForce(Vector3.up * 10f, ForceMode.VelocityChange);
 
 
-                limbCheckerScript.hitLimbs.Clear();
+            //    limbCheckerScript.hitLimbs.Clear();
                 limbCheckerScript.hitInsides.Clear();
             }
         }

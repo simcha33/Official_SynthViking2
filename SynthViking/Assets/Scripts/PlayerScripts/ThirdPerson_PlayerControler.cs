@@ -22,6 +22,7 @@ public enum playerAttackType
 public class ThirdPerson_PlayerControler : MonoBehaviour
 {
     public Vector3 inputDir;
+    private bool holsterWeapon; 
 
     [Header("GROUND MOVEMENT")] //GROUND MOVEMENT
     #region
@@ -102,6 +103,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     private float dashDelayTimer;
     public float dashBuildUpSpeed;
     public float currentDashDistance;
+    public int dashTargetCount;
 
     [HideInInspector] public float dashCooldownTimer;
     public float dashCooldownDuration;
@@ -109,7 +111,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     [HideInInspector] public bool enemyDashObjectReached;
     [HideInInspector] public bool fullyChargedDash;
     private bool dashEndMove;
-    private Vector3 dashDirection;
+    [HideInInspector] public Vector3 dashDirection;
     private Vector3 dashOffset = Vector3.up * -1f;
     private Vector3 originalIndicatorSize;
     public Transform dashChecker;
@@ -139,7 +141,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     [Header("DASH ATTACK")]
     #region
     public float dashAttackForce;
-    public float dashAttackDamage = 5f; 
+    public float dashAttackDamage = 5f;
+    public bool dashAirAttack; 
     [HideInInspector] public GameObject dashAttackTarget;
     #endregion
 
@@ -257,7 +260,9 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
   
     public TrailRenderer[] footTrail;
     private float sprintTrailTimer; 
-    private float sprintTrailDuration; 
+    private float sprintTrailDuration;
+    private float attackTrailDuration;
+    private float attackTrailTimer; 
     private bool enableTrail = false; 
 
 
@@ -278,7 +283,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public Rigidbody airConstraints;
     public GameObject holsteredWeapon;
     public GameObject drawnWeapon;
-    public Collider mainCollider; 
+    public Collider mainCollider;
+    public Transform dashpoint; 
     #endregion
 
     [Header("FEEDBACK")]
@@ -375,12 +381,14 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         currentRotateSpeed = defaultRotateSpeed; 
         // sprintTrailDuration = sprintTrail.time; sprintTrail.time = -.1f;
         sprintTrailDuration = footTrail[1].time;
+        attackTrailDuration = attackTrail.time;
+        attackTrail.time = -1f; 
         foreach (TrailRenderer trail in footTrail) trail.time = -.1f; 
         airSmashDelayTimer = 0f;
         airSmashCooldownTimer = airSmashCooldownDuration;
         dashCooldownTimer = 0f; 
         playerRb.drag = groundStopDrag;
-        HolsterWeapon(true);
+      //  HolsterWeapon(true);
 
 
        //Set default states
@@ -466,9 +474,9 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
             HandleSprinting();
             HandleAnimations();
+            HolsterWeapon(); 
         }
     
-        //if(transform.eulerAngles.x != 0) transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, transform.eulerAngles.z); 
     }
 
 
@@ -536,8 +544,24 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     }
 
-    void HolsterWeapon(bool holsterWeapon)
+    void HolsterWeapon()
     {
+
+        if(isSprinting || isInAir || isLanding)
+        {
+            drawnWeapon.SetActive(false);
+            holsteredWeapon.SetActive(true);
+            holsterWeapon = true; 
+        }
+        else
+        {
+            drawnWeapon.SetActive(true);
+            holsteredWeapon.SetActive(false);
+            holsterWeapon = false; 
+        }
+
+
+        /*
         if (holsterWeapon)
         {
             drawnWeapon.SetActive(false);
@@ -551,6 +575,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             holsteredWeapon.SetActive(false);
            // drawWeapon = false;
         }   
+        */
     }
 
 
@@ -626,7 +651,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             if (!isSprinting)
             {
               //  sprintFeedback?.PlayFeedbacks();
-                HolsterWeapon(true);
+             //   HolsterWeapon(true);
             }
 
             isSprinting = true;       
@@ -634,6 +659,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         }
         else
         {
+        //    HolsterWeapon(false);
             canStartWallrun = false;
             isSprinting = false;
         }
@@ -705,9 +731,51 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         Debug.DrawRay(playerCamera.transform.position, playerCamera.transform.forward * currentDashDistance, Color.green);
         forward.y = 0;
 
-        //dashDirection = playerCamera.transform.forward;
+       
+        //Check for airborne dashTargets
+        // ray, out hit, groundCheckHeight, envorinmentLayer
+        Ray ray = new Ray(playerCamera.transform.position, playerCamera.transform.forward.normalized); 
+        RaycastHit upHitOut;
+        if (Physics.Raycast(ray, out upHitOut, currentDashDistance, 1 << LayerMask.NameToLayer("DashPoint")) && fullyChargedDash)
+        {
+            //dashpoint = upHitOut.collider.transform;
 
-        if (input.dashButtonPressed && !isDashing && canDash)
+            if (upHitOut.collider.transform != dashpoint)
+            {
+                dashTargetCount++;
+            }
+
+            if (dashTargetCount == 1)
+            {
+                dashpoint = upHitOut.collider.transform;
+                DashPoint dashScript = dashpoint.GetComponent<DashPoint>();
+                dashScript.isTargeted = true;
+            }
+            else if(dashTargetCount > 1)
+            {
+                print("remove old"); 
+                DashPoint oldDashScript = dashpoint.GetComponent<DashPoint>();
+                oldDashScript.isTargeted = false;
+                dashpoint = null;
+                dashTargetCount--;
+
+                dashpoint = upHitOut.collider.transform;
+            //    DashPoint dashScript = dashpoint.GetComponent<DashPoint>();
+            //    dashScript.isTargeted = true;
+             
+            }                  
+        }
+        else if(dashpoint != null && !isDashing && !isDashAttacking || !fullyChargedDash && dashpoint != null)
+        {         
+            dashpoint.GetComponent<DashPoint>().isTargeted = false;
+            dashpoint = null;
+            dashTargetCount--; 
+        }
+
+
+
+        //Check for charged dash obstacles
+        if (input.dashButtonPressed && !isDashing && canDash && dashpoint == null)
         {
             raycastCheck.gameObject.SetActive(true);
             RaycastHit camForwardHit;
@@ -717,6 +785,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             {
                 //if (canDash && (camForwardHit.transform.gameObject.layer == 6 || camForwardHit.transform.CompareTag("Enemy")))
                  raycastCheckMeshr.material = holoGreen;
+
                 if ((camForwardHit.transform.gameObject.layer == EnvorinmentLayer))
                 {
                     raycastCheck.transform.position = camForwardHit.point;
@@ -727,6 +796,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                     raycastCheck.transform.position = playerCamera.transform.position + playerCamera.transform.forward * currentDashDistance;
                     dashDirection = raycastCheck.transform.position + dashOffset;
                 }
+
+               
             }
             else
             {
@@ -734,15 +805,19 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 raycastCheck.transform.position = playerCamera.transform.position + playerCamera.transform.forward * currentDashDistance;
                 dashDirection = raycastCheck.transform.position + dashOffset;
             }
+
+            
         }
-        else
+        else if(dashpoint != null)
         {
-            //raycastCheck.gameObject.SetActive(false);
+          //  raycastCheck.gameObject.SetActive(false); 
         }
-        return forward.normalized;
 
-
+        return forward.normalized;        
+        
     }
+
+    
 
     private Vector3 GetCameraRight(Camera playerCamera)
     {
@@ -775,6 +850,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     void CheckForDash()
     {
+
         //Build up the dashduration on button hold
         if (input.dashButtonPressed && canDash)
         {
@@ -795,12 +871,36 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             //Add small dash delay for the animation charge up 
             if (dashDelayTimer == dashDelayDuration)
             {
+                
+                if (dashpoint != null)
+                {
+                    DashPoint dashTargetScript = dashpoint.GetComponent<DashPoint>();
+                    BasicEnemyScript enemyScript = dashTargetScript.enemyScript;
+                    dashTargetScript.freezeEnemy = true;
+                    dashTargetScript.stayPos = enemyScript.transform.position; 
+                    //enemyScript.enemyRb.isKinematic = true;
+                    enemyScript.canMove = false;
+                    enemyScript.enemyAgent.enabled = false; 
+                    enemyScript.enemyRb.velocity = new Vector3(0, 0, 0);
+                    dashDirection = enemyScript.transform.position; 
+                    transform.LookAt(dashDirection);
+                    dashDirection += (transform.forward * 10f); 
+                    raycastCheck.position = dashDirection;
+                    dashDelayTimer = dashDelayDuration; 
+                }
+                else
+                {
+                    transform.LookAt(dashDirection);
+                }
+                                          
+               
+             
                 playerState.canBeHit = false; 
                 canMove = false;
                 canLand = false;
                 ResetAnimator();
                 transform.LookAt(dashDirection);
-                //dashDirection = aimPoint.forward + Vector3.right;
+                //dashDirection = aimPoint.forward + Vector3.right;d
                 playerAnim.SetTrigger("DashStartTrigger");
             }
             dashDelayTimer -= Time.deltaTime;
@@ -811,7 +911,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 isDashing = true;
                 canDash = false;
                 isChargingDash = false;
-                //  mainCollider.isTrigger = true;
+                mainCollider.isTrigger = true;
                 Physics.IgnoreLayerCollision(enemyLayer, this.gameObject.layer, true); 
 
                 //dashDirection = aimPoint.forward;
@@ -832,8 +932,9 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //The player is dashing 
         if (isDashing && !solidDashObjectReached && !enemyDashObjectReached && !canEndDash) //Maintain dash
         {
-            if (currentDashDistance <= 6f)
+            if (dashpoint == null && currentDashDistance <= 6f || dashpoint != null && currentDashDistance <= 1f)
             {
+
                 canEndDash = true; //End Dash
                 return;
             }
@@ -855,13 +956,13 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                
             }
         }
-        else if (isDashing && canEndDash) //End dash
+        else if (isDashing && canEndDash && dashpoint == null) //End dash
         {
             ResetDash();
         }
         else if (enemyDashObjectReached)
         {
-            dashChecker.gameObject.SetActive(false);
+         //   dashChecker.gameObject.SetActive(false);
             canEndDash = false;
             canLand = true;
         }
@@ -889,8 +990,10 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         
         if (!enemyDashObjectReached && !solidDashObjectReached)
         {
+
             playerRb.AddForce((dashDirection - transform.position) * dashForwardForce, ForceMode.VelocityChange);
-            dashChecker.gameObject.SetActive(true);
+          //  else playerRb.AddForce(((dashpoint.transform.position - new Vector3(0,-2,0)) - transform.position) * dashForwardForce, ForceMode.VelocityChange);
+            //dashChecker.gameObject.SetActive(true);
         }
     }
 
@@ -899,8 +1002,9 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         BasicEnemyScript script = dashAttackTarget.transform.GetComponentInParent<BasicEnemyScript>();  
         if(!script.isDead)
         {
+
             script.TakeDamage(dashAttackDamage, playerAttackType.PowerPunch.ToString());
-            script.transform.position = transform.position + transform.forward + script.transform.up; 
+            //script.transform.position = transform.position + transform.forward + script.transform.up; 
             playerRb.AddForce(transform.up * 5, ForceMode.VelocityChange);
         }
 
@@ -918,19 +1022,20 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
         solidDashObjectReached = false;
         enemyDashObjectReached = false;
-        dashChecker.gameObject.SetActive(false);
+       // dashChecker.gameObject.SetActive(false);
         raycastCheck.gameObject.SetActive(false);
         meshR.materials = defaultSkinMat;
         if (jumpCount > 1) jumpCount = 1;
 
         isDashing = false;
+       // if(dashpoint != null) dashpoint = null; 
         canEndDash = false;
         canMove = true;
         dashEndMove = false;
         playerRb.useGravity = true;
         playerState.canBeHit = true;
         fullyChargedDash = false;
-        // mainCollider.isTrigger = false; 
+        mainCollider.isTrigger = false; 
         Physics.IgnoreLayerCollision(enemyLayer, this.gameObject.layer, false);
 
         currentDashDistance = minDashDistance;
@@ -1282,7 +1387,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         playerRb.AddForce(-Vector3.up * airSmashDownSpeed, ForceMode.VelocityChange);
         dashChecker.gameObject.SetActive(true);
 
-        //Dash has reached ground
+        //Dash has reached groundF
         RaycastHit hit;
         Ray downRay = new Ray(transform.position, -transform.up);
         if ((Physics.Raycast(downRay, out hit, airSmashEndHeight)))
@@ -1309,6 +1414,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 }
 
                 mainGameManager.DoHaptics(.37f, 1f, 1.8f); 
+          
                 GameObject slamEffect = Instantiate(groundSlamVFX, hit.point, transform.rotation);               
                 slamEffect.AddComponent<CleanUpScript>(); 
             }
@@ -1360,7 +1466,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             ResetStates(); 
             isBlocking = true;
             canBlock = false;  
-            HolsterWeapon(false); 
+            //HolsterWeapon(false); 
             previousState = controllerState;
             playerAnim.SetBool("IsAttacking", false);
             playerAnim.SetTrigger("BlockTrigger"); 
@@ -1440,7 +1546,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     void SetAttackType()
     {
         int totalAttackTrees = 5;
-        HolsterWeapon(false);
+     //   HolsterWeapon(false);
 
        // print("Set attack type");
         if (isSprinting)
@@ -1566,6 +1672,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             isAttacking = false;
             attackTargetInRange = false;
             playerAnim.SetBool("IsAttacking", false);
+            limbCheckerScript.hitLimbs.Clear();
+            limbCheckerScript.hitInsides.Clear();
         }
 
 
@@ -1621,6 +1729,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         playerRb.isKinematic = false;
         meshR.materials = defaultSkinMat;
         playerAnim.speed = 1f;
+        mainCollider.isTrigger = false; 
 
         //jumpCount = 0;
 
@@ -1677,12 +1786,45 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     {
         float disableTrailDuration = .75f;
 
-        if (isSprinting || jumpCount >= 1 || isDashing || isAirSmashing)enableTrail = true; 
+        if (isSprinting || jumpCount >= 1 || isDashing || isAirSmashing) enableTrail = true; 
         else enableTrail = false;
 
-      
- 
+      ///  Debug.Log(attackTrailTimer); 
 
+        //Attack trail 
+        if (isAttacking) //Enable the trail 
+        {
+            
+            if (attackTrail.time <= 0)
+            {
+                attackTrail.time = attackTrailDuration * .05f;
+            }
+
+            if (attackTrail.time < attackTrailDuration)
+            {
+                attackTrail.time += Time.deltaTime * disableTrailDuration;
+            }
+            else
+            {
+                attackTrail.time = attackTrailDuration;
+            }
+            attackTrailTimer = attackTrailDuration;
+
+
+        }
+        else if (!!isAttacking && attackTrailTimer > -.1) //Eetract the trail      
+        {
+         
+            attackTrail.time = attackTrailTimer; 
+        }
+      
+        if (!isAttacking && attackTrailTimer > -.1) //Disable the trail        
+        {
+            attackTrail.time -= Time.fixedDeltaTime* disableTrailDuration;
+        }
+
+
+        //Run trail
         foreach (TrailRenderer trail in footTrail)
         {
             if (enableTrail) //Enable the trail 

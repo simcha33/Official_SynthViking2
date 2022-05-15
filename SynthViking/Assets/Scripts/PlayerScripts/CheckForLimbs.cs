@@ -25,8 +25,8 @@ public class CheckForLimbs : MonoBehaviour
 
     void Start()
     {
+        bloodDripEffect.GetComponent<ParticleSystem>().Pause();
 
-  
     }
 
 
@@ -68,8 +68,9 @@ public class CheckForLimbs : MonoBehaviour
         if(!canBloodDrip)
         {
             canBloodDrip = true;
-            bloodDrip = true;           
-            bloodDripEffect.SetActive(true); 
+            bloodDrip = true;
+            //  bloodDripEffect.SetActive(true); 
+            bloodDripEffect.GetComponent<ParticleSystem>().Play();
         }
         
         bloodDripTimer = 0f; 
@@ -98,8 +99,9 @@ public class CheckForLimbs : MonoBehaviour
 
     public void StopBloodDrip()
     {
-            bloodDripEffect.SetActive(false);  
-            canBloodDrip = false;     
+            //bloodDripEffect.SetActive(false);  
+            canBloodDrip = false;
+            bloodDripEffect.GetComponent<ParticleSystem>().Pause();
     }
   
 }

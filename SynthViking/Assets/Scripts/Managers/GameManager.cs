@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
     private Gamepad gamepad; 
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
           gamepad = Gamepad.current;
          // hapticDuration = 2f; 
@@ -27,7 +27,14 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(hapticDuration > 0) DoHaptics(hapticDuration, curLowFreq, cureHighFreq);
+        if (gamepad != null)
+        {
+            if (hapticDuration > 0) DoHaptics(hapticDuration, curLowFreq, cureHighFreq);
+        }
+        else
+        {
+            gamepad = Gamepad.current;
+        }
     }
 
     public void ResetScene()

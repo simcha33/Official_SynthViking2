@@ -13,6 +13,7 @@ TagManager:
   - BasicEnemy
   - EnemyInside
   - SoulObject
+  - DashPoint
   layers:
   - Default
   - TransparentFX
@@ -33,7 +34,7 @@ TagManager:
   - Player
   - Projectile
   - ProjectileAvoid
-  - 
+  - DashPoint
   - 
   - 
   - 
