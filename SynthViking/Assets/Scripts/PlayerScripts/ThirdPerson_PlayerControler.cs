@@ -16,6 +16,7 @@ public enum playerAttackType
     GroundSlam,
     NormalePunch,
     BlockStun,
+    SprintAttack,
 }
 
 
@@ -739,7 +740,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         if (Physics.Raycast(ray, out upHitOut, currentDashDistance, 1 << LayerMask.NameToLayer("DashPoint")) && fullyChargedDash)
         {
             //dashpoint = upHitOut.collider.transform;
-
+         
             if (upHitOut.collider.transform != dashpoint)
             {
                 dashTargetCount++;
@@ -1508,14 +1509,43 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     void CheckForAttack()
     {
+        if(input.meleeButtonPressed && canStartNewAttack)
+        {        
 
-        if (input.meleeButtonPressed && canStartNewAttack && !isAttacking)
-        {
-            currentComboLength = 0;
-            ResetAnimator(); 
-            SetAttackType();           
+            if (!isAttacking)
+            {
+                currentComboLength = 0;
+                ResetAnimator();
+               // SetAttackType();
+
+            }
+            else
+            {
+             //   ResetAnimator(); 
+            }
+
+            SetAttackType();
             ResetStates();
             isAttacking = true;
+            canStartNewAttack = false; 
+            playerRb.isKinematic = false;
+            playerAnim.speed = animAttackSpeed;
+            nextAttackTimer = nextAttackDuration = 10f;
+
+            controllerState = (int)currentState.ATTACKING;
+            fixedControllerState = (int)currentState.ATTACKING;
+            
+        }
+
+
+        /*
+        if (input.meleeButtonPressed && canStartNewAttack && !isAttacking)
+        {
+            currentComboLength = 0; //
+            ResetAnimator(); 
+            SetAttackType(); //          
+            ResetStates();
+            isAttacking = true; //
             canStartNewAttack = false;
             playerRb.isKinematic = false;
             //HandleWeaponSwaping(false);     
@@ -1535,10 +1565,12 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             isAttacking = true;
             canStartNewAttack = false;
             nextAttackTimer = 10f;
+        //    playerRb.isKinematic = false; 
 
             controllerState = (int)currentState.ATTACKING;
             fixedControllerState = (int)currentState.ATTACKING;
         }
+        */
 
         if (isAttacking) HandleAttack();
     }
@@ -1556,7 +1588,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             currentAttackDamage = basicSprintAttackDamage;
             currentAttackForwardForce = sprintAttackForwardForce;
 
-
+            
             attackState = currentAttackType.SprintAttack.ToString();
             playerAnim.SetFloat("SprintAttackType", Random.Range(1, 4));
 
@@ -1600,12 +1632,13 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     void HandleAttack()
     {
-   
+
         //Set attack duration equel to current animation clip length and speed
-        nextAttackDuration = playerAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / (playerAnim.GetCurrentAnimatorStateInfo(0).speed * playerAnim.speed);
+         nextAttackDuration = playerAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / (playerAnim.GetCurrentAnimatorStateInfo(0).speed * playerAnim.speed);
+       // nextAttackDuration = 10f;  
        
         //Check if we can continue to the next attack
-        if (nextAttackTimer >= nextAttackDuration - .21f && input.meleeButtonPressed)
+        if (nextAttackTimer >= nextAttackDuration - .23f && input.meleeButtonPressed)
         {
 
             if (currentComboLength >= totalComboLength)
@@ -1619,6 +1652,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             currentComboLength++;
 
             //Trigger correct animation stuff
+            playerAnim.speed = animAttackSpeed; 
             AttackFeedback?.PlayFeedbacks();
             playerAnim.SetBool("IsAttacking", true);
             playerAnim.SetInteger("CurrentComboLength", currentComboLength);
@@ -1632,6 +1666,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
           //  playerRb.velocity = new Vector3(0, 0, 0);
 
 
+            /*
             //Check if there is a attack target within range 
             if (attackTargetScript.selectedTarget != null)
             {
@@ -1639,6 +1674,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 currentAttackTarget = attackTargetScript.selectedTarget;
             }
             else attackTargetInRange = false;
+            */
         }
 
         //Check if the combo is broken 

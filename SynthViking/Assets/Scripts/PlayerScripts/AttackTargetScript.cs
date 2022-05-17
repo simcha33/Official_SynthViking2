@@ -240,7 +240,11 @@ public class AttackTargetScript : MonoBehaviour
                                 CharacterJoint joint = limb.GetComponent<CharacterJoint>();
                                 GameObject blood2 = Instantiate(limbBloodVFX, joint.transform.position, joint.transform.rotation);
                                 GameObject blood3 = Instantiate(bloodDrip, joint.transform.position, joint.transform.rotation);
-                           //     GameObject blood4 = Instantiate(bloodPool, joint.transform.position, bloodPool.transform.rotation);
+                                GameObject blood4 = Instantiate(limbBloodVFX, joint.transform.position, joint.transform.rotation);
+                              //  GameObject blood5 = Instantiate(bloodDrip, joint.transform.position, joint.transform.rotation);
+
+                                blood4.transform.parent = enemyScript.transform; 
+                                //     GameObject blood4 = Instantiate(bloodPool, joint.transform.position, bloodPool.transform.rotation);
 
                                 blood2.transform.parent = blood3.transform.parent = limb.transform;
                                 blood2.AddComponent<CleanUpScript>();

@@ -5,7 +5,8 @@ using UnityEngine;
 public class HitPauses : MonoBehaviour
 {
     public float hitPauseTimer; 
-    public float hitPauseDuration; 
+    public float hitPauseDuration;
+    public float pullOutReduction; 
 
     private float waitForTimer; 
     private float waitForDuration = .05f; 
@@ -15,6 +16,7 @@ public class HitPauses : MonoBehaviour
     public List<Animator> objectsToPause = new List<Animator>(); 
     public AttackTargetScript attackTargetScript; 
     public Animator playerAnim;
+
 
     public List<GameObject> theHitPaused = new List<GameObject>();
     //  public Animator hitEnemyAnim; 
@@ -40,7 +42,10 @@ public class HitPauses : MonoBehaviour
                 //Turn anim off 
                 if (hitPauseTimer < hitPauseDuration)
                 {
-                    if (anim == playerAnim) anim.speed = .02f;
+                    if (anim == playerAnim)
+                    {
+                        anim.speed = .02f;
+                    }
                     //Turn anim back on 
                     
                 }
@@ -57,8 +62,8 @@ public class HitPauses : MonoBehaviour
                     }
 
                     attackTargetScript.weaponHitFeedback?.PlayFeedbacks();
-                    theHitPaused.Clear();            
-                    if (anim == playerAnim) anim.speed = attackTargetScript.playerController.animAttackSpeed;
+                    theHitPaused.Clear();
+                    if (anim == playerAnim) anim.speed = attackTargetScript.playerController.animAttackSpeed * pullOutReduction; 
                     else anim.speed = 1f;
                     //  if(anim != playerAnim) objectsToPause.Remove(anim); 
                 }

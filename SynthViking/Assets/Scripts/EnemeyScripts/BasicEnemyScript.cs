@@ -683,12 +683,16 @@ public class BasicEnemyScript : MonoBehaviour
         enemyBehaviourManagerScript.spawnManager.enemiesLeft--;
 
         //Add soul object if there are active pilars nearby 
-       // if (enemyBehaviourManagerScript.rewardPilar.activePilarInScene)
+        //Add soul object if there are active pilars nearby 
+        // if (enemyBehaviourManagerScript.rewardPilar.activePilarInScene)
         //{
-      //     // Instantiate
-      //  }
+        //     // Instantiate
+        //  }
 
         //Enter death state
+        //  if (playerController.dashpoint == dashPointCol.transform) playerController.dashpoint = null; 
+        //  Destroy(dashPointCol.gameObject); 
+        dashPointCol.gameObject.layer = LayerMask.NameToLayer("DeadEnemy");
         enemyRb.mass = originalRbMass;
         enemyMeshr.materials = deadSkinMat;
         isDead = true;
