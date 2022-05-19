@@ -26,6 +26,7 @@ public class AttackTargetScript : MonoBehaviour
     public MMFeedbacks weapinFirstImpactFeedback;
     public MMFeedbacks playerBlockFeedback;
     public MMFeedbacks parriedFeedback; 
+    public MMFeedbacks sprintAttackHitFeedback; 
     #endregion
 
 
@@ -199,7 +200,6 @@ public class AttackTargetScript : MonoBehaviour
         }
     }
 
-    
 
 
     public void TargetDamageCheck()
@@ -215,18 +215,13 @@ public class AttackTargetScript : MonoBehaviour
                 BasicEnemyScript enemyScript = obj.GetComponent<BasicEnemyScript>();
                 if (!enemyScript.isDead)
                 {
-                    enemyScript.TakeDamage(playerController.currentAttackDamage, playerAttackType.LightAxeHit.ToString());
+                    enemyScript.TakeDamage(playerController.currentAttackDamage, playerController.attackState);
                     hitpauseScript.theHitPaused.Add(obj);
                 }
                 Vector3 backDirection = playerController.transform.position + transform.forward * playerController.currentAttackForwardForce * attackBackForce;
 
-                //Feedback
-                //GameObject blood = Instantiate(axeHitBloodVFX, enemyScript.bloodSpawnPoint.position, enemyScript.bloodSpawnPoint.rotation);
-              //  blood.AddComponent<CleanUpScript>();
-                weapinFirstImpactFeedback?.PlayFeedbacks();
-                playerController.mainGameManager.DoHaptics(.3f, .2f, .4f); 
-
-
+                //   weapinFirstImpactFeedback?.PlayFeedbacks();
+                // playerController.mainGameManager.DoHaptics(.3f, .2f, .4f); 
                 //Is the enemy dead after our hit?            
                 if (enemyScript.isDead)
                 {
@@ -237,25 +232,22 @@ public class AttackTargetScript : MonoBehaviour
                         {
                             if (limb.GetComponent<CharacterJoint>() != null)
                             {
+                                //Add blood 
                                 CharacterJoint joint = limb.GetComponent<CharacterJoint>();
                                 GameObject blood2 = Instantiate(limbBloodVFX, joint.transform.position, joint.transform.rotation);
                                 GameObject blood3 = Instantiate(bloodDrip, joint.transform.position, joint.transform.rotation);
                                 GameObject blood4 = Instantiate(limbBloodVFX, joint.transform.position, joint.transform.rotation);
-                              //  GameObject blood5 = Instantiate(bloodDrip, joint.transform.position, joint.transform.rotation);
-
                                 blood4.transform.parent = enemyScript.transform; 
-                                //     GameObject blood4 = Instantiate(bloodPool, joint.transform.position, bloodPool.transform.rotation);
-
                                 blood2.transform.parent = blood3.transform.parent = limb.transform;
                                 blood2.AddComponent<CleanUpScript>();
-                               // blood3.AddComponent<CleanUpScript>(); 
+
+                                //Detach and launch limb rb's 
                                 Destroy(joint);
                                 limb.transform.parent = null;
-
                                 limb.velocity = new Vector3(0, 0, 0);
                                 limb.AddExplosionForce(10f, limb.position, 2f, 4f, ForceMode.Impulse);
+                                limb.AddForce(Vector3.up * Random.Range(1f,3f), ForceMode.Impulse); 
                                 if (enemyScript.canBeTargeted) limb.mass *= 3f;
-                                // limb.GetComponent<SetEnemyInside>().ActivateLimbInside(); 
                             }
                         }
                     }
@@ -268,7 +260,6 @@ public class AttackTargetScript : MonoBehaviour
 
                     if (enemyScript.canBeTargeted)
                     {
-
                         //Unhand enemies weapon
                         if (enemyScript.weapon != null)
                         {
@@ -282,7 +273,6 @@ public class AttackTargetScript : MonoBehaviour
                             swordrb.AddForce(Vector3.up * 5f, ForceMode.VelocityChange);                        
                         }
 
-                        // targetsInRange.Remove(obj);
                         enemyScript.canBeTargeted = false;
                         playerController.mainGameManager.DoHaptics(.2f, .55f, .75f); 
                         weaponKillFeedback?.PlayFeedbacks();
@@ -291,9 +281,12 @@ public class AttackTargetScript : MonoBehaviour
                 }
                 else
                 {
-                    //  hitpauseScript.objectsToPause.Add(enemyScript.enemyAnim);
-                    hitpauseScript.doHitPause = true;
+
+                    //Do Hit Pause
+                    AddhitFeedback(); 
+                    
                 }
+
                 enemyScript.enemyRb.velocity = new Vector3(0, 0, 0);
                 enemyScript.transform.DOMove(backDirection, .3f).SetUpdate(UpdateType.Fixed);  //Move enemy backwards enemyScript.enemyRb.AddForce(playerController.transform.position + transform.forward * playerController.currentAttackForwardForce, ForceMode.VelocityChange);            
                 if (enemyScript.isRagdolling ||  enemyScript.isDead) enemyScript.enemyRb.AddForce(Vector3.up * 10f, ForceMode.VelocityChange);
@@ -317,6 +310,27 @@ public class AttackTargetScript : MonoBehaviour
         }
 
     }
+
+    private void AddhitFeedback()
+    {
+        hitpauseScript.doHitPause = true;
+
+        //Axe hit feedback 
+        if(playerController.attackState == playerAttackType.LightAxeHit.ToString())
+        {
+            weapinFirstImpactFeedback?.PlayFeedbacks();
+            playerController.mainGameManager.DoHaptics(.3f, .2f, .4f);        
+            hitpauseScript.hitPauseDuration = hitpauseScript.axeHitPauseLength; 
+        }   
+
+        //Sprintattack hit feedback
+        else if(playerController.attackState == playerAttackType.SprintAttack.ToString())
+        {
+              playerController.mainGameManager.DoHaptics(.2f, .3f, .5f); 
+              sprintAttackHitFeedback?.PlayFeedbacks(); 
+        }
+    }
+
 
     private void OnDrawGizmosSelected()
     {
@@ -357,60 +371,5 @@ public class AttackTargetScript : MonoBehaviour
         */
 
     }
-    /*
-
-    // Update is called once per frame
-    void Update()
-    {
-        CheckForAttackTarget(); 
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("AttackTargetCheck") && !dontRemoveTarget)
-        {
-            if (!nearbyTargets.Contains(other.transform))
-            {
-                nearbyTargets.Add(other.transform);
-            }
-        }
-       
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.CompareTag("AttackTargetCheck") && !dontRemoveTarget)
-        {
-            if (nearbyTargets.Contains(other.transform))
-            {
-                nearbyTargets.Remove(other.transform);
-            } 
-        }
-    }
-
-    void CheckForAttackTarget()
-    {
-        if (nearbyTargets.Count > 0)
-        {
-
-            //Find the closest target to attack
-            foreach (Transform target in nearbyTargets)
-            {
-                float targetDistance = Vector3.Distance(transform.position, target.position);
-
-                if (targetDistance < closedDistance || nearbyTargets.Count >= 1 && closedDistance == 0)
-                {
-                    closedDistance = targetDistance;
-                    selectedTarget = target;
-                }
-            }
-        }
-
-        
-        {
-            closedDistance = 0; 
-            selectedTarget = null;
-        }
-    }
-    */
+ 
 }

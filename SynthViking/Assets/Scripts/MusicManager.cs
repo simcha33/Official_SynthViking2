@@ -19,24 +19,30 @@ public class MusicManager : MonoBehaviour
     
     public float songDuration;
     public float songTimer; 
+    public MMFeedbackSound minVol; 
+    public MMFeedbackSound maxVol; 
 
     // Start is called before the first frame update
     void Start()
     {
         songIsFinished = true;
         canChangeSong = true; 
+        
     }
 
     void Update()
     {
         CheckForSong(); 
+        
     }
 
     void CheckForSong()
-    {
+    {   
         songTimer += Time.unscaledDeltaTime;
         if (songTimer >= songDuration) songIsFinished = true; 
-        if (songIsFinished && canChangeSong) ChooseNextSong();       
+        if (songIsFinished && canChangeSong) ChooseNextSong();  
+
+        
     }
 
     void ChooseNextSong()
@@ -46,6 +52,8 @@ public class MusicManager : MonoBehaviour
         currentSong = unplayedmusicList[choosenSong];
         songDuration = currentSong.GetComponent<MMFeedbackSound>().FeedbackDuration;
         currentTextString = currentSong.GetComponent<MMFeedbackSound>().name;
+   
+           Debug.Log(" checkk");    
         currentSong.GetComponent<MMFeedbackSound>().MaxVolume = currentSong.GetComponent<MMFeedbackSound>().MinVolume = songVolume; 
         currentSong?.PlayFeedbacks();
    
@@ -59,6 +67,10 @@ public class MusicManager : MonoBehaviour
 
         //Check if all the songs have been played
         if(unplayedmusicList.Count <= 0) ResetPlaylist(); 
+
+
+
+
     }
 
     void ResetPlaylist()

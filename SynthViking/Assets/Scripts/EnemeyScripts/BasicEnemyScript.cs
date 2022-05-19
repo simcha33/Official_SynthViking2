@@ -431,13 +431,12 @@ public class BasicEnemyScript : MonoBehaviour
 
 
     //Attacking
-    void HandleAttack() /*[MOVE]*/
+    void HandleAttack() 
     {
         //Set a new attack
         if(!isAttacking && isInAttackRange)
         {
             ResetState();
-            //enemyRb.isKinematic = true;
             enemyRb.mass = stunnedMass; 
             transform.LookAt(target, Vector3.up);
             SetAttackType(); 
@@ -446,7 +445,6 @@ public class BasicEnemyScript : MonoBehaviour
         //Reset attack state and return to enage state
         else if(!isAttacking)
         {
-            //  enemyRb.isKinematic = false;
             enemyRb.mass = originalRbMass; 
             currentComboLength = 0; 
             enemyState = (int)currentState.ENGAGE; 
@@ -455,7 +453,7 @@ public class BasicEnemyScript : MonoBehaviour
         DoAttack();
     }
 
-    void SetAttackType() /*[MOVE]*/
+    void SetAttackType() 
     {
         int totalAttackTrees = 1;
 
@@ -473,7 +471,7 @@ public class BasicEnemyScript : MonoBehaviour
         if(enemyAnim.GetInteger("AttackType") == 1) totalComboLength = 3f; //Check length of combo attack tree 
     }
 
-    public void DoAttack() /*[MOVE]*/
+    public void DoAttack() 
     {
         nextAttackDuration = enemyAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / enemyAnim.GetCurrentAnimatorStateInfo(0).speed;
 
@@ -509,8 +507,6 @@ public class BasicEnemyScript : MonoBehaviour
     public void AttackEventTrigger() /*[MOVE]*/
     {
         canBeParried = true;
-        // weapon.gameObject.GetComponent<MeshRenderer>().material = attackIndicationMat;
-        //if (attackState != currentAttackType.SprintAttack.ToString()) transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .4f).SetUpdate(UpdateType.Fixed);
     }
 
     public void AllowAttackDamage() /*[MOVE]*/
@@ -575,6 +571,14 @@ public class BasicEnemyScript : MonoBehaviour
             {
                 ResetState();
                 canBeChainHit = true;
+            }
+
+            if(DamageType == playerAttackType.SprintAttack.ToString())
+            {
+                ResetState(); 
+                EnableRagdoll(); 
+                isLaunched = true; 
+                canBeChainHit = true;            
             }
 
             if (DamageType == playerAttackType.BlockStun.ToString()) //Enemy is hit by power punch
@@ -746,6 +750,18 @@ public class BasicEnemyScript : MonoBehaviour
             //enemyRb.mass = stunnedMass; 
             enemyMeshr.materials = hitSkinMat;
             isLaunched = false; 
+        }
+
+        
+        if(stunType == playerAttackType.SprintAttack.ToString())
+        {
+            chainHitScript.isOrigin = true;
+            chainHitScript.enabled = true;   
+            chainHitScript.SetChainHitType(stunType);
+            stunDuration = 1f;
+            enemyRb.mass = originalRbMass; 
+            canBeChainHit = true; 
+            //LaunchEnemy(playerController.attackDirection, playerController.dashAttackForce, 2f);            
         }
 
         if (stunType == playerAttackType.BlockStun.ToString()) //Enemy attack is parried
@@ -1029,7 +1045,6 @@ public class BasicEnemyScript : MonoBehaviour
         foreach(GameObject limb in limbInsides)
         {
             Destroy(limb); 
-        }
-        
+        }      
     }
 }

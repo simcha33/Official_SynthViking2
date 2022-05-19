@@ -25,13 +25,15 @@ public class DashPathChecker : MonoBehaviour
     //playerController.dashAirAttack && Vector3.Distance(transform.position, playerController.dashDirection) < 5f
     private void OnTriggerEnter(Collider other)
     {
-        if (playerController.isDashing) {
+        if (playerController.isDashing || playerController.dashDelayDuration > 0 && !playerController.input.dashButtonPressed) 
+        {
 
 
             //Dash collides with enemy
             if (other.gameObject.layer == LayerMask.NameToLayer("DashPoint") && !playerController.enemyDashObjectReached && !other.gameObject.CompareTag("Dead") && playerController.fullyChargedDash) 
             {
        
+                print(" Trigger Dash Attack"); 
                 playerController.playerAnim.SetTrigger("DashAttackTrigger");
                 playerController.enemyDashObjectReached = true;
                 playerController.playerRb.velocity = new Vector3(0, 0, 0);

@@ -3119,6 +3119,8 @@ MonoBehaviour:
   readyTarget: 0
   buttonPrompt: {fileID: 8016837899046630141}
   playerCamera: {fileID: 0}
+  freezeEnemy: 0
+  stayPos: {x: 0, y: 0, z: 0}
   playerControlle: {fileID: 0}
 --- !u!1 &864045691162778260
 GameObject:
@@ -3423,7 +3425,7 @@ MonoBehaviour:
   powerPunchChainDamage: 30
   powerPunchStunDuration: 0.8
   chainHitForce: 30
-  chainHitActiveDuration: 0.4
+  chainHitActiveDuration: 0.5
   chainHitDamage: 5
   chainHitStunDuration: 0.4
   chainHitString: 
@@ -4146,6 +4148,7 @@ MonoBehaviour:
   canBeParried: 1
   canBeParriedTimer: 0
   canBeParriedDuration: 0.3
+  isDashTargeted: 0
   stunnedSkinMat:
   - {fileID: 2100000, guid: 085bead2946154d44aa9e6b283201e52, type: 2}
   - {fileID: 2100000, guid: a3ac3a789870a7a41a3a116e64bf55c8, type: 2}

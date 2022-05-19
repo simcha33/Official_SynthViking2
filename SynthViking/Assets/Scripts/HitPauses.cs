@@ -7,6 +7,9 @@ public class HitPauses : MonoBehaviour
     public float hitPauseTimer; 
     public float hitPauseDuration;
     public float pullOutReduction; 
+    public float sprintHitPauseLength; 
+    public float axeHitPauseLength;
+    
 
     private float waitForTimer; 
     private float waitForDuration = .05f; 
@@ -30,9 +33,11 @@ public class HitPauses : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(doHitPause) DoHitPause();        
+    }
 
-        if (doHitPause)
-        {
+    void DoHitPause()
+    {
             playerController.canRotate = false;
             hitPauseTimer += Time.deltaTime; 
 
@@ -79,7 +84,7 @@ public class HitPauses : MonoBehaviour
                 
                 // attackTargetScript.TargetDamageEffects();
             }
-        }
+        
     }
    
 }

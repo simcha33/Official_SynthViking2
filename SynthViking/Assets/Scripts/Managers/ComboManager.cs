@@ -178,12 +178,7 @@ public class ComboManager : MonoBehaviour
                 }
             }
         }
-    }
-
-
-
-    
-     
+    }    
     
 
     void CheckForStyle()

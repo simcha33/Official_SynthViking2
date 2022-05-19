@@ -143,10 +143,14 @@ public class ChainHitScript : MonoBehaviour
             currentChainHitBackForce = powerPunchForce;
             currentDamage = powerPunchChainDamage;
             stunType = playerAttackType.PowerPunch.ToString();
-           
-     
-            
+        }
 
+          if(stunType == playerAttackType.SprintAttack.ToString()) //Power punch 
+        {
+            currentChainHitActiveDuration = powerPunchChainActiveDuration / 2f;
+            currentChainHitBackForce = powerPunchForce / 2;
+            currentDamage = powerPunchChainDamage / 2;
+            stunType = playerAttackType.PowerPunch.ToString();
         }
 
         if(stunType == playerAttackType.LightAxeHit.ToString()) //Light axe hit 
