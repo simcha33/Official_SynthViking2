@@ -53,7 +53,6 @@ public class MusicManager : MonoBehaviour
         songDuration = currentSong.GetComponent<MMFeedbackSound>().FeedbackDuration;
         currentTextString = currentSong.GetComponent<MMFeedbackSound>().name;
    
-           Debug.Log(" checkk");    
         currentSong.GetComponent<MMFeedbackSound>().MaxVolume = currentSong.GetComponent<MMFeedbackSound>().MinVolume = songVolume; 
         currentSong?.PlayFeedbacks();
    

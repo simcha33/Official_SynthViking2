@@ -10,81 +10,67 @@ public class HitPauses : MonoBehaviour
     public float sprintHitPauseLength; 
     public float axeHitPauseLength;
     
-
-    private float waitForTimer; 
-    private float waitForDuration = .05f; 
     public bool doHitPause;
-    public ThirdPerson_PlayerControler playerController; 
 
-    public List<Animator> objectsToPause = new List<Animator>(); 
-    public AttackTargetScript attackTargetScript; 
+  //  public List<GameObject> theHitPaused = new List<GameObject>();
+    public List<Animator> objectsToPause = new List<Animator>();
+
+    public ThirdPerson_PlayerControler playerController;
+    public AttackTargetScript attackTargetScript;
     public Animator playerAnim;
 
-
-    public List<GameObject> theHitPaused = new List<GameObject>();
-    //  public Animator hitEnemyAnim; 
-
-    // Start is called before the first frame update
     void Start()
     {
         objectsToPause.Add(playerAnim); 
     }
 
-    // Update is called once per frame
     void Update()
     {
         if(doHitPause) DoHitPause();        
     }
 
-    void DoHitPause()
+    public void DoHitPause()
     {
-            playerController.canRotate = false;
-            hitPauseTimer += Time.deltaTime; 
 
+        //Turn anims off 
+        if (hitPauseTimer < hitPauseDuration) 
+        {          
             foreach (Animator anim in objectsToPause)
             {
-
-                //Turn anim off 
-                if (hitPauseTimer < hitPauseDuration)
-                {
-                    if (anim == playerAnim)
-                    {
-                        anim.speed = .02f;
-                    }
-                    //Turn anim back on 
-                    
-                }
-                else if (hitPauseTimer >= hitPauseDuration)
-                {
-
-                    foreach (GameObject obj in theHitPaused)
-                    {
-                        //Deal damage to hit target
-                        BasicEnemyScript enemyScript = obj.GetComponent<BasicEnemyScript>();
-                        // enemyScript.TakeDamage(attackTargetScript.playerController.currentAttackDamage);
-                        GameObject blood = Instantiate(attackTargetScript.axeHitBloodVFX, enemyScript.bloodSpawnPoint.position, enemyScript.bloodSpawnPoint.rotation);
-                        blood.AddComponent<CleanUpScript>();
-                    }
-
-                    attackTargetScript.weaponHitFeedback?.PlayFeedbacks();
-                    theHitPaused.Clear();
-                    if (anim == playerAnim) anim.speed = attackTargetScript.playerController.animAttackSpeed * pullOutReduction; 
-                    else anim.speed = 1f;
-                    //  if(anim != playerAnim) objectsToPause.Remove(anim); 
-                }
-                 
-
+                if (anim == playerAnim) anim.speed = .02f;
+                else anim.speed = .25f; 
             }
 
-            if (hitPauseTimer >= hitPauseDuration)
+            hitPauseTimer += Time.deltaTime;
+            playerController.canRotate = false;
+        }
+
+        //Turn anims back on
+        else if (hitPauseTimer >= hitPauseDuration)
+        {
+            foreach (Animator anim in objectsToPause)
             {
-                playerController.canRotate = true;
-                hitPauseTimer = 0f;
-                doHitPause = false;
-                
-                // attackTargetScript.TargetDamageEffects();
+                 
+                if (anim == playerAnim) anim.speed = attackTargetScript.playerController.animAttackSpeed * pullOutReduction;
+                else
+                {
+                    BasicEnemyScript enemyScript = anim.transform.GetComponent<BasicEnemyScript>();
+                    GameObject blood = Instantiate(attackTargetScript.axeHitBloodVFX, enemyScript.bloodSpawnPoint.position, enemyScript.bloodSpawnPoint.rotation);
+                    blood.AddComponent<CleanUpScript>();
+                    attackTargetScript.weaponHitFeedback?.PlayFeedbacks();
+                    anim.speed = 1f;
+                   // objectsToPause.Remove(anim); 
+                }          
             }
-        
+            objectsToPause.Clear();
+            objectsToPause.Add(playerAnim);
+            doHitPause = false;
+            hitPauseTimer = 0;            
+        }
+
+      
+
+
     }
    
 }

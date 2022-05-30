@@ -29,6 +29,7 @@ public class SlowMoScript : MonoBehaviour
     {
         currentSlowmoTime  = maxSlowMoTime;
         slowmoRechargeCooldownTimer = slowmoRechargeCooldownDuration;
+        timeManager.SetTimescaleTo(1f); 
     }
 
     // Update is called once per frame

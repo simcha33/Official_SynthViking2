@@ -44,6 +44,15 @@ public class AttackTargetScript : MonoBehaviour
     public Transform selectedTarget;
     #endregion
 
+    [Header("SPRINT ATTACK")] //SPRINT ATTACK
+    #region
+    public float sprintAttackBackForce = 50f;
+    public float backPointDistance = 8f;
+    public Transform backPointCheck;
+    private int sprintTargetCount;
+    private List<BasicEnemyScript> sprintAttackTargets = new List<BasicEnemyScript>();
+    #endregion
+
     [Header("VALUES")] //GROUND MOVEMENT
     #region
     public float targetCheckRadius; 
@@ -52,6 +61,7 @@ public class AttackTargetScript : MonoBehaviour
     private float attackBackForce = 1.1f; 
     public List<GameObject> targetsInRange = new List<GameObject>();
     public List<GameObject> hitTargets = new List<GameObject>(); 
+
     #endregion
 
      [Header("VISUALS")] //GROUND MOVEMENT
@@ -87,9 +97,13 @@ public class AttackTargetScript : MonoBehaviour
 
             case (int)currentAttackerType.PLAYER:
                 TargetLock();
+                Vector3 backPoint = transform.position + transform.forward * backPointDistance;
+                backPointCheck.transform.position = backPoint;
                 break; 
         }
-              
+
+
+
     }
         
      
@@ -212,13 +226,25 @@ public class AttackTargetScript : MonoBehaviour
             {
 
                 //Deal damage to hit target
+             
+
                 BasicEnemyScript enemyScript = obj.GetComponent<BasicEnemyScript>();
                 if (!enemyScript.isDead)
                 {
-                    enemyScript.TakeDamage(playerController.currentAttackDamage, playerController.attackState);
-                    hitpauseScript.theHitPaused.Add(obj);
+                    if (playerController.attackState == playerAttackType.LightAxeHit.ToString())
+                    {
+                        enemyScript.TakeDamage(playerController.currentAttackDamage, playerController.attackState);
+                        hitpauseScript.objectsToPause.Add(obj.GetComponent<Animator>());
+                    }
+                    else if (playerController.attackState == playerAttackType.SprintAttack.ToString() && !playerController.sprintHitList.Contains(enemyScript))
+                    {
+                        enemyScript.TakeDamage(playerController.currentAttackDamage, playerController.attackState);
+                        sprintAttackTargets.Add(enemyScript); 
+                    }
+                  
                 }
                 Vector3 backDirection = playerController.transform.position + transform.forward * playerController.currentAttackForwardForce * attackBackForce;
+
 
                 //   weapinFirstImpactFeedback?.PlayFeedbacks();
                 // playerController.mainGameManager.DoHaptics(.3f, .2f, .4f); 
@@ -281,19 +307,16 @@ public class AttackTargetScript : MonoBehaviour
                 }
                 else
                 {
-
                     //Do Hit Pause
-                    AddhitFeedback(); 
+                    AddhitFeedback(enemyScript, backDirection); 
                     
                 }
 
-                enemyScript.enemyRb.velocity = new Vector3(0, 0, 0);
-                enemyScript.transform.DOMove(backDirection, .3f).SetUpdate(UpdateType.Fixed);  //Move enemy backwards enemyScript.enemyRb.AddForce(playerController.transform.position + transform.forward * playerController.currentAttackForwardForce, ForceMode.VelocityChange);            
+                //enemyScript.enemyRb.velocity = new Vector3(0, 0, 0);                  
                 if (enemyScript.isRagdolling ||  enemyScript.isDead) enemyScript.enemyRb.AddForce(Vector3.up * 10f, ForceMode.VelocityChange);
-
-
             //    limbCheckerScript.hitLimbs.Clear();
                 limbCheckerScript.hitInsides.Clear();
+                
             }
         }
         
@@ -311,24 +334,57 @@ public class AttackTargetScript : MonoBehaviour
 
     }
 
-    private void AddhitFeedback()
+    private void AddhitFeedback(BasicEnemyScript enemyScript, Vector3 backDirection)
     {
-        hitpauseScript.doHitPause = true;
+        
 
         //Axe hit feedback 
-        if(playerController.attackState == playerAttackType.LightAxeHit.ToString())
+        if (playerController.attackState == playerAttackType.LightAxeHit.ToString())
         {
+            hitpauseScript.hitPauseDuration = hitpauseScript.axeHitPauseLength;
+            hitpauseScript.doHitPause = true;
+            hitpauseScript.DoHitPause(); 
             weapinFirstImpactFeedback?.PlayFeedbacks();
-            playerController.mainGameManager.DoHaptics(.3f, .2f, .4f);        
-            hitpauseScript.hitPauseDuration = hitpauseScript.axeHitPauseLength; 
-        }   
+            playerController.mainGameManager.DoHaptics(.3f, .2f, .4f);
+            enemyScript.transform.DOMove(backDirection, .3f).SetUpdate(UpdateType.Fixed);  //Move enemy backwards enemyScript.enemyRb.AddForce(playerController.transform.position + transform.forward * playerController.currentAttackForwardForce, ForceMode.VelocityChange);   
+            enemyScript.enemyRb.velocity = new Vector3(0, 0, 0);
+
+        }
 
         //Sprintattack hit feedback
-        else if(playerController.attackState == playerAttackType.SprintAttack.ToString())
+        else if (playerController.attackState == playerAttackType.SprintAttack.ToString() && !playerController.sprintHitList.Contains(enemyScript))
         {
-              playerController.mainGameManager.DoHaptics(.2f, .3f, .5f); 
-              sprintAttackHitFeedback?.PlayFeedbacks(); 
+            // hitpauseScript.doHitPause = true;
+            sprintTargetCount++;
+            playerController.sprintHitList.Add(enemyScript); 
+            playerController.mainGameManager.DoHaptics(.2f, .3f, .5f);
+            playerController.dashAttackTarget = enemyScript.transform.gameObject;
+            enemyScript.enemyRb.velocity = new Vector3(0, 0, 0);
+            enemyScript.transform.parent = playerController.transform;
+            enemyScript.transform.position = playerController.transform.position;
+            transform.DOMove(transform.position, .001f);
+            if (sprintTargetCount == 1) sprintAttackHitFeedback?.PlayFeedbacks();
         }
+    }
+
+    public void SprintAttackImpact()
+    {
+        //sprintAttackTarget.transform.position = backPointCheck.transform.position; 
+
+        foreach (BasicEnemyScript enemy in sprintAttackTargets)
+        {
+            enemy.transform.parent = null;
+            enemy.transform.position = backPointCheck.transform.position;
+            GameObject dashAttackEffect = Instantiate(playerController.airPunchEffect, enemy.transform.position, transform.rotation);
+            dashAttackEffect.transform.LookAt(-playerController.aimPoint.forward + new Vector3(0, .5f, 0));
+            dashAttackEffect.transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, transform.eulerAngles.z);
+           
+            enemy.LaunchEnemy(transform.forward, sprintAttackBackForce, 1f);
+        }
+
+        sprintAttackTargets.Clear();
+        sprintTargetCount = 0; 
+        playerController.mainGameManager.DoHaptics(.2f, .4f, .6f);
     }
 
 

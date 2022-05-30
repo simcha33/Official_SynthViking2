@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
           gamepad = Gamepad.current;
+        // gamepad.ResetHaptics(); 
+        gamepad.SetMotorSpeeds(0, 0); 
          // hapticDuration = 2f; 
           //DoHaptics(2f, .1f ,.3f); 
     }

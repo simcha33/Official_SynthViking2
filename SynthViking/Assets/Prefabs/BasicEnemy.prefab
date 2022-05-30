@@ -3859,7 +3859,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.23598099, y: 0.25122342, z: 0.4041653}
-  m_Center: {x: -0.37000698, y: -0.0021548718, z: 0.000000014901161}
+  m_Center: {x: -0.37000698, y: 0, z: 0.000000014901161}
 --- !u!54 &8410380784877409721
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -4110,7 +4110,7 @@ MonoBehaviour:
   navLink: {fileID: 0}
   targetPos: {x: 0, y: 0, z: 0}
   currentHealth: 0
-  maxHealth: 250
+  maxHealth: 400
   walkSpeed: 4
   runSpeed: 7
   lookRange: 0
@@ -4544,6 +4544,7 @@ MonoBehaviour:
   weapinFirstImpactFeedback: {fileID: 0}
   playerBlockFeedback: {fileID: 0}
   parriedFeedback: {fileID: 6536784880594510359}
+  sprintAttackHitFeedback: {fileID: 0}
   enemyController: {fileID: 8410380785165072143}
   playerController: {fileID: 0}
   hitpauseScript: {fileID: 0}
@@ -4551,6 +4552,9 @@ MonoBehaviour:
   swordPoint: {fileID: 0}
   targetCube: {fileID: 0}
   selectedTarget: {fileID: 0}
+  sprintAttackBackForce: 50
+  backPointDistance: 8
+  backPointCheck: {fileID: 0}
   targetCheckRadius: 3
   targetCheckRange: 10
   canTarget: 0
@@ -6601,7 +6605,7 @@ CapsuleCollider:
   m_Radius: 0.13526203
   m_Height: 0.5410481
   m_Direction: 0
-  m_Center: {x: 0.27052405, y: 0, z: 0}
+  m_Center: {x: 0.24, y: 0, z: 0}
 --- !u!54 &8410380786055096107
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -7213,8 +7217,8 @@ SphereCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.10104132
-  m_Center: {x: -0.10104132, y: 0, z: 0}
+  m_Radius: 0.12
+  m_Center: {x: -0.1, y: 0, z: 0}
 --- !u!54 &8410380786545797300
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -7540,7 +7544,7 @@ CapsuleCollider:
   m_Radius: 0.13526231
   m_Height: 0.54104924
   m_Direction: 0
-  m_Center: {x: -0.27052462, y: 0, z: 0}
+  m_Center: {x: -0.25, y: 0, z: 0}
 --- !u!54 &8410380786851461908
 Rigidbody:
   m_ObjectHideFlags: 0

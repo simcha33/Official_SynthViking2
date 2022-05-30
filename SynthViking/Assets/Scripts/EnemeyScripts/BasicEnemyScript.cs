@@ -537,8 +537,12 @@ public class BasicEnemyScript : MonoBehaviour
             canAddImpactDamage = true; 
             isLaunched = true; 
             isStunned = true;
-            canRecover = false; 
-            enemyRb.velocity = new Vector3(0,0,0); 
+            canRecover = false;
+            foreach (Rigidbody rb in ragdollRbs)
+            {
+                rb.velocity = new Vector3(0, 0, 0);
+            }
+
             EnableRagdoll(); 
 
             foreach(Rigidbody rb in ragdollRbs)
@@ -554,6 +558,7 @@ public class BasicEnemyScript : MonoBehaviour
     public void TakeDamage(float damageAmount, string DamageType){
         
         currentHealth -= damageAmount;
+        ResetAnimator(); 
 
         if (currentHealth > 0 && !isDead)
         {
@@ -577,7 +582,7 @@ public class BasicEnemyScript : MonoBehaviour
             {
                 ResetState(); 
                 EnableRagdoll(); 
-                isLaunched = true; 
+               // isLaunched = true; 
                 canBeChainHit = true;            
             }
 
@@ -683,7 +688,7 @@ public class BasicEnemyScript : MonoBehaviour
         //Tell the enemymanager that the enemy is dead 
         if(enemyBehaviourManagerScript.currentenemiesInScene.Contains(thisScript)) enemyBehaviourManagerScript.currentenemiesInScene.Remove(thisScript);
         enemyBehaviourManagerScript.allDeadEnemiesInScene.Add(thisScript);
-        transform.parent = enemyBehaviourManagerScript.deadEnemyParent.transform;
+        if(DamageType != LayerMask.NameToLayer("Environment").ToString()) transform.parent = enemyBehaviourManagerScript.deadEnemyParent.transform;
         enemyBehaviourManagerScript.spawnManager.enemiesLeft--;
 
         //Add soul object if there are active pilars nearby 
@@ -936,6 +941,15 @@ public class BasicEnemyScript : MonoBehaviour
             rb.isKinematic = false;
         }
 
+        /*
+        if (weapon != null)
+        {
+            Rigidbody weaponRb = weapon.GetComponent<Rigidbody>();
+            weaponRb.isKinematic = false;
+            weaponRb.useGravity = true; 
+        }
+        */
+
         //Turn of normal physics    
         enemyRb.constraints = RigidbodyConstraints.None;
         enemyRb.useGravity = true;
@@ -971,6 +985,15 @@ public class BasicEnemyScript : MonoBehaviour
             rb.isKinematic = true;
             rb.GetComponent<Collider>().isTrigger = true;
         }
+
+        /*
+        if (weapon != null)
+        {
+            Rigidbody weaponRb = weapon.GetComponent<Rigidbody>();
+            weaponRb.isKinematic = false;
+            weaponRb.useGravity = true;
+        }
+        */
 
         weapon.localPosition = weaponPos;
         weapon.localEulerAngles = weaponAngle; 
@@ -1022,7 +1045,13 @@ public class BasicEnemyScript : MonoBehaviour
 
     public void ResetAnimator()
     {
+        foreach (AnimatorControllerParameter parameter in enemyAnim.parameters)
+        {
+            enemyAnim.SetBool(parameter.name, false);
+            enemyAnim.ResetTrigger(parameter.name);
+            enemyAnim.SetInteger(parameter.name, 0);
 
+        }
     }
 
     public void EnemyDies()
@@ -1037,9 +1066,7 @@ public class BasicEnemyScript : MonoBehaviour
     {
         enemyBehaviourManagerScript.allDeadEnemiesInScene.Remove(thisScript);
         if(playerController.attackTargetScript.targetsInRange.Contains(this.gameObject)) playerController.attackTargetScript.targetsInRange.Remove(this.gameObject);
-        if (playerController.hitPauseScript.theHitPaused.Contains(this.gameObject)) playerController.hitPauseScript.theHitPaused.Remove(this.gameObject);
-        // limbCheckerScript.hitLimbs.Clear();
-        // limbCheckerScript.hitInsides.Clear();
+        if (playerController.hitPauseScript.objectsToPause.Contains(enemyAnim)) playerController.hitPauseScript.objectsToPause.Remove(enemyAnim);
         Destroy(weapon.gameObject);
         Destroy(this.gameObject);
         foreach(GameObject limb in limbInsides)
