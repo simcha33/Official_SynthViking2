@@ -439,7 +439,7 @@ public class BasicEnemyScript : MonoBehaviour
             ResetState();
             enemyRb.mass = stunnedMass; 
             transform.LookAt(target, Vector3.up);
-            SetAttackType(); 
+            SetAttackType();         
         }    
 
         //Reset attack state and return to enage state
@@ -460,6 +460,7 @@ public class BasicEnemyScript : MonoBehaviour
         //Reset some attack values 
         canAttack = true;
         currentComboLength++; 
+        print(currentComboLength); 
 
         currentAttackDamage = basicMeleeAttackDamage; 
         currentAttackForwardForce = basicMeleeAttackForwardForce;
@@ -468,6 +469,8 @@ public class BasicEnemyScript : MonoBehaviour
 
 
         if (currentComboLength == 1) enemyAnim.SetInteger("AttackType", Random.Range(1, totalAttackTrees)); //Set combo attack tree
+        
+      
         if(enemyAnim.GetInteger("AttackType") == 1) totalComboLength = 3f; //Check length of combo attack tree 
     }
 
@@ -477,6 +480,7 @@ public class BasicEnemyScript : MonoBehaviour
 
         if (canAttack)
         {
+       
             canAttack = false; 
             isAttacking = true;
 
@@ -564,6 +568,7 @@ public class BasicEnemyScript : MonoBehaviour
         {
             launchDirection = playerController.transform.forward;           
             enemyRb.velocity = new Vector3(0, 0, 0);
+            currentComboLength = 0; 
 
 
             if (DamageType == playerAttackType.PowerPunch.ToString()) //Enemy is hit by ground slam
