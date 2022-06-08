@@ -57,7 +57,7 @@ public class DashPathChecker : MonoBehaviour
         if (Physics.Raycast(dashRay, out dashHit, 2f))
         {
             //Dash collides with environmental object
-            if (dashHit.collider.gameObject.layer == LayerMask.NameToLayer("Environment"))
+            if (dashHit.collider.gameObject.layer == LayerMask.NameToLayer("Environment") || dashHit.collider.gameObject.layer == LayerMask.NameToLayer("InvisibleWall"))
             {
                 if (!dashHit.collider.gameObject.CompareTag("Breakable")) //Ignore destruction objects
                 {

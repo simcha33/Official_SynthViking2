@@ -137,7 +137,7 @@ public class PlayerState : MonoBehaviour
 
     public void TakeDamage(float damageAmount, string DamageType)
     {
-        if (canBeHit || DamageType == "EnvironmentDamage")
+        if (canBeHit || DamageType == "LavaDamage")
         {
             currentHealth -= damageAmount;
             healthText.text = currentHealth.ToString(); 
@@ -167,11 +167,19 @@ public class PlayerState : MonoBehaviour
                    // stunDuration = 100f; 
                 }
 
-                if(DamageType == "EnvironmentDamage")
+                if(DamageType == "LavaDamage")
                 {
                     playerController.DoJump(550); 
                     stunString = "AttackHit";
+                    DamageType = "EnvironmentDamage"; 
                     stunDuration = 10f;      
+                }
+
+                if(DamageType == "LaserDamage")
+                {
+                    DamageType = "EnvironmentDamage";
+                    stunString = "AttackHit";
+                    stunDuration = 10f;
                 }
 
               

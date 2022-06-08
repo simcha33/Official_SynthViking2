@@ -37,6 +37,8 @@ public class GameManager : MonoBehaviour
         {
             gamepad = Gamepad.current;
         }
+
+        if (gamepad == null) gamepad = Gamepad.current; 
     }
 
     public void ResetScene()

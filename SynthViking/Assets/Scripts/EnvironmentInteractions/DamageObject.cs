@@ -8,7 +8,9 @@ public class DamageObject : MonoBehaviour
     public float damageAmount;
     public GameObject lavaDeathVisual;
     public bool isLava;
-    public bool isHammer; 
+    public bool isHammer;
+    public bool isLaser; 
+    public bool canHurtEnemies; 
     public enum trapType
     {
         lava,
@@ -21,7 +23,7 @@ public class DamageObject : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other) 
     {
-        if(other.gameObject.CompareTag("Player") || other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        if(other.gameObject.CompareTag("Player") || other.gameObject.layer == LayerMask.NameToLayer("Enemy") && canHurtEnemies)
         {
             if(other.gameObject.CompareTag("Player"))
             {
@@ -29,7 +31,8 @@ public class DamageObject : MonoBehaviour
                 ThirdPerson_PlayerControler playerController = playerStateScript.playerController;  
                // playerController.ResetStates(); 
                 if(playerController.isAirSmashing)playerController.EndAirSmash(); 
-                playerStateScript.TakeDamage(damageAmount, "EnvironmentDamage"); 
+                if(isLava) playerStateScript.TakeDamage(damageAmount, "LavaDamage");
+                else if(isLaser) playerStateScript.TakeDamage(damageAmount, "LaserDamage");
             }
 
             if(other.gameObject.layer == LayerMask.NameToLayer("Enemy"))

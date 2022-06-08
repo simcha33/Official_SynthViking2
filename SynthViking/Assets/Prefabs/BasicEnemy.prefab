@@ -4195,7 +4195,7 @@ MonoBehaviour:
   attackTargetScript: {fileID: 837819321}
   chainHitScript: {fileID: 271370257864884223}
   comboManagerScript: {fileID: 0}
-  enemyBehaviourManagerScript: {fileID: 0}
+  enemySpawnManagerScript: {fileID: 0}
   enemyAnim: {fileID: 8410380785165072142}
   enemyRb: {fileID: 0}
   mainCollider: {fileID: 8410380785165072128}
@@ -4223,6 +4223,7 @@ MonoBehaviour:
   isFollowing: 0
   isGettingUp: 0
   isBlockStunned: 0
+  canBeStunned: 1
   canRecover: 0
   canFollow: 1
   canDetectPlayer: 1
@@ -4271,7 +4272,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 8410380785165072131}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 0.89
   m_Speed: 3.5
   m_Acceleration: 30
   avoidancePriority: 2

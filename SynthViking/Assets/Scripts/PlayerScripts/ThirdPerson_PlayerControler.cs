@@ -1034,8 +1034,12 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             dashAttackEffect.transform.LookAt(-aimPoint.forward + new Vector3(0, .5f, 0));
             dashAttackEffect.transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, transform.eulerAngles.z); 
             dashAttackEffect.AddComponent<CleanUpScript>();
-            script.LaunchEnemy(aimPoint.forward, dashAttackForce, 5f);
-            mainGameManager.DoHaptics(.2f, .4f, .6f);
+
+            if (script.canBeStunned)
+            {
+                script.LaunchEnemy(aimPoint.forward, dashAttackForce, 5f);
+                mainGameManager.DoHaptics(.2f, .4f, .6f);
+            }
         }
 
   
@@ -1437,8 +1441,11 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                     if (slamTarget.gameObject.layer == enemyLayer)
                     {
                         BasicEnemyScript enemyScript = slamTarget.GetComponent<BasicEnemyScript>();
-                        enemyScript.TakeDamage(currentGroundSlamDamage, playerAttackType.GroundSlam.ToString());
-                        enemyScript.LaunchEnemy((slamTarget.transform.position - transform.position), slamImpactForwardForce, Random.Range(slamImpactUpForce / 1.3f, slamImpactUpForce * 1.3f));
+                        if (enemyScript.canBeStunned)
+                        {
+                            enemyScript.TakeDamage(currentGroundSlamDamage, playerAttackType.GroundSlam.ToString());
+                            enemyScript.LaunchEnemy((slamTarget.transform.position - transform.position), slamImpactForwardForce, Random.Range(slamImpactUpForce / 1.3f, slamImpactUpForce * 1.3f));
+                        }
                     }
                 }
 
@@ -1740,10 +1747,11 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         }
         else if (nextAttackTimer < nextAttackDuration)
         {
-            if (attackState != playerAttackType.SprintAttack.ToString()) playerRb.isKinematic = true;
-            else if (alllowForwardForce && attackState == playerAttackType.SprintAttack.ToString()) 
-            { 
-                AllowAttackDamage(); 
+            if (attackState != playerAttackType.SprintAttack.ToString()) { if (!isInAir) playerRb.isKinematic = true; print("check"); }
+            else if (alllowForwardForce && attackState == playerAttackType.SprintAttack.ToString())
+            {
+                print("SprintAttack");
+                AllowAttackDamage();
             }
 
             currentMoveSpeed = attackMoveSpeed; 

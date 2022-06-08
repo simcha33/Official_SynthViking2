@@ -13,7 +13,6 @@ public class KillBox : MonoBehaviour
             {
                 enemyScript.TakeDamage(enemyScript.currentHealth, "Killbox");
                 enemyScript.DestroySelf();
-                print("KILLBOX KILL"); 
             }         
         }
     }

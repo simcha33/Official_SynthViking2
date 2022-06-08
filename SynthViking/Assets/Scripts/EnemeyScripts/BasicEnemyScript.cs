@@ -114,7 +114,8 @@ public class BasicEnemyScript : MonoBehaviour
     public AttackTargetScript attackTargetScript;
     public ChainHitScript chainHitScript;
     public ComboManager comboManagerScript;
-    public EnemyManager enemyBehaviourManagerScript; 
+ //   public EnemyManager enemyBehaviourManagerScript;
+    public EnemySpawnManager enemySpawnManagerScript; 
     public Animator enemyAnim;
     [HideInInspector] public Rigidbody enemyRb;
     public Collider mainCollider;
@@ -152,7 +153,7 @@ public class BasicEnemyScript : MonoBehaviour
     public bool isGettingUp;
     public bool isBlockStunned; 
 
-  //  public bool canBeStunned;
+    public bool canBeStunned;
     public bool canRecover = false;
     public bool canFollow; 
     public bool canDetectPlayer; 
@@ -185,7 +186,8 @@ public class BasicEnemyScript : MonoBehaviour
         //Components
         playerController = GameObject.Find("Player").GetComponent<ThirdPerson_PlayerControler>();
         comboManagerScript = GameObject.Find("StyleManager").GetComponent<ComboManager>();
-        enemyBehaviourManagerScript = GameObject.Find("EnemyBehaviourManager").GetComponent<EnemyManager>(); 
+      //  enemyBehaviourManagerScript = GameObject.Find("EnemyBehaviourManager").GetComponent<EnemyManager>();
+        enemySpawnManagerScript = GameObject.Find("EnemySpawnManager").GetComponent<EnemySpawnManager>();
         thisScript = this.gameObject.GetComponent<BasicEnemyScript>(); 
         weaponMeshr = weapon.GetComponent<MeshRenderer>();
         enemyRb = GetComponent<Rigidbody>();
@@ -229,8 +231,10 @@ public class BasicEnemyScript : MonoBehaviour
         }
 
         enemyRb.detectCollisions = true;
-        enemyBehaviourManagerScript.currentenemiesInScene.Add(thisScript);
-        transform.parent = enemyBehaviourManagerScript.aliveEnemyParent.transform;         
+        enemySpawnManagerScript.spawnedAliveEnemies.Add(thisScript);
+        transform.parent = enemySpawnManagerScript.aliveEnemyParent.transform; 
+     //   enemyBehaviourManagerScript.currentenemiesInScene.Add(thisScript);
+       // transform.parent = enemyBehaviourManagerScript.aliveEnemyParent.transform;         
     }
 
 
@@ -460,7 +464,6 @@ public class BasicEnemyScript : MonoBehaviour
         //Reset some attack values 
         canAttack = true;
         currentComboLength++; 
-        print(currentComboLength); 
 
         currentAttackDamage = basicMeleeAttackDamage; 
         currentAttackForwardForce = basicMeleeAttackForwardForce;
@@ -562,7 +565,7 @@ public class BasicEnemyScript : MonoBehaviour
     public void TakeDamage(float damageAmount, string DamageType){
         
         currentHealth -= damageAmount;
-        ResetAnimator(); 
+        if(canBeStunned) ResetAnimator(); 
 
         if (currentHealth > 0 && !isDead)
         {
@@ -571,13 +574,13 @@ public class BasicEnemyScript : MonoBehaviour
             currentComboLength = 0; 
 
 
-            if (DamageType == playerAttackType.PowerPunch.ToString()) //Enemy is hit by ground slam
+            if (DamageType == playerAttackType.PowerPunch.ToString() && canBeStunned) //Enemy is hit by ground slam
             {
                 ResetState();
                 canBeChainHit = false;
             }
 
-            if (DamageType == playerAttackType.GroundSlam.ToString()) //Enemy is hit by power punch
+            if (DamageType == playerAttackType.GroundSlam.ToString() && canBeStunned) //Enemy is hit by power punch
             {
                 ResetState();
                 canBeChainHit = true;
@@ -691,10 +694,11 @@ public class BasicEnemyScript : MonoBehaviour
         }
 
         //Tell the enemymanager that the enemy is dead 
-        if(enemyBehaviourManagerScript.currentenemiesInScene.Contains(thisScript)) enemyBehaviourManagerScript.currentenemiesInScene.Remove(thisScript);
-        enemyBehaviourManagerScript.allDeadEnemiesInScene.Add(thisScript);
-        if(DamageType != LayerMask.NameToLayer("Environment").ToString()) transform.parent = enemyBehaviourManagerScript.deadEnemyParent.transform;
-        enemyBehaviourManagerScript.spawnManager.enemiesLeft--;
+        if(enemySpawnManagerScript.spawnedAliveEnemies.Contains(thisScript)) enemySpawnManagerScript.spawnedAliveEnemies.Remove(thisScript);
+        enemySpawnManagerScript.spawnedDeadEnemies.Add(thisScript);
+        enemySpawnManagerScript.enemiesLeft--; 
+        if (DamageType != LayerMask.NameToLayer("Environment").ToString()) transform.parent = enemySpawnManagerScript.deadEnemyParent.transform;
+        //enemySpawnManagerScript.enemyCount--; 
 
         //Add soul object if there are active pilars nearby 
         //Add soul object if there are active pilars nearby 
@@ -724,22 +728,26 @@ public class BasicEnemyScript : MonoBehaviour
     
     public void CheckForStunType(string damageType)
     {
-        stunType = damageType;
-        enemyMeshr.materials = stunnedSkinMat;    
-       // if(stunType != playerAttackType.LightAxeHit.ToString()) stunnedEffect.SetActive(true); 
-        stunnedEffect.SetActive(true); 
         
-        enemyAgent.enabled = false;
+        stunType = damageType;
+
+        if (canBeStunned)
+        {
+            stunnedEffect.SetActive(true);
+            enemyAgent.enabled = false;
+            enemyMeshr.materials = stunnedSkinMat;
+        }
+      
         //stunnedFeeback?.PlayFeedbacks();
 
-        if (stunType == playerAttackType.GroundSlam.ToString()) //Enemy is hit by ground slam
+        if (stunType == playerAttackType.GroundSlam.ToString() && canBeStunned) //Enemy is hit by ground slam
         {
             stunDuration = 2f;
             enemyRb.mass = originalRbMass;
 
         }
 
-        if (stunType == playerAttackType.PowerPunch.ToString()) //Enemy is hit by ground slam
+        if (stunType == playerAttackType.PowerPunch.ToString() && canBeStunned) //Enemy is hit by ground slam
         {
             chainHitScript.isOrigin = true;
             chainHitScript.enabled = true;   
@@ -763,7 +771,7 @@ public class BasicEnemyScript : MonoBehaviour
         }
 
         
-        if(stunType == playerAttackType.SprintAttack.ToString())
+        if(stunType == playerAttackType.SprintAttack.ToString() && canBeStunned)
         {
             chainHitScript.isOrigin = true;
             chainHitScript.enabled = true;   
@@ -784,7 +792,7 @@ public class BasicEnemyScript : MonoBehaviour
             //enemyRb.isKinematic = true; 
         }
 
-        if (stunType == chainHitScript.chainHitString) //Enemy is hit by an already stunned enemy
+        if (stunType == chainHitScript.chainHitString && canBeStunned) //Enemy is hit by an already stunned enemy
         {
             stunnedEffect.SetActive(true);
             chainHitScript.isOrigin = true;
@@ -792,11 +800,14 @@ public class BasicEnemyScript : MonoBehaviour
             stunDuration = chainHitScript.currentStunDuration;
             enemyRb.mass = originalRbMass; 
         }
-       
-        enemyAgent.speed = 0f;
-        stunTimer = 0f;
-        enemyRb.isKinematic = false;    
-        enemyState = (int)currentState.STUNNED;    
+
+        if (canBeStunned)
+        {
+            enemyAgent.speed = 0f;
+            stunTimer = 0f;
+            enemyRb.isKinematic = false;
+            enemyState = (int)currentState.STUNNED;
+        }
     }
     
     private void CheckForRecovery()
@@ -1069,9 +1080,11 @@ public class BasicEnemyScript : MonoBehaviour
 
     public void DestroySelf()
     {
-        enemyBehaviourManagerScript.allDeadEnemiesInScene.Remove(thisScript);
+        //if(enemySpawnManagerScript.spawnedDeadEnemies.Contains(thisScript)) enemySpawnManagerScript.spawnedDeadEnemies.Remove(thisScript);
+       // if (enemySpawnManagerScript.spawnedAliveEnemies.Contains(thisScript)) enemySpawnManagerScript.spawnedAliveEnemies.Remove(thisScript); 
         if(playerController.attackTargetScript.targetsInRange.Contains(this.gameObject)) playerController.attackTargetScript.targetsInRange.Remove(this.gameObject);
         if (playerController.hitPauseScript.objectsToPause.Contains(enemyAnim)) playerController.hitPauseScript.objectsToPause.Remove(enemyAnim);
+
         Destroy(weapon.gameObject);
         Destroy(this.gameObject);
         foreach(GameObject limb in limbInsides)

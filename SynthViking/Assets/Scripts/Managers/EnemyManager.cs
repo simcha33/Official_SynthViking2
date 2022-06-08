@@ -20,6 +20,7 @@ public class EnemyManager : MonoBehaviour
         public Transform aliveEnemyParent;
 
         public EnemySpawnManager spawnManager;
+    
         public RewardPilar rewardPilar;
 
     /*
@@ -43,7 +44,7 @@ public class EnemyManager : MonoBehaviour
 
     private void Update()
     {
-        CheckForCleanUp(); 
+        //CheckForCleanUp(); 
 
        // foreach(BasicEnemyScript enemy in allDeadEnemiesInScene)
        // {
@@ -56,6 +57,7 @@ public class EnemyManager : MonoBehaviour
        // } 
       //  
     }
+
 
     public void CheckForCleanUp()
     {
