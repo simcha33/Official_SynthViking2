@@ -231,11 +231,11 @@ public class AttackTargetScript : MonoBehaviour
                 BasicEnemyScript enemyScript = obj.GetComponent<BasicEnemyScript>();
                 if (!enemyScript.isDead)
                 {
-                    if (playerController.attackState == playerAttackType.LightAxeHit.ToString())
+                    if (playerController.attackState == playerAttackType.HeavyAxeHit.ToString() || playerController.attackState == playerAttackType.LightPunchHit.ToString())
                     {
                         enemyScript.TakeDamage(playerController.currentAttackDamage, playerController.attackState);
                         hitpauseScript.objectsToPause.Add(obj.GetComponent<Animator>());
-                    }
+                    }              
                     else if (playerController.attackState == playerAttackType.SprintAttack.ToString() && !playerController.sprintHitList.Contains(enemyScript))
                     {
                         enemyScript.TakeDamage(playerController.currentAttackDamage, playerController.attackState);
@@ -339,9 +339,9 @@ public class AttackTargetScript : MonoBehaviour
         
 
         //Axe hit feedback 
-        if (playerController.attackState == playerAttackType.LightAxeHit.ToString())
+        if (playerController.attackState == playerAttackType.HeavyAxeHit.ToString())
         {
-            hitpauseScript.hitPauseDuration = hitpauseScript.axeHitPauseLength;
+            hitpauseScript.hitPauseDuration = playerController.axeHitPauseLength;
             hitpauseScript.doHitPause = true;
             hitpauseScript.DoHitPause(); 
             weapinFirstImpactFeedback?.PlayFeedbacks();
@@ -349,6 +349,16 @@ public class AttackTargetScript : MonoBehaviour
             enemyScript.transform.DOMove(backDirection, .3f).SetUpdate(UpdateType.Fixed);  //Move enemy backwards enemyScript.enemyRb.AddForce(playerController.transform.position + transform.forward * playerController.currentAttackForwardForce, ForceMode.VelocityChange);   
             enemyScript.enemyRb.velocity = new Vector3(0, 0, 0);
 
+        }
+        else if(playerController.attackState == playerAttackType.LightPunchHit.ToString())
+        {
+            hitpauseScript.hitPauseDuration = playerController.punchPauseLength / 2.5f;
+            hitpauseScript.doHitPause = true;
+            hitpauseScript.DoHitPause(); 
+            weapinFirstImpactFeedback?.PlayFeedbacks();
+            playerController.mainGameManager.DoHaptics(.15f, .1f, .2f);
+            enemyScript.transform.DOMove(backDirection, .3f).SetUpdate(UpdateType.Fixed);  //Move enemy backwards enemyScript.enemyRb.AddForce(playerController.transform.position + transform.forward * playerController.currentAttackForwardForce, ForceMode.VelocityChange);   
+            enemyScript.enemyRb.velocity = new Vector3(0, 0, 0);
         }
 
         //Sprintattack hit feedback

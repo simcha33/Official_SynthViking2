@@ -18,7 +18,8 @@ public class PlayerInputCheck : MonoBehaviour
     [HideInInspector] public bool sprintButtonPressed; 
     [HideInInspector] public bool beamButtonPressed;
     [HideInInspector] public bool projectileButtonPressed;
-    [HideInInspector] public bool meleeButtonPressed;
+    [HideInInspector] public bool heavyAttackButtonPressed;
+    [HideInInspector] public bool lightAttackButtonPressed;
     [HideInInspector] public bool blockButtonPressed;
     [HideInInspector] public bool ultimateButtonPressed;
     [HideInInspector] public bool jumpButtonPressed;
@@ -76,8 +77,14 @@ public class PlayerInputCheck : MonoBehaviour
 
     private void OnMeleeAttack(InputValue value)
     {
-        meleeButtonPressed = value.isPressed;
+        heavyAttackButtonPressed = value.isPressed;
     }
+
+    private void OnLightAttack(InputValue value)
+    {
+        lightAttackButtonPressed = value.isPressed; 
+    }
+
 
     private void OnAirSmash(InputValue value)
     {

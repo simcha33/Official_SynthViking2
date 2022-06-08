@@ -22,6 +22,14 @@
                     "interactions": ""
                 },
                 {
+                    "name": "LightAttack",
+                    "type": "Value",
+                    "id": "e6c771d0-2088-4453-ba92-e331c5220dab",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "Jump",
                     "type": "Value",
                     "id": "eea10429-3cda-4b3f-be6b-7dc501f6c136",
@@ -437,6 +445,17 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "Dpad-Right",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a0fd1c8b-485c-4be7-bea6-e63c4c9119e6",
+                    "path": "<Gamepad>/rightShoulder",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "LightAttack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

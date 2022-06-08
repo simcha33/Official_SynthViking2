@@ -8,7 +8,7 @@ public class HitPauses : MonoBehaviour
     public float hitPauseDuration;
     public float pullOutReduction; 
     public float sprintHitPauseLength; 
-    public float axeHitPauseLength;
+
     
     public bool doHitPause;
 
@@ -51,8 +51,12 @@ public class HitPauses : MonoBehaviour
             foreach (Animator anim in objectsToPause)
             {
                  
-                if (anim == playerAnim) anim.speed = attackTargetScript.playerController.animAttackSpeed * pullOutReduction;
-                else
+                if (anim == playerAnim) 
+                {
+                    if(playerController.attackState == playerAttackType.HeavyAxeHit.ToString())anim.speed = attackTargetScript.playerController.axeAttackSpeed * pullOutReduction;
+                    else if(playerController.attackState == playerAttackType.LightPunchHit.ToString())anim.speed = attackTargetScript.playerController.punchAttackSpeed;
+                }
+                else if(anim != playerAnim)
                 {
                     BasicEnemyScript enemyScript = anim.transform.GetComponent<BasicEnemyScript>();
                     GameObject blood = Instantiate(attackTargetScript.axeHitBloodVFX, enemyScript.bloodSpawnPoint.position, enemyScript.bloodSpawnPoint.rotation);

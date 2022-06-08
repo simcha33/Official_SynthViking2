@@ -153,14 +153,26 @@ public class ChainHitScript : MonoBehaviour
             stunType = playerAttackType.PowerPunch.ToString();
         }
 
-        if(stunType == playerAttackType.LightAxeHit.ToString()) //Light axe hit 
+        if(stunType == playerAttackType.HeavyAxeHit.ToString()) //Light axe hit 
         {
 
             currentChainHitActiveDuration = axeHitChainActiveDuration; 
             currentChainHitBackForce = axeHitForce;
             currentDamage = axeHitChainDamage; 
-            stunType = playerAttackType.LightAxeHit.ToString();
+            stunType = playerAttackType.HeavyAxeHit.ToString();
             currentStunDuration = axeHitStunDuration; 
+            
+        }
+
+        
+        if(stunType == playerAttackType.LightPunchHit.ToString()) //Light axe hit 
+        {
+
+            currentChainHitActiveDuration = axeHitChainActiveDuration / 2 ; 
+            currentChainHitBackForce = axeHitForce /2;
+            currentDamage = axeHitChainDamage /2; 
+            stunType = playerAttackType.LightPunchHit.ToString();
+            currentStunDuration = axeHitStunDuration /2; 
             
         }
 
@@ -202,7 +214,12 @@ public class ChainHitScript : MonoBehaviour
             else launchDirection = -transform.right; //Launch enemy to the right 
         }
 
-        if(chainType == playerAttackType.LightAxeHit.ToString())
+        if(chainType == playerAttackType.HeavyAxeHit.ToString())
+        {
+            launchDirection = mainScript.launchDirection; //Base launch direction of attackers forward 
+        }
+
+          if(chainType == playerAttackType.LightPunchHit.ToString())
         {
             launchDirection = mainScript.launchDirection; //Base launch direction of attackers forward 
         }

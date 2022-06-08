@@ -37,7 +37,6 @@ public class SpawnAreaTrigger : MonoBehaviour
 
         if (spawnManager.spawnedDeadEnemies.Count > 0)
         {
-            print("check2");
             foreach (BasicEnemyScript enemy in spawnManager.spawnedDeadEnemies)
             {
                 enemy.DestroySelf();
@@ -46,7 +45,6 @@ public class SpawnAreaTrigger : MonoBehaviour
 
         if (spawnManager.spawnedAliveEnemies.Count > 0)
         {
-            print("check1"); 
             foreach (BasicEnemyScript enemy in spawnManager.spawnedAliveEnemies)
             {           
                 enemy.DestroySelf();

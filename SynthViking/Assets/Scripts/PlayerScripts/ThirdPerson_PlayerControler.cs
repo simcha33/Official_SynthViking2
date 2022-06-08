@@ -12,11 +12,14 @@ public enum playerAttackType
 {
     PowerPunch,
     PhysicsImpact,
-    LightAxeHit,
+    HeavyAxeHit,
+    LightPunchHit, 
     GroundSlam,
     NormalePunch,
     BlockStun,
     SprintAttack,
+
+    Reset, 
 }
 
 
@@ -151,6 +154,30 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     #endregion
 
+    [Header("GENERAL ATTACK")]
+    #region   
+    public float maxTimeBetweenAttacks;
+    private float nextAttackDuration;
+    private float nextAttackTimer; 
+  
+    public float attackTransitionOffset; 
+   
+    private float attackMoveLerpT;
+    private Vector3 attackStartPos;
+    
+ 
+    [HideInInspector] public Vector3 attackDirection; 
+    public float attackMoveSpeed = 1f;
+    [HideInInspector]public bool attackTargetInRange;
+    [HideInInspector] public bool canDamageTarget;
+    [HideInInspector]public Transform currentAttackTarget;
+    [HideInInspector] public float currentAttackDamage;
+    [HideInInspector] public float currentAttackForwardForce; 
+    public float basicAttackForwardForce;
+   // public float punchAttackDamage = 5f;
+    public List<BasicEnemyScript> sprintHitList = new List<BasicEnemyScript>(); 
+    #endregion
+
     [Header("DASH ATTACK")]
     #region
     public float dashAttackForce;
@@ -159,42 +186,40 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     [HideInInspector] public GameObject dashAttackTarget;
     #endregion
 
-    [Header("MELEE ATTACK")]
-    #region   
-    public float maxTimeBetweenAttacks;
-    private float nextAttackDuration;
-    private float nextAttackTimer; 
-    public bool wantsToAttack; 
-    private float attackHoldTimer;
-    public float attackTransitionOffset; 
-    
-    public int currentComboLength;
-    public int totalComboLength;
-    public float animAttackSpeed; 
-    private float attackMoveLerpT;
-    private Vector3 attackStartPos;
-    public Sequence sprintAttackTween; 
- 
-
-    [HideInInspector] public Vector3 attackDirection; 
-
-    public float attackMoveSpeed = 1f;
-    [HideInInspector]public bool attackTargetInRange;
-    [HideInInspector] public bool canDamageTarget;
-    [HideInInspector]public Transform currentAttackTarget;
-    [HideInInspector] public float currentAttackDamage;
-    [HideInInspector] public float currentAttackForwardForce; 
-    public float basicAttackForwardForce;
-    public float sprintAttackForwardForce; 
+    [Header("PUNCH ATTACK")]
+    #region 
+    public float punchAttackTransitionOffset;
+    private bool wantsToLightAttack; 
+    private float lightAttackHoldTimer;
+    public float punchPauseLength; 
+   
+    private int punchComboLength;  
+    private int totalPunchComboLength;
+    public float punchAttackSpeed;
     public float basicLightAttackDamage = 10f;
-    public float basicHeavyAttackDamage = 20f;
-    public float basicSprintAttackDamage = 20f; 
-    public float punchAttackDamage = 5f;
-    public List<BasicEnemyScript> sprintHitList = new List<BasicEnemyScript>(); 
-  
+    #endregion
+      
 
+    [Header("AXE ATTACK")]
+    #region 
+    public float axeAttackTransitionOffset;
+    private bool wantsToHeayAttack; 
+    private float heavyAttackHoldTimer;   
+    public float axeHitPauseLength;
+  
+    private int axeComboLength;
+    private int totalAxeComboLength;
+    public float axeAttackSpeed; 
+    public float basicHeavyAttackDamage = 20f;
+
+    [Header("SPRINT ATTACK")]
+    
+    public float sprintAttackForwardForce; 
+     public Sequence sprintAttackTween;
+    public float basicSprintAttackDamage = 20f; 
     #endregion
 
+    
     [Header("AIR SMASH")]
     #region 
     public float groundSlamMinDamage;
@@ -320,6 +345,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public MMFeedbacks DashAttackFeedback; 
     public MMFeedbacks AttackFeedback; 
     public MMFeedbacks BasicLightAttackFeedback;
+    public MMFeedbacks BasicHeavyAttackFeedback;
     public MMFeedbacks SprintAttackFeedback;
     public MMFeedbacks AirSlamStartFeeback;
     public MMFeedbacks AirSlamEndFeedback;
@@ -459,7 +485,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                     CheckForAirSmash();
                     break;
 
-                case (int)currentState.ATTACKING:
+                case (int)currentState.ATTACKING:                 
                     CheckForAttack();
                     CheckForAirSmash();
                     CheckForDash();
@@ -567,7 +593,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     void HolsterWeapon()
     {
 
-        if((isSprinting || isInAir || isLanding) && canStartNewAttack)
+        if((isSprinting || isInAir || isLanding) && canStartNewAttack || attackState == playerAttackType.LightPunchHit.ToString())
         {
             drawnWeapon.SetActive(false);
             holsteredWeapon.SetActive(true);
@@ -1539,7 +1565,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             //  controllerState = (int)currentState.MOVING; 
         }
         /*
-        else if (input.meleeButtonPressed)
+        else if (input.heavyAttackButtonPressed)
         {
             canBlockStun = true;
             isBlocking = false;
@@ -1557,19 +1583,38 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     void CheckForAttack()
     {
         //Check for player pressing an attack button 
-        if (input.meleeButtonPressed && nextAttackTimer >= nextAttackDuration - (attackTransitionOffset * 2.2f)) wantsToAttack = true;       
-        //if (input.meleeButtonPressed && canStartNewAttack) wantsToAttack = true;
+        if ((input.heavyAttackButtonPressed || input.lightAttackButtonPressed) && nextAttackTimer >= nextAttackDuration - (attackTransitionOffset * 2.2f))
+        { 
+            if(input.heavyAttackButtonPressed) //We want to do a heavy attack 
+            {        
+                print("Wants Axe Attack"); 
+                wantsToHeayAttack = true;   
+                wantsToLightAttack = false; 
+            }
+            if(input.lightAttackButtonPressed) // We want to do a light attack 
+            {   
+                print("Wants Punch Attack");              
+                wantsToHeayAttack = false; 
+                wantsToLightAttack = true; 
+            }
+        } 
 
         //Check for player holding an attack button
-        if (input.meleeButtonPressed) attackHoldTimer+= Time.deltaTime;   
-        else attackHoldTimer = 0f; 
+        if (input.heavyAttackButtonPressed) heavyAttackHoldTimer+= Time.deltaTime;   
+        else heavyAttackHoldTimer = 0f; 
+
+        if (input.lightAttackButtonPressed) lightAttackHoldTimer+= Time.deltaTime;   
+        else lightAttackHoldTimer = 0f; 
+
+
        
         //Start attacking state once the player has released the attack button 
-        if(!input.meleeButtonPressed && canStartNewAttack && wantsToAttack)
+        if((!input.heavyAttackButtonPressed  && wantsToHeayAttack || !input.lightAttackButtonPressed && wantsToLightAttack) && canStartNewAttack)
         {  
             if (!isAttacking)
                 {
-                    currentComboLength = 0;
+                    axeComboLength = 0;
+                    punchComboLength = 0; 
                     ResetAnimator();
                 }
 
@@ -1578,7 +1623,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 isAttacking = true;
                 canStartNewAttack = false; 
                 playerRb.isKinematic = false;
-                playerAnim.speed = animAttackSpeed;
+               // playerAnim.speed = axeAttackSpeed;
                 nextAttackTimer = nextAttackDuration = 10f;
 
                 controllerState = (int)currentState.ATTACKING;
@@ -1598,7 +1643,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     void CheckForAirCombat()
     {
         /*
-        if(input.meleeButtonPressed)
+        if(input.heavyAttackButtonPressed)
         {
               Collider[] colls = Physics.OverlapSphere(transform.position, groundSlamRadius);
 
@@ -1610,10 +1655,10 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         }
         */
 
-        if(attackHoldTimer >= upperCutHoldDuration) canUppercut = true; 
+        if(heavyAttackHoldTimer >= upperCutHoldDuration) canUppercut = true; 
         else canUppercut = false; 
 
-        if(canUppercut && !input.meleeButtonPressed && !isUpperCutting) 
+        if(canUppercut && !input.heavyAttackButtonPressed && !isUpperCutting) 
         {
             DoUpperCut(); 
             controllerState = (int)currentState.ATTACKING; 
@@ -1638,54 +1683,83 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     void SetAttackType()
     {
         int totalAttackTrees = 5;
-     //   HolsterWeapon(false);
-
-       // print("Set attack type");
         if (isSprinting)
         {
-            totalComboLength = 2;
+            axeComboLength = 2;
            // AttackFeedback = SprintAttackFeedback;
             currentAttackDamage = 0; 
             currentAttackForwardForce = sprintAttackForwardForce;
         
             attackState = playerAttackType.SprintAttack.ToString();
+            print(" This ONEEEEEEE"); 
             //playerAnim.SetFloat("SprintAttackType", Random.Range(4,4));
             playerAnim.SetFloat("SprintAttackType", 4);
 
         }
-        else
-        {
-           // print("HEREREEEE??");
-            AttackFeedback = BasicLightAttackFeedback;        
-            currentAttackDamage = basicLightAttackDamage;
+        else if(wantsToHeayAttack)
+        {        
+            attackState = playerAttackType.HeavyAxeHit.ToString();    
+            totalAttackTrees = 5; 
+            attackTransitionOffset = axeAttackTransitionOffset; 
+            AttackFeedback = BasicHeavyAttackFeedback;        
+            currentAttackDamage = basicHeavyAttackDamage;
             currentAttackForwardForce = basicAttackForwardForce;
 
-            attackState = playerAttackType.LightAxeHit.ToString();
+          
 
             //Set new combo 
-            if (currentComboLength == 0)
+            if (axeComboLength == 0)
             {
                 //No double hit animations
-                int originalReaction = playerAnim.GetInteger("LightAttackType");
+                int originalReaction = playerAnim.GetInteger("AxeAttackType");
                 int newRandomNumber = Random.Range(1, totalAttackTrees + 1);
                 if (newRandomNumber == originalReaction)
                 {
                     if (newRandomNumber - 1 <= 0) newRandomNumber += 1;
                     else newRandomNumber -= 1;
                 }
-                playerAnim.SetInteger("LightAttackType", newRandomNumber);  //Decide which combo tree to go into (only once per full combo tree)
+                playerAnim.SetInteger("AxeAttackType", newRandomNumber);  //Decide which combo tree to go into (only once per full combo tree)
             }
 
             //Set current attack tree length
-            if      (playerAnim.GetInteger("LightAttackType") == 1) totalComboLength = 3; 
-            else if (playerAnim.GetInteger("LightAttackType") == 2) totalComboLength = 4;
-            else if (playerAnim.GetInteger("LightAttackType") == 3) totalComboLength = 4;
-            else if (playerAnim.GetInteger("LightAttackType") == 4) totalComboLength = 4;
-            else if (playerAnim.GetInteger("LightAttackType") == 5) totalComboLength = 6;                                                                                 
+            if      (playerAnim.GetInteger("AxeAttackType") == 1) totalAxeComboLength = 3; 
+            else if (playerAnim.GetInteger("AxeAttackType") == 2) totalAxeComboLength = 4;
+            else if (playerAnim.GetInteger("AxeAttackType") == 3) totalAxeComboLength = 4;
+            else if (playerAnim.GetInteger("AxeAttackType") == 4) totalAxeComboLength = 4;
+            else if (playerAnim.GetInteger("AxeAttackType") == 5) totalAxeComboLength = 6;                                                                                 
             
         }
+        else if(wantsToLightAttack)
+        {
+            attackState = playerAttackType.LightPunchHit.ToString();
+            totalAttackTrees = 2; 
+            attackTransitionOffset = punchAttackTransitionOffset; 
+            AttackFeedback = BasicLightAttackFeedback;    
+            currentAttackDamage = basicLightAttackDamage;
+            currentAttackForwardForce = basicAttackForwardForce;
 
+            
 
+            if (punchComboLength == 0)
+            {
+                //No double hit animations
+                int originalReaction = playerAnim.GetInteger("PunchAttackType");
+                int newRandomNumber = Random.Range(1, totalAttackTrees + 1);
+             
+                if (newRandomNumber == originalReaction)
+                {
+                    if (newRandomNumber - 1 <= 0) newRandomNumber += 1;
+                    else newRandomNumber -= 1;
+                }
+            
+                playerAnim.SetInteger("PunchAttackType", newRandomNumber);  //Decide which combo tree to go into (only once per full combo tree)
+            }
+
+            //Set current punch-attack tree length 
+            if      (playerAnim.GetInteger("PunchAttackType") == 1) totalPunchComboLength = 4; 
+            else if (playerAnim.GetInteger("PunchAttackType") == 2) totalPunchComboLength = 4;
+         
+        }
     }
 
     void HandleAttack()
@@ -1693,26 +1767,43 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //Set attack duration equel to current animation clip length and speed
          nextAttackDuration = playerAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / (playerAnim.GetCurrentAnimatorStateInfo(0).speed * playerAnim.speed);
 
+        
         //Check if we can continue to the next attack
-        if (nextAttackTimer >= nextAttackDuration - attackTransitionOffset && !input.meleeButtonPressed && wantsToAttack)
-        {
-            wantsToAttack = false; 
-            if (currentComboLength >= totalComboLength)
+        if (nextAttackTimer >= nextAttackDuration - attackTransitionOffset && (!input.heavyAttackButtonPressed && wantsToHeayAttack || !input.lightAttackButtonPressed && wantsToLightAttack))
+        {        
+            if(attackState == playerAttackType.SprintAttack.ToString())
             {
-                currentComboLength = 0; //Reset combo tree
-                SetAttackType();
+                
+            }   
+            else if(wantsToHeayAttack) //We are doing an axe attack 
+            {
+                wantsToLightAttack = false; 
+                if (axeComboLength >= totalAxeComboLength) axeComboLength = 0; //Reset combo tree
+                SetAttackType();      
+              //  CheckForMoveInput(); //Set attack direction 
+                axeComboLength++;
+                playerAnim.speed = axeAttackSpeed; 
+                playerAnim.SetInteger("AxeComboLength", axeComboLength);
+                wantsToHeayAttack = false; 
+            }
+            else if(wantsToLightAttack) //We are doing an punch attack
+            {
+                wantsToHeayAttack = false;           
+                if (punchComboLength >= totalPunchComboLength) punchComboLength = 0; //Reset combo tree      
+                SetAttackType();           
+              //  CheckForMoveInput(); //Set attack direction 
+                punchComboLength++;
+                playerAnim.speed = punchAttackSpeed; 
+                playerAnim.SetInteger("PunchComboLength", punchComboLength);
+                wantsToLightAttack = false; 
             }
 
             CheckForMoveInput(); //Set attack direction 
-            if(currentComboLength > 0) SetAttackType(); // Set attack type (skip first attack so we can do conditional start attacks)
-            currentComboLength++;
-
-            //Trigger correct animation stuff
-            playerAnim.speed = animAttackSpeed; 
+            //Trigger correct animation stuff 
             AttackFeedback?.PlayFeedbacks();
             playerAnim.SetBool("IsAttacking", true);
-            playerAnim.SetInteger("CurrentComboLength", currentComboLength);
             playerAnim.SetTrigger(attackState + "Trigger");
+            
 
             nextAttackTimer = 0f;
             attackMoveLerpT = 0f;
@@ -1734,7 +1825,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             playerAnim.speed = 1f; 
             attackTargetInRange = false;
             canRotate = true;
-            playerRb.isKinematic = false;
+            playerRb.isKinematic = false;        
             meshR.materials = defaultSkinMat;
             currentMoveSpeed = minWalkingMoveSpeed;
 
@@ -1745,12 +1836,12 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
 
         }
-        else if (nextAttackTimer < nextAttackDuration)
+        else if (nextAttackTimer < nextAttackDuration  - attackTransitionOffset)
         {
-            if (attackState != playerAttackType.SprintAttack.ToString()) { if (!isInAir) playerRb.isKinematic = true; print("check"); }
+            if (attackState != playerAttackType.SprintAttack.ToString()) { if (!isInAir) playerRb.isKinematic = true; //print("check"); 
+            }
             else if (alllowForwardForce && attackState == playerAttackType.SprintAttack.ToString())
             {
-                print("SprintAttack");
                 AllowAttackDamage();
             }
 
@@ -1761,7 +1852,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //Exit attack state
         if (nextAttackTimer >= nextAttackDuration + maxTimeBetweenAttacks)
         {
-            currentComboLength = 0;
+            axeComboLength = 0;
+            punchComboLength = 0;
             isAttacking = false;
             attackTargetInRange = false;
             playerAnim.SetBool("IsAttacking", false);
@@ -1829,7 +1921,15 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     void AllowAttackForwardForce()
     {
-        if (attackState == playerAttackType.LightAxeHit.ToString())
+        if (attackState == playerAttackType.HeavyAxeHit.ToString())
+        {
+           // playerAnim.speed = animAttackSpeed * 1.55f; 
+            attackDirection = transform.position + inputDir;
+            mainGameManager.DoHaptics(.1f, .02f, .04f); 
+            attackTargetScript.BackCheck(); 
+            transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .35f).SetUpdate(UpdateType.Fixed);
+        }
+        else if (attackState == playerAttackType.LightPunchHit.ToString())
         {
            // playerAnim.speed = animAttackSpeed * 1.55f; 
             attackDirection = transform.position + inputDir;
@@ -1852,13 +1952,17 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     void AllowNextAttack()
     {
-        if (attackState == playerAttackType.LightAxeHit.ToString()) 
+        if (attackState == playerAttackType.HeavyAxeHit.ToString()|| attackState == playerAttackType.LightPunchHit.ToString()) 
         {
             nextAttackTimer = nextAttackDuration;
+            print("AllowNextAttack"); 
         }
         else if (attackState == playerAttackType.SprintAttack.ToString()) 
         {
             nextAttackTimer = 10f; 
+            wantsToHeayAttack = false;
+            wantsToLightAttack = false; 
+            isSprinting = false; 
         }
     }
 
@@ -1938,8 +2042,5 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             sprintTrailTimer -= Time.fixedDeltaTime * disableTrailDuration;
         }
     }
-    
-
-
     
 }

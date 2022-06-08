@@ -479,11 +479,10 @@ public class BasicEnemyScript : MonoBehaviour
 
     public void DoAttack() 
     {
-        nextAttackDuration = enemyAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / enemyAnim.GetCurrentAnimatorStateInfo(0).speed;
+        nextAttackDuration = enemyAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / enemyAnim.GetCurrentAnimatorStateInfo(0).speed * animSpeed;
 
         if (canAttack)
-        {
-       
+        {       
             canAttack = false; 
             isAttacking = true;
 
@@ -574,7 +573,7 @@ public class BasicEnemyScript : MonoBehaviour
             currentComboLength = 0; 
 
 
-            if (DamageType == playerAttackType.PowerPunch.ToString() && canBeStunned) //Enemy is hit by ground slam
+            if (DamageType == playerAttackType.PowerPunch.ToString() && canBeStunned) //Enemy is hit by a ch
             {
                 ResetState();
                 canBeChainHit = false;
@@ -619,10 +618,8 @@ public class BasicEnemyScript : MonoBehaviour
 
             }
 
-               
-
-
-            if (DamageType == playerAttackType.LightAxeHit.ToString() && !isRagdolling) //Enemy is hit by axe
+            
+            if (DamageType == playerAttackType.HeavyAxeHit.ToString() && !isRagdolling) //Enemy is hit by axe
             {
 
                 ResetState(); 
@@ -657,8 +654,34 @@ public class BasicEnemyScript : MonoBehaviour
                 enemyAnim.SetTrigger("DamageTrigger");
             }
 
+            if (DamageType == playerAttackType.LightPunchHit.ToString() && !isRagdolling) //Enemy is hit by axe
+            {
 
+                ResetState(); 
+                enemyRb.mass = stunnedMass;
+                canBeChainHit = false;
+
+                enemyRb.freezeRotation = true;
+
+                //No double hit animations
+                float originalReaction = enemyAnim.GetFloat("DamageReaction");
+                float newRandomNumber = Random.Range(0, 6f);
+
+
+                if (newRandomNumber == originalReaction)
+                {
+                    if (newRandomNumber - 1 < 0) newRandomNumber += 1f;
+                    else newRandomNumber -= 1f;
+
+                }
+
+                transform.LookAt(playerController.transform); 
+                enemyAnim.SetFloat("DamageReaction", newRandomNumber);
+                enemyAnim.SetTrigger("DamageTrigger");
+            }
+            
             CheckForStunType(DamageType);
+            
         }
 
         else if (!isDead)//Kill the enemy
@@ -757,13 +780,26 @@ public class BasicEnemyScript : MonoBehaviour
 
         }
 
-        if (stunType == playerAttackType.LightAxeHit.ToString() && !isRagdolling) //Enemy is hit with axe attack
+        if (stunType == playerAttackType.HeavyAxeHit.ToString() && !isRagdolling) //Enemy is hit with axe attack
         {
           //  chainHitScript.enabled = true; //allow this enemy to cause chain hit impacts
             chainHitScript.isOrigin = true; 
             canBeChainHit = false;
             chainHitScript.SetChainHitType(stunType);
             stunDuration = 1f;
+            mainCollider.isTrigger = false;           
+            //enemyRb.mass = stunnedMass; 
+            enemyMeshr.materials = hitSkinMat;
+            isLaunched = false; 
+        }
+
+        if (stunType == playerAttackType.LightPunchHit.ToString() && !isRagdolling) //Enemy is hit with axe attack
+        {
+          //  chainHitScript.enabled = true; //allow this enemy to cause chain hit impacts
+            //chainHitScript.isOrigin = true; 
+           // canBeChainHit = false;
+           // chainHitScript.SetChainHitType(stunType);
+            stunDuration = .7f;
             mainCollider.isTrigger = false;           
             //enemyRb.mass = stunnedMass; 
             enemyMeshr.materials = hitSkinMat;

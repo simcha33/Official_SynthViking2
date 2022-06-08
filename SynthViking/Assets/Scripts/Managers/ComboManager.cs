@@ -124,7 +124,7 @@ public class ComboManager : MonoBehaviour
        // if(styleType == "ChainHit")
 
 
-        if (styleType == playerAttackType.LightAxeHit.ToString()) //Enemy is killed with axe 
+        if (styleType == playerAttackType.HeavyAxeHit.ToString()) //Enemy is killed with axe 
         {
             currentStyleAmount += axeHitKillValue; 
         }

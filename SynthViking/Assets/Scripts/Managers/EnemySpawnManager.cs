@@ -178,7 +178,6 @@ public class EnemySpawnManager : MonoBehaviour
             if(enemiesLeft <= 0 || currentWave == 0)
             {
                 if (currentWave > 0) waveText.text = "WAVE CLEARED";
-                print("Start new Wave"); 
                 waveText.alpha = 1f; 
                 waveHasEnded = true;
                 if (currentWave < maxWaves) DoNextWaveTranstition();              
