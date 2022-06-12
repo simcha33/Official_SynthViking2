@@ -23,7 +23,7 @@ public class BasicEnemyScript : MonoBehaviour
     private float animSpeed;
     private float currentMoveSpeed; 
     public float lookRange;
-    public float groundCheckHeight = .8f;
+    public float groundCheckHeight = .6f;
     public LayerMask envorinmentLayer; 
     public  BasicEnemyScript thisScript;
     public bool canBeManaged;
@@ -78,7 +78,10 @@ public class BasicEnemyScript : MonoBehaviour
     public float canBeParriedTimer;
     public float canBeParriedDuration; 
     private string StunType;
-    [HideInInspector] public bool isDashTargeted; 
+    public bool addSlowdownForce; 
+    [HideInInspector] public bool isDashTargeted;
+    public float stopFallTimer;
+    private float stopFallDuration = .5f; 
     #endregion
 
 
@@ -151,7 +154,9 @@ public class BasicEnemyScript : MonoBehaviour
     public bool playerLocationIsKnown;
     public bool isFollowing;
     public bool isGettingUp;
-    public bool isBlockStunned; 
+    public bool isBlockStunned;
+    public bool isUpperCutted;
+    public bool isStoppingFall;
 
     public bool canBeStunned;
     public bool canRecover = false;
@@ -161,7 +166,8 @@ public class BasicEnemyScript : MonoBehaviour
     public bool canAttack; 
     public bool canBeTargeted; 
     public bool canAddImpactDamage; 
-    public bool canBeLaunched = true; 
+    public bool canBeLaunched = true;
+    public bool canStopFall; 
     #endregion
    
     [Header("STATEMACHINE")]
@@ -276,7 +282,9 @@ public class BasicEnemyScript : MonoBehaviour
                 CheckForPlayer(); 
                 CheckForImpactDamage();
                 HandleAnimation();
-                GroundCheck(); 
+                GroundCheck();
+                AddSlowDownForce();
+                StopFall(); 
                // GroundCheck();
 
                 break; 
@@ -408,17 +416,22 @@ public class BasicEnemyScript : MonoBehaviour
         else
         {
           // dashPointCol.enabled = true; 
+            
             isGrounded = false;
         }
 
         Debug.DrawRay(groundCheckPoint.position, Vector3.down * groundCheckHeight, Color.red);
 
         
-        if(!isGrounded && isStunned && !isRagdolling && !isLaunched && !isGettingUp)
+        if(!isGrounded && isStunned && !isRagdolling && !isLaunched && !isGettingUp && !isUpperCutted && !isStoppingFall)
         {
             isLaunched = true; 
             EnableRagdoll();
             CheckForStunType("PhysicsImpact"); 
+        }
+        else if(isStoppingFall && isRagdolling)
+        {
+            DisableRagdoll(); 
         }
         
 
@@ -585,7 +598,7 @@ public class BasicEnemyScript : MonoBehaviour
                 canBeChainHit = true;
             }
 
-            if(DamageType == playerAttackType.SprintAttack.ToString())
+            if(DamageType == playerAttackType.SprintAttack.ToString() && canBeStunned) //Enemy is hit by sprint attack
             {
                 ResetState(); 
                 EnableRagdoll(); 
@@ -603,23 +616,32 @@ public class BasicEnemyScript : MonoBehaviour
                 enemyAnim.SetTrigger("DamageTrigger");
             }
 
-            if (DamageType == chainHitScript.chainHitString) //Enemy is hit by power punch
+            if (DamageType == playerAttackType.AirLaunchAttack.ToString() && !isRagdolling && canBeStunned) //Enemy is hit by axe
             {
-                canBeChainHit = true;
+                ResetState();
+                isUpperCutted = true; 
+                enemyRb.mass = originalRbMass;
+                enemyRb.constraints = RigidbodyConstraints.None;
+                enemyRb.freezeRotation = true;
+
+                //No double hit animations
+                float originalReaction = enemyAnim.GetFloat("DamageReaction");
+                float newRandomNumber = Random.Range(0, 6f);
+
+
+                if (newRandomNumber == originalReaction)
+                {
+                    if (newRandomNumber - 1 < 0) newRandomNumber += 1f;
+                    else newRandomNumber -= 1f;
+
+                }
+
+                transform.LookAt(playerController.transform);
+                enemyAnim.SetFloat("DamageReaction", newRandomNumber);
+                enemyAnim.SetTrigger("DamageTrigger");
             }
 
-            if (DamageType == "ImpactDamage")
-            {
-
-            }
-
-            if (DamageType == "EnvironmentDamage") 
-            {
-
-            }
-
-            
-            if (DamageType == playerAttackType.HeavyAxeHit.ToString() && !isRagdolling) //Enemy is hit by axe
+            if (DamageType == playerAttackType.HeavyAxeHit.ToString() && !isRagdolling && canBeStunned) //Enemy is hit by axe
             {
 
                 ResetState(); 
@@ -654,9 +676,10 @@ public class BasicEnemyScript : MonoBehaviour
                 enemyAnim.SetTrigger("DamageTrigger");
             }
 
-            if (DamageType == playerAttackType.LightPunchHit.ToString() && !isRagdolling) //Enemy is hit by axe
+            if (DamageType == playerAttackType.LightPunchHit.ToString() && !isRagdolling && canBeStunned) //Enemy is hit by axe
             {
 
+              
                 ResetState(); 
                 enemyRb.mass = stunnedMass;
                 canBeChainHit = false;
@@ -679,7 +702,22 @@ public class BasicEnemyScript : MonoBehaviour
                 enemyAnim.SetFloat("DamageReaction", newRandomNumber);
                 enemyAnim.SetTrigger("DamageTrigger");
             }
-            
+
+            if (DamageType == chainHitScript.chainHitString) //Enemy is hit by power punch
+            {
+                canBeChainHit = true;
+            }
+
+            if (DamageType == "ImpactDamage")
+            {
+
+            }
+
+            if (DamageType == "EnvironmentDamage")
+            {
+
+            }
+
             CheckForStunType(DamageType);
             
         }
@@ -763,6 +801,7 @@ public class BasicEnemyScript : MonoBehaviour
       
         //stunnedFeeback?.PlayFeedbacks();
 
+
         if (stunType == playerAttackType.GroundSlam.ToString() && canBeStunned) //Enemy is hit by ground slam
         {
             stunDuration = 2f;
@@ -780,9 +819,10 @@ public class BasicEnemyScript : MonoBehaviour
 
         }
 
-        if (stunType == playerAttackType.HeavyAxeHit.ToString() && !isRagdolling) //Enemy is hit with axe attack
+        if (stunType == playerAttackType.HeavyAxeHit.ToString() && !isRagdolling && canBeStunned) //Enemy is hit with axe attack
         {
-          //  chainHitScript.enabled = true; //allow this enemy to cause chain hit impacts
+            //  chainHitScript.enabled = true; //allow this enemy to cause chain hit impacts
+            stunnedEffect.SetActive(false);
             chainHitScript.isOrigin = true; 
             canBeChainHit = false;
             chainHitScript.SetChainHitType(stunType);
@@ -790,20 +830,23 @@ public class BasicEnemyScript : MonoBehaviour
             mainCollider.isTrigger = false;           
             //enemyRb.mass = stunnedMass; 
             enemyMeshr.materials = hitSkinMat;
-            isLaunched = false; 
+            if(!isUpperCutted) isLaunched = false; 
         }
 
-        if (stunType == playerAttackType.LightPunchHit.ToString() && !isRagdolling) //Enemy is hit with axe attack
+        if (stunType == playerAttackType.LightPunchHit.ToString() && !isRagdolling && canBeStunned) //Enemy is hit with axe attack
         {
-          //  chainHitScript.enabled = true; //allow this enemy to cause chain hit impacts
+            //  chainHitScript.enabled = true; //allow this enemy to cause chain hit impacts
             //chainHitScript.isOrigin = true; 
-           // canBeChainHit = false;
-           // chainHitScript.SetChainHitType(stunType);
+            // canBeChainHit = false;
+            // chainHitScript.SetChainHitType(stunType);
+         //   transform.LookAt(playerController.transform);           
+            stunnedEffect.SetActive(false);
             stunDuration = .7f;
             mainCollider.isTrigger = false;           
             //enemyRb.mass = stunnedMass; 
             enemyMeshr.materials = hitSkinMat;
-            isLaunched = false; 
+            if (!isUpperCutted) isLaunched = false;
+            
         }
 
         
@@ -824,20 +867,12 @@ public class BasicEnemyScript : MonoBehaviour
             chainHitScript.isOrigin = true;
             chainHitScript.SetChainHitType(stunType);
             stunDuration = chainHitScript.currentStunDuration;
-            enemyRb.mass = stunnedMass; 
+            enemyRb.mass = stunnedMass;
             //enemyRb.isKinematic = true; 
         }
 
-        if (stunType == chainHitScript.chainHitString && canBeStunned) //Enemy is hit by an already stunned enemy
-        {
-            stunnedEffect.SetActive(true);
-            chainHitScript.isOrigin = true;
-            chainHitScript.enabled = true;       
-            stunDuration = chainHitScript.currentStunDuration;
-            enemyRb.mass = originalRbMass; 
-        }
 
-        if (canBeStunned)
+        if (canBeStunned || stunType == playerAttackType.BlockStun.ToString())
         {
             enemyAgent.speed = 0f;
             stunTimer = 0f;
@@ -858,7 +893,7 @@ public class BasicEnemyScript : MonoBehaviour
         {
             recoveryTimer += Time.deltaTime;
         } 
-        else if (isLaunched && currentVelocity >= maxRecoveryVel && !isGettingUp && !isBlockStunned || isDashTargeted) //If a launched enemy is moving to fast don't allow him to recover 
+        else if (isLaunched && currentVelocity >= maxRecoveryVel && !isGettingUp && !isBlockStunned || isDashTargeted || isStoppingFall) //If a launched enemy is moving to fast don't allow him to recover 
         {
             recoveryTimer = 0f;
             canRecover = false;
@@ -870,7 +905,7 @@ public class BasicEnemyScript : MonoBehaviour
             recoveryTimer = 0f;
         }
 
-        if (stunTimer >= stunDuration && canRecover && !isDead) //Let enemy recover from stunned state 
+        if (stunTimer >= stunDuration && canRecover && !isDead) //Let enemy recover from stunned state s
         {
             StandBackUp();
         }
@@ -912,6 +947,7 @@ public class BasicEnemyScript : MonoBehaviour
     
         if(getUpTimer >= getUpDuration) //exit stunned satte 
         {
+    
             ResetState();  
             stunnedEffect.SetActive(false); 
             if(isRagdolling) DisableRagdoll(); 
@@ -966,11 +1002,22 @@ public class BasicEnemyScript : MonoBehaviour
         if(hasHitObject && currentVelocity > minStunnedImpactVelocity && canAddImpactDamage && isLaunched)
         {
             canAddImpactDamage = false;
-            print("ImpactDamageTaken");
             GameObject bloodvfx = Instantiate(bloodSplash, transform.position, transform.rotation);
             bloodvfx.AddComponent<CleanUpScript>().SetCleanUp(10f); 
             TakeDamage(50f, "ImpactDamage"); 
         }        
+    }
+
+    void AddSlowDownForce()
+    {
+        if (addSlowdownForce)
+        {
+            foreach (Rigidbody rb in ragdollRbs)
+            {
+                rb.velocity *= (Time.deltaTime * .8f);
+                if (rb.velocity.magnitude < 5) addSlowdownForce = false; 
+            }
+        }
     }
  
    
@@ -1017,10 +1064,11 @@ public class BasicEnemyScript : MonoBehaviour
 
         Destroy(mainColJoint);
         enemyRb.constraints = RigidbodyConstraints.FreezePositionY;
+        enemyRb.constraints = RigidbodyConstraints.FreezeRotation; 
 
         canAddImpactDamage = false;
         isRagdolling = false;
-        enemyAgent.enabled = true;
+        if(!isStoppingFall) enemyAgent.enabled = true;
 
         if (!isGettingUp) isLaunched = false;        
      
@@ -1067,8 +1115,7 @@ public class BasicEnemyScript : MonoBehaviour
         //   canFollow = true;
 
         //canDoStunImpact = false;
-
-
+        //isUpperCutted = false; 
         isGettingUp = false; 
         isFollowing = false;
         isStunned = false;
@@ -1127,5 +1174,42 @@ public class BasicEnemyScript : MonoBehaviour
         {
             Destroy(limb); 
         }      
+    }
+
+    void StopFall()
+    {
+
+        if (canStopFall)
+        {
+            if (!isStoppingFall) 
+            {
+                isStoppingFall = true;
+                enemyRb.isKinematic = true; 
+                foreach (Rigidbody rb in ragdollRbs)
+                {
+                    rb.isKinematic = true;
+                }
+            }
+
+            stopFallTimer += Time.deltaTime; 
+
+            if(stopFallTimer >= stopFallDuration)
+            {
+                canStopFall = false;
+                stopFallTimer = 0f; 
+            }          
+        }
+
+        else if(isStoppingFall)
+        {
+            isStoppingFall = false;
+            enemyRb.isKinematic = false; 
+            foreach (Rigidbody rb in ragdollRbs)
+            {
+                EnableRagdoll(); 
+                rb.isKinematic = false;
+            }
+        }
+       
     }
 }

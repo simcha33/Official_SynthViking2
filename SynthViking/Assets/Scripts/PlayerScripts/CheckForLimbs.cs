@@ -39,7 +39,8 @@ public class CheckForLimbs : MonoBehaviour
             
         }
 
-        DoBloodDrip(); 
+        DoBloodDrip();
+
 
         
         
@@ -47,17 +48,21 @@ public class CheckForLimbs : MonoBehaviour
     }
 
 
-    void OnTriggerEnter(Collider other)
-    {
-        if(!hitLimbs.Contains(other.attachedRigidbody) && other.gameObject.CompareTag("Limb"))
+
+
+        void OnTriggerEnter(Collider other)
         {
-            hitLimbs.Add(other.attachedRigidbody);   
-        }   
+            if (!hitLimbs.Contains(other.attachedRigidbody) && other.gameObject.CompareTag("Limb"))
+            {
+                hitLimbs.Add(other.attachedRigidbody);
+            }
 
-        if(!hitInsides.Contains(other.gameObject) && other.gameObject.CompareTag("EnemyInside")){
-            hitInsides.Add(other.gameObject);
+            if (!hitInsides.Contains(other.gameObject) && other.gameObject.CompareTag("EnemyInside"))
+            {
+                hitInsides.Add(other.gameObject);
+            }
         }
-    }
+ 
 
 
     

@@ -6,15 +6,6 @@ using DG.Tweening;
 public class DashPathChecker : MonoBehaviour
 {
     public ThirdPerson_PlayerControler playerController;
-
-   // public Transform target; 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
     void Update()
     {
         if(playerController.isDashing) CheckForEnvorinment();
@@ -30,8 +21,11 @@ public class DashPathChecker : MonoBehaviour
             if (other.gameObject.layer == LayerMask.NameToLayer("DashPoint") && !playerController.enemyDashObjectReached && !other.gameObject.CompareTag("Dead") && playerController.fullyChargedDash) 
             {
        
-                print(" Trigger Dash Attack"); 
+                print(" Trigger Dash Attack");
+
+                playerController.playerAnim.SetInteger("DashAttackType",0); 
                 playerController.playerAnim.SetTrigger("DashAttackTrigger");
+
                 playerController.enemyDashObjectReached = true;
                 playerController.playerRb.velocity = new Vector3(0, 0, 0);
                 playerController.DoDash();
@@ -60,7 +54,7 @@ public class DashPathChecker : MonoBehaviour
             if (dashHit.collider.gameObject.layer == LayerMask.NameToLayer("Environment") || dashHit.collider.gameObject.layer == LayerMask.NameToLayer("InvisibleWall"))
             {
                 if (!dashHit.collider.gameObject.CompareTag("Breakable")) //Ignore destruction objects
-                {
+                {           
                     playerController.solidDashObjectReached = true;
                     playerController.ResetDash();
                     playerController.playerRb.velocity = new Vector3(0, 0, 0);

@@ -18,6 +18,7 @@ public enum playerAttackType
     NormalePunch,
     BlockStun,
     SprintAttack,
+    AirLaunchAttack,
 
     Reset, 
 }
@@ -39,11 +40,13 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     private bool topSpeedReached;
     public float currentRotateSpeed;
     public float defaultRotateSpeed;
-    public float attackingRotateSpeed; 
+  
 
     public float currentMoveSpeed;
     private float moveVelocity = 0.0f;
     private float groundStopDrag = 20f;
+
+    public Sequence moveSequence; 
 
     [HideInInspector] public Vector3 moveInput;
     [HideInInspector] public Vector3 moveDirection;
@@ -54,19 +57,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     [HideInInspector] public Vector2 targetTurnRotation;
 
     #endregion
-    
-    [Header("AiR ATTACKING")]
-    #region 
-    public float upperCutHoldDuration; 
-    public float upperCutHeight; 
-    public float upperCutDamage; 
-    public bool canUppercut;
-    public bool isUpperCutting; 
-    public bool isAirAttacking; 
-    public float closestTargetAngle;
-    public Transform airAttackTarget; 
-    #endregion
-   
+
     [Header("AIR MOVEMENT")]  //AIR MOVEMENT
     #region
     //Jumping 
@@ -78,23 +69,108 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     private float jumpDelayTimer;
     public float landingDelayTimer;
-    private float landingDelayDuration; 
+    private float landingDelayDuration;
     private float gravity = 1f;
     public float fallMultiplier = 5f;
     public float lowJumpGravity;
     //[Range(0, 1)] public float airMSpeedReduction;
     public float airMoveSpeed;
     public float airDrag = 2f;
-    private float inAirTime = 0f; 
+    private float inAirTime = 0f;
 
 
-    private float groundCheckHeight = .5f;
+    private float groundCheckHeight = .35f;
     private float landCheckHeight = 2.5f;
     private float groundCheckJumpDelay = .5f; //Temporaly turn of the groundcheck after jumping 
     public float groundCheckTimer;
     #endregion
 
-     [Header("BLOCKING")]
+    [Header("GENERAL ATTACK")]
+    #region   
+    public float maxTimeBetweenAttacks;
+    private float nextAttackDuration;
+    private float nextAttackTimer;
+
+    public float attackTransitionOffset;
+    public float attackingRotateSpeed;
+
+    private float attackMoveLerpT;
+    private Vector3 attackStartPos;
+
+
+    [HideInInspector] public Vector3 attackDirection;
+    public float attackMoveSpeed = 1f;
+    [HideInInspector] public bool attackTargetInRange;
+    [HideInInspector] public bool canDamageTarget;
+    [HideInInspector] public Transform currentAttackTarget;
+    [HideInInspector] public float currentAttackDamage;
+    [HideInInspector] public float currentAttackForwardForce;
+    // public float basicAttackForwardForce;
+    // public float punchAttackDamage = 5f;
+    public List<BasicEnemyScript> sprintHitList = new List<BasicEnemyScript>();
+    #endregion
+
+    [Header("PUNCH ATTACK")]
+    #region 
+    public float punchAttackTransitionOffset;
+    private bool wantsToLightAttack;
+    private float lightAttackHoldTimer;
+    public float punchPauseLength;
+
+    private int punchComboLength;
+    private int totalPunchComboLength;
+    public float punchAttackSpeed;
+    public float basicLightAttackDamage = 10f;
+    public float punchAttackForwardForce;
+
+    #endregion
+
+    [Header("AXE ATTACK")]
+    #region 
+    public float axeAttackTransitionOffset;
+    private bool wantsToHeayAttack;
+    private float heavyAttackHoldTimer;
+    public float axeHitPauseLength;
+
+    private int axeComboLength;
+    private int totalAxeComboLength;
+    public float axeAttackSpeed;
+    public float basicHeavyAttackDamage = 20f;
+    public float axeAttackForwardForce;
+    #endregion
+
+    [Header("AiR ATTACKING")]
+    #region 
+
+    public float airLaunchHoldDuration; 
+    public float airLaunchHeight; 
+    public float airLaunchDamage; 
+    public bool canairLaunch;
+    //public bool isairLaunchting; 
+    //public bool isAirAttacking; 
+    public float closestTargetAngle;
+    public Transform airAttackTarget;
+    private bool wantsToAirLaunchCut;
+    private Vector3 airLaunchPoint;
+    #endregion
+
+    [Header("DASH ATTACK")]
+    #region
+    public float dashAttackForce;
+    public float dashAttackDamage = 5f;
+    public bool dashAirAttack;
+    [HideInInspector] public GameObject dashAttackTarget;
+    #endregion
+
+
+    [Header("SPRINT ATTACK")]
+    #region
+    public float sprintAttackForwardForce;
+    public Sequence sprintAttackTween;
+    public float basicSprintAttackDamage = 20f;
+    #endregion
+
+    [Header("BLOCKING")]
     #region
     public bool isBlocking;
     public bool canBlock;
@@ -152,71 +228,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     }
 
 
-    #endregion
-
-    [Header("GENERAL ATTACK")]
-    #region   
-    public float maxTimeBetweenAttacks;
-    private float nextAttackDuration;
-    private float nextAttackTimer; 
-  
-    public float attackTransitionOffset; 
-   
-    private float attackMoveLerpT;
-    private Vector3 attackStartPos;
-    
- 
-    [HideInInspector] public Vector3 attackDirection; 
-    public float attackMoveSpeed = 1f;
-    [HideInInspector]public bool attackTargetInRange;
-    [HideInInspector] public bool canDamageTarget;
-    [HideInInspector]public Transform currentAttackTarget;
-    [HideInInspector] public float currentAttackDamage;
-    [HideInInspector] public float currentAttackForwardForce; 
-    public float basicAttackForwardForce;
-   // public float punchAttackDamage = 5f;
-    public List<BasicEnemyScript> sprintHitList = new List<BasicEnemyScript>(); 
-    #endregion
-
-    [Header("DASH ATTACK")]
-    #region
-    public float dashAttackForce;
-    public float dashAttackDamage = 5f;
-    public bool dashAirAttack; 
-    [HideInInspector] public GameObject dashAttackTarget;
-    #endregion
-
-    [Header("PUNCH ATTACK")]
-    #region 
-    public float punchAttackTransitionOffset;
-    private bool wantsToLightAttack; 
-    private float lightAttackHoldTimer;
-    public float punchPauseLength; 
-   
-    private int punchComboLength;  
-    private int totalPunchComboLength;
-    public float punchAttackSpeed;
-    public float basicLightAttackDamage = 10f;
-    #endregion
-      
-
-    [Header("AXE ATTACK")]
-    #region 
-    public float axeAttackTransitionOffset;
-    private bool wantsToHeayAttack; 
-    private float heavyAttackHoldTimer;   
-    public float axeHitPauseLength;
-  
-    private int axeComboLength;
-    private int totalAxeComboLength;
-    public float axeAttackSpeed; 
-    public float basicHeavyAttackDamage = 20f;
-
-    [Header("SPRINT ATTACK")]
-    
-    public float sprintAttackForwardForce; 
-     public Sequence sprintAttackTween;
-    public float basicSprintAttackDamage = 20f; 
     #endregion
 
     
@@ -333,7 +344,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public GameObject holsteredWeapon;
     public GameObject drawnWeapon;
     public Collider mainCollider;
-    public Transform dashpoint; 
+    public Transform dashpoint;
+    public Transform enemyLaunchPoint; 
     #endregion
 
     [Header("FEEDBACK")]
@@ -389,8 +401,9 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public bool canStartAirSmash;
     public bool canEndAirSmash = true;
     public bool canEndDash = false;
-    public bool canStartSprintFeedback = false; 
+    public bool canStartSprintFeedback = false;
 
+    public bool isUpperCutting; 
     public bool isMoving;
     public bool isAttacking;
     public bool isWallRunning;
@@ -493,6 +506,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                     HandleRotation();
                     CheckForBlock();
                     CheckForJump();
+                    CheckForAirLaunch();
+                    GroundCheck(); 
                     break;
 
                 case (int)currentState.DASHING:
@@ -593,7 +608,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     void HolsterWeapon()
     {
 
-        if((isSprinting || isInAir || isLanding) && canStartNewAttack || attackState == playerAttackType.LightPunchHit.ToString())
+        if((isSprinting || isInAir || isAirSmashing ||isLanding) && canStartNewAttack ||( attackState == playerAttackType.LightPunchHit.ToString() || attackState == playerAttackType.AirLaunchAttack.ToString()) && !isBlocking)
         {
             drawnWeapon.SetActive(false);
             holsteredWeapon.SetActive(true);
@@ -1132,6 +1147,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 //Animation handeling
                 ResetAnimator();
                 playerAnim.SetFloat("JumpCount", jumpCount);
+
                 if (jumpCount == 1) playerAnim.SetFloat("RandomJumpVar", 0f);
                 else playerAnim.SetFloat("RandomJumpVar", Random.Range(1, 5)); //Randomly select a second jump animation 
                 playerAnim.SetTrigger("JumpTrigger");              
@@ -1157,7 +1173,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     }
 
     public void DoJump(float jumpHeight)
-    {   
+    {
+        DOTween.Kill(this.transform); 
         playerRb.isKinematic = false;
         playerRb.constraints = airConstraints.constraints; 
         playerRb.velocity = new Vector3(playerRb.velocity.x, 0, playerRb.velocity.z);
@@ -1218,7 +1235,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
             }
             //Player isn't grounded 
-            else
+            else if(!isUpperCutting)
             {
                 playerRb.constraints = airConstraints.constraints; 
                 if (!isLanding) canLand = true; 
@@ -1231,7 +1248,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             }
 
             //Player can land 
-            if ((Physics.Raycast(ray, out hit, landCheckHeight) && canLand && isInAir))
+            if ((Physics.Raycast(ray, out hit, landCheckHeight) && canLand && isInAir && !isUpperCutting))
             {
                 if (hit.collider.gameObject.layer == EnvorinmentLayer)
                 { 
@@ -1470,7 +1487,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                         if (enemyScript.canBeStunned)
                         {
                             enemyScript.TakeDamage(currentGroundSlamDamage, playerAttackType.GroundSlam.ToString());
-                            enemyScript.LaunchEnemy((slamTarget.transform.position - transform.position), slamImpactForwardForce, Random.Range(slamImpactUpForce / 1.3f, slamImpactUpForce * 1.3f));
+                            enemyScript.LaunchEnemy((slamTarget.transform.position - transform.position), slamImpactForwardForce, Random.Range(slamImpactUpForce / 1.1f, slamImpactUpForce * 1.1f));
                         }
                     }
                 }
@@ -1587,23 +1604,30 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         { 
             if(input.heavyAttackButtonPressed) //We want to do a heavy attack 
             {        
-                print("Wants Axe Attack"); 
                 wantsToHeayAttack = true;   
                 wantsToLightAttack = false; 
             }
             if(input.lightAttackButtonPressed) // We want to do a light attack 
-            {   
-                print("Wants Punch Attack");              
+            {              
                 wantsToHeayAttack = false; 
                 wantsToLightAttack = true; 
             }
-        } 
+        }
 
         //Check for player holding an attack button
-        if (input.heavyAttackButtonPressed) heavyAttackHoldTimer+= Time.deltaTime;   
-        else heavyAttackHoldTimer = 0f; 
+        if (input.heavyAttackButtonPressed) heavyAttackHoldTimer += Time.deltaTime;
+        else heavyAttackHoldTimer = 0f;
 
-        if (input.lightAttackButtonPressed) lightAttackHoldTimer+= Time.deltaTime;   
+        if (input.lightAttackButtonPressed)
+        {
+            lightAttackHoldTimer += Time.deltaTime;
+            if(lightAttackHoldTimer >= airLaunchHoldDuration) mainGameManager.DoHaptics(.1f, .1f, .1f);
+        
+        }
+        else if (lightAttackHoldTimer >= airLaunchHoldDuration)
+        {
+            wantsToAirLaunchCut = true;
+        }
         else lightAttackHoldTimer = 0f; 
 
 
@@ -1640,70 +1664,39 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         }
     }
 
-    void CheckForAirCombat()
-    {
-        /*
-        if(input.heavyAttackButtonPressed)
-        {
-              Collider[] colls = Physics.OverlapSphere(transform.position, groundSlamRadius);
-
-              foreach(Collider airEnemy in colls)
-            {
-                  float angle = Vector3.Angle(transform.position + transform.forward, airEnemy.transform.position); 
-                  if(angle < closestTargetAngle) airAttackTarget = airEnemy.transform; 
-              }             
-        }
-        */
-
-        if(heavyAttackHoldTimer >= upperCutHoldDuration) canUppercut = true; 
-        else canUppercut = false; 
-
-        if(canUppercut && !input.heavyAttackButtonPressed && !isUpperCutting) 
-        {
-            DoUpperCut(); 
-            controllerState = (int)currentState.ATTACKING; 
-            fixedControllerState = (int)currentState.ATTACKING; 
-
-        }
-     
-    }
-
-    void DoUpperCut()
-    {
-        ResetStates(); 
-
-        if(!isUpperCutting){
-            DoJump(jumpForce * .4f); 
-        }
-        
-        isUpperCutting = true; 
-    }
-
 
     void SetAttackType()
     {
         int totalAttackTrees = 5;
-        if (isSprinting)
+        if (isSprinting && !wantsToAirLaunchCut)
         {
+            attackState = playerAttackType.SprintAttack.ToString();
             axeComboLength = 2;
            // AttackFeedback = SprintAttackFeedback;
             currentAttackDamage = 0; 
             currentAttackForwardForce = sprintAttackForwardForce;
-        
-            attackState = playerAttackType.SprintAttack.ToString();
-            print(" This ONEEEEEEE"); 
-            //playerAnim.SetFloat("SprintAttackType", Random.Range(4,4));
-            playerAnim.SetFloat("SprintAttackType", 4);
+            playerAnim.SetFloat("SprintAttackType", 1);
+         
 
         }
+        else if (wantsToAirLaunchCut) 
+        {
+            totalAttackTrees = 3;
+            attackState = playerAttackType.AirLaunchAttack.ToString();
+
+            // int originalReaction = playerAnim.GetInteger("AirLaunchAttackType");
+            int randomType = Random.Range(1, totalAttackTrees + 1); 
+            playerAnim.SetFloat("AirLaunchAttackType", randomType);     
+            lightAttackHoldTimer = 0; 
+        }   
         else if(wantsToHeayAttack)
-        {        
-            attackState = playerAttackType.HeavyAxeHit.ToString();    
-            totalAttackTrees = 5; 
+        {
+            totalAttackTrees = 5;
+            attackState = playerAttackType.HeavyAxeHit.ToString();           
             attackTransitionOffset = axeAttackTransitionOffset; 
             AttackFeedback = BasicHeavyAttackFeedback;        
             currentAttackDamage = basicHeavyAttackDamage;
-            currentAttackForwardForce = basicAttackForwardForce;
+            currentAttackForwardForce = axeAttackForwardForce; 
 
           
 
@@ -1731,12 +1724,12 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         }
         else if(wantsToLightAttack)
         {
-            attackState = playerAttackType.LightPunchHit.ToString();
-            totalAttackTrees = 2; 
+            totalAttackTrees = 5;
+            attackState = playerAttackType.LightPunchHit.ToString();      
             attackTransitionOffset = punchAttackTransitionOffset; 
             AttackFeedback = BasicLightAttackFeedback;    
             currentAttackDamage = basicLightAttackDamage;
-            currentAttackForwardForce = basicAttackForwardForce;
+            currentAttackForwardForce = punchAttackForwardForce; 
 
             
 
@@ -1758,7 +1751,10 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             //Set current punch-attack tree length 
             if      (playerAnim.GetInteger("PunchAttackType") == 1) totalPunchComboLength = 4; 
             else if (playerAnim.GetInteger("PunchAttackType") == 2) totalPunchComboLength = 4;
-         
+            else if (playerAnim.GetInteger("PunchAttackType") == 3) totalPunchComboLength = 4;
+            else if (playerAnim.GetInteger("PunchAttackType") == 4) totalPunchComboLength = 4;
+            else if (playerAnim.GetInteger("PunchAttackType") == 5) totalPunchComboLength = 4;
+
         }
     }
 
@@ -1769,15 +1765,24 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
         
         //Check if we can continue to the next attack
-        if (nextAttackTimer >= nextAttackDuration - attackTransitionOffset && (!input.heavyAttackButtonPressed && wantsToHeayAttack || !input.lightAttackButtonPressed && wantsToLightAttack))
+        if (nextAttackTimer >= nextAttackDuration - attackTransitionOffset && (!input.heavyAttackButtonPressed && wantsToHeayAttack || !input.lightAttackButtonPressed && wantsToLightAttack || attackState == playerAttackType.LightPunchHit.ToString() && wantsToHeayAttack) || attackState == playerAttackType.HeavyAxeHit.ToString() && wantsToLightAttack)
         {        
             if(attackState == playerAttackType.SprintAttack.ToString())
             {
                 
             }   
+            else if (wantsToAirLaunchCut)
+            {
+                wantsToHeayAttack = false;
+                wantsToLightAttack = false;
+                wantsToAirLaunchCut = false;
+                print("This one"); 
+               
+            }
             else if(wantsToHeayAttack) //We are doing an axe attack 
             {
-                wantsToLightAttack = false; 
+                wantsToLightAttack = false;
+                wantsToAirLaunchCut = false; 
                 if (axeComboLength >= totalAxeComboLength) axeComboLength = 0; //Reset combo tree
                 SetAttackType();      
               //  CheckForMoveInput(); //Set attack direction 
@@ -1788,7 +1793,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             }
             else if(wantsToLightAttack) //We are doing an punch attack
             {
-                wantsToHeayAttack = false;           
+                wantsToHeayAttack = false;
+                wantsToAirLaunchCut = false; 
                 if (punchComboLength >= totalPunchComboLength) punchComboLength = 0; //Reset combo tree      
                 SetAttackType();           
               //  CheckForMoveInput(); //Set attack direction 
@@ -1838,15 +1844,17 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         }
         else if (nextAttackTimer < nextAttackDuration  - attackTransitionOffset)
         {
-            if (attackState != playerAttackType.SprintAttack.ToString()) { if (!isInAir) playerRb.isKinematic = true; //print("check"); 
-            }
-            else if (alllowForwardForce && attackState == playerAttackType.SprintAttack.ToString())
-            {
-                AllowAttackDamage();
-            }
+            if (attackState != playerAttackType.SprintAttack.ToString() && attackState != playerAttackType.AirLaunchAttack.ToString()) playerRb.isKinematic = true; //Freeze enemy mid air if attacking
+            else if (alllowForwardForce && attackState == playerAttackType.SprintAttack.ToString()) AllowAttackDamage();
+       
 
             currentMoveSpeed = attackMoveSpeed; 
             isAttacking = true;
+        }
+        else
+        {
+            currentMoveSpeed = minWalkingMoveSpeed; 
+            playerRb.isKinematic = false; 
         }
 
         //Exit attack state
@@ -1878,7 +1886,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         isBlocking = false;
         hasParriedAttack = false; 
 
-        isUpperCutting = false; 
+       // isairLaunchting = false; 
         isRunning = false;
         isInAir = false;
         isLanding = false;
@@ -1914,6 +1922,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     {
         attackTargetScript.TargetDamageCheck();
         attackDirection = transform.position + inputDir;
+        Debug.Log(attackState); 
         // if (attackState != currentAttackType.SprintAttack.ToString()) transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .35f).SetUpdate(UpdateType.Fixed);
         //else meshR.materials = defaultSkinMat; 
    //     meshR.materials = defaultSkinMat;
@@ -1921,27 +1930,38 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     void AllowAttackForwardForce()
     {
-        if (attackState == playerAttackType.HeavyAxeHit.ToString())
+        if(attackState == playerAttackType.AirLaunchAttack.ToString())
+        {
+            //DoJump(500f);   
+            airLaunchPoint = transform.position + transform.up * airLaunchHeight; 
+            isUpperCutting = true;
+            AllowAttackDamage(); 
+            moveSequence.Append(transform.DOMove(airLaunchPoint, .2f).SetUpdate(UpdateType.Fixed));
+          
+        }
+        else if (attackState == playerAttackType.HeavyAxeHit.ToString())
         {
            // playerAnim.speed = animAttackSpeed * 1.55f; 
             attackDirection = transform.position + inputDir;
-            mainGameManager.DoHaptics(.1f, .02f, .04f); 
-            attackTargetScript.BackCheck(); 
-            transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .35f).SetUpdate(UpdateType.Fixed);
+            mainGameManager.DoHaptics(.1f, .09f, .09f); 
+            attackTargetScript.BackCheck();
+            //playerRb.AddForce(transform.position + transform.forward * currentAttackForwardForce);
+            moveSequence.Append(transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .35f).SetUpdate(UpdateType.Fixed));
+      
         }
         else if (attackState == playerAttackType.LightPunchHit.ToString())
         {
            // playerAnim.speed = animAttackSpeed * 1.55f; 
             attackDirection = transform.position + inputDir;
-            mainGameManager.DoHaptics(.1f, .02f, .04f); 
+            mainGameManager.DoHaptics(.1f, .05f, .05f); 
             attackTargetScript.BackCheck(); 
-            transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .35f).SetUpdate(UpdateType.Fixed);
+            moveSequence.Append(transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .35f).SetUpdate(UpdateType.Fixed));
         }
         else if (attackState == playerAttackType.SprintAttack.ToString())
         {
             alllowForwardForce = true;
             meshR.materials = holoSkinMat;
-            transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .5f).SetUpdate(UpdateType.Fixed);     
+            moveSequence.Append(transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .5f).SetUpdate(UpdateType.Fixed));     
             SprintAttackFeedback?.PlayFeedbacks();
             mainGameManager.DoHaptics(.2f, .3f, .5f);
         }
@@ -1955,7 +1975,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         if (attackState == playerAttackType.HeavyAxeHit.ToString()|| attackState == playerAttackType.LightPunchHit.ToString()) 
         {
             nextAttackTimer = nextAttackDuration;
-            print("AllowNextAttack"); 
         }
         else if (attackState == playerAttackType.SprintAttack.ToString()) 
         {
@@ -2040,6 +2059,29 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         if (!enableTrail && sprintTrailTimer > -.1) //Disable the trail        
         {
             sprintTrailTimer -= Time.fixedDeltaTime * disableTrailDuration;
+        }
+    }
+
+    void CheckForAirLaunch()
+    {
+        if (isUpperCutting)
+        {
+            if (Vector3.Distance(airLaunchPoint, transform.position) < .5f || attackState != playerAttackType.AirLaunchAttack.ToString())
+            {
+                isUpperCutting = false;
+                nextAttackTimer = nextAttackDuration; 
+                
+                foreach (BasicEnemyScript enemy in attackTargetScript.airLaunchTargets)
+                {
+                    if (!enemy.isDead) enemy.transform.parent = null;  //transform.parent = enemy.transform.parent = enemy.enemySpawnManagerScript.aliveEnemyParent.transform;
+                  //  enemy.isLaunched = true; 
+                    enemy.isUpperCutted = false;
+
+                }
+                
+                attackTargetScript.airLaunchTargets.Clear();
+                playerRb.velocity = new Vector3(0, 0, 0); 
+            }
         }
     }
     
