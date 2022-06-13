@@ -38,7 +38,7 @@ public class HitPauses : MonoBehaviour
             foreach (Animator anim in objectsToPause)
             {
                 if (anim == playerAnim) anim.speed = .02f;
-                else anim.speed = .25f; 
+                else if(!anim.gameObject.CompareTag("BigEnemy")) anim.speed = .25f; 
 
             }
 

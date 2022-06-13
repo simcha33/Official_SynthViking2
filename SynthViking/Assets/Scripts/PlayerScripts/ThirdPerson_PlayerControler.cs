@@ -461,6 +461,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     }
 
 
+
     private void Update()
     {
         if (!mainGameManager.gameIsPaused)
@@ -1936,7 +1937,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             airLaunchPoint = transform.position + transform.up * airLaunchHeight; 
             isUpperCutting = true;
             AllowAttackDamage(); 
-            moveSequence.Append(transform.DOMove(airLaunchPoint, .2f).SetUpdate(UpdateType.Fixed));
+            moveSequence.Append(transform.DOMove(airLaunchPoint, .3f).SetUpdate(UpdateType.Fixed));
           
         }
         else if (attackState == playerAttackType.HeavyAxeHit.ToString())

@@ -40,6 +40,15 @@ public class DashPathChecker : MonoBehaviour
                 playerController.DashAttackFeedback?.PlayFeedbacks();
             }
         }
+
+        //Cancel dash
+        if((other.gameObject.layer == playerController.EnvorinmentLayer || other.gameObject.layer == LayerMask.NameToLayer("InvisibleWall")) && playerController.isDashing && !playerController.isDashAttacking)
+        {
+            playerController.solidDashObjectReached = true;
+            playerController.ResetDash();
+            playerController.playerRb.velocity = new Vector3(0, 0, 0);
+        }
+
     }
 
     void CheckForEnvorinment()
@@ -47,7 +56,7 @@ public class DashPathChecker : MonoBehaviour
 
         //Check for dash path collisions 
         RaycastHit dashHit;
-        Ray dashRay = new Ray(transform.position, transform.forward);
+        Ray dashRay = new Ray(transform.position, playerController.dashDirection);
         if (Physics.Raycast(dashRay, out dashHit, 2f))
         {
             //Dash collides with environmental object

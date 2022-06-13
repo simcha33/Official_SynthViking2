@@ -42,9 +42,17 @@ public class BasicEnemyScript : MonoBehaviour
     public float currentRequiredDistance; 
     public float circleDistance; 
     public float basicMeleeAttackDamage;
-    private float totalComboLength;
+    private int totalComboLength;
     [HideInInspector] public float currentAttackDamage; 
     private int currentComboLength;
+
+
+    public List <Animation> clipsToPause = new List<Animation>();
+    private Animation pausedAttackClip;
+
+    private bool attackHasBeenPaused; 
+    private float attackPauseDuration;
+    private float attackPauseTimer; 
 
     public string enemyAttackType; 
     private float currentAttackForwardForce; 
@@ -108,6 +116,7 @@ public class BasicEnemyScript : MonoBehaviour
     #region
     public MMFeedbacks stunnedFeeback; 
     public MMFeedbacks startAttackFeedback; 
+    public MMFeedbacks parryIndictionFeedback;
     #endregion
 
 
@@ -257,6 +266,7 @@ public class BasicEnemyScript : MonoBehaviour
                 HandleAnimation();
                 GroundCheck(); 
                 CheckForLinkJumping(); 
+                CheckForAttack(); 
                 break; 
 
             case(int)currentState.ENGAGE:
@@ -433,9 +443,6 @@ public class BasicEnemyScript : MonoBehaviour
         {
             DisableRagdoll(); 
         }
-        
-
-
     }
 
     public void MoveTowardsTarget()
@@ -456,6 +463,8 @@ public class BasicEnemyScript : MonoBehaviour
             ResetState();
             enemyRb.mass = stunnedMass; 
             transform.LookAt(target, Vector3.up);
+            nextAttackTimer = 0; 
+          //  nextAttackDuration = 10f; 
             SetAttackType();         
         }    
 
@@ -466,8 +475,11 @@ public class BasicEnemyScript : MonoBehaviour
             currentComboLength = 0; 
             enemyState = (int)currentState.ENGAGE; 
         }
+        
+            DoAttack();
+        
 
-        DoAttack();
+     
     }
 
     void SetAttackType() 
@@ -476,18 +488,27 @@ public class BasicEnemyScript : MonoBehaviour
 
         //Reset some attack values 
         canAttack = true;
-        currentComboLength++; 
-
+    
+        //Choose next attack in the combo 
+        if(gameObject.CompareTag("BasicEnemy"))
+        {
+            totalAttackTrees = 0;  
+            currentComboLength++; 
+           
+            if (currentComboLength == 1) enemyAnim.SetInteger("AttackType", 1); //Set combo attack tree         
+            if(enemyAnim.GetInteger("AttackType") == 1) totalComboLength = 3; //Check length of combo attack tree 
+            if(currentComboLength > totalComboLength) currentComboLength = 0; 
+        }
+        else if(gameObject.CompareTag("BigEnemy"))
+        {
+            enemyAnim.SetInteger("AttackType", 1);      
+            if(enemyAnim.GetInteger("AttackType") == 1) totalComboLength = 6; //Check length of combo attack tree 
+            currentComboLength = Random.Range(1,totalComboLength + 1); 
+        }
+        
         currentAttackDamage = basicMeleeAttackDamage; 
         currentAttackForwardForce = basicMeleeAttackForwardForce;
-        enemyAttackType = "BasicMeleeAttackDamage";
-       // BasicMeleeAttackDamageStunTrigger
-
-
-        if (currentComboLength == 1) enemyAnim.SetInteger("AttackType", Random.Range(1, totalAttackTrees)); //Set combo attack tree
-        
-      
-        if(enemyAnim.GetInteger("AttackType") == 1) totalComboLength = 3f; //Check length of combo attack tree 
+        enemyAttackType = "BasicMeleeAttackDamage";                       
     }
 
     public void DoAttack() 
@@ -495,10 +516,10 @@ public class BasicEnemyScript : MonoBehaviour
         nextAttackDuration = enemyAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / enemyAnim.GetCurrentAnimatorStateInfo(0).speed * animSpeed;
 
         if (canAttack)
-        {       
+        {      
+            print("attack trigger");  
             canAttack = false; 
             isAttacking = true;
-
             enemyRb.velocity = new Vector3(0, 0, 0); 
      
             enemyAnim.SetInteger("CurrentComboLength", currentComboLength);
@@ -507,25 +528,30 @@ public class BasicEnemyScript : MonoBehaviour
             nextAttackTimer = 0f;
             nextAttackDuration = 5f; //arbitrary value to not instantly complete the timer
             attackStartPos = transform.position; 
-
             if (currentComboLength >= totalComboLength) currentComboLength = 0; //Reset combo tree
+
+            if(currentComboLength >= totalComboLength) currentComboLength = 0; 
         }
 
-        if(nextAttackTimer >= nextAttackDuration)
+        if(nextAttackTimer >= nextAttackDuration - .1f)
         {
-            isAttacking = false; 
+            isAttacking = false;  
         }
         else
         {
             transform.LookAt(target, Vector3.up);
         }
 
-        nextAttackTimer += Time.deltaTime; 
+    
+        //If the attack is pause wait for the pause to end 
+         nextAttackTimer += Time.deltaTime;
     }
 
     public void AttackEventTrigger() /*[MOVE]*/
     {
         canBeParried = true;
+        parryIndictionFeedback?.PlayFeedbacks(); 
+
     }
 
     public void AllowAttackDamage() /*[MOVE]*/
@@ -543,6 +569,40 @@ public class BasicEnemyScript : MonoBehaviour
                 attackTargetScript.TargetDamageCheck();
             }
         }
+    }
+
+
+
+    public void PauseAttack()
+    {
+        /*
+        enemyAnim.speed = 0; 
+        attackPauseTimer = 0; 
+        attackPauseDuration = Random.Range(2f,6f); 
+        attackHasBeenPaused = true; 
+
+        
+        foreach(Animation clip in clipsToPause)
+        {
+            if(clip.name == enemyAnim.GetCurrentAnimatorClipInfo(0)[0].clip.name) clip[enemyAnim.GetCurrentAnimatorClipInfo(0)[0].clip.name].speed = 0;          
+        }
+        //AnimationClip clip = enemyAnim.GetCurrentAnimatorClipInfo(0)[0].clip; 
+      //  clip.
+
+
+        attackPauseTimer = 0; 
+       attackPauseDuration = 3f; 
+      //  enemyAnim.StopPlayback(); 
+      // enemyAnim.speed = 0; 
+       //enemyAnim.enabled = false; 
+       enemyAnim.speed = 0; 
+       attackHasBeenPaused = true;
+
+       */
+
+    
+        
+        
     }
 
 
@@ -583,7 +643,7 @@ public class BasicEnemyScript : MonoBehaviour
         {
             launchDirection = playerController.transform.forward;           
             enemyRb.velocity = new Vector3(0, 0, 0);
-            currentComboLength = 0; 
+            //currentComboLength = 0; 
 
 
             if (DamageType == playerAttackType.PowerPunch.ToString() && canBeStunned) //Enemy is hit by a ch
@@ -1122,6 +1182,7 @@ public class BasicEnemyScript : MonoBehaviour
         //isDead = false;
         isBlockStunned = false; 
         isLinkJumping = false; 
+        canAttack = true;
      //   isLaunched = false;
        // isRagdolling = false;
         isAttacking = false;

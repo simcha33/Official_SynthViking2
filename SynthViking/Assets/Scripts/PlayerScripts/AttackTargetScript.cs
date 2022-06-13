@@ -253,12 +253,12 @@ public class AttackTargetScript : MonoBehaviour
                     if (playerController.attackState == playerAttackType.HeavyAxeHit.ToString())
                     {
                         enemyScript.TakeDamage(playerController.currentAttackDamage, playerController.attackState);
-                        if (enemyScript.canBeStunned) hitpauseScript.objectsToPause.Add(obj.GetComponent<Animator>());
+                         hitpauseScript.objectsToPause.Add(obj.GetComponent<Animator>());
                     }     
                     else if (playerController.attackState == playerAttackType.LightPunchHit.ToString())
                     {
                         enemyScript.TakeDamage(playerController.currentAttackDamage, playerController.attackState);
-                        if(enemyScript.canBeStunned) hitpauseScript.objectsToPause.Add(obj.GetComponent<Animator>());
+                         hitpauseScript.objectsToPause.Add(obj.GetComponent<Animator>());
                     }
                     else if (playerController.attackState == playerAttackType.SprintAttack.ToString() && !playerController.sprintHitList.Contains(enemyScript))
                     {
@@ -354,9 +354,8 @@ public class AttackTargetScript : MonoBehaviour
             dashAttackEffect.transform.eulerAngles = new Vector3(dashAttackEffect.transform.eulerAngles.x - 180, dashAttackEffect.transform.eulerAngles.y, dashAttackEffect.transform.eulerAngles.z);
             dashAttackEffect.transform.localScale *= .45f;
 
-            //Soawb punch force effect 1 
+            //Punch explosion force effect
             GameObject punchForceEffect = Instantiate(punchForceVFX2, enemyScript.transform.position + new Vector3(0, 1.5f, 0), transform.rotation);
-
             punchForceEffect.transform.LookAt(playerController.transform.forward + new Vector3(0, .5f, 0));
             punchForceEffect.transform.localScale *= .55f;
 
@@ -406,13 +405,10 @@ public class AttackTargetScript : MonoBehaviour
             dust.transform.parent = enemyScript.transform;
             sparks.transform.parent = enemyScript.transform;
             dust.AddComponent<CleanUpScript>();
-
             airLaunchHitFeedback?.PlayFeedbacks(); 
             playerController.mainGameManager.DoHaptics(.2f, .25f, .35f);
             airLaunchTargets.Add(enemyScript);
             enemyScript.canStopFall = true;
-
-
             enemyScript.isLaunched = true;
 
             enemyScript.transform.parent = playerController.transform;
@@ -427,15 +423,16 @@ public class AttackTargetScript : MonoBehaviour
             playerController.mainGameManager.DoHaptics(.35f, .45f, .5f);
             weapinFirstImpactFeedback?.PlayFeedbacks();        
             enemyScript.enemyRb.velocity = new Vector3(0, 0, 0);
-            if (playerController.isGrounded) enemyScript.transform.DOMove(backDirection, .3f).SetUpdate(UpdateType.Fixed);  //Move enemy backwards 
-            else
+
+            //Move enemy backwards
+            if (playerController.isGrounded && !enemyScript.CompareTag("BigEnemy")) enemyScript.transform.DOMove(backDirection, .3f).SetUpdate(UpdateType.Fixed);  //Move enemy backwards 
+            else if(!enemyScript.CompareTag("BigEnemy"))
             {
-                // enemyScript.transform.DOMove(backDirection + new Vector3(0,3f,0), .3f).SetUpdate(UpdateType.Fixed);
-                // enemyScript.enemyRb.AddForce(Vector3.up * 50, ForceMode.VelocityChange); 
                 enemyScript.transform.DOMove(backDirection + new Vector3(0, 1f, 0), .3f).SetUpdate(UpdateType.Fixed);
                 enemyScript.canStopFall = true;
-                //enemyScript.transform.position = playerController.transform.position + new Vector3(0,5,0) + playerController.transform.forward * 1f; 
-            }                        
+            }    
+            else if(enemyScript.CompareTag("BigEnemy")) DOTween.Kill(playerController.transform); 
+                            
 
         }
 
@@ -447,14 +444,16 @@ public class AttackTargetScript : MonoBehaviour
             punchFirstImpactFeedback?.PlayFeedbacks();
             playerController.mainGameManager.DoHaptics(.2f, .25f, .35f);
             enemyScript.enemyRb.velocity = new Vector3(0, 0, 0);
-            if (playerController.isGrounded) enemyScript.transform.DOMove(backDirection, .3f).SetUpdate(UpdateType.Fixed);  //Move enemy backwards 
-               else
+
+            //Move enemy backwards
+            if (playerController.isGrounded && !enemyScript.CompareTag("BigEnemy")) enemyScript.transform.DOMove(backDirection, .3f).SetUpdate(UpdateType.Fixed);  //Move enemy backwards 
+            else if(!enemyScript.CompareTag("BigEnemy"))
             {
                 enemyScript.transform.DOMove(backDirection + new Vector3(0, 1f, 0), .3f).SetUpdate(UpdateType.Fixed);
                 enemyScript.canStopFall = true; 
-               // enemyScript.enemyRb.AddForce(Vector3.up * 50, ForceMode.VelocityChange);
-                // enemyScript.transform.position = playerController.transform.position + new Vector3(0, 5, 0) + playerController.transform.forward * 1f;
             }
+            else if(enemyScript.CompareTag("BigEnemy")) DOTween.Kill(playerController.transform); 
+            
 
       
         }
@@ -463,6 +462,7 @@ public class AttackTargetScript : MonoBehaviour
         else if (playerController.attackState == playerAttackType.SprintAttack.ToString() && !playerController.sprintHitList.Contains(enemyScript) && enemyScript.canBeStunned)
         {
             sprintTargetCount++;
+            playerController.meshR.materials = playerController.defaultSkinMat; 
             playerController.sprintHitList.Add(enemyScript);
             playerController.mainGameManager.DoHaptics(.2f, .3f, .5f);
             playerController.dashAttackTarget = enemyScript.transform.gameObject;
@@ -508,7 +508,15 @@ public class AttackTargetScript : MonoBehaviour
             enemy.transform.position = backPointCheck.transform.position;
             GameObject dashAttackEffect = Instantiate(playerController.airPunchEffect, enemy.transform.position, transform.rotation);
             dashAttackEffect.transform.LookAt(-playerController.aimPoint.forward + new Vector3(0, .5f, 0));
-            dashAttackEffect.transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, transform.eulerAngles.z);
+            //dashAttackEffect.transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, transform.eulerAngles.z);
+            
+            //Punch explosion force effect
+            GameObject punchForceEffect = Instantiate(punchForceVFX2, enemy.transform.position + new Vector3(0, 1.5f, 0), transform.rotation);
+            punchForceEffect.transform.LookAt(playerController.transform.forward + new Vector3(0, .5f, 0));
+            punchForceEffect.transform.localScale *= .55f;
+
+            //Set effect postion and rotation 
+            dashAttackEffect.transform.eulerAngles = punchForceEffect.transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, transform.eulerAngles.z);
 
             enemy.LaunchEnemy(transform.forward, sprintAttackBackForce, 0f);
         }
