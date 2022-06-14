@@ -112,13 +112,13 @@ public class LaserTurret : MonoBehaviour
 
     void DoSwiffle()
     {
-        if (xSwiffle) { xAmount += Time.deltaTime * xSpeed; print("x"); }
+        if (xSwiffle)  xAmount += Time.deltaTime * xSpeed;
         else xAmount = turretBase.eulerAngles.x;
 
-        if (ySwiffle) { yAmount += Time.deltaTime * ySpeed; print("y"); }
+        if (ySwiffle)  yAmount += Time.deltaTime * ySpeed;
         else yAmount = turretBase.eulerAngles.y;
 
-        if (zSwiffle) { zAmount += Time.deltaTime * zSpeed; print("z"); }
+        if (zSwiffle)  zAmount += Time.deltaTime * zSpeed;
         else zAmount = turretBase.eulerAngles.z; 
 
         if (xSwiffle && (xAmount - xDefault >= xMaxSwiffle || xAmount - xDefault <= -xMaxSwiffle)) xSpeed *= -1;

@@ -46,3 +46,25 @@ MonoBehaviour:
         m_PreInfinity: 0
         m_PostInfinity: 0
         m_RotationOrder: 0
+  - m_From: Player_FreeFallCamera
+    m_To: Player_DefaultCam
+    m_Blend:
+      m_Style: 2
+      m_Time: 0.4
+      m_CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  - m_From: Player_DefaultCam
+    m_To: Player_FreeFallCamera
+    m_Blend:
+      m_Style: 2
+      m_Time: 3
+      m_CustomCurve:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0

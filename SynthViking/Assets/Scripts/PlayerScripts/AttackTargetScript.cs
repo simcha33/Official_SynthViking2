@@ -178,6 +178,7 @@ public class AttackTargetScript : MonoBehaviour
         foreach (GameObject obj in targetsInRange)
         {
             PlayerState targetScript = obj.GetComponent<PlayerState>();
+          
 
             if (playerController.isBlocking && enemyController.canBeParried && enemyController.isAttacking) //Check if the player is blocking              
             {
@@ -187,6 +188,7 @@ public class AttackTargetScript : MonoBehaviour
                 if (playerController.canBlockStun) //Do a stun effect around the player 
                 {
                     Collider[] colls = Physics.OverlapSphere(playerController.transform.position, playerController.blockStunRadius);
+                    
                     foreach (Collider enemy in colls)
                     {
                         if (enemy.gameObject.layer == LayerMask.NameToLayer("Enemy"))
@@ -196,16 +198,19 @@ public class AttackTargetScript : MonoBehaviour
                             if(!enemyScript.isDead)
                             {
                                 playerController.canBlockStun = false;
+                     
                                 enemyScript.TakeDamage(enemyController.chainHitScript.blockChainDamage, playerAttackType.BlockStun.ToString());
                                 enemyScript.isLaunched = true;
                                 enemyScript.isBlockStunned = true;
                                 
                                 //Feedback
-                                GameObject lightningVFX =  Instantiate(parryLightningVFX, enemy.transform.position, transform.rotation);
-                                lightningVFX.transform.eulerAngles = new Vector3(-90, lightningVFX.transform.eulerAngles.y, lightningVFX.transform.eulerAngles.z);  
+                                GameObject lightningVFX =  Instantiate(parryLightningVFX, enemy.transform.position - new Vector3(0,0,0), transform.rotation);
+                              //  lightningVFX.transform.eulerAngles = new Vector3(-90, lightningVFX.transform.eulerAngles.y, lightningVFX.transform.eulerAngles.z);  
                                 lightningVFX.AddComponent<CleanUpScript>();
                                 parriedFeedback?.PlayFeedbacks();
-                                playerController.mainGameManager.DoHaptics(.2f, .4f, .7f); 
+                                playerController.mainGameManager.DoHaptics(.2f, .4f, .7f);
+                                enemy.transform.LookAt(playerController.transform);
+
                             }
                         }
 

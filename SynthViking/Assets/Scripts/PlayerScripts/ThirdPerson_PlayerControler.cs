@@ -40,6 +40,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     private bool topSpeedReached;
     public float currentRotateSpeed;
     public float defaultRotateSpeed;
+    private Vector3 startingRotation; 
   
 
     public float currentMoveSpeed;
@@ -60,27 +61,37 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     [Header("AIR MOVEMENT")]  //AIR MOVEMENT
     #region
-    //Jumping 
-    public float jumpForce;
-    public float maxJumps;
-    public int jumpCount;
-    private float randomJumpVar = 2;
-    public bool hasJumped = false;
 
-    private float jumpDelayTimer;
-    public float landingDelayTimer;
-    private float landingDelayDuration;
-    private float gravity = 1f;
+    //Jumping 
+    public float minJumpForce = 450f;
+    private float currentJumpForce;
+    private float currentChargedJumpForce; 
+    public float maxChargedJumpForce;
+    public float maxJumpChargeDuration;
+    private float maxJumpChargeTimer;
+    private bool wantsToJump;
+    //  public float fallTimer;
+    public float freefallWaitTime = 1.1f; 
+
+  //  public float fullFullWaitTime;   
+    public float maxJumps;
+    private int jumpCount; 
+    private bool hasJumped = false;
+    // private float jumpDelayTimer;
+    //private float randomJumpVar = 2;
+
+    //Movement
     public float fallMultiplier = 5f;
     public float lowJumpGravity;
-    //[Range(0, 1)] public float airMSpeedReduction;
     public float airMoveSpeed;
     public float airDrag = 2f;
-    private float inAirTime = 0f;
+    [HideInInspector] public float inAirTime = 0f;
 
-
+    //Landing
+    public float landingDelayTimer;
+    private float landingDelayDuration;
     private float groundCheckHeight = .35f;
-    private float landCheckHeight = 2.5f;
+    private float landCheckHeight = 3.2f;
     private float groundCheckJumpDelay = .5f; //Temporaly turn of the groundcheck after jumping 
     public float groundCheckTimer;
     #endregion
@@ -259,6 +270,9 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public float sideWallCheckDist;
     public float exitJumpDistance; 
     public Transform frontWallChecker;
+    public bool wallRunCooldown;
+    private float wallRunCooldownTimer;
+    private float wallRunCooldownDuration = 1f; 
 
     private Vector3 jumpOffPoint;
     //[HideInInspector] public LayerMask EnvorinmentLayer = 10;
@@ -331,6 +345,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     [Header("Components")] //COMPONENTS
     #region
     public Animator playerAnim;
+    public Transform playerModel; 
     public Rigidbody playerRb;
     public SkinnedMeshRenderer meshR;
     private MeshRenderer raycastCheckMeshr;
@@ -351,6 +366,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     [Header("FEEDBACK")]
     #region
     public MMFeedbacks JumpFeedback;
+    public MMFeedbacks chargedJumpFeedback; 
     public MMFeedbacks LandingFeedback;
     public MMFeedbacks DashStartFeeback;
     public MMFeedbacks DashEndFeeback;
@@ -419,7 +435,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public bool isAirSmashing;
     public bool isGroundSmash;
     public bool isGrounded = true;
-    public bool isStunned; 
+    public bool isStunned;
+    public bool isFreeFalling; 
 
     public bool alllowForwardForce; 
 
@@ -450,6 +467,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         airSmashCooldownTimer = airSmashCooldownDuration;
         dashCooldownTimer = 0f; 
         playerRb.drag = groundStopDrag;
+        startingRotation = playerModel.transform.eulerAngles; 
 
 
        //Set default states
@@ -499,7 +517,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                     CheckForAirSmash();
                     break;
 
-                case (int)currentState.ATTACKING:                 
+                case (int)currentState.ATTACKING:
+                    HandleMoveSpeed(); 
                     CheckForAttack();
                     CheckForAirSmash();
                     CheckForDash();
@@ -508,13 +527,15 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                     CheckForBlock();
                     CheckForJump();
                     CheckForAirLaunch();
-                    GroundCheck(); 
+                    GroundCheck();
+                    CheckForWall(); 
                     break;
 
                 case (int)currentState.DASHING:
                     CheckForDash();
                     CheckForAirSmash();
                     CheckForBlock();
+                    CheckForWall(); 
                     break;
 
                 case (int)currentState.AIRSMASHING:
@@ -522,6 +543,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                     CheckForMoveInput();
                     CheckForAirSmash();
                     HandleRotation();
+                    CheckForWall(); 
                     break;
 
 
@@ -597,7 +619,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         playerAnim.SetBool("IsDashing", isDashing);
         playerAnim.SetBool("IsAirSmashing", isAirSmashing);
         playerAnim.SetBool("IsStunned", isStunned);
-        playerAnim.SetBool("IsBlocking", isBlocking);  
+        playerAnim.SetBool("IsBlocking", isBlocking);
+        playerAnim.SetBool("IsFreeFalling", isFreeFalling); 
 
         //Checks
         playerAnim.SetBool("CanJump", canJump);
@@ -639,7 +662,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         }   
         */
     }
-
 
 
 
@@ -710,18 +732,11 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //Check for sprinting 
         if (input.sprintButtonPressed && canSprint && (isMoving || isWallRunning))
         {
-            if (!isSprinting)
-            {
-              //  sprintFeedback?.PlayFeedbacks();
-             //   HolsterWeapon(true);
-            }
-
             isSprinting = true;       
             if (!isWallRunning) canStartWallrun = true;
         }
         else
         {
-        //    HolsterWeapon(false);
             canStartWallrun = false;
             isSprinting = false;
         }
@@ -736,24 +751,28 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         if (isGrounded)  //Handle ground move speed changes
         {
 
+            if (isAttacking) currentMoveSpeed = attackMoveSpeed;
             if (isSprinting) currentMoveSpeed = sprintMoveSpeed;  //Sprinting 
             else if (isMoving && !isSprinting)
             {
-                
+
                 if (!isRunning) currentMoveSpeed = maxMoveSpeed * moveVelocity; //Walking
                 else if (isRunning) currentMoveSpeed = maxMoveSpeed; //Running 
                 if (currentMoveSpeed < currentMinMoveSpeed) currentMoveSpeed = currentMinMoveSpeed; //Check for min move speed 
             }
-         
+
         }
 
         //Special cases 
+
+  //      else if (attackState == playerAttackType.AirLaunchAttack.ToString()) currentMoveSpeed = 0;
         else if (isWallRunning) currentMoveSpeed = wallRunMoveSpeed; //Wallrunning
         else if (wasSprintingBeforeJump) currentMoveSpeed = airMoveSpeed * 1.5f; //Jumping after sprinting 
         else if (isInAir) //Normale air move speed 
         {
             //wasSprintingBeforeJump = false; 
-            currentMoveSpeed = airMoveSpeed;
+            if (!isAttacking) currentMoveSpeed = airMoveSpeed;
+            else currentMoveSpeed = attackMoveSpeed;
         }
 
     }
@@ -877,15 +896,12 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         
     }
 
-    
-
     private Vector3 GetCameraRight(Camera playerCamera)
     {
         Vector3 right = playerCamera.transform.right;
         right.y = 0;
         return right.normalized;
     }
-
 
 
     private void HandleRotation()
@@ -1125,15 +1141,26 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     //Jumping
     void CheckForJump()
     {
+
+        //Check for jump charge 
+        if (input.jumpButtonPressed)
+        {
+            wantsToJump = true; 
+            maxJumpChargeTimer += Time.deltaTime;
+            if (currentJumpForce < maxChargedJumpForce && maxJumpChargeTimer > .3f) currentJumpForce = (maxJumpChargeTimer - .3f / maxJumpChargeDuration) * maxChargedJumpForce;
+            else if(currentJumpForce >= maxChargedJumpForce)currentJumpForce = maxChargedJumpForce; 
+        }
+
         if (jumpCount < maxJumps)
         {
             //Player presses the jump key
-            if (input.jumpButtonPressed && canJump)
+            if (wantsToJump && !input.jumpButtonPressed && canJump)
             {
                 jumpCount++;
+                playerAnim.SetFloat("JumpCount", jumpCount); 
                 if (isSprinting && jumpCount == 1) wasSprintingBeforeJump = true; //check if we we're running before the jump
 
-                ResetStates(); 
+                if(isWallRunning) ResetStates(); 
                 controllerState = (int)currentState.MOVING;
                 fixedControllerState = (int)currentState.MOVING; 
                 
@@ -1143,23 +1170,52 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 isLanding = false;
                 hasJumped = true;
                 canJump = false;
+                wantsToJump = false;             
 
-
-                //Animation handeling
-                ResetAnimator();
-                playerAnim.SetFloat("JumpCount", jumpCount);
-
-                if (jumpCount == 1) playerAnim.SetFloat("RandomJumpVar", 0f);
-                else playerAnim.SetFloat("RandomJumpVar", Random.Range(1, 5)); //Randomly select a second jump animation 
-                playerAnim.SetTrigger("JumpTrigger");              
+               // if (jumpCount == 1 && currentJumpForce < minJumpForce) playerAnim.SetFloat("RandomJumpVar", 0f);
+              //  else playerAnim.SetFloat("RandomJumpVar", Random.Range(1, 5)); //Randomly select a second jump animation 
+              //  playerAnim.SetTrigger("JumpTrigger");              
             }
             else if (!input.jumpButtonPressed && !hasJumped) canJump = true;
 
-            //Handle Jump animations
+            //Do the jump
             if (hasJumped)
             {
-                GroundCheck(); 
-                DoJump(jumpForce);
+                //Check from where we are jumping
+                GroundCheck();
+                if (input.sprintButtonPressed && canSprint) isSprinting = true; 
+                CheckForWall();
+
+                if (isWallRunning)
+                {
+                    wallRunCooldown = true;
+                    ExitWallRun();
+                }
+
+
+                //Set and trigger correct animation
+                ResetAnimator();
+                if (currentJumpForce < minJumpForce || inAirTime > .2f)
+                {
+                   
+                    currentJumpForce = minJumpForce;
+                }
+                else
+                {
+                    chargedJumpFeedback?.PlayFeedbacks(); 
+                }
+
+                if (currentJumpForce > minJumpForce) playerAnim.SetFloat("RandomJumpVar", 5);
+                else if (jumpCount <= 1) playerAnim.SetFloat("RandomJumpVar", 0); 
+                else playerAnim.SetFloat("RandomJumpVar", Random.Range(1, 5)); //Randomly select a second jump animation 
+                playerAnim.SetTrigger("JumpTrigger");   
+
+                                  
+                DoJump(currentJumpForce);
+
+                //Reset values
+                currentJumpForce = 0;
+                maxJumpChargeTimer = 0;
                 hasJumped = false;
             }
         }
@@ -1167,10 +1223,34 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
 
         //Add extra falling gravity 
-        if (playerRb.velocity.y < 1) playerRb.velocity -= Vector3.down * Physics.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+        if (playerRb.velocity.y < 1)
+        {
+            playerRb.velocity -= Vector3.down * Physics.gravity.y * (fallMultiplier - 1) * Time.deltaTime;
+        }
 
         //Low and high jumps
-        if (playerRb.velocity.y > 0 && !input.jumpButtonPressed) playerRb.velocity += Vector3.up * Physics.gravity.y * (lowJumpGravity - 1) * Time.deltaTime;
+        else if (playerRb.velocity.y > 0) playerRb.velocity += Vector3.up * Physics.gravity.y * (lowJumpGravity - 1) * Time.deltaTime;
+
+        //Trigger free fall animation
+        if (playerRb.velocity.y <= -20f && !isLanding && !isGrounded && inAirTime >= freefallWaitTime && !isAttacking)
+        {
+            if (!isFreeFalling)
+            {
+                playerAnim.SetTrigger("FreeFallTrigger"); 
+                playerModel.localEulerAngles = new Vector3(playerModel.localEulerAngles.x + 72, 0, 0);
+            }
+            isFreeFalling = true;
+            
+        }
+        else
+        {
+            //  playerModel.eulerAngles = new Vector3(0, 0, 0);
+            //if(isFreeFalling)             playerModel.localEulerAngles = startingRotation;
+            if(isFreeFalling) playerModel.localEulerAngles = new Vector3(0, 0, 0); 
+            isFreeFalling = false;
+
+        }
+
     }
 
     public void DoJump(float jumpHeight)
@@ -1197,7 +1277,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     void GroundCheck()
     {
         RaycastHit hit;
-        Ray ray = new Ray(this.transform.position + Vector3.up * .1f, Vector3.down);
+        Ray ray = new Ray(this.transform.position, Vector3.down);
 
         //Shortly disable groundcheck so that it won't interupt the start of the jump 
         if (jumpCount > 0 && groundCheckTimer > 0)
@@ -1207,7 +1287,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             isGrounded = false;
             isLanding = false;
             isInAir = true;
-            playerRb.constraints = airConstraints.constraints; 
+            playerRb.constraints = airConstraints.constraints;
       
             playerRb.useGravity = true;
         }
@@ -1243,7 +1323,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 isGrounded = false;
                // isLanding = false; 
                 isInAir = true;
-                inAirTime += Time.deltaTime; 
+                if (!isAttacking) inAirTime += Time.deltaTime;
+                else inAirTime = 0; 
                 playerRb.useGravity = true;
         
             }
@@ -1255,6 +1336,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 { 
                     canLand = false;
                     isInAir = false;
+                   // isFreeFalling = false; 
                     isLanding = true;
                     landingDelayTimer = 0f;
                     playerAnim.SetTrigger("LandingTrigger");               
@@ -1315,25 +1397,34 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         Ray frontRay = new Ray(frontWallChecker.position, frontWallChecker.forward);
         Debug.DrawLine(frontWallChecker.position, frontWallChecker.position + frontWallChecker.forward * frontWallCheckDist, Color.red);
 
-        //Check if we can enter or exit the wallrun 
         if (Physics.Raycast(frontRay, out hit, frontWallCheckDist) && isSprinting)
         {
             //Start wallrun
-            if (hit.collider.gameObject.layer == EnvorinmentLayer && canStartWallrun) //Environment
+            if (hit.collider.gameObject.layer == EnvorinmentLayer && !wallRunCooldown) //Environment
             {
-
-                StartWallRun();
+                if(canStartWallrun) StartWallRun();
+                isWallRunning = true; 
             }
         }
-        else if (isWallRunning || isWallRunning && (input.jumpButtonPressed || !input.sprintButtonPressed))
+        else if (isWallRunning || isWallRunning && !input.sprintButtonPressed)
         {
-            if(input.jumpButtonPressed || !input.sprintButtonPressed)
+            if(!input.jumpButtonPressed && wantsToJump || !input.sprintButtonPressed)
             { 
                 jumpOffPoint = transform.position - transform.forward * exitJumpDistance; 
-                wallRunExitWithJump = true; 
+                wallRunExitWithJump = true;          
             }
-       
+
             ExitWallRun();
+        }
+
+        if (wallRunCooldown) 
+        {
+            wallRunCooldownTimer += Time.deltaTime;
+            if (wallRunCooldownTimer >= wallRunCooldownDuration)
+            {
+                wallRunCooldownTimer = 0f; 
+                wallRunCooldown = false;
+            }
         }
     }
 
@@ -1362,18 +1453,24 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         playerAnim.SetTrigger("WallRunEndTrigger");
         groundCheckTimer = .45f;
         jumpCount = 1;
-        
-
-      
+        print("check 0"); 
+            
 
         if(wallRunExitWithJump)
         {
             transform.DOMove(jumpOffPoint, .25f); 
-            transform.DORotate(new Vector3(transform.eulerAngles.x, transform.eulerAngles.y + 180, transform.eulerAngles.z), .5f); 
+            transform.DORotate(new Vector3(transform.eulerAngles.x, transform.eulerAngles.y + 180, transform.eulerAngles.z), .5f);
+            print("check1");
+        }
+        else if (!input.jumpButtonPressed && wantsToJump && !wallRunCooldown) 
+        {
+
+            DoJump(minJumpForce * .05f);
+            print("check2");
         }
         else
         {
-            DoJump(jumpForce * .05f);
+            print("check3");
         }
 
         wallRunExitWithJump = false; 
@@ -1476,7 +1573,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 AirSlamEndFeedback?.PlayFeedbacks(); 
                 isGroundSmash = true;
                 playerState.canBeHit = false; 
-                DoJump(jumpForce / 1.2f); 
+                DoJump(minJumpForce / 1.2f); 
 
 
                 Collider[] colls = Physics.OverlapSphere(transform.position, groundSlamRadius);
@@ -1692,7 +1789,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         }   
         else if(wantsToHeayAttack)
         {
-            totalAttackTrees = 5;
+            totalAttackTrees = 6;
             attackState = playerAttackType.HeavyAxeHit.ToString();           
             attackTransitionOffset = axeAttackTransitionOffset; 
             AttackFeedback = BasicHeavyAttackFeedback;        
@@ -1709,8 +1806,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 int newRandomNumber = Random.Range(1, totalAttackTrees + 1);
                 if (newRandomNumber == originalReaction)
                 {
-                    if (newRandomNumber - 1 <= 0) newRandomNumber += 1;
-                    else newRandomNumber -= 1;
+                   // if (newRandomNumber - 1 <= 0) newRandomNumber += 1;
+                    //else newRandomNumber -= 1;
                 }
                 playerAnim.SetInteger("AxeAttackType", newRandomNumber);  //Decide which combo tree to go into (only once per full combo tree)
             }
@@ -1720,8 +1817,10 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             else if (playerAnim.GetInteger("AxeAttackType") == 2) totalAxeComboLength = 4;
             else if (playerAnim.GetInteger("AxeAttackType") == 3) totalAxeComboLength = 4;
             else if (playerAnim.GetInteger("AxeAttackType") == 4) totalAxeComboLength = 4;
-            else if (playerAnim.GetInteger("AxeAttackType") == 5) totalAxeComboLength = 6;                                                                                 
-            
+            else if (playerAnim.GetInteger("AxeAttackType") == 5) totalAxeComboLength = 6;
+            else if (playerAnim.GetInteger("AxeAttackType") == 6) totalAxeComboLength = 4;
+          //  else if (playerAnim.GetInteger("AxeAttackType") == 7) totalAxeComboLength = 4;
+
         }
         else if(wantsToLightAttack)
         {
@@ -1849,12 +1948,13 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             else if (alllowForwardForce && attackState == playerAttackType.SprintAttack.ToString()) AllowAttackDamage();
        
 
-            currentMoveSpeed = attackMoveSpeed; 
+            //currentMoveSpeed = attackMoveSpeed;
+            print("Check1"); 
             isAttacking = true;
         }
         else
         {
-            currentMoveSpeed = minWalkingMoveSpeed; 
+         //   currentMoveSpeed = minWalkingMoveSpeed; 
             playerRb.isKinematic = false; 
         }
 
@@ -1889,6 +1989,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
        // isairLaunchting = false; 
         isRunning = false;
+        isFreeFalling = false; 
         isInAir = false;
         isLanding = false;
         isGrounded = false;
@@ -1905,7 +2006,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         playerRb.isKinematic = false;
         meshR.materials = defaultSkinMat;
         playerAnim.speed = 1f;
-        mainCollider.isTrigger = false; 
+        mainCollider.isTrigger = false;
+        nextAttackTimer = 0f;
     }
 
     public void ResetAnimator()
@@ -2077,10 +2179,17 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                     if (!enemy.isDead) enemy.transform.parent = null;  //transform.parent = enemy.transform.parent = enemy.enemySpawnManagerScript.aliveEnemyParent.transform;
                   //  enemy.isLaunched = true; 
                     enemy.isUpperCutted = false;
+                    // enemy.transform.position = transform.position + transform.forward * .5f;
+                    enemy.transform.LookAt(transform);
+                    // enemy.transform.position = transform.position - enemy.transform.forward * .5f;
+                    enemy.transform.DOMove(transform.position + transform.forward * .5f, .1f).SetUpdate(UpdateType.Fixed);
+
 
                 }
                 
                 attackTargetScript.airLaunchTargets.Clear();
+
+               
                 playerRb.velocity = new Vector3(0, 0, 0); 
             }
         }

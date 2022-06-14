@@ -88,8 +88,8 @@ public class BasicEnemyScript : MonoBehaviour
     private string StunType;
     public bool addSlowdownForce; 
     [HideInInspector] public bool isDashTargeted;
-    public float stopFallTimer;
-    private float stopFallDuration = .5f; 
+    private float stopFallTimer;
+    public float stopFallDuration = .7f; 
     #endregion
 
 
@@ -176,9 +176,10 @@ public class BasicEnemyScript : MonoBehaviour
     public bool canBeTargeted; 
     public bool canAddImpactDamage; 
     public bool canBeLaunched = true;
-    public bool canStopFall; 
+    public bool canStopFall;
+    public bool canRotate = true;
     #endregion
-   
+
     [Header("STATEMACHINE")]
     #region 
     public int enemyState;
@@ -206,6 +207,8 @@ public class BasicEnemyScript : MonoBehaviour
         thisScript = this.gameObject.GetComponent<BasicEnemyScript>(); 
         weaponMeshr = weapon.GetComponent<MeshRenderer>();
         enemyRb = GetComponent<Rigidbody>();
+        int runType = Random.Range(1, 3);
+        enemyAnim.SetFloat("RunType", runType);
 
         //Starting values
         chainHitScript.enabled = false;
@@ -398,7 +401,7 @@ public class BasicEnemyScript : MonoBehaviour
         
             enemyAgent.speed = runSpeed;
             enemyAnim.speed = runSpeed / originalRunSpeed; //Slow down the animation based on the random move speed
-            transform.LookAt(target, Vector3.up); 
+          //  transform.LookAt(target, Vector3.up); 
             isFollowing = true;      
             enemyState = (int)currentState.ENGAGE; 
           //  enemyManager.SetNewEngager(thisScript); 
@@ -461,6 +464,7 @@ public class BasicEnemyScript : MonoBehaviour
         if(!isAttacking && isInAttackRange)
         {
             ResetState();
+            ResetAnimator();
             enemyRb.mass = stunnedMass; 
             transform.LookAt(target, Vector3.up);
             nextAttackTimer = 0; 
@@ -486,9 +490,8 @@ public class BasicEnemyScript : MonoBehaviour
     {
         int totalAttackTrees = 1;
 
-        //Reset some attack values 
         canAttack = true;
-    
+   
         //Choose next attack in the combo 
         if(gameObject.CompareTag("BasicEnemy"))
         {
@@ -497,7 +500,8 @@ public class BasicEnemyScript : MonoBehaviour
            
             if (currentComboLength == 1) enemyAnim.SetInteger("AttackType", 1); //Set combo attack tree         
             if(enemyAnim.GetInteger("AttackType") == 1) totalComboLength = 3; //Check length of combo attack tree 
-            if(currentComboLength > totalComboLength) currentComboLength = 0; 
+            if(currentComboLength > totalComboLength) currentComboLength = 0;
+            
         }
         else if(gameObject.CompareTag("BigEnemy"))
         {
@@ -516,11 +520,14 @@ public class BasicEnemyScript : MonoBehaviour
         nextAttackDuration = enemyAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / enemyAnim.GetCurrentAnimatorStateInfo(0).speed * animSpeed;
 
         if (canAttack)
-        {      
+        {
+            
             print("attack trigger");  
             canAttack = false; 
             isAttacking = true;
-            enemyRb.velocity = new Vector3(0, 0, 0); 
+            canRotate = true;
+            enemyRb.velocity = new Vector3(0, 0, 0);
+            currentComboLength++; 
      
             enemyAnim.SetInteger("CurrentComboLength", currentComboLength);
             enemyAnim.SetTrigger("AttackTrigger");
@@ -530,17 +537,27 @@ public class BasicEnemyScript : MonoBehaviour
             attackStartPos = transform.position; 
             if (currentComboLength >= totalComboLength) currentComboLength = 0; //Reset combo tree
 
-            if(currentComboLength >= totalComboLength) currentComboLength = 0; 
         }
 
-        if(nextAttackTimer >= nextAttackDuration - .1f)
+        if(nextAttackTimer >= nextAttackDuration - .2f && isInAttackRange)
+        {
+            canAttack = true; 
+        }
+        
+
+
+        if(nextAttackTimer >= nextAttackDuration)
         {
             isAttacking = false;  
         }
-        else
+        else if (canRotate)
         {
-            transform.LookAt(target, Vector3.up);
+            float singleStep = 15f * Time.deltaTime;
+            Vector3 targetDir = playerController.transform.position - transform.position;
+            Vector3 newDirection = Vector3.RotateTowards(transform.forward, targetDir, singleStep, 0.0f);
+            transform.rotation = Quaternion.LookRotation(newDirection); 
         }
+       
 
     
         //If the attack is pause wait for the pause to end 
@@ -550,7 +567,8 @@ public class BasicEnemyScript : MonoBehaviour
     public void AttackEventTrigger() /*[MOVE]*/
     {
         canBeParried = true;
-        parryIndictionFeedback?.PlayFeedbacks(); 
+        parryIndictionFeedback?.PlayFeedbacks();
+        canRotate = false; 
 
     }
 
@@ -928,6 +946,8 @@ public class BasicEnemyScript : MonoBehaviour
             chainHitScript.SetChainHitType(stunType);
             stunDuration = chainHitScript.currentStunDuration;
             enemyRb.mass = stunnedMass;
+            enemyMeshr.materials = stunnedSkinMat;
+            stunnedEffect.SetActive(true);
             //enemyRb.isKinematic = true; 
         }
 
@@ -1182,7 +1202,7 @@ public class BasicEnemyScript : MonoBehaviour
         //isDead = false;
         isBlockStunned = false; 
         isLinkJumping = false; 
-        canAttack = true;
+     
      //   isLaunched = false;
        // isRagdolling = false;
         isAttacking = false;
@@ -1209,7 +1229,7 @@ public class BasicEnemyScript : MonoBehaviour
         {
             enemyAnim.SetBool(parameter.name, false);
             enemyAnim.ResetTrigger(parameter.name);
-            enemyAnim.SetInteger(parameter.name, 0);
+          //  enemyAnim.SetInteger(parameter.name, 0);
 
         }
     }
@@ -1245,10 +1265,13 @@ public class BasicEnemyScript : MonoBehaviour
             if (!isStoppingFall) 
             {
                 isStoppingFall = true;
+                enemyRb.velocity = new Vector3(0,0,0); 
                 enemyRb.isKinematic = true; 
                 foreach (Rigidbody rb in ragdollRbs)
                 {
+                    rb.velocity = new Vector3(0, 0, 0);
                     rb.isKinematic = true;
+                 
                 }
             }
 
@@ -1270,6 +1293,7 @@ public class BasicEnemyScript : MonoBehaviour
                 EnableRagdoll(); 
                 rb.isKinematic = false;
             }
+
         }
        
     }

@@ -13,7 +13,8 @@ public class CameraHandeler : MonoBehaviour
 
     public CinemachineFreeLook defaultCamera;
     public CinemachineFreeLook aimingCamera;
-    public CinemachineFreeLook airSmashCamera; 
+    public CinemachineFreeLook airSmashCamera;
+    public CinemachineFreeLook freeFallCamera;
     public CinemachineVirtualCamera mainCam;
     private int highPrio = 10; 
     private int LowPrio = 9; 
@@ -46,11 +47,12 @@ public class CameraHandeler : MonoBehaviour
     public void CheckForCamera()
     {
 
-        string c; 
+        string c;
         if (playerController.isAirSmashing) c = airSmashCamera.name;
+        else if (playerController.isFreeFalling && playerController.inAirTime >= playerController.freefallWaitTime) c = freeFallCamera.name; 
         else if (input.dashButtonPressed && playerController.canDash) c = aimingCamera.name;
         else c = defaultCamera.name;
-        SwitchPriority(c); 
+        SwitchPriority(c);
     }
 
     public void SwitchPriority(string camName)
