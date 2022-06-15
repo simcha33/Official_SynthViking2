@@ -49,7 +49,7 @@ public class CameraHandeler : MonoBehaviour
 
         string c;
         if (playerController.isAirSmashing) c = airSmashCamera.name;
-        else if (playerController.isFreeFalling && playerController.inAirTime >= playerController.freefallWaitTime) c = freeFallCamera.name; 
+        else if (playerController.inAirTime >= playerController.freefallWaitTime) c = freeFallCamera.name; 
         else if (input.dashButtonPressed && playerController.canDash) c = aimingCamera.name;
         else c = defaultCamera.name;
         SwitchPriority(c);

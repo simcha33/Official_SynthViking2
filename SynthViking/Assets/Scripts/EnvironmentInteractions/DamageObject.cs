@@ -1,16 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MoreMountains.Feedbacks; 
 
 public class DamageObject : MonoBehaviour
 {
 
     public float damageAmount;
-    public GameObject lavaDeathVisual;
+
     public bool isLava;
     public bool isHammer;
-    public bool isLaser; 
-    public bool canHurtEnemies; 
+    public bool isLaser;
+    public bool isMine; 
+    public bool canHurtEnemies;
+
+    [Header ("Components")]
+    public GameObject mineExplosionEffect; 
+    public GameObject lavaDeathVisual;
+
+    [Header("Components")]
+    public MMFeedbacks explosionFeedback;
+
+
     public enum trapType
     {
         lava,
@@ -30,12 +41,20 @@ public class DamageObject : MonoBehaviour
                 PlayerState playerStateScript = other.gameObject.GetComponent<PlayerState>(); 
                 ThirdPerson_PlayerControler playerController = playerStateScript.playerController;  
                // playerController.ResetStates(); 
-                if(playerController.isAirSmashing)playerController.EndAirSmash(); 
-                if(isLava) playerStateScript.TakeDamage(damageAmount, "LavaDamage");
-                else if(isLaser) playerStateScript.TakeDamage(damageAmount, "LaserDamage");
+                if(playerController.isAirSmashing)playerController.EndAirSmash();
+                if (isLava) playerStateScript.TakeDamage(damageAmount, "LavaDamage");
+                else if (isLaser) playerStateScript.TakeDamage(damageAmount, "LaserDamage");
+                else if (isMine)
+                {
+                    playerStateScript.TakeDamage(damageAmount, "LaserDamage");
+                    GameObject effect = Instantiate(mineExplosionEffect, transform.position, transform.rotation);
+                    effect.AddComponent<CleanUpScript>();
+                    explosionFeedback?.PlayFeedbacks(); 
+                    Destroy(this.gameObject);  
+                }
             }
 
-            if(other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+            else if(other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
                 BasicEnemyScript enemyScript = other.gameObject.GetComponent<BasicEnemyScript>(); 
                 enemyScript.TakeDamage(enemyScript.maxHealth, "EnvironmentDamage");

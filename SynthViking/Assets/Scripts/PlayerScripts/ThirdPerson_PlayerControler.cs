@@ -64,14 +64,15 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     //Jumping 
     public float minJumpForce = 450f;
-    private float currentJumpForce;
-    private float currentChargedJumpForce; 
     public float maxChargedJumpForce;
+    public float currentJumpForce;
+
     public float maxJumpChargeDuration;
     private float maxJumpChargeTimer;
     private bool wantsToJump;
     //  public float fallTimer;
-    public float freefallWaitTime = 1.1f; 
+    public float freefallWaitTime = 1.1f;
+    
 
   //  public float fullFullWaitTime;   
     public float maxJumps;
@@ -81,10 +82,13 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     //private float randomJumpVar = 2;
 
     //Movement
+
+    public float airMoveSpeed;
+    public float freeFallMoveSpeed;
+    public float airDrag = 2f;
     public float fallMultiplier = 5f;
     public float lowJumpGravity;
-    public float airMoveSpeed;
-    public float airDrag = 2f;
+
     [HideInInspector] public float inAirTime = 0f;
 
     //Landing
@@ -771,8 +775,9 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         else if (isInAir) //Normale air move speed 
         {
             //wasSprintingBeforeJump = false; 
-            if (!isAttacking) currentMoveSpeed = airMoveSpeed;
-            else currentMoveSpeed = attackMoveSpeed;
+            if (isFreeFalling) currentMoveSpeed = freeFallMoveSpeed;
+            else if (!isAttacking) currentMoveSpeed = airMoveSpeed;           
+            else if(isAttacking) currentMoveSpeed = attackMoveSpeed;
         }
 
     }
@@ -936,6 +941,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             if (currentDashDistance < maxDashDistance) currentDashDistance += dashBuildUpSpeed * Time.unscaledDeltaTime;
             else
             {
+                mainGameManager.DoHaptics(.1f, .1f, .2f);
                 fullyChargedDash = true; 
                 currentDashDistance = maxDashDistance;
             }
@@ -994,7 +1000,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 mainCollider.isTrigger = true;
                 Physics.IgnoreLayerCollision(enemyLayer, this.gameObject.layer, true); 
                 
-                mainGameManager.DoHaptics(.2f, .3f, .5f); 
+                mainGameManager.DoHaptics(.2f, .5f, .5f); 
                 DashStartFeeback?.PlayFeedbacks();
                 meshR.materials = holoSkinMat;
 
@@ -1147,8 +1153,17 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         {
             wantsToJump = true; 
             maxJumpChargeTimer += Time.deltaTime;
-            if (currentJumpForce < maxChargedJumpForce && maxJumpChargeTimer > .3f) currentJumpForce = (maxJumpChargeTimer - .3f / maxJumpChargeDuration) * maxChargedJumpForce;
-            else if(currentJumpForce >= maxChargedJumpForce)currentJumpForce = maxChargedJumpForce; 
+
+            if (currentJumpForce < maxChargedJumpForce && maxJumpChargeTimer > .3f) //Build up charge force
+            {
+                currentJumpForce = ((maxJumpChargeTimer - .3f) / maxJumpChargeDuration) * maxChargedJumpForce;
+                mainGameManager.DoHaptics(.2f, .1f * (currentJumpForce / maxChargedJumpForce), .2f *(currentJumpForce / maxChargedJumpForce));
+            }
+            else if (currentJumpForce >= maxChargedJumpForce)
+            {
+                currentJumpForce = maxChargedJumpForce + 300f;
+                mainGameManager.DoHaptics(.2f, .3f, .5f);
+            }
         }
 
         if (jumpCount < maxJumps)
@@ -1232,7 +1247,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         else if (playerRb.velocity.y > 0) playerRb.velocity += Vector3.up * Physics.gravity.y * (lowJumpGravity - 1) * Time.deltaTime;
 
         //Trigger free fall animation
-        if (playerRb.velocity.y <= -20f && !isLanding && !isGrounded && inAirTime >= freefallWaitTime && !isAttacking)
+        if (playerRb.velocity.y <= -20f && !isLanding && !isGrounded && inAirTime >= freefallWaitTime && !isAttacking && !isWallRunning)
         {
             if (!isFreeFalling)
             {
@@ -1240,6 +1255,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 playerModel.localEulerAngles = new Vector3(playerModel.localEulerAngles.x + 72, 0, 0);
             }
             isFreeFalling = true;
+           // Debug.Log(playerRb.velocity.y); 
             
         }
         else
@@ -1259,6 +1275,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         playerRb.isKinematic = false;
         playerRb.constraints = airConstraints.constraints; 
         playerRb.velocity = new Vector3(playerRb.velocity.x, 0, playerRb.velocity.z);
+        playerRb.drag = airDrag; 
 
         mainGameManager.DoHaptics(.1f, .04f, .07f); 
         JumpFeedback?.PlayFeedbacks();
@@ -1994,6 +2011,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         isLanding = false;
         isGrounded = false;
         isWallRunning = false;
+        isFreeFalling = false; 
         isAttacking = false;
         isDashing = false;
         isChargingDash = false;
@@ -2008,6 +2026,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         playerAnim.speed = 1f;
         mainCollider.isTrigger = false;
         nextAttackTimer = 0f;
+
+        playerModel.localEulerAngles = new Vector3(0, 0, 0);
     }
 
     public void ResetAnimator()
@@ -2092,7 +2112,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     {
         float disableTrailDuration = .75f;
 
-        if (isSprinting || jumpCount >= 1 || isDashing || isAirSmashing) enableTrail = true; 
+        if (isSprinting || jumpCount >= 1 || isDashing || isAirSmashing || isFreeFalling) enableTrail = true; 
         else enableTrail = false;
 
       ///  Debug.Log(attackTrailTimer); 
