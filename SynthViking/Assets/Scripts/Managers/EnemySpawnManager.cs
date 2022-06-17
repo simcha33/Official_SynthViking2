@@ -59,11 +59,14 @@ public class EnemySpawnManager : MonoBehaviour
     public bool waveHasEnded;
     public bool waveHasStarted;
     public bool canStartNewWave;
+    private  float waveTurnOffTimer;
+    private float waveTurnOffDuration = 6f;
+    private bool waveIsTurnedOff; 
 
     [Header("VISUALS")]
     public TextMeshPro waveText;
     public TextMeshPro enemyCountText;
-    public TextMeshPro waveInfoText;
+   // public TextMeshPro waveInfoText;
     public RawImage skullImage; 
 
     private enum waveState
@@ -87,8 +90,9 @@ public class EnemySpawnManager : MonoBehaviour
         maxWaves = allWaves.Count;
         currentWave = 0;
         canStartNewWave = true;
-        waveInfoText.alpha = 0f;
-        skullImage.enabled = false; 
+        enemyCountText.alpha = 0f;
+        skullImage.enabled = false;
+        TurnOffWave(); 
 
     }
 
@@ -96,6 +100,7 @@ public class EnemySpawnManager : MonoBehaviour
     {
         if (waveArea != null)
         {
+            if (waveIsTurnedOff) TurnOnWave(); 
             CheckForWave();
             CheckForCleanUp();
             HandleUI();
@@ -106,10 +111,32 @@ public class EnemySpawnManager : MonoBehaviour
                 CheckForEnemySpawn();
             }
         }
+        else
+        {
+            TurnOffWave(); 
+        }
     }
 
     void CheckForEnemyCount()
     {
+
+    }
+
+    void TurnOffWave()
+    {
+        waveIsTurnedOff = true; 
+        waveArea = null; 
+        waveText.gameObject.SetActive(false);
+        enemyCountText.gameObject.SetActive(false);
+        skullImage.gameObject.SetActive(false); 
+    }
+
+    void TurnOnWave()
+    {
+        waveIsTurnedOff = false;
+        waveText.gameObject.SetActive(true);
+        enemyCountText.gameObject.SetActive(true);
+        skullImage.gameObject.SetActive(true);
 
     }
 
@@ -169,7 +196,7 @@ public class EnemySpawnManager : MonoBehaviour
     void CheckForWave()
     {
 
-        if (waveHasStarted) waveInfoText.text = enemiesLeft.ToString(); 
+        if (waveHasStarted) enemyCountText.text = enemiesLeft.ToString(); 
 
         if (enemiesSpawnedThisWave >=  maxEnemiesToSpawnThisWave|| currentWave == 0) 
         {
@@ -227,6 +254,8 @@ public class EnemySpawnManager : MonoBehaviour
 
     void EndWaves()
     {
+        waveTurnOffTimer += Time.deltaTime;
+        if (waveTurnOffTimer >= waveTurnOffDuration) TurnOffWave(); 
         canStartNewWave = false;
         waveText.text = "ENEMIES DESTROYED"; 
     }
@@ -235,15 +264,15 @@ public class EnemySpawnManager : MonoBehaviour
     {
         if (waveHasStarted && waveText.alpha > 0) waveText.alpha -= Time.deltaTime * .1f;
 
-        if (waveHasStarted && waveText.alpha <= 0 && waveInfoText.alpha < 1)
+        if (waveHasStarted && waveText.alpha <= 0 && enemyCountText.alpha < 1)
         {
-            waveInfoText.alpha += Time.deltaTime * .35f;
+            enemyCountText.alpha += Time.deltaTime * .35f;
             skullImage.enabled = true; 
         }
         else if (waveHasEnded)
         {
-            skullImage.enabled = false; 
-            waveInfoText.alpha = 0f;
+            skullImage.enabled = false;
+            enemyCountText.alpha = 0f;
         }
     }
 
@@ -258,7 +287,7 @@ public class EnemySpawnManager : MonoBehaviour
         enemiesSpawnedThisWave = 0;
 
         canStartNewWave = true;
-        waveInfoText.alpha = 0f;
+        enemyCountText.alpha = 0f;
         skullImage.enabled = false;
     }
 

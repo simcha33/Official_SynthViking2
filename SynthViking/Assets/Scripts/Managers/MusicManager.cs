@@ -7,6 +7,7 @@ using TMPro;
 
 public class MusicManager : MonoBehaviour
 {
+    public eventManagerScript eventScript; 
 
     //public TextMeshPro songTitle;
     public string currentTextString; 
@@ -20,13 +21,14 @@ public class MusicManager : MonoBehaviour
     public float songDuration;
     public float songTimer; 
     public MMFeedbackSound minVol; 
-    public MMFeedbackSound maxVol; 
+    public MMFeedbackSound maxVol;
+    public bool randomSong = true; 
 
     // Start is called before the first frame update
     void Start()
     {
-        songIsFinished = true;
-        canChangeSong = true; 
+     //   songIsFinished = true;
+      // canChangeSong = true; 
         
     }
 
@@ -45,15 +47,23 @@ public class MusicManager : MonoBehaviour
         
     }
 
-    void ChooseNextSong()
+    public void ChooseNextSong()
     {
         //Set next song
-        int choosenSong = Random.Range(0, unplayedmusicList.Count); 
-        currentSong = unplayedmusicList[choosenSong];
+        if (randomSong)
+        {
+            int choosenSong = Random.Range(0, unplayedmusicList.Count);
+            currentSong = unplayedmusicList[choosenSong];
+        }
+        else
+        {
+            currentSong = eventScript.currentSong; 
+        }
+
         songDuration = currentSong.GetComponent<MMFeedbackSound>().FeedbackDuration;
         currentTextString = currentSong.GetComponent<MMFeedbackSound>().name;
    
-        currentSong.GetComponent<MMFeedbackSound>().MaxVolume = currentSong.GetComponent<MMFeedbackSound>().MinVolume = songVolume; 
+     //   currentSong.GetComponent<MMFeedbackSound>().MaxVolume = currentSong.GetComponent<MMFeedbackSound>().MinVolume = songVolume; 
         currentSong?.PlayFeedbacks();
    
         //Change lists

@@ -495,12 +495,14 @@ public class BasicEnemyScript : MonoBehaviour
         //Choose next attack in the combo 
         if(gameObject.CompareTag("BasicEnemy"))
         {
-            totalAttackTrees = 0;  
-            currentComboLength++; 
-           
-            if (currentComboLength == 1) enemyAnim.SetInteger("AttackType", 1); //Set combo attack tree         
-            if(enemyAnim.GetInteger("AttackType") == 1) totalComboLength = 3; //Check length of combo attack tree 
-            if(currentComboLength > totalComboLength) currentComboLength = 0;
+            if (currentComboLength >= totalComboLength) currentComboLength = 0;
+            totalAttackTrees = 0;
+            currentComboLength++;
+
+             if (currentComboLength == 1) enemyAnim.SetInteger("AttackType", 1); //Set combo attack tree   
+           // enemyAnim.SetInteger("AttackType", 1);
+            if (enemyAnim.GetInteger("AttackType") == 1) totalComboLength = 3; //Check length of combo attack tree 
+          //  if(currentComboLength > totalComboLength) currentComboLength = 0;
             
         }
         else if(gameObject.CompareTag("BigEnemy"))
@@ -521,8 +523,7 @@ public class BasicEnemyScript : MonoBehaviour
 
         if (canAttack)
         {
-            
-            print("attack trigger");  
+           
             canAttack = false; 
             isAttacking = true;
             canRotate = true;
@@ -853,6 +854,7 @@ public class BasicEnemyScript : MonoBehaviour
         enemyRb.mass = originalRbMass;
         enemyMeshr.materials = deadSkinMat;
         isDead = true;
+        //canBeTargeted = false; 
         enemyAgent.enabled = false;
         chainHitScript.enabled = true;
         chainHitScript.SetChainHitType(DamageType);

@@ -21,7 +21,10 @@ public class CheckForLimbs : MonoBehaviour
 
     public float bloodDripTimer; 
 
-    public Transform axeBlade; 
+    public Transform axeBlade;
+
+    //public float limbCheckRadius;  
+    public Vector3 limbCheckRadius;
 
     void Start()
     {
@@ -52,6 +55,7 @@ public class CheckForLimbs : MonoBehaviour
 
         void OnTriggerEnter(Collider other)
         {
+        
             if (!hitLimbs.Contains(other.attachedRigidbody) && other.gameObject.CompareTag("Limb"))
             {
                 hitLimbs.Add(other.attachedRigidbody);
@@ -61,11 +65,34 @@ public class CheckForLimbs : MonoBehaviour
             {
                 hitInsides.Add(other.gameObject);
             }
+        
         }
- 
+
+    /*
+
+    public void LimbCheck()
+    {
+        // Collider[] colls = Physics.OverlapSphere(playerController.transform.position, playerController.blockStunRadius);     
+
+        Collider[] limbColls = Physics.OverlapBox(transform.position, limbCheckRadius, transform.rotation); 
+
+        foreach (Collider limb in limbColls)
+        {
+            if (!hitLimbs.Contains(limb.attachedRigidbody) && limb.gameObject.CompareTag("Limb"))
+            {
+                hitLimbs.Add(limb.attachedRigidbody);
+                print("addlimb"); 
+            }
+
+            if (!hitInsides.Contains(limb.gameObject) && limb.gameObject.CompareTag("EnemyInside"))
+            {
+                hitInsides.Add(limb.gameObject);
+            }
+        }
+    }
+    */
 
 
-    
 
     public void CheckForBloodDrip()
     {

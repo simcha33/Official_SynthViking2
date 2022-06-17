@@ -66,6 +66,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public float minJumpForce = 450f;
     public float maxChargedJumpForce;
     public float currentJumpForce;
+    private bool isChargedJump;
+
 
     public float maxJumpChargeDuration;
     private float maxJumpChargeTimer;
@@ -78,13 +80,14 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public float maxJumps;
     private int jumpCount; 
     private bool hasJumped = false;
+
     // private float jumpDelayTimer;
     //private float randomJumpVar = 2;
 
     //Movement
-
     public float airMoveSpeed;
     public float freeFallMoveSpeed;
+    public float chargedJumpMoveSpeed;
     public float airDrag = 2f;
     public float fallMultiplier = 5f;
     public float lowJumpGravity;
@@ -776,8 +779,9 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         {
             //wasSprintingBeforeJump = false; 
             if (isFreeFalling) currentMoveSpeed = freeFallMoveSpeed;
-            else if (!isAttacking) currentMoveSpeed = airMoveSpeed;           
-            else if(isAttacking) currentMoveSpeed = attackMoveSpeed;
+            else if (isChargedJump) currentMoveSpeed = chargedJumpMoveSpeed; 
+            else if (!isAttacking) currentMoveSpeed = airMoveSpeed;
+            else if (isAttacking) currentMoveSpeed = attackMoveSpeed;
         }
 
     }
@@ -1156,7 +1160,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
             if (currentJumpForce < maxChargedJumpForce && maxJumpChargeTimer > .3f) //Build up charge force
             {
-                currentJumpForce = ((maxJumpChargeTimer - .3f) / maxJumpChargeDuration) * maxChargedJumpForce;
+                currentJumpForce = ((maxJumpChargeTimer - .3f) / maxJumpChargeDuration) * (maxChargedJumpForce + minJumpForce);
                 mainGameManager.DoHaptics(.2f, .1f * (currentJumpForce / maxChargedJumpForce), .2f *(currentJumpForce / maxChargedJumpForce));
             }
             else if (currentJumpForce >= maxChargedJumpForce)
@@ -1172,7 +1176,10 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             if (wantsToJump && !input.jumpButtonPressed && canJump)
             {
                 jumpCount++;
-                playerAnim.SetFloat("JumpCount", jumpCount); 
+                playerAnim.SetFloat("JumpCount", jumpCount);
+                //if (jumpCount > 1) inAirTime = .2f;
+                if (isChargedJump) inAirTime = .2f; 
+
                 if (isSprinting && jumpCount == 1) wasSprintingBeforeJump = true; //check if we we're running before the jump
 
                 if(isWallRunning) ResetStates(); 
@@ -1185,11 +1192,9 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 isLanding = false;
                 hasJumped = true;
                 canJump = false;
-                wantsToJump = false;             
+                wantsToJump = false;
 
-               // if (jumpCount == 1 && currentJumpForce < minJumpForce) playerAnim.SetFloat("RandomJumpVar", 0f);
-              //  else playerAnim.SetFloat("RandomJumpVar", Random.Range(1, 5)); //Randomly select a second jump animation 
-              //  playerAnim.SetTrigger("JumpTrigger");              
+                        
             }
             else if (!input.jumpButtonPressed && !hasJumped) canJump = true;
 
@@ -1210,14 +1215,16 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
                 //Set and trigger correct animation
                 ResetAnimator();
-                if (currentJumpForce < minJumpForce || inAirTime > .2f)
+                if (currentJumpForce < minJumpForce || inAirTime >= .2f)
                 {
                    
                     currentJumpForce = minJumpForce;
+                    isChargedJump = false;
                 }
                 else
                 {
-                    chargedJumpFeedback?.PlayFeedbacks(); 
+                    chargedJumpFeedback?.PlayFeedbacks();
+                    isChargedJump = true; 
                 }
 
                 if (currentJumpForce > minJumpForce) playerAnim.SetFloat("RandomJumpVar", 5);
@@ -1246,27 +1253,29 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //Low and high jumps
         else if (playerRb.velocity.y > 0) playerRb.velocity += Vector3.up * Physics.gravity.y * (lowJumpGravity - 1) * Time.deltaTime;
 
-        //Trigger free fall animation
+        HandleFreeFall(); 
+    }
+
+    void HandleFreeFall()
+    {
+
+        //Trigger free fall
         if (playerRb.velocity.y <= -20f && !isLanding && !isGrounded && inAirTime >= freefallWaitTime && !isAttacking && !isWallRunning)
         {
             if (!isFreeFalling)
             {
-                playerAnim.SetTrigger("FreeFallTrigger"); 
+                playerAnim.SetTrigger("FreeFallTrigger");
                 playerModel.localEulerAngles = new Vector3(playerModel.localEulerAngles.x + 72, 0, 0);
             }
             isFreeFalling = true;
-           // Debug.Log(playerRb.velocity.y); 
-            
+
         }
         else
         {
-            //  playerModel.eulerAngles = new Vector3(0, 0, 0);
-            //if(isFreeFalling)             playerModel.localEulerAngles = startingRotation;
-            if(isFreeFalling) playerModel.localEulerAngles = new Vector3(0, 0, 0); 
+            if (isFreeFalling) playerModel.localEulerAngles = new Vector3(0, 0, 0);
             isFreeFalling = false;
 
         }
-
     }
 
     public void DoJump(float jumpHeight)
@@ -1284,6 +1293,16 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         jumpEffect.AddComponent<CleanUpScript>().SetCleanUp(3f);
 
         playerRb.AddForce(Vector3.up * jumpHeight, ForceMode.Impulse);
+
+        if (jumpHeight > minJumpForce && isRunning)
+        {
+            
+
+        }
+        else if (jumpHeight > minJumpForce && isSprinting)
+        {
+         
+        }
         
         if (isWallRunning)
         {
@@ -1353,9 +1372,11 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 { 
                     canLand = false;
                     isInAir = false;
-                   // isFreeFalling = false; 
+                    // isFreeFalling = false; 
+                    wantsToJump = false; 
                     isLanding = true;
                     landingDelayTimer = 0f;
+                    isChargedJump = false; 
                     playerAnim.SetTrigger("LandingTrigger");               
                                
                 }
@@ -1384,12 +1405,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         else if(moveVelocity <= .3f) landingDelayDuration = (noMoveLandingClip.length / playerAnim.GetCurrentAnimatorStateInfo(0).speed);
         
         landingDelayTimer += Time.deltaTime;
-
-        if(isGrounded)
-        {   
-           // GameObject landEffect = Instantiate(landVFX, transform.position, transform.rotation); 
-           // landEffect.AddComponent<CleanUpScript>(); 
-        }
 
         if(landingDelayTimer >= landingDelayDuration - .15f) isLanding = false; 
         
@@ -1477,17 +1492,17 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         {
             transform.DOMove(jumpOffPoint, .25f); 
             transform.DORotate(new Vector3(transform.eulerAngles.x, transform.eulerAngles.y + 180, transform.eulerAngles.z), .5f);
-            print("check1");
+            
         }
         else if (!input.jumpButtonPressed && wantsToJump && !wallRunCooldown) 
         {
 
             DoJump(minJumpForce * .05f);
-            print("check2");
+            
         }
         else
         {
-            print("check3");
+           
         }
 
         wallRunExitWithJump = false; 
@@ -1696,17 +1711,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             controllerState = previousState;
             //  controllerState = (int)currentState.MOVING; 
         }
-        /*
-        else if (input.heavyAttackButtonPressed)
-        {
-            canBlockStun = true;
-            isBlocking = false;
-            playerState.canBeHit = true;
-            blockTimer = 0f;
-            CheckForAttack();
-        }
-        */
-
       
     }
 
@@ -1922,6 +1926,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             }
 
             CheckForMoveInput(); //Set attack direction 
+
             //Trigger correct animation stuff 
             AttackFeedback?.PlayFeedbacks();
             playerAnim.SetBool("IsAttacking", true);
@@ -1966,7 +1971,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
        
 
             //currentMoveSpeed = attackMoveSpeed;
-            print("Check1"); 
             isAttacking = true;
         }
         else
@@ -2018,6 +2022,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         isDashAttacking = false;
         isAirSmashing = false;
         isGroundSmash = false;
+        isChargedJump = false;
+       
 
         alllowForwardForce = false; 
 
@@ -2044,8 +2050,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     void AllowAttackDamage()
     {
         attackTargetScript.TargetDamageCheck();
-        attackDirection = transform.position + inputDir;
-        Debug.Log(attackState); 
+        attackDirection = transform.position + inputDir; 
         // if (attackState != currentAttackType.SprintAttack.ToString()) transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .35f).SetUpdate(UpdateType.Fixed);
         //else meshR.materials = defaultSkinMat; 
    //     meshR.materials = defaultSkinMat;

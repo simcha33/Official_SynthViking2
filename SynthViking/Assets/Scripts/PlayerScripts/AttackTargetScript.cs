@@ -279,9 +279,15 @@ public class AttackTargetScript : MonoBehaviour
                 if(!playerController.isGrounded || playerController.attackState == playerAttackType.AirLaunchAttack.ToString()) backDirection = playerController.transform.position + transform.forward * playerController.currentAttackForwardForce * attackBackForce;
                 else if (playerController.isGrounded) backDirection = enemyScript.transform.position + enemyScript.transform.forward * (playerController.currentAttackForwardForce * .8f) * attackBackForce;
 
-                enemyScript.transform.LookAt(playerController.transform); 
-                if (enemyScript.isDead) KillEnemy(enemyScript); //The enemy is dead
+                enemyScript.transform.LookAt(playerController.transform);
+
+                if (enemyScript.isDead)
+                {
+                    KillEnemy(enemyScript); //The enemy is dead
+                 //   enemyScript.canBeTargeted = false;
+                }
                 else AddhitFeedback(enemyScript, backDirection); //The enemy is not dead
+               
                               
                 if (enemyScript.isRagdolling ||  enemyScript.isDead) enemyScript.enemyRb.AddForce(Vector3.up * 10f, ForceMode.VelocityChange);
                 limbCheckerScript.hitInsides.Clear();              
@@ -306,8 +312,10 @@ public class AttackTargetScript : MonoBehaviour
     {
         if (playerController.attackState == playerAttackType.HeavyAxeHit.ToString()) //Axe kill
         {
-            
+
             //Collect and detach limbs
+           // limbCheckerScript.LimbCheck(); 
+
             foreach (Rigidbody limb in limbCheckerScript.hitLimbs)
             {
                 
@@ -346,7 +354,6 @@ public class AttackTargetScript : MonoBehaviour
 
         else if (playerController.attackState == playerAttackType.LightPunchHit.ToString() && enemyScript.canBeTargeted) //Kill someone with punch
         {
-
             enemyScript.transform.LookAt(playerController.transform);
             playerController.mainGameManager.DoHaptics(.2f, .7f, .8f);
             punchKillList.Add(enemyScript);

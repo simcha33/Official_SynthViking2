@@ -33,12 +33,15 @@ public class GameManager : MonoBehaviour
         {
             if (hapticDuration > 0) DoHaptics(hapticDuration, curLowFreq, cureHighFreq);
         }
+
+        /*
         else
         {
             gamepad = Gamepad.current;
         }
 
         if (gamepad == null) gamepad = Gamepad.current; 
+        */
     }
 
     public void ResetScene()
@@ -53,13 +56,16 @@ public class GameManager : MonoBehaviour
 
     public void DoHaptics(float duration, float lowFreq, float highFreq)
     {
-        curLowFreq = lowFreq; 
-        cureHighFreq = highFreq; 
-        hapticDuration = duration; 
-        hapticDuration -= Time.deltaTime; 
-        gamepad.SetMotorSpeeds(lowFreq, highFreq);
+        if (gamepad != null)
+        {
+            curLowFreq = lowFreq;
+            cureHighFreq = highFreq;
+            hapticDuration = duration;
+            hapticDuration -= Time.deltaTime;
+            gamepad.SetMotorSpeeds(lowFreq, highFreq);
 
-        if(hapticDuration <= 0) InputSystem.ResetHaptics(); 
+            if (hapticDuration <= 0) InputSystem.ResetHaptics();
+        }
     }
 
 

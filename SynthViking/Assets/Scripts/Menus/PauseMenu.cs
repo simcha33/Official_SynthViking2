@@ -74,7 +74,6 @@ public class PauseMenu : MonoBehaviour
         gameOverMenuCanvas.SetActive(true);
         //gameOverText.alpha += Time.deltaTime * .5f;
         gameOverText.alpha = 1f; 
-        Debug.Log("thehelll??"); 
     }
 
 
