@@ -20,7 +20,10 @@ public class CameraHandeler : MonoBehaviour
     public Camera mainCam; 
    
     private int highPrio = 10; 
-    private int LowPrio = 9; 
+    private int LowPrio = 9;
+
+    public float manualCamUsedTimer; 
+    public float autoCamEnabledDuration; 
 
     public List<CinemachineFreeLook> playerCameras = new List<CinemachineFreeLook>();
     public List<CinemachineVirtualCamera> eventCameras = new List<CinemachineVirtualCamera>();
@@ -43,9 +46,8 @@ public class CameraHandeler : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        CheckForCamera(); 
 
-        
+        CheckForCamera(); 
     }
 
 
@@ -101,7 +103,7 @@ public class CameraHandeler : MonoBehaviour
                 else cam.Priority = LowPrio;
             }
 
-            print("helooo??"); 
+  
         }
         else if (eventScript.currentEventCam != null)
         {

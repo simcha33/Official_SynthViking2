@@ -23,9 +23,12 @@ public class eventManagerScript : MonoBehaviour
     [HideInInspector] public MMFeedbacks currentEventFeedback;
     [HideInInspector] public GameObject currentEnvorinment;
     [HideInInspector] public AudioClip currentMusicclip;
-    [HideInInspector] public TextMeshPro currentEventText;
+    public TextMeshPro currentEventText;
+    public TextMeshPro currentTutorialText; 
     public Transform hidePosition;
 
+    [Header("Event 1: Íntro")]
+    public MMFeedbacks event0Feedback;
 
     [Header("Event 1: Íntro")]
     public Transform event1Position;
@@ -39,9 +42,18 @@ public class eventManagerScript : MonoBehaviour
     public GameObject environment2;
     public MMFeedbacks event2Feedback;
 
-    [Header("Event 3: The title card")]
-    public MMFeedbacks event3Feedback;
+    [Header("Event 3: PlanetSwap")]
+    public GameObject outsidePlanet;
+    public GameObject insidePlanet;
+    public GameObject barrackEnvironment;
+
+    [Header("Event 4: The title card")]
+    public MMFeedbacks event4Feedback;
     public TextMeshPro titelCardText;
+
+    [Header("Event 5: Tutorial Basic Combat")]
+  //  public TextMeshPro basicCombatTutorialText;
+    public GameObject basicCombatTutoiral; 
 
 
 
@@ -64,51 +76,76 @@ public class eventManagerScript : MonoBehaviour
     [Header("Event Camera")]
     public bool blackCamera;
     public CinemachineVirtualCamera currentEventCam;
+    public CinemachineVirtualCamera eventCam0;
     public CinemachineVirtualCamera eventCam1;
+ 
     public List<CinemachineVirtualCamera> eventCameras = new List<CinemachineVirtualCamera>(); 
 
 
     void Start()
     {
 
-       currentEvent = 1;       
+       //currentEvent = 1;       
        eventTimer = 0f;
+
 
         if (startWithEvent)
         {
-            currentEvent = eventToStartAt; 
-            SetNewEvent(currentEvent);
+            currentEvent = eventToStartAt;
+            SetNewEvent(eventToStartAt);
         }
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (eventTimer > 0) DoEventTimer(eventDuration); 
+        if (eventTimer > 0) DoEventTimer(eventDuration);
     }
 
     public void SetNewEvent(int eventInt)
     {
         currentEvent = eventInt;
 
-        //Starting dialog 
-        if(currentEvent == 1)
+        if (currentEvent == 0)
         {
+            /*
+            currentEventFeedback = event0Feedback;
+            currentSong = musicFeedback1;
+            currentEventCam = eventCam0;
+            playerController.transform.position = hidePosition.position;
+             eventDuration = currentEventFeedback.GetComponent<MMFeedbackSound>().FeedbackDuration - .5f; //Event will end after a timer 
+            eventTimer = 45f;
+            doCountdown = true;
+
+            musicManagerScript.randomSong = false;
+            ChangeMusic();
+            turnOffCamera();
+            TurnOffUI();
+            */
+
+
+        }
+
+        //Starting dialog 
+        if (currentEvent == 1)
+        {
+            
             currentEventFeedback = event1Feedback;
             currentSong = musicFeedback1;
             currentEventCam = eventCam1;
             playerController.transform.position = hidePosition.position; 
 
-            eventTimer = eventDuration = currentEventFeedback.GetComponent<MMFeedbackSound>().FeedbackDuration; //Event will end after a timer 
-
-            
+            eventDuration = currentEventFeedback.GetComponent<MMFeedbackSound>().FeedbackDuration; //Event will end after a timer 
+            eventTimer = eventDuration - .2f; 
+      
             doCountdown = true;        
             musicManagerScript.randomSong = false;
-
-            //DisablePlayer(); 
+  
             ChangeMusic(); 
             turnOffCamera();
-            TurnOffUI();         
+            TurnOffUI();       
+         
         }
 
         //THe big freefall into the planet
@@ -117,25 +154,38 @@ public class eventManagerScript : MonoBehaviour
             currentEventFeedback = event2Feedback;
             playerController.transform.position = event2Position.position;
             playerController.inAirTime = playerController.freefallWaitTime;
-            currentEnvorinment = environment2; 
-            currentEnvorinment.SetActive(true); 
-          
+            currentEnvorinment = environment2;
+            barrackEnvironment.SetActive(false); 
+            currentEnvorinment.SetActive(true);
+           // outsidePlanet.SetActive(true);
+          //  insidePlanet.SetActive(false);
+
         }
 
-        if(currentEvent == 3)
+        //Planet swap
+        if (currentEvent == 3)
         {
-            currentEventFeedback = event3Feedback;
-            currentEventText = titelCardText; 
-            eventTimer = currentEventFeedback.GetComponent<MMFeedbackTimescaleModifier>().FeedbackDuration; 
+            //outsidePlanet.SetActive(false);
+          //insidePlanet.SetActive(true);
+            currentEnvorinment = barrackEnvironment;
+            barrackEnvironment.SetActive(true); 
         }
 
+        //Title Card
+        if (currentEvent == 4)
+        {
+            currentEventFeedback = event4Feedback;
+            currentEventText = titelCardText; 
+         //   eventTimer = currentEventFeedback.GetComponent<MMFeedbackTimescaleModifier>().FeedbackDuration; 
+        }
+    
         if (currentEventText != null) currentEventText.gameObject.SetActive(true); 
         currentEventFeedback?.PlayFeedbacks(); 
     }
 
     void DoEventTimer(float duration)
     {
-        eventTimer -= Time.unscaledDeltaTime; 
+        eventTimer -= Time.deltaTime; 
 
         if(eventTimer < 0)
         {
@@ -145,7 +195,7 @@ public class eventManagerScript : MonoBehaviour
 
     public void EndEvent()
     {    
-        currentEventFeedback.StopFeedbacks();
+        currentEventFeedback?.StopFeedbacks();
         TurnOnUI();
         TurnOnCamera();
      

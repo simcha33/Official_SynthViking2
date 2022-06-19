@@ -2,7 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using MoreMountains.Feedbacks;
-using UnityEngine.UI; 
+using UnityEngine.UI;
+using Cinemachine; 
 
 public class SlowMoScript : MonoBehaviour
 {
@@ -10,7 +11,8 @@ public class SlowMoScript : MonoBehaviour
     public ThirdPerson_PlayerControler playerController;
     public PlayerInputCheck input;
     public Slider slowMoSlider;
-    public Image slowMoBar; 
+    public Image slowMoBar;
+    public CinemachineFreeLook aimCam; 
 
     public float maxSlowMoTime;
     public float currentSlowmoTime;
@@ -21,7 +23,8 @@ public class SlowMoScript : MonoBehaviour
     public bool canSlowmo;
     public bool isInSlowmo; 
     public bool isRecharging; 
-    public float currentTimeScale; 
+    public float currentTimeScale;
+    public float dashChargeTimeScale = .45f; 
 
     public MMTimeManager timeManager; 
 
@@ -36,6 +39,7 @@ public class SlowMoScript : MonoBehaviour
     void Update()
     {
         if (!playerController.mainGameManager.gameIsPaused) CheckForSlowmo();
+     
     }
 
     
@@ -51,12 +55,15 @@ public class SlowMoScript : MonoBehaviour
         {
             if(!isInSlowmo)
             { 
-                timeManager.SetTimescaleTo(.45f);
+               
+                aimCam.m_YAxis.m_MaxSpeed /= dashChargeTimeScale;
+                aimCam.m_XAxis.m_MaxSpeed /= dashChargeTimeScale; 
+
                 isInSlowmo = true; 
             }
             isRecharging = false; 
             
-            DoSlowmo(true, .51f); 
+            DoSlowmo(true, dashChargeTimeScale); 
 
         }
 
@@ -74,8 +81,12 @@ public class SlowMoScript : MonoBehaviour
             { 
                 canSlowmo = false; 
                 isInSlowmo = false; 
-                isRecharging = true; 
-                timeManager.SetTimescaleTo(1f);   
+                isRecharging = true;
+                aimCam.m_YAxis.m_MaxSpeed *= dashChargeTimeScale;
+                aimCam.m_XAxis.m_MaxSpeed *= dashChargeTimeScale;
+          
+                timeManager.SetTimescaleTo(1f);  
+                
                 slowmoRechargeCooldownTimer = slowmoRechargeCooldownDuration;             
             }      
 
@@ -86,6 +97,7 @@ public class SlowMoScript : MonoBehaviour
     public void DoSlowmo(bool hasCost, float timeScaleModifier)
     {  
         if(hasCost) currentSlowmoTime -= Time.unscaledDeltaTime;
+        timeManager.SetTimescaleTo(timeScaleModifier);
     }
 
     void DoSlowmoRecharge()

@@ -5,6 +5,7 @@ using MoreMountains.Feedbacks;
 
 public class DamageObject : MonoBehaviour
 {
+    public ThirdPerson_PlayerControler player; 
 
     public float damageAmount;
 
@@ -13,6 +14,7 @@ public class DamageObject : MonoBehaviour
     public bool isLaser;
     public bool isMine; 
     public bool canHurtEnemies;
+    public bool isSawBalde; 
 
     [Header ("Components")]
     public GameObject mineExplosionEffect; 
@@ -21,12 +23,8 @@ public class DamageObject : MonoBehaviour
     [Header("Components")]
     public MMFeedbacks explosionFeedback;
 
+    public List<GameObject> sawBlades = new List<GameObject>(); 
 
-    public enum trapType
-    {
-        lava,
-        spike,
-    }
 
     private void Start()
     {
@@ -54,7 +52,7 @@ public class DamageObject : MonoBehaviour
                 }
             }
 
-            else if(other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+            if(other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
                 BasicEnemyScript enemyScript = other.gameObject.GetComponent<BasicEnemyScript>(); 
                 enemyScript.TakeDamage(enemyScript.maxHealth, "EnvironmentDamage");
@@ -80,6 +78,43 @@ public class DamageObject : MonoBehaviour
         if (isHammer)
         {
             target.LaunchEnemy(transform.forward, 25f, 6f); 
+        }
+
+        if (isSawBalde)
+        {
+            ExplodeTarget(target); 
+        }
+    }
+
+    void ExplodeTarget(BasicEnemyScript enemyScript)
+    {
+        foreach(Rigidbody limb in enemyScript.ragdollRbs)
+        {
+
+
+            //Add blood 
+            if (limb.GetComponent<CharacterJoint>() != null)
+            {
+                CharacterJoint joint = limb.GetComponent<CharacterJoint>();
+                GameObject blood2 = Instantiate(player.attackTargetScript.limbBloodVFX, joint.transform.position, joint.transform.rotation);
+                GameObject blood3 = Instantiate(player.attackTargetScript.bloodDrip, joint.transform.position, joint.transform.rotation);
+                GameObject blood4 = Instantiate(player.attackTargetScript.limbBloodVFX, joint.transform.position, joint.transform.rotation);
+                GameObject axeDust = Instantiate(player.attackTargetScript.axeDustVFX, joint.transform.position, joint.transform.rotation);
+                blood4.transform.parent = enemyScript.transform;
+                blood2.transform.parent = blood3.transform.parent = axeDust.transform.parent = limb.transform;
+                blood2.AddComponent<CleanUpScript>();
+                axeDust.AddComponent<CleanUpScript>();
+
+                //Detach and launch limb rb's 
+                Destroy(joint);
+                limb.transform.parent = null;
+                limb.velocity = new Vector3(0, 0, 0);
+                limb.AddExplosionForce(10f, limb.position, 2f, 4f, ForceMode.Impulse);
+                limb.AddForce(Vector3.up * Random.Range(1f, 3f), ForceMode.Impulse);
+                if (enemyScript.canBeTargeted) limb.mass *= 3f;
+            }
+            
+          
         }
     }
 

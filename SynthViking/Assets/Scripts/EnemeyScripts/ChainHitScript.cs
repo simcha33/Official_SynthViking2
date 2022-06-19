@@ -6,6 +6,7 @@ public class ChainHitScript : MonoBehaviour
 {
 
     public BasicEnemyScript mainScript;
+    public ThirdPerson_PlayerControler playerController; 
     public bool isOrigin;
     private bool canCheck = false;
     public float chainHitMaxDistance = 20f;
@@ -20,6 +21,12 @@ public class ChainHitScript : MonoBehaviour
     public float axeHitChainActiveDuration;
     public float axeHitChainDamage = 0;
     public float axeHitStunDuration;
+    
+    [Header ("PUNCH CHAIN HIT")]
+    public float punchHitForce;
+    public float punchHitChainActiveDuration;
+    public float punchHitChainDamage = 0;
+    public float punchHitStunDuration;
 
     [Header("BLOCK CHAIN HIT")]
     public float blockHitForce; 
@@ -53,7 +60,8 @@ public class ChainHitScript : MonoBehaviour
 
     private void Start()
     {
-        chainHitString = "ChainStunHIt"; 
+        chainHitString = "ChainStunHIt";
+        playerController = GameObject.Find("Player").GetComponent<ThirdPerson_PlayerControler>(); 
         chainHitActiveTimer = 0f; 
     }
 
@@ -111,6 +119,7 @@ public class ChainHitScript : MonoBehaviour
                 {
                     otherScript.enemyRb.mass = otherScript.originalRbMass;
                     otherScript.LaunchEnemy(launchDirection, currentChainHitBackForce, 10f);
+                    
         
                 }
                 else
@@ -120,11 +129,19 @@ public class ChainHitScript : MonoBehaviour
                     //Set launch direction 
                     otherScript.enemyRb.velocity = new Vector3(0f, 0f, 0f);
                     otherScript.launchDirection = mainScript.launchDirection; //Base launch direction of attackers forward 
+                    print(currentChainHitBackForce); 
                     otherScript.enemyRb.AddForce(mainScript.launchDirection * currentChainHitBackForce, ForceMode.Impulse);
+
+                    //Spawn punch force effect 2
+                    GameObject dashAttackEffect = Instantiate(playerController.airPunchEffect, otherScript.transform.position + new Vector3(0, 1.5f, 0), transform.rotation);
+                    dashAttackEffect.transform.LookAt(otherScript.transform.forward + new Vector3(0, .5f, 0));
+                    dashAttackEffect.transform.eulerAngles = new Vector3(dashAttackEffect.transform.eulerAngles.x - 180, dashAttackEffect.transform.eulerAngles.y, dashAttackEffect.transform.eulerAngles.z);
+                    dashAttackEffect.transform.localScale *= .45f;
+
                 }
-                      
-                           
-                otherScript.enemyRb.AddForce(launchDirection * currentChainHitBackForce, ForceMode.Impulse);
+
+              
+             //   otherScript.enemyRb.AddForce(launchDirection * currentChainHitBackForce, ForceMode.Impulse);
                 otherScript.enemyMeshr.materials = otherScript.stunnedSkinMat;
                 otherScript.stunDuration = currentStunDuration; 
                 otherScript.mainCollider.isTrigger = true; 
@@ -167,12 +184,12 @@ public class ChainHitScript : MonoBehaviour
         
         if(stunType == playerAttackType.LightPunchHit.ToString()) //Light axe hit 
         {
-
-            currentChainHitActiveDuration = axeHitChainActiveDuration / 2 ; 
-            currentChainHitBackForce = axeHitForce /2;
-            currentDamage = axeHitChainDamage /2; 
+            
+            currentChainHitActiveDuration = punchHitChainActiveDuration; 
+            currentChainHitBackForce = punchHitForce;
+            currentDamage = punchHitChainDamage; 
             stunType = playerAttackType.LightPunchHit.ToString();
-            currentStunDuration = axeHitStunDuration /2; 
+            currentStunDuration = punchHitStunDuration; 
             
         }
 
@@ -185,6 +202,7 @@ public class ChainHitScript : MonoBehaviour
             stunType = playerAttackType.BlockStun.ToString();
         }
 
+       
         if (stunType == chainHitString) //Normale chain stun 
         {     
             currentChainHitActiveDuration = chainHitActiveDuration;
@@ -194,6 +212,7 @@ public class ChainHitScript : MonoBehaviour
             stunType = chainHitString;
             
         }
+        
 
         chainType = stunType;
         canCheck = true; 

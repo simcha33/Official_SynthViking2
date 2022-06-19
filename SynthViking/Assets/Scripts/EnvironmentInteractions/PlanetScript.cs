@@ -5,8 +5,9 @@ using UnityEngine;
 public class PlanetScript : MonoBehaviour
 {
 
-    public float rotationSpeed;
-    public Transform planet; 
+    public Vector3 rotationSpeed; 
+    public Transform planet;
+ 
 
 
     private void FixedUpdate()
@@ -16,7 +17,8 @@ public class PlanetScript : MonoBehaviour
 
     void RotatePlanet()
     {
-        planet.transform.eulerAngles += new Vector3(0, rotationSpeed, 0); 
+        planet.transform.eulerAngles += new Vector3(rotationSpeed.x, rotationSpeed.y , rotationSpeed.z);
+    
     }
 }
 

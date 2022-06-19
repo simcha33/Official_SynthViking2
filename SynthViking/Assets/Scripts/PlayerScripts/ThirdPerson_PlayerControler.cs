@@ -274,6 +274,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public float wallRunMoveSpeed;
     public float wallRunUpSpeed;
     public float frontWallCheckDist;
+    public float climbWallCheckDist; 
     public float sideWallCheckDist;
     public float exitJumpDistance; 
     public Transform frontWallChecker;
@@ -774,14 +775,14 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
   //      else if (attackState == playerAttackType.AirLaunchAttack.ToString()) currentMoveSpeed = 0;
         else if (isWallRunning) currentMoveSpeed = wallRunMoveSpeed; //Wallrunning
-        else if (wasSprintingBeforeJump) currentMoveSpeed = airMoveSpeed * 1.5f; //Jumping after sprinting 
+      //  else if (wasSprintingBeforeJump) currentMoveSpeed = currentMoveSpeed * 1.2f; //Jumping after sprinting 
         else if (isInAir) //Normale air move speed 
         {
             //wasSprintingBeforeJump = false; 
             if (isFreeFalling) currentMoveSpeed = freeFallMoveSpeed;
             else if (isChargedJump) currentMoveSpeed = chargedJumpMoveSpeed; 
             else if (!isAttacking) currentMoveSpeed = airMoveSpeed;
-            else if (isAttacking) currentMoveSpeed = attackMoveSpeed;
+         //   else if (isAttacking) currentMoveSpeed = attackMoveSpeed;
         }
 
     }
@@ -1178,7 +1179,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 jumpCount++;
                 playerAnim.SetFloat("JumpCount", jumpCount);
                 //if (jumpCount > 1) inAirTime = .2f;
-                if (isChargedJump) inAirTime = .2f; 
+             //   if (isChargedJump) inAirTime = .2f; 
 
                 if (isSprinting && jumpCount == 1) wasSprintingBeforeJump = true; //check if we we're running before the jump
 
@@ -1219,7 +1220,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 {
                    
                     currentJumpForce = minJumpForce;
-                    isChargedJump = false;
+                    if(!isChargedJump) isChargedJump = false;
                 }
                 else
                 {
@@ -1280,6 +1281,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     public void DoJump(float jumpHeight)
     {
+
         DOTween.Kill(this.transform); 
         playerRb.isKinematic = false;
         playerRb.constraints = airConstraints.constraints; 
@@ -1427,7 +1429,10 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     {
         RaycastHit hit;
         Ray frontRay = new Ray(frontWallChecker.position, frontWallChecker.forward);
-        Debug.DrawLine(frontWallChecker.position, frontWallChecker.position + frontWallChecker.forward * frontWallCheckDist, Color.red);
+
+            Debug.DrawLine(frontWallChecker.position, frontWallChecker.position + frontWallChecker.forward * frontWallCheckDist, Color.red);
+            Debug.DrawLine(frontWallChecker.position + new Vector3(0,0.1f,0) , frontWallChecker.position + frontWallChecker.forward * climbWallCheckDist, Color.green);
+       
 
         if (Physics.Raycast(frontRay, out hit, frontWallCheckDist) && isSprinting)
         {
@@ -1438,15 +1443,27 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 isWallRunning = true; 
             }
         }
-        else if (isWallRunning || isWallRunning && !input.sprintButtonPressed)
+        else if (isWallRunning && isSprinting || isWallRunning && !input.sprintButtonPressed || isWallRunning && !input.jumpButtonPressed && wantsToJump)
         {
-            if(!input.jumpButtonPressed && wantsToJump || !input.sprintButtonPressed)
-            { 
-                jumpOffPoint = transform.position - transform.forward * exitJumpDistance; 
-                wallRunExitWithJump = true;          
+            //Close and predictive raycast can both not find a target
+            if(Physics.Raycast(frontRay, out hit, climbWallCheckDist)) 
+            {
+                if(hit.collider.gameObject.layer != EnvorinmentLayer)
+                {
+                    ExitWallRun();
+                }
+            }
+            else
+            {
+                ExitWallRun();
             }
 
-            ExitWallRun();
+          if (!input.jumpButtonPressed && wantsToJump || !input.sprintButtonPressed)
+            { 
+                jumpOffPoint = transform.position - transform.forward * exitJumpDistance; 
+                wallRunExitWithJump = true;
+                ExitWallRun();
+            }   
         }
 
         if (wallRunCooldown) 
@@ -1480,29 +1497,25 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     {
         //Give the player a small boost after wallrunning 
   
-
-
         playerAnim.SetTrigger("WallRunEndTrigger");
         groundCheckTimer = .45f;
-        jumpCount = 1;
+     
         print("check 0"); 
             
 
         if(wallRunExitWithJump)
         {
             transform.DOMove(jumpOffPoint, .25f); 
-            transform.DORotate(new Vector3(transform.eulerAngles.x, transform.eulerAngles.y + 180, transform.eulerAngles.z), .5f);
-            
-        }
-        else if (!input.jumpButtonPressed && wantsToJump && !wallRunCooldown) 
-        {
+           // transform.DORotate(new Vector3(transform.eulerAngles.x, transform.eulerAngles.y + 180, transform.eulerAngles.z), .5f);
+            if (!input.jumpButtonPressed && wantsToJump) DoJump(currentJumpForce); //Jump off by pressing A
+            else transform.DORotate(new Vector3(transform.eulerAngles.x, transform.eulerAngles.y + 180, transform.eulerAngles.z), .5f); //Stop sprinting mid object
+            jumpCount = 1;
 
-            DoJump(minJumpForce * .05f);
-            
+
         }
-        else
+        else if (!input.jumpButtonPressed && !!wantsToJump && !wallRunCooldown) //Reach top of object
         {
-           
+          //  DoJump(minJumpForce * .05f);           
         }
 
         wallRunExitWithJump = false; 
@@ -1514,6 +1527,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     void HandleWallRunning()
     {
+        float forwardForce = 5f;
+        playerRb.AddForce(transform.forward * forwardForce, ForceMode.VelocityChange); 
         playerRb.velocity = new Vector3(playerRb.velocity.x, wallRunUpSpeed, playerRb.velocity.z);
     }
 
@@ -1795,6 +1810,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             currentAttackDamage = 0; 
             currentAttackForwardForce = sprintAttackForwardForce;
             playerAnim.SetFloat("SprintAttackType", 1);
+            playerRb.velocity = new Vector3(0, 0, 0); 
          
 
         }
@@ -1897,7 +1913,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 wantsToHeayAttack = false;
                 wantsToLightAttack = false;
                 wantsToAirLaunchCut = false;
-                print("This one"); 
+               
                
             }
             else if(wantsToHeayAttack) //We are doing an axe attack 
@@ -1945,28 +1961,25 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //Check if the combo is broken 
         if (nextAttackTimer >= nextAttackDuration)
         {
-    
-            playerAnim.SetBool("IsAttacking", false);
-            alllowForwardForce = false; 
- 
-            canStartNewAttack = true;
-            playerAnim.speed = 1f; 
-            attackTargetInRange = false;
-            canRotate = true;
-            playerRb.isKinematic = false;        
-            meshR.materials = defaultSkinMat;
-            currentMoveSpeed = minWalkingMoveSpeed;
+                playerAnim.SetBool("IsAttacking", false);
+                alllowForwardForce = false;
 
-            if (attackState == playerAttackType.SprintAttack.ToString()) sprintHitList.Clear();
-            fixedControllerState = (int)currentState.MOVING;
-            controllerState = (int)currentState.MOVING;
-            //CheckForAttack(); 
+                canStartNewAttack = true;
+                playerAnim.speed = 1f;
+                attackTargetInRange = false;
+                canRotate = true;
+                playerRb.isKinematic = false;
+                meshR.materials = defaultSkinMat;
+                currentMoveSpeed = minWalkingMoveSpeed;
 
-
+                if (attackState == playerAttackType.SprintAttack.ToString()) sprintHitList.Clear();
+                fixedControllerState = (int)currentState.MOVING;
+                controllerState = (int)currentState.MOVING;
+                //CheckForAttack();            
         }
         else if (nextAttackTimer < nextAttackDuration  - attackTransitionOffset)
         {
-            if (attackState != playerAttackType.SprintAttack.ToString() && attackState != playerAttackType.AirLaunchAttack.ToString()) playerRb.isKinematic = true; //Freeze enemy mid air if attacking
+            if (attackState != playerAttackType.SprintAttack.ToString() && attackState != playerAttackType.AirLaunchAttack.ToString() && !input.jumpButtonPressed) playerRb.isKinematic = true; //Freeze enemy mid air if attacking
             else if (alllowForwardForce && attackState == playerAttackType.SprintAttack.ToString()) AllowAttackDamage();
        
 
@@ -1980,16 +1993,26 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         }
 
         //Exit attack state
-        if (nextAttackTimer >= nextAttackDuration + maxTimeBetweenAttacks)
+        if (nextAttackTimer >= nextAttackDuration + maxTimeBetweenAttacks || input.jumpButtonPressed && canJump)
         {
             axeComboLength = 0;
             punchComboLength = 0;
+            playerAnim.speed = 1f;
             isAttacking = false;
             attackTargetInRange = false;
+            canRotate = true;
+            alllowForwardForce = false;
+            playerRb.isKinematic = false;
+            canStartNewAttack = true;
             playerAnim.SetBool("IsAttacking", false);
             limbCheckerScript.hitLimbs.Clear();
             limbCheckerScript.hitInsides.Clear();
-            nextAttackTimer = 10f; 
+            nextAttackTimer = 10f;
+            meshR.materials = defaultSkinMat;
+
+            if (attackState == playerAttackType.SprintAttack.ToString()) sprintHitList.Clear();
+            fixedControllerState = (int)currentState.MOVING;
+            controllerState = (int)currentState.MOVING;
         }
 
         nextAttackTimer += Time.deltaTime;      
@@ -2051,6 +2074,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     {
         attackTargetScript.TargetDamageCheck();
         attackDirection = transform.position + inputDir; 
+         print("uppercut");
         // if (attackState != currentAttackType.SprintAttack.ToString()) transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .35f).SetUpdate(UpdateType.Fixed);
         //else meshR.materials = defaultSkinMat; 
    //     meshR.materials = defaultSkinMat;
@@ -2063,6 +2087,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             //DoJump(500f);   
             airLaunchPoint = transform.position + transform.up * airLaunchHeight; 
             isUpperCutting = true;
+            print("uppercut");
             AllowAttackDamage(); 
             moveSequence.Append(transform.DOMove(airLaunchPoint, .3f).SetUpdate(UpdateType.Fixed));
           
@@ -2197,27 +2222,39 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             if (Vector3.Distance(airLaunchPoint, transform.position) < .5f || attackState != playerAttackType.AirLaunchAttack.ToString())
             {
                 isUpperCutting = false;
-                nextAttackTimer = nextAttackDuration; 
+                nextAttackTimer = nextAttackDuration;
+       
+                
+          //
                 
                 foreach (BasicEnemyScript enemy in attackTargetScript.airLaunchTargets)
                 {
                     if (!enemy.isDead) enemy.transform.parent = null;  //transform.parent = enemy.transform.parent = enemy.enemySpawnManagerScript.aliveEnemyParent.transform;
                   //  enemy.isLaunched = true; 
                     enemy.isUpperCutted = false;
+                    DOTween.Kill(enemy.transform);
+
                     // enemy.transform.position = transform.position + transform.forward * .5f;
-                    enemy.transform.LookAt(transform);
+                    //  enemy.transform.LookAt(transform);
                     // enemy.transform.position = transform.position - enemy.transform.forward * .5f;
-                    enemy.transform.DOMove(transform.position + transform.forward * .5f, .1f).SetUpdate(UpdateType.Fixed);
+                    //    enemy.transform.DOMove(transform.position + transform.forward * .5f, .1f).SetUpdate(UpdateType.Fixed);
 
 
                 }
                 
                 attackTargetScript.airLaunchTargets.Clear();
+                wantsToAirLaunchCut = false;
+                attackState = playerAttackType.Reset.ToString();
+                nextAttackTimer = nextAttackDuration;
+               // isAttacking = false;  
 
-               
+
+
                 playerRb.velocity = new Vector3(0, 0, 0); 
             }
         }
+
+        //Thanks voor het helpen opbouwen van dit conecpt corné hope you like it 
     }
     
 }

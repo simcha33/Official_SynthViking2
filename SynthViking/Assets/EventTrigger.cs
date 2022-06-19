@@ -6,7 +6,12 @@ public class EventTrigger : MonoBehaviour
 {
     public int eventToTrigger;
     private bool hasBeenTriggered = false;
-    public eventManagerScript eventManager; 
+    public eventManagerScript eventManager;
+
+    private void Start()
+    {
+       // eventManager = GameObject.Find("EventManager").GetComponent<eventManagerScript>();
+    }
 
     private void OnTriggerEnter(Collider other)
     {

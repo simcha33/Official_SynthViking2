@@ -143,19 +143,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29fa0085f50d5e54f8144f766051a691, type: 3}
   m_Name: FilmGrain
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   m_AdvancedMode: 0
   type:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 9
   intensity:
     m_OverrideState: 1
-    m_Value: 0.55
+    m_Value: 0.714
     min: 0
     max: 1
   response:
     m_OverrideState: 1
-    m_Value: 0.835
+    m_Value: 0.948
     min: 0
     max: 1
   texture:

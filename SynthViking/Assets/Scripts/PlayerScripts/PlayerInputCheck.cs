@@ -25,7 +25,7 @@ public class PlayerInputCheck : MonoBehaviour
     [HideInInspector] public bool jumpButtonPressed;
     [HideInInspector] public bool airSmashButtonPressed; 
     [HideInInspector] public bool restartSceneButtonPressed;
-    [HideInInspector] public bool slowMoButtonPressed; 
+    [HideInInspector] public bool slowMoButtonPressed;
 
     [HideInInspector] public bool pauseButtonPressed; 
 
@@ -48,6 +48,14 @@ public class PlayerInputCheck : MonoBehaviour
     {
         moveInput = value.Get<Vector2>();
     }
+
+    /*
+    private void OnLook(InputValue value)
+    {
+        moveInput = value.Get<Vector2>();
+    }
+    */
+
 
     private void OnJump(InputValue value)
     {
@@ -95,6 +103,8 @@ public class PlayerInputCheck : MonoBehaviour
     {
         pauseButtonPressed = value.isPressed; 
     }
+
+
 
 
 

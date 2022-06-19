@@ -253,7 +253,7 @@ public class AttackTargetScript : MonoBehaviour
                     {
                         enemyScript.TakeDamage(0, playerController.attackState); 
                         if(enemyScript.canBeStunned) hitpauseScript.objectsToPause.Add(obj.GetComponent<Animator>());
-                        print("UppercutDamage"); 
+                   
                     }
                     if (playerController.attackState == playerAttackType.HeavyAxeHit.ToString())
                     {
@@ -289,7 +289,7 @@ public class AttackTargetScript : MonoBehaviour
                 else AddhitFeedback(enemyScript, backDirection); //The enemy is not dead
                
                               
-                if (enemyScript.isRagdolling ||  enemyScript.isDead) enemyScript.enemyRb.AddForce(Vector3.up * 10f, ForceMode.VelocityChange);
+             //   if (enemyScript.isRagdolling ||  enemyScript.isDead) enemyScript.enemyRb.AddForce(Vector3.up * 10f, ForceMode.VelocityChange);
                 limbCheckerScript.hitInsides.Clear();              
             }
         }     
@@ -314,11 +314,11 @@ public class AttackTargetScript : MonoBehaviour
         {
 
             //Collect and detach limbs
-           // limbCheckerScript.LimbCheck(); 
+            // limbCheckerScript.LimbCheck(); 
 
             foreach (Rigidbody limb in limbCheckerScript.hitLimbs)
             {
-                
+
                 if (enemyScript.ragdollRbs.Contains(limb))
                 {
                     if (limb.GetComponent<CharacterJoint>() != null)
@@ -376,6 +376,7 @@ public class AttackTargetScript : MonoBehaviour
 
 
         }
+        
 
         if (enemyScript.canBeTargeted)
         {
@@ -422,8 +423,14 @@ public class AttackTargetScript : MonoBehaviour
             airLaunchTargets.Add(enemyScript);
             enemyScript.canStopFall = true;
             enemyScript.isLaunched = true;
+           
+            // enemyScript.transform.DOMove(transform.position + transform.forward * .5f, .1f).SetUpdate(UpdateType.Fixed);
+            Vector3 airLaunchPoint = enemyScript.transform.position + Vector3.up * (playerController.airLaunchHeight - 1f);
+            enemyScript.moveSequence.Append(enemyScript.transform.DOMove(airLaunchPoint, .3f).SetUpdate(UpdateType.Fixed));
+            enemyScript.transform.LookAt(playerController.transform);
 
-            enemyScript.transform.parent = playerController.transform;
+
+            //   enemyScript.transform.parent = playerController.transform;
         }
         else if (playerController.attackState == playerAttackType.HeavyAxeHit.ToString()) //Axe hit feedback 
         {

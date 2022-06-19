@@ -61,9 +61,10 @@ public class EnemySpawnManager : MonoBehaviour
     public bool canStartNewWave;
     private  float waveTurnOffTimer;
     private float waveTurnOffDuration = 6f;
-    private bool waveIsTurnedOff; 
+    private bool waveIsTurnedOff;
 
     [Header("VISUALS")]
+    public GameObject waveUI; 
     public TextMeshPro waveText;
     public TextMeshPro enemyCountText;
    // public TextMeshPro waveInfoText;
@@ -125,18 +126,20 @@ public class EnemySpawnManager : MonoBehaviour
     void TurnOffWave()
     {
         waveIsTurnedOff = true; 
-        waveArea = null; 
-        waveText.gameObject.SetActive(false);
-        enemyCountText.gameObject.SetActive(false);
-        skullImage.gameObject.SetActive(false); 
+        waveArea = null;
+        waveUI.SetActive(false); 
+       // waveText.gameObject.SetActive(false);
+      //  enemyCountText.gameObject.SetActive(false);
+       // skullImage.gameObject.SetActive(false); 
     }
 
     void TurnOnWave()
     {
         waveIsTurnedOff = false;
-        waveText.gameObject.SetActive(true);
-        enemyCountText.gameObject.SetActive(true);
-        skullImage.gameObject.SetActive(true);
+        waveUI.SetActive(true);
+        //  waveText.gameObject.SetActive(true);
+        //  enemyCountText.gameObject.SetActive(true);
+        //  skullImage.gameObject.SetActive(true);
 
     }
 
@@ -145,7 +148,7 @@ public class EnemySpawnManager : MonoBehaviour
 
         if (spawnedAliveEnemies.Count < maxEnemiesAllowedInScene && enemiesSpawnedThisWave < maxEnemiesToSpawnThisWave)  //Check if the max cap of enemies has been reached 
         {
-            canSpawnNewEnemies = true;
+            canSpawnNewEnemies = true; 
         }
         else
         {

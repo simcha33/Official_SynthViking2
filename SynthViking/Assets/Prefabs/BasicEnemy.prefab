@@ -3535,15 +3535,19 @@ MonoBehaviour:
   chainHitMaxDistance: 14
   currentStunDuration: 0.4
   launchDirection: {x: 0, y: 0, z: 0}
-  axeHitForce: 18
-  axeHitChainActiveDuration: 0.4
+  axeHitForce: 10
+  axeHitChainActiveDuration: 0.3
   axeHitChainDamage: 0
-  axeHitStunDuration: 0.6
+  axeHitStunDuration: 0.3
+  punchHitForce: 40
+  punchHitChainActiveDuration: 0.8
+  punchHitChainDamage: 0
+  punchHitStunDuration: 0.6
   blockHitForce: 5
   blockActiveDuration: 0.2
   blockChainDamage: 0
   blockStunDuration: 1.2
-  powerPunchForce: 50
+  powerPunchForce: 100
   powerPunchChainActiveDuration: 1.4
   powerPunchChainDamage: 30
   powerPunchStunDuration: 0.8
@@ -4233,7 +4237,7 @@ MonoBehaviour:
   navLink: {fileID: 0}
   targetPos: {x: 0, y: 0, z: 0}
   currentHealth: 0
-  maxHealth: 400
+  maxHealth: 600
   walkSpeed: 4
   runSpeed: 7
   lookRange: 0
@@ -4408,7 +4412,7 @@ NavMeshAgent:
   m_Acceleration: 30
   avoidancePriority: 5
   m_AngularSpeed: 200
-  m_StoppingDistance: 1.5
+  m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
