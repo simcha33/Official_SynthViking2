@@ -56,7 +56,7 @@ public class CameraHandeler : MonoBehaviour
 
         string c = "";
 
-        if (eventScript.currentEventCam == null)
+        if (eventScript.currentEventCam == null || eventScript.waitForEvent)
         {
             if (mainCam.enabled == false) mainCam.enabled = true; 
             if (playerController.isAirSmashing) c = airSmashCamera.name;

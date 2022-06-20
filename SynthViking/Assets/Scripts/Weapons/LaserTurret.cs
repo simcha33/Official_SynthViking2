@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MoreMountains.Feedbacks; 
 
 public class LaserTurret : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class LaserTurret : MonoBehaviour
     public Transform turretBase; 
     public GameObject laserObject;
     public GameObject laserOrb; 
+    public MMFeedbacks laserOnFeedback; 
 
     public float activeDuration;
     private float activeTimer;
@@ -94,6 +96,7 @@ public class LaserTurret : MonoBehaviour
 
         isActivated = false;
         canActivate = false;
+         laserOnFeedback?.StopFeedbacks();
     }
 
     void EnableLaser()
@@ -108,6 +111,7 @@ public class LaserTurret : MonoBehaviour
         activeTimer -= Time.deltaTime;
         if (canSwiffle) DoSwiffle();
         if (activeTimer <= 0 && !stayOn) ResetLaser();
+        laserOnFeedback?.PlayFeedbacks(); 
     }
 
     void DoSwiffle()

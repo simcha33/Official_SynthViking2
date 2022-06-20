@@ -2074,7 +2074,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     {
         attackTargetScript.TargetDamageCheck();
         attackDirection = transform.position + inputDir; 
-         print("uppercut");
+
         // if (attackState != currentAttackType.SprintAttack.ToString()) transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .35f).SetUpdate(UpdateType.Fixed);
         //else meshR.materials = defaultSkinMat; 
    //     meshR.materials = defaultSkinMat;
@@ -2254,7 +2254,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             }
         }
 
-        //Thanks voor het helpen opbouwen van dit conecpt corné hope you like it 
+        //Thanks voor het helpen opbouwen van dit conecpt cornï¿½ hope you like it 
     }
     
 }

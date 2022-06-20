@@ -14,6 +14,14 @@ public class eventManagerScript : MonoBehaviour
     //public int totalEvents;
     private int currentEvent;
     private Vector3 currentPlayerPosition;
+    private List<GameObject> delayedObjects = new List<GameObject>(); 
+
+
+    //Waiting for events
+    public float waitForEventTimer;
+    public float waitForEventDuration;
+    [HideInInspector] public bool waitForEvent;  
+
 
     [Header("Components")]
     public CinemachineVirtualCamera mainCam;
@@ -24,13 +32,15 @@ public class eventManagerScript : MonoBehaviour
     [HideInInspector] public GameObject currentEnvorinment;
     [HideInInspector] public AudioClip currentMusicclip;
     public TextMeshPro currentEventText;
-    public TextMeshPro currentTutorialText; 
+    public TextMeshPro currentTutorialText;
+
+    public SpawnAreaTrigger currentArenaTrigger;  
     public Transform hidePosition;
+    public EnemySpawnManager spawnManager;
 
-    [Header("Event 1: Íntro")]
-    public MMFeedbacks event0Feedback;
 
-    [Header("Event 1: Íntro")]
+
+    [Header("Event 1: ï¿½ntro")]
     public Transform event1Position;
     public GameObject environment1;
   //  public float introDuration;
@@ -51,9 +61,14 @@ public class eventManagerScript : MonoBehaviour
     public MMFeedbacks event4Feedback;
     public TextMeshPro titelCardText;
 
-    [Header("Event 5: Tutorial Basic Combat")]
+    [Header("Event 5: Boss intro")]
   //  public TextMeshPro basicCombatTutorialText;
+    public MMFeedbacks event5Feedback;
     public GameObject basicCombatTutoiral; 
+    public TextMeshPro bossTitleCard;
+  
+    [Header("Event 6: First combat encounter")]
+    public SpawnAreaTrigger combatArena1Trigger;  
 
 
 
@@ -68,7 +83,7 @@ public class eventManagerScript : MonoBehaviour
 
     [Header("Checks")]  
     public bool pauseGame;
-    public bool doCountdown; 
+  //  public bool doCountdown; 
     public float eventDuration;
     public float eventTimer;
    
@@ -78,6 +93,7 @@ public class eventManagerScript : MonoBehaviour
     public CinemachineVirtualCamera currentEventCam;
     public CinemachineVirtualCamera eventCam0;
     public CinemachineVirtualCamera eventCam1;
+     public CinemachineVirtualCamera event5Cam;
  
     public List<CinemachineVirtualCamera> eventCameras = new List<CinemachineVirtualCamera>(); 
 
@@ -95,12 +111,14 @@ public class eventManagerScript : MonoBehaviour
             SetNewEvent(eventToStartAt);
         }
         
+        
     }
 
     // Update is called once per frame
     void Update()
     {
         if (eventTimer > 0) DoEventTimer(eventDuration);
+        if(waitForEvent) WaitForEventTrigger(); 
     }
 
     public void SetNewEvent(int eventInt)
@@ -139,7 +157,7 @@ public class eventManagerScript : MonoBehaviour
             eventDuration = currentEventFeedback.GetComponent<MMFeedbackSound>().FeedbackDuration; //Event will end after a timer 
             eventTimer = eventDuration - .2f; 
       
-            doCountdown = true;        
+            //doCountdown = true;        
             musicManagerScript.randomSong = false;
   
             ChangeMusic(); 
@@ -175,12 +193,32 @@ public class eventManagerScript : MonoBehaviour
         if (currentEvent == 4)
         {
             currentEventFeedback = event4Feedback;
-            currentEventText = titelCardText; 
+        //    currentEventText = titelCardText; 
          //   eventTimer = currentEventFeedback.GetComponent<MMFeedbackTimescaleModifier>().FeedbackDuration; 
         }
     
-        if (currentEventText != null) currentEventText.gameObject.SetActive(true); 
-        currentEventFeedback?.PlayFeedbacks(); 
+        //Boss intro title card
+        if(currentEvent == 5)
+        {
+            waitForEvent = true; 
+            waitForEventDuration = 3f; 
+            eventTimer = eventDuration = 8f; 
+            currentEventFeedback = event5Feedback; 
+            currentEventCam = event5Cam; 
+           // currentEventText = bossTitleCard; 
+          //  delayedObjects.Add(currentEventText.gameObject); 
+            
+        }
+
+        //First comba arena triggered 
+        if(currentEvent == 6)
+        {
+            currentArenaTrigger = combatArena1Trigger;  
+        }
+
+        if (currentEventText != null && !delayedObjects.Contains(currentEventText.gameObject)) currentEventText.gameObject.SetActive(true); 
+        if(currentEventFeedback != null && !delayedObjects.Contains(currentEventFeedback.gameObject)) currentEventFeedback?.PlayFeedbacks(); 
+       if(currentArenaTrigger != null) currentArenaTrigger.SetNewSpawnArea();  
     }
 
     void DoEventTimer(float duration)
@@ -193,18 +231,44 @@ public class eventManagerScript : MonoBehaviour
         }
     }
 
+    void WaitForEventTrigger()
+    {
+        waitForEventTimer += Time.deltaTime;
+        if(waitForEventTimer >= waitForEventDuration)
+        { 
+            waitForEvent = false; 
+            waitForEventTimer = 0; 
+
+            if(delayedObjects.Count > 0)
+            {
+                foreach(GameObject obj in delayedObjects)
+                {
+                    print("no wait events"); 
+                    obj.SetActive(true); 
+                }
+
+                delayedObjects.Clear(); 
+            }
+        }
+    }
+
     public void EndEvent()
     {    
         currentEventFeedback?.StopFeedbacks();
         TurnOnUI();
+
         TurnOnCamera();
+        delayedObjects.Clear(); 
+      
      
         if(currentEventFeedback != null) currentEventFeedback = null;
         if (currentEventCam != null) currentEventCam = null;
         if (currentEventText != null) currentEventText.gameObject.SetActive(false);
        
         blackCamera = false; 
-        doCountdown = false;
+      //  doCountdown = false;
+        waitForEvent = false; 
+        waitForEventTimer = 0;
         eventTimer = 0;
 
         //Transiion from intro dialog and free fall
@@ -217,6 +281,10 @@ public class eventManagerScript : MonoBehaviour
         {
             currentEnvorinment.SetActive(false); 
         }
+        else if (currentEvent == 5)
+        {
+            SetNewEvent(6); 
+        }
 
     }
 
@@ -228,9 +296,11 @@ public class eventManagerScript : MonoBehaviour
 
     void TurnOnCamera()
     {
-        print("Backcam NOOO");
+    
         blackCamera = false; 
     }
+
+
 
     void TurnOffUI()
     {

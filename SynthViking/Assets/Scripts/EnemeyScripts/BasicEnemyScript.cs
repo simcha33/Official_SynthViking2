@@ -138,6 +138,8 @@ public class BasicEnemyScript : MonoBehaviour
     public Transform bloodSpawnPoint; //Cube in waist
     public Transform weapon; //Weapon in hand
     public CapsuleCollider dashPointCol; 
+
+    public GameObject holoShield; 
  
     public Rigidbody groundCheckPoint;
     private Vector3 weaponPos;
@@ -476,6 +478,7 @@ public class BasicEnemyScript : MonoBehaviour
             transform.LookAt(target, Vector3.up);
             nextAttackTimer = 0; 
           //  nextAttackDuration = 10f; 
+          
             SetAttackType();         
         }    
 
@@ -509,7 +512,7 @@ public class BasicEnemyScript : MonoBehaviour
              if (currentComboLength == 1) enemyAnim.SetInteger("AttackType", 1); //Set combo attack tree   
            // enemyAnim.SetInteger("AttackType", 1);
             if (enemyAnim.GetInteger("AttackType") == 1) totalComboLength = 3; //Check length of combo attack tree 
-          //  if(currentComboLength > totalComboLength) currentComboLength = 0;
+            if(currentComboLength > totalComboLength) currentComboLength = 0;
             
         }
         else if(gameObject.CompareTag("BigEnemy"))
@@ -536,7 +539,9 @@ public class BasicEnemyScript : MonoBehaviour
             canRotate = true;
             enemyRb.velocity = new Vector3(0, 0, 0);
             currentComboLength++; 
-     
+            
+            if(currentComboLength > totalComboLength) currentComboLength = 0; 
+            print(currentComboLength); 
             enemyAnim.SetInteger("CurrentComboLength", currentComboLength);
             enemyAnim.SetTrigger("AttackTrigger");
 
@@ -576,7 +581,7 @@ public class BasicEnemyScript : MonoBehaviour
     {
         canBeParried = true;
         parryIndictionFeedback?.PlayFeedbacks();
-        canRotate = false; 
+        if(gameObject.CompareTag("BigEnemy")) canRotate = false; 
 
     }
 

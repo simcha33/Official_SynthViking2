@@ -11,6 +11,8 @@ public class EventTrigger : MonoBehaviour
     private void Start()
     {
        // eventManager = GameObject.Find("EventManager").GetComponent<eventManagerScript>();
+
+       eventManager = GameObject.Find("EventManager").GetComponent<eventManagerScript>(); 
     }
 
     private void OnTriggerEnter(Collider other)

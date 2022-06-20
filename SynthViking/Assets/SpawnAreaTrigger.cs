@@ -23,18 +23,20 @@ public class SpawnAreaTrigger : MonoBehaviour
         
     }
 
+/*
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player") && !spawnAreaIsActive)
         {
-            spawnAreaIsActive = true;
+         
             SetNewSpawnArea(); 
         }
     }
+    */
 
-    void SetNewSpawnArea()
+    public void SetNewSpawnArea()
     {
-
+        spawnAreaIsActive = true; 
         if (spawnManager.spawnedDeadEnemies.Count > 0)
         {
             foreach (BasicEnemyScript enemy in spawnManager.spawnedDeadEnemies)

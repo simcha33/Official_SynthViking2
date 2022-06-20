@@ -9,6 +9,9 @@ public class DamageObject : MonoBehaviour
 
     public float damageAmount;
 
+    public bool OnEnter;
+    public bool onExit; 
+
     public bool isLava;
     public bool isHammer;
     public bool isLaser;
@@ -28,11 +31,11 @@ public class DamageObject : MonoBehaviour
 
     private void Start()
     {
-        
+        player = GameObject.Find("Player").GetComponent<ThirdPerson_PlayerControler>(); 
     }
     private void OnTriggerEnter(Collider other) 
     {
-        if(other.gameObject.CompareTag("Player") || other.gameObject.layer == LayerMask.NameToLayer("Enemy") && canHurtEnemies)
+        if(other.gameObject.CompareTag("Player") || other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
             if(other.gameObject.CompareTag("Player"))
             {
@@ -55,10 +58,23 @@ public class DamageObject : MonoBehaviour
             if(other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
                 BasicEnemyScript enemyScript = other.gameObject.GetComponent<BasicEnemyScript>(); 
-                enemyScript.TakeDamage(enemyScript.maxHealth, "EnvironmentDamage");
+                if(canHurtEnemies) enemyScript.TakeDamage(enemyScript.maxHealth, "EnvironmentDamage");
                 // DoType(other.transform); 
+                OnEnter = true; 
                 DoType(enemyScript); 
+                OnEnter = false; 
             }
+        }
+    }
+
+    private void OnTriggerExit(Collider other){
+        if(other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            BasicEnemyScript enemyScript = other.gameObject.GetComponent<BasicEnemyScript>(); 
+            onExit = true; 
+            DoType(enemyScript); 
+            onExit = false;
+        
         }
     }
 
@@ -77,12 +93,21 @@ public class DamageObject : MonoBehaviour
 
         if (isHammer)
         {
-            target.LaunchEnemy(transform.forward, 25f, 6f); 
+            if(OnEnter) target.LaunchEnemy(transform.forward, 25f, 6f); 
         }
 
         if (isSawBalde)
         {
-            ExplodeTarget(target); 
+            if(OnEnter) ExplodeTarget(target); 
+        }
+
+        if(isLaser)
+        {
+            if(onExit)target.holoShield.SetActive(false); 
+            if(OnEnter)
+            { 
+                target.holoShield.SetActive(true);  
+            }
         }
     }
 
