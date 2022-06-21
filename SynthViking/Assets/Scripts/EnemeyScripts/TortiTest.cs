@@ -61,9 +61,10 @@ public class TortiTest : MonoBehaviour
     #region
     public float stunTimer;
     public float stunDuration;
-    public bool isStunned; 
+    public bool isStunned;
     #endregion
 
+    public bool hasExploded; 
 
     [Header("Charge Attack")]
     #region
@@ -98,8 +99,10 @@ public class TortiTest : MonoBehaviour
     public List <SkinnedMeshRenderer> litMeshes = new List <SkinnedMeshRenderer>(); 
     public Material backOrbDefaultMat; 
     public Material backOrbStunnedMat;
-    public Material backOrbDeadMat; 
+    public Material backOrbDeadMat;
 
+    public GameObject explosionEffect;
+    public GameObject explosionRadius;
     public GameObject stunnedEffect;
 
     public GameObject hatFire;
@@ -116,7 +119,8 @@ public class TortiTest : MonoBehaviour
         Dead,
         Stunned,
         Punch,
-        Grab
+        Grab,
+        Explode
     }
 
     private enum attackType
@@ -139,13 +143,19 @@ public class TortiTest : MonoBehaviour
         tortiAgent = GetComponent<NavMeshAgent>();
         tortiAnim = gameObject.GetComponent<Animator>(); 
         tortiRb = gameObject.GetComponent<Rigidbody>();
-       // litMeshes.Add(backOrbMeshr); 
-        
+        // litMeshes.Add(backOrbMeshr); 
+
         //Set defeault states 
+        //tortiState = (int)currentState.Follow;
         tortiState = (int)currentState.Follow;
         currentMoveSpeed = walkMoveSpeed; 
         ResetState(); 
+        ResetAttack();
+      //  isCharging = true;
+        StartChargeAttack();
+        tortiState = (int)currentState.Charge;
         ResetAttack(); 
+
     }
 
     // Update is called once per frame
@@ -154,9 +164,9 @@ public class TortiTest : MonoBehaviour
         switch (tortiState)
         {
             case (int)currentState.Follow:      
-                WaitForNextAttack();
-                CheckForTarget();
-                FollowTarget();
+              //  WaitForNextAttack();
+               // CheckForTarget();
+               // FollowTarget();
                 break;
 
             case (int)currentState.Charge:
@@ -181,7 +191,10 @@ public class TortiTest : MonoBehaviour
                 break;
             case(int)currentState.ChargeAttack:
                 DoChargeAttack(); 
-                break; 
+                break;
+            case (int)currentState.Explode:
+                if(!hasExploded)DoExplode(); 
+                break;
         }
 
         tortiAgent.speed = currentMoveSpeed; 
@@ -191,6 +204,13 @@ public class TortiTest : MonoBehaviour
     void SetTarget()
     {
 
+    }
+
+    void DoExplode()
+    {
+        hasExploded = true; 
+        GameObject explodeEffect = Instantiate(explosionEffect, transform.position, transform.rotation);
+        explodeEffect.AddComponent<CleanUpScript>();
     }
 
     void CheckForAnimation()
@@ -273,13 +293,14 @@ public class TortiTest : MonoBehaviour
         chargeStartDelayTimer = 0f;
         currentMoveSpeed = 0f;
         canMove = false;
+        isCharging = true; 
         chargeStartFeedback?.PlayFeedbacks();
     }
 
 
     void DoChargeForward()
     {
-        chargeStartDelayTimer += Time.deltaTime;
+       chargeStartDelayTimer += Time.deltaTime;
 
         //Charge start
         if (!isCharging && chargeStartDelayTimer >= chargeStartDelayDuration)
@@ -362,9 +383,15 @@ public class TortiTest : MonoBehaviour
      
             if(UpDistance <.5f && grabAttackTimer > 0)
             {
+                /*
                 print("Return To follow state" ); 
                 ResetState(); 
                 tortiState = (int)currentState.Follow; 
+                */
+                tortiState = (int)currentState.Explode;
+                GameObject explodeEffect = Instantiate(explosionEffect, transform.position, transform.rotation);
+                explosionEffect.AddComponent<CleanUpScript>();
+                print("boooom");
             }
 
         }

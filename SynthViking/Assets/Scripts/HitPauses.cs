@@ -56,6 +56,7 @@ public class HitPauses : MonoBehaviour
                 {
                     if(playerController.attackState == playerAttackType.HeavyAxeHit.ToString())anim.speed = attackTargetScript.playerController.axeAttackSpeed * pullOutReduction;
                     else if(playerController.attackState == playerAttackType.LightPunchHit.ToString())anim.speed = attackTargetScript.playerController.punchAttackSpeed;
+                    playerController.canRotate = true;
                 }
                 else if(anim != playerAnim)
                 {

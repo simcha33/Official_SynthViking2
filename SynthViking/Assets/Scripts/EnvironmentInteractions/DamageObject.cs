@@ -17,7 +17,8 @@ public class DamageObject : MonoBehaviour
     public bool isLaser;
     public bool isMine; 
     public bool canHurtEnemies;
-    public bool isSawBalde; 
+    public bool isSawBalde;
+    public List<BasicEnemyScript> laserList = new List<BasicEnemyScript>(); 
 
     [Header ("Components")]
     public GameObject mineExplosionEffect; 
@@ -32,6 +33,33 @@ public class DamageObject : MonoBehaviour
     private void Start()
     {
         player = GameObject.Find("Player").GetComponent<ThirdPerson_PlayerControler>(); 
+    }
+
+    private void Update()
+    {
+        if(laserList.Count > 0)
+        {
+            foreach (BasicEnemyScript enemy in laserList)
+            {
+                if (!enemy.inLaser)
+                {
+                    onExit = true; 
+                    DoType(enemy);
+                    onExit = false;
+                }
+            }
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if(laserList.Count > 0)
+        {
+            foreach(BasicEnemyScript enemy in laserList)
+            {
+                enemy.inLaser = false; 
+            }
+        }
     }
     private void OnTriggerEnter(Collider other) 
     {
@@ -67,7 +95,8 @@ public class DamageObject : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other){
+    private void OnTriggerExit(Collider other)
+    {
         if(other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
             BasicEnemyScript enemyScript = other.gameObject.GetComponent<BasicEnemyScript>(); 
@@ -75,6 +104,16 @@ public class DamageObject : MonoBehaviour
             DoType(enemyScript); 
             onExit = false;
         
+        }
+    }
+
+    private void OnTriggerStay(Collider other)
+    {
+
+        if (isLaser && other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
+        {
+            BasicEnemyScript enemyScript = other.gameObject.GetComponent<BasicEnemyScript>();
+            enemyScript.inLaser = true; 
         }
     }
 
@@ -103,43 +142,49 @@ public class DamageObject : MonoBehaviour
 
         if(isLaser)
         {
-            if(onExit)target.holoShield.SetActive(false); 
-            if(OnEnter)
-            { 
-                target.holoShield.SetActive(true);  
+            if (OnEnter)
+            {
+                target.holoShield.SetActive(true);
+                laserList.Add(target);
             }
+            if (onExit) target.holoShield.SetActive(false); 
+            
+          
         }
     }
 
     void ExplodeTarget(BasicEnemyScript enemyScript)
     {
-        foreach(Rigidbody limb in enemyScript.ragdollRbs)
+        if (enemyScript.isDead)
         {
-
-
-            //Add blood 
-            if (limb.GetComponent<CharacterJoint>() != null)
+            foreach (Rigidbody limb in enemyScript.ragdollRbs)
             {
-                CharacterJoint joint = limb.GetComponent<CharacterJoint>();
-                GameObject blood2 = Instantiate(player.attackTargetScript.limbBloodVFX, joint.transform.position, joint.transform.rotation);
-                GameObject blood3 = Instantiate(player.attackTargetScript.bloodDrip, joint.transform.position, joint.transform.rotation);
-                GameObject blood4 = Instantiate(player.attackTargetScript.limbBloodVFX, joint.transform.position, joint.transform.rotation);
-                GameObject axeDust = Instantiate(player.attackTargetScript.axeDustVFX, joint.transform.position, joint.transform.rotation);
-                blood4.transform.parent = enemyScript.transform;
-                blood2.transform.parent = blood3.transform.parent = axeDust.transform.parent = limb.transform;
-                blood2.AddComponent<CleanUpScript>();
-                axeDust.AddComponent<CleanUpScript>();
 
-                //Detach and launch limb rb's 
-                Destroy(joint);
-                limb.transform.parent = null;
-                limb.velocity = new Vector3(0, 0, 0);
-                limb.AddExplosionForce(10f, limb.position, 2f, 4f, ForceMode.Impulse);
-                limb.AddForce(Vector3.up * Random.Range(1f, 3f), ForceMode.Impulse);
-                if (enemyScript.canBeTargeted) limb.mass *= 3f;
+
+                //Add blood 
+                if (limb.GetComponent<CharacterJoint>() != null)
+                {
+                    CharacterJoint joint = limb.GetComponent<CharacterJoint>();
+                    GameObject blood2 = Instantiate(player.attackTargetScript.limbBloodVFX, joint.transform.position, joint.transform.rotation);
+                    GameObject blood3 = Instantiate(player.attackTargetScript.bloodDrip, joint.transform.position, joint.transform.rotation);
+                    GameObject blood4 = Instantiate(player.attackTargetScript.limbBloodVFX, joint.transform.position, joint.transform.rotation);
+                    GameObject axeDust = Instantiate(player.attackTargetScript.axeDustVFX, joint.transform.position, joint.transform.rotation);
+                    blood4.transform.parent = enemyScript.transform;
+                    blood2.transform.parent = blood3.transform.parent = axeDust.transform.parent = limb.transform;
+                    blood2.AddComponent<CleanUpScript>();
+                    axeDust.AddComponent<CleanUpScript>();
+
+                    //Detach and launch limb rb's 
+                    Destroy(joint);
+                    limb.transform.parent = null;
+                    limb.velocity = new Vector3(0, 0, 0);
+                    limb.AddExplosionForce(10f, limb.position, 2f, 4f, ForceMode.Impulse);
+                    limb.AddForce(Vector3.up * Random.Range(1f, 3f), ForceMode.Impulse);
+                    if (enemyScript.canBeTargeted) limb.mass *= 3f;
+                }
+
+
             }
-            
-          
         }
     }
 

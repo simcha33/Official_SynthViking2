@@ -12,7 +12,9 @@ public class SlowMoScript : MonoBehaviour
     public PlayerInputCheck input;
     public Slider slowMoSlider;
     public Image slowMoBar;
-    public CinemachineFreeLook aimCam; 
+    public CinemachineFreeLook aimCam;
+    public float defaultAimY;
+    public float defaultAimX; 
 
     public float maxSlowMoTime;
     public float currentSlowmoTime;
@@ -32,7 +34,10 @@ public class SlowMoScript : MonoBehaviour
     {
         currentSlowmoTime  = maxSlowMoTime;
         slowmoRechargeCooldownTimer = slowmoRechargeCooldownDuration;
-        timeManager.SetTimescaleTo(1f); 
+        timeManager.SetTimescaleTo(1f);
+
+        defaultAimX = aimCam.m_XAxis.m_MaxSpeed;
+        defaultAimY = aimCam.m_YAxis.m_MaxSpeed; 
     }
 
     // Update is called once per frame
@@ -54,13 +59,16 @@ public class SlowMoScript : MonoBehaviour
         if (canSlowmo && input.dashButtonPressed)
         {
             if(!isInSlowmo)
-            { 
-               
-                aimCam.m_YAxis.m_MaxSpeed /= dashChargeTimeScale;
-                aimCam.m_XAxis.m_MaxSpeed /= dashChargeTimeScale; 
+            {
 
-                isInSlowmo = true; 
+                //  aimCam.m_YAxis.m_MaxSpeed /= (dashChargeTimeScale * 1.2f);
+                //  aimCam.m_XAxis.m_MaxSpeed /= (dashChargeTimeScale * 1.2f); 
+
+                aimCam.m_XAxis.m_MaxSpeed = defaultAimX / dashChargeTimeScale;
+                aimCam.m_YAxis.m_MaxSpeed = defaultAimY / dashChargeTimeScale;
             }
+
+            isInSlowmo = true;            
             isRecharging = false; 
             
             DoSlowmo(true, dashChargeTimeScale); 
@@ -75,7 +83,7 @@ public class SlowMoScript : MonoBehaviour
 
 
         //Player is not in slowmo 
-        if (currentSlowmoTime < maxSlowMoTime && !input.dashButtonPressed)
+        if (currentSlowmoTime < maxSlowMoTime || !input.dashButtonPressed)
         {                          
             if(!isRecharging)
             { 

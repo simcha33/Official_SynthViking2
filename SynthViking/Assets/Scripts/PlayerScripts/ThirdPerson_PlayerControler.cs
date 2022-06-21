@@ -1166,7 +1166,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             }
             else if (currentJumpForce >= maxChargedJumpForce)
             {
-                currentJumpForce = maxChargedJumpForce + 300f;
+                currentJumpForce = maxChargedJumpForce + 100f;
                 mainGameManager.DoHaptics(.2f, .3f, .5f);
             }
         }
@@ -1874,7 +1874,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             {
                 //No double hit animations
                 int originalReaction = playerAnim.GetInteger("PunchAttackType");
-                int newRandomNumber = Random.Range(1, totalAttackTrees + 1);
+                int newRandomNumber = Random.Range(2, totalAttackTrees + 1);
              
                 if (newRandomNumber == originalReaction)
                 {
@@ -1898,12 +1898,13 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     void HandleAttack()
     {
         //Set attack duration equel to current animation clip length and speed
-         nextAttackDuration = playerAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / (playerAnim.GetCurrentAnimatorStateInfo(0).speed * playerAnim.speed);
+         if(isAttacking) nextAttackDuration = playerAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / (playerAnim.GetCurrentAnimatorStateInfo(0).speed * playerAnim.speed);
 
         
         //Check if we can continue to the next attack
         if (nextAttackTimer >= nextAttackDuration - attackTransitionOffset && (!input.heavyAttackButtonPressed && wantsToHeayAttack || !input.lightAttackButtonPressed && wantsToLightAttack || attackState == playerAttackType.LightPunchHit.ToString() && wantsToHeayAttack) || attackState == playerAttackType.HeavyAxeHit.ToString() && wantsToLightAttack)
-        {        
+        {
+            print("DOAttack"); 
             if(attackState == playerAttackType.SprintAttack.ToString())
             {
                 
@@ -1975,13 +1976,14 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 if (attackState == playerAttackType.SprintAttack.ToString()) sprintHitList.Clear();
                 fixedControllerState = (int)currentState.MOVING;
                 controllerState = (int)currentState.MOVING;
+            nextAttackTimer = 10f; 
                 //CheckForAttack();            
         }
         else if (nextAttackTimer < nextAttackDuration  - attackTransitionOffset)
         {
             if (attackState != playerAttackType.SprintAttack.ToString() && attackState != playerAttackType.AirLaunchAttack.ToString() && !input.jumpButtonPressed) playerRb.isKinematic = true; //Freeze enemy mid air if attacking
             else if (alllowForwardForce && attackState == playerAttackType.SprintAttack.ToString()) AllowAttackDamage();
-       
+            
 
             //currentMoveSpeed = attackMoveSpeed;
             isAttacking = true;
