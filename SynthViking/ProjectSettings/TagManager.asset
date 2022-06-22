@@ -16,6 +16,7 @@ TagManager:
   - DashPoint
   - Invisible
   - BigEnemy
+  - SoulPilar
   layers:
   - Default
   - TransparentFX

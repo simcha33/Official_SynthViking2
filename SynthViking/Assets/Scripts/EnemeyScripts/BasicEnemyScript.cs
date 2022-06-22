@@ -94,6 +94,13 @@ public class BasicEnemyScript : MonoBehaviour
     public float stopFallDuration = .7f;
     #endregion
 
+    [Header("SOUL")]
+    #region
+    public SoulObject soulObject; 
+    public bool hasSoul;
+    public float soulValue = 1f; 
+    #endregion
+
 
     [Header("VISUALS")]
     #region 
@@ -183,6 +190,7 @@ public class BasicEnemyScript : MonoBehaviour
     public bool canStopFall;
     public bool canRotate = true;
     public bool inLaser;
+
     #endregion
 
     [Header("STATEMACHINE")]
@@ -541,7 +549,6 @@ public class BasicEnemyScript : MonoBehaviour
             currentComboLength++;
 
             if (currentComboLength > totalComboLength) currentComboLength = 0;
-            print(currentComboLength);
             enemyAnim.SetInteger("CurrentComboLength", currentComboLength);
             enemyAnim.SetTrigger("AttackTrigger");
 
@@ -864,16 +871,12 @@ public class BasicEnemyScript : MonoBehaviour
         if (DamageType != LayerMask.NameToLayer("Environment").ToString()) transform.parent = enemySpawnManagerScript.deadEnemyParent.transform;
         //enemySpawnManagerScript.enemyCount--; 
 
-        //Add soul object if there are active pilars nearby 
-        //Add soul object if there are active pilars nearby 
-        // if (enemyBehaviourManagerScript.rewardPilar.activePilarInScene)
-        //{
-        //     // Instantiate
-        //  }
+        //Soul sucking   
+        soulObject.gameObject.SetActive(true); 
+        soulObject.soulIsFree = true;
 
-        //Enter death state
-        //  if (playerController.dashpoint == dashPointCol.transform) playerController.dashpoint = null; 
-        //  Destroy(dashPointCol.gameObject); 
+        
+        //Enter death state 
         dashPointCol.gameObject.layer = LayerMask.NameToLayer("DeadEnemy");
         enemyRb.mass = originalRbMass;
         enemyMeshr.materials = deadSkinMat;

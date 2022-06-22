@@ -9,45 +9,73 @@ using TMPro;
 public class EnemySpawnManager : MonoBehaviour
 {
     [Header ("Lists")]
+    #region 
     public List<EnemySpawner> enemySpawners = new List<EnemySpawner>();
     public List<GameObject> allEnemyTypes = new List<GameObject>();
+    public List<GameObject> enemySpawnList = new List<GameObject>(); 
     public List<WaveSpawnData> allWaves = new List<WaveSpawnData>();
     public List<BasicEnemyScript> spawnedAliveEnemies = new List<BasicEnemyScript>();
     public List<BasicEnemyScript> spawnedDeadEnemies = new List<BasicEnemyScript>();
+    public List<GameObject> objectSpawnList = new List<GameObject>(); 
+      public List<GameObject> objectsInScene = new List<GameObject>(); 
+    #endregion 
 
     [Header("Scripts")]
+    #region 
     private EnemyManager enemyBehaviourScript;
     public WaveSpawnData choosenSpawnData;
+    public eventManagerScript eventScript; 
     public PlayerState playerState;
     public ThirdPerson_PlayerControler playerController;
+        #endregion 
+
 
     [Header("Components")]
+    #region 
     public Transform deadEnemyParent;
     public Transform aliveEnemyParent;
+        #endregion 
+
 
     [Header ("SPAWNING RESTRICTIONS")]
+    #region 
     public int maxEnemiesAllowedInScene;
    // public int enemyCount; 
 
     //Spawn cooldowns and timers
     public float groupSpawnCooldownDuration;
     public float groupSpawnCooldownTimer;
+        #endregion 
+
 
     [Header("WAVE AREA")]
+    #region 
     public SpawnAreaTrigger waveArea; 
+        #endregion 
+
 
     [Header("ENEMY SPAWNING LOGIC")]
+        #region 
     public int maxGroupSize;
     public int minGroupSize;
     public int totalGroupSize;  
 
-    public int currentEnemyTypeToSpawn;
+    public int currentEnemyToSpawn;
     private Transform choosenSpawnLocation;
     public bool canSpawnNewEnemies;
     public bool activateSpawner;
     private float maxDeadEnemies = 20f; 
+    public int maxGruntsToSpawn; 
+    public int maxBigGuyToSpawn; 
+    public int maxTortiToSpawn; 
+    public bool canTriggerEvent; 
+    public int eventToTrigger;
+   // public int max
+        #endregion 
+
   
     [Header("WAVE LOGIC")]
+        #region 
     public int currentWave;
     public int enemiesLeft; 
     public int maxWaves;
@@ -62,19 +90,23 @@ public class EnemySpawnManager : MonoBehaviour
     private  float waveTurnOffTimer;
     private float waveTurnOffDuration = 6f;
     private bool waveIsTurnedOff;
+        #endregion 
 
     [Header("VISUALS")]
+        #region 
     public GameObject waveUI; 
     public TextMeshPro waveText;
     public TextMeshPro enemyCountText;
    // public TextMeshPro waveInfoText;
     public RawImage skullImage; 
+        #endregion 
 
     private enum waveState
     {
         WaveEvent,
         ResetEvent, 
     }
+
 
     private int currentWaveState; 
 
@@ -108,7 +140,6 @@ public class EnemySpawnManager : MonoBehaviour
 
             if (waveHasStarted)
             {
-                CheckForEnemyCount();
                 CheckForEnemySpawn();
             }
         }
@@ -118,10 +149,6 @@ public class EnemySpawnManager : MonoBehaviour
         }
     }
 
-    void CheckForEnemyCount()
-    {
-
-    }
 
     void TurnOffWave()
     {
@@ -136,7 +163,8 @@ public class EnemySpawnManager : MonoBehaviour
     void TurnOnWave()
     {
         waveIsTurnedOff = false;
-        waveUI.SetActive(true);
+        waveUI.SetActive(true); 
+       // SetNextWave();
         //  waveText.gameObject.SetActive(true);
         //  enemyCountText.gameObject.SetActive(true);
         //  skullImage.gameObject.SetActive(true);
@@ -168,7 +196,7 @@ public class EnemySpawnManager : MonoBehaviour
                 {
                     SetEnemyToSpawnType();
                     SetSpawnLocation();
-                    SpawnEnemy(currentEnemyTypeToSpawn, choosenSpawnLocation);
+                    SpawnEnemy(currentEnemyToSpawn, choosenSpawnLocation);
                     if (enemiesSpawnedThisWave >= maxEnemiesToSpawnThisWave) totalGroupSize = 0;
                 }
 
@@ -180,7 +208,30 @@ public class EnemySpawnManager : MonoBehaviour
   
     void SetEnemyToSpawnType()
     {
-        currentEnemyTypeToSpawn = (int)EnemyTypes.Grunt;       
+        /*
+        currentEnemyToSpawn = Random.Range(0, enemyTypesToSpawn.Count - 1);
+        if(enemyTypesToSpawn[currentEnemyToSpawn].CompareTag("BasicEnemy"))
+        {
+            print("Basic Grunt Spawn"); 
+            gruntSpawnCount++; 
+            if(gruntSpawnCount > )
+        
+        } 
+        
+        //currentEnemyToSpawn = (int)EnemyTypes.Grunt;  
+        */   
+
+        currentEnemyToSpawn = Random.Range(0, enemySpawnList.Count - 1); 
+   
+         
+
+
+
+    }
+
+    void ChooseEnemyToSpawn()
+    {
+
     }
 
     void SetSpawnLocation()
@@ -191,8 +242,9 @@ public class EnemySpawnManager : MonoBehaviour
 
     void SpawnEnemy(int enemySpawnType, Transform placeToSpawn)
     {
-        GameObject enemyToSpawn = allEnemyTypes[enemySpawnType];
-        GameObject enemy = Instantiate(enemyToSpawn, new Vector3(placeToSpawn.position.x, placeToSpawn.position.y, placeToSpawn.position.z), enemyToSpawn.transform.rotation);      
+        GameObject enemyToSpawn = enemySpawnList[enemySpawnType];
+        GameObject enemy = Instantiate(enemyToSpawn, new Vector3(placeToSpawn.position.x, placeToSpawn.position.y, placeToSpawn.position.z), enemyToSpawn.transform.rotation);     
+        enemySpawnList.Remove(enemyToSpawn);  
         enemiesSpawnedThisWave++; 
     }
 
@@ -201,43 +253,81 @@ public class EnemySpawnManager : MonoBehaviour
 
         if (waveHasStarted) enemyCountText.text = enemiesLeft.ToString(); 
 
-        if (enemiesSpawnedThisWave >=  maxEnemiesToSpawnThisWave|| currentWave == 0) 
+        if (enemiesSpawnedThisWave >=  maxEnemiesToSpawnThisWave || currentWave == 0) 
         {
             canSpawnNewEnemies = false;
             
             if(enemiesLeft <= 0 || currentWave == 0)
             {
-                if (currentWave > 0) waveText.text = "WAVE CLEARED";
+                if (currentWave > 0) waveText.text = "WAVE CLEARED"; 
                 waveText.alpha = 1f; 
                 waveHasEnded = true;
-                if (currentWave < maxWaves) DoNextWaveTranstition();              
+               // print("current: " + currentWave + "max: " + maxWaves); 
+                if (currentWave < maxWaves) DoNextWaveTranstition();           
                 else EndWaves(); 
             }
         }
     }
 
+
     void SetNextWave()
     {
         currentWave++;
-        choosenSpawnData = allWaves[currentWave - 1]; 
+        choosenSpawnData = allWaves[currentWave - 1]; //Select wave to pull data from
+         
+        //Set enemy types to spawn 
+        maxGruntsToSpawn = choosenSpawnData.maxGruntsToSpawn; 
+        maxBigGuyToSpawn = choosenSpawnData.maxBigGuyToSpawn; 
+        maxTortiToSpawn = choosenSpawnData.maxTortiToSpawn;
+        SetEnemySpawnlist();  
+      
+
+        //Set spawn data 
         maxEnemiesAllowedInScene = choosenSpawnData.maxEnemiesInScene; //Max enemies allowed in the scene at the same time 
-        maxEnemiesToSpawnThisWave = choosenSpawnData.maxEnemiesInWave; //Max enemies to spawn in a wave 
+        enemiesLeft = maxEnemiesToSpawnThisWave = maxGruntsToSpawn + maxBigGuyToSpawn + maxTortiToSpawn; 
+        //maxEnemiesToSpawnThisWave = choosenSpawnData.maxEnemiesInWave; //Max enemies to spawn in a wave 
+         //maxEnemiesToSpawnThisWave = choosenSpawnData.maxEnemiesInWave; //Max enemies to spawn in a wave 
         minGroupSize = choosenSpawnData.minGroupSpawnSize;  //max enimes to spawn in a group 
         maxGroupSize  = choosenSpawnData.maxGroupSpawnSize; //Min enemies to spawn in a group
         currentWaveTitle = choosenSpawnData.WaveTitle;
+        canTriggerEvent = choosenSpawnData.canTriggerEvent; 
+        eventToTrigger = choosenSpawnData.eventToTrigger; 
         enemiesSpawnedThisWave = 0;
-      
-
+        
     }
+
+    void SetEnemySpawnlist()
+    {
+         
+        //Grunt enemies to spawn 
+        for (int i = 0; i < maxGruntsToSpawn; i++)
+        {
+            enemySpawnList.Add(allEnemyTypes[0]); 
+        }
+
+        //Big Guy enemies to spawn 
+        for (int i = 0; i < maxBigGuyToSpawn; i++)
+        {
+            enemySpawnList.Add(allEnemyTypes[1]); 
+        }
+
+        //Big Guy enemies to spawn 
+        for (int i = 0; i < maxTortiToSpawn; i++)
+        {
+            enemySpawnList.Add(allEnemyTypes[2]); 
+        }
+    }
+
 
     void DoNextWaveTranstition()
     {
+        
         waveCountdownTimer -= Time.deltaTime;
         waveText.text = waveCountdownTimer.ToString("F0");
 
         if (waveCountdownTimer <= 0 && canStartNewWave)
-        {   
-            SetNextWave();
+        {         
+            SetNextWave();    
             StartNewWave();
             waveCountdownTimer = waveCountdownDuration;
         }
@@ -252,6 +342,29 @@ public class EnemySpawnManager : MonoBehaviour
         waveText.text = "ACT " + currentWave + " " + currentWaveTitle;
         playerState.AddHealth(25f);
         enemiesLeft = maxEnemiesToSpawnThisWave; 
+
+        if(canTriggerEvent)
+        {
+            print(" trigger event"); 
+            eventScript.EndEvent(); 
+            eventScript.SetNewEvent(eventToTrigger); 
+        }
+
+        /*
+
+        //Spawn special objects 
+        if(objectSpawnList.Count > 0)
+        {
+            foreach(GameObject obj in objectSpawnList)
+            {
+                //obj.SetActive(true); 
+                Instantiate(obj, obj.transform.position, obj.transform.rotation); 
+                objectsInScene.Add(obj);  
+            }
+
+            objectSpawnList.Clear(); 
+        }
+        */
     }
 
 
@@ -261,6 +374,7 @@ public class EnemySpawnManager : MonoBehaviour
         if (waveTurnOffTimer >= waveTurnOffDuration) TurnOffWave(); 
         canStartNewWave = false;
         waveText.text = "ENEMIES DESTROYED"; 
+        
     }
 
     void HandleUI()

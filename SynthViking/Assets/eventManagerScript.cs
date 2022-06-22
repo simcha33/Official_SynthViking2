@@ -15,6 +15,7 @@ public class eventManagerScript : MonoBehaviour
     private int currentEvent;
     private Vector3 currentPlayerPosition;
     private List<GameObject> delayedObjects = new List<GameObject>(); 
+    public List<GameObject> currentObjectsToSpawn = new List<GameObject>(); 
 
 
     //Waiting for events
@@ -69,6 +70,9 @@ public class eventManagerScript : MonoBehaviour
   
     [Header("Event 6: First combat encounter")]
     public SpawnAreaTrigger combatArena1Trigger;  
+
+    [Header("Event 7: First combat encounter")]
+    public List <GameObject> arenaObjects1; 
 
 
 
@@ -214,11 +218,21 @@ public class eventManagerScript : MonoBehaviour
         if(currentEvent == 6)
         {
             currentArenaTrigger = combatArena1Trigger;  
+           
+        }
+
+        if(currentEvent == 7)
+        {
+            currentObjectsToSpawn = arenaObjects1; 
+            SpawnObjects(); 
+
         }
 
         if (currentEventText != null && !delayedObjects.Contains(currentEventText.gameObject)) currentEventText.gameObject.SetActive(true); 
         if(currentEventFeedback != null && !delayedObjects.Contains(currentEventFeedback.gameObject)) currentEventFeedback?.PlayFeedbacks(); 
-       if(currentArenaTrigger != null) currentArenaTrigger.SetNewSpawnArea();  
+        if(currentArenaTrigger != null){ currentArenaTrigger.SetNewSpawnArea();  
+       
+        }
     }
 
     void DoEventTimer(float duration)
@@ -229,6 +243,16 @@ public class eventManagerScript : MonoBehaviour
         {
             EndEvent(); 
         }
+    }
+
+    public void SpawnObjects()
+    {
+        foreach(GameObject obj in currentObjectsToSpawn)
+        {
+            obj.SetActive(true); 
+        }
+
+    
     }
 
     void WaitForEventTrigger()
@@ -242,8 +266,7 @@ public class eventManagerScript : MonoBehaviour
             if(delayedObjects.Count > 0)
             {
                 foreach(GameObject obj in delayedObjects)
-                {
-                    print("no wait events"); 
+                { 
                     obj.SetActive(true); 
                 }
 
@@ -260,16 +283,18 @@ public class eventManagerScript : MonoBehaviour
         TurnOnCamera();
         delayedObjects.Clear(); 
       
-     
+        currentObjectsToSpawn.Clear(); 
         if(currentEventFeedback != null) currentEventFeedback = null;
         if (currentEventCam != null) currentEventCam = null;
         if (currentEventText != null) currentEventText.gameObject.SetActive(false);
+        if(currentArenaTrigger != null) currentArenaTrigger = null; 
        
         blackCamera = false; 
       //  doCountdown = false;
         waitForEvent = false; 
         waitForEventTimer = 0;
         eventTimer = 0;
+
 
         //Transiion from intro dialog and free fall
         if (currentEvent == 1)

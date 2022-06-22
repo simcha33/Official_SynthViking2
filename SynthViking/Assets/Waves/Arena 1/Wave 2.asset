@@ -12,8 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6b6834424db3a3419981a417c135707, type: 3}
   m_Name: Wave 2
   m_EditorClassIdentifier: 
-  maxEnemiesInWave: 40
   maxEnemiesInScene: 15
   minGroupSpawnSize: 6
   maxGroupSpawnSize: 10
   WaveTitle: A CHALLENGE
+  maxGruntsToSpawn: 0
+  maxBigGuyToSpawn: 0
+  maxTortiToSpawn: 0
+  canTriggerEvent: 0
+  eventToTrigger: 0

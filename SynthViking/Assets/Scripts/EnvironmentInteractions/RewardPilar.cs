@@ -5,6 +5,7 @@ using UnityEngine;
 public class RewardPilar : MonoBehaviour
 {
 
+/*
     EnemyManager enemyBehaviourManagerScript;
     EnemySpawnManager enemySpawnManagerScript;
     RewardPilarManager rewardPilarManager; 
@@ -29,4 +30,5 @@ public class RewardPilar : MonoBehaviour
     {
 
     }
+    */
 }

@@ -20,6 +20,7 @@ public class EventTrigger : MonoBehaviour
         if (other.gameObject.CompareTag("Player") && !hasBeenTriggered)
         {
             eventManager.EndEvent(); 
+            
             eventManager.SetNewEvent(eventToTrigger);
             hasBeenTriggered = true; 
         }

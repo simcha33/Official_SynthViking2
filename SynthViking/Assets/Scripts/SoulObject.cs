@@ -5,13 +5,18 @@ using UnityEngine;
 public class SoulObject : MonoBehaviour
 {
 
-    public GameObject soulSphere;
+    //public GameObject soulSphere;
+    [HideInInspector] public SoulPilar attachedSoulPilar; 
+    public float soulValue;
     public float stayDuration;
-    public float stayTimer;
+    private float stayTimer;
     public bool isBeingSucked;
-    public bool hasBeenSucked;
-    public Transform suckPoint;
-    public float suckSpeed; 
+
+    public bool soulIsFree; 
+    //public bool hasBeenSucked;
+    [HideInInspector] public Vector3 suckPoint;
+  
+    [HideInInspector] public  float suckSpeed; 
 
 
     // Start is called before the first frame update
@@ -23,10 +28,12 @@ public class SoulObject : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        stayTimer += Time.deltaTime;
-        if (stayTimer >= stayDuration && !isBeingSucked) RemoveObject();
-
+        //stayTimer += Time.deltaTime;
+        //if (stayTimer >= stayDuration && !isBeingSucked) RemoveObject();
         if (isBeingSucked) MoveTowardsSuckPoint(); 
+        if(soulIsFree && !isBeingSucked) stayTimer += Time.deltaTime;
+        if(stayTimer >= stayDuration) RemoveObject(); 
+        
     }
 
     public void RemoveObject()
@@ -34,13 +41,14 @@ public class SoulObject : MonoBehaviour
         Destroy(gameObject);
     }
    
-    void MoveTowardsSuckPoint()
+    public void MoveTowardsSuckPoint()
     {
-        transform.position = Vector3.MoveTowards(transform.position, suckPoint.position, suckSpeed); 
-        if(Vector3.Distance(transform.position, suckPoint.position) < .2f)
+        transform.position = Vector3.MoveTowards(transform.position, suckPoint, suckSpeed); 
+        if(Vector3.Distance(transform.position, suckPoint) < .3f)
         {
-            hasBeenSucked = true;
+          //  hasBeenSucked = true;
             isBeingSucked = false;
+            attachedSoulPilar.AddSoul(soulValue); 
             RemoveObject();
         }
      

@@ -3,114 +3,101 @@ using System.Collections.Generic;
 using UnityEngine;
 using MoreMountains.Feedbacks;
 using TMPro;
+using UnityEngine.UI; 
 
 public class RewardPilarManager : MonoBehaviour
 {
+   
+   public int maxPilarsInScene; 
+    public int currentPilarsInScene;
+
+   //public bool canSpawnPilar; 
+   //public bool hasSpawnedPilar; 
+
+
+   public TextMeshProUGUI pilarText; 
+   public bool textOnScreen;
+   public float textDespawnTimer;
+   public float textDespawnDuration; 
+
+    public float minSpawnWaitDuration;
+    public float maxSpawnWaitDuration; 
+   private float pilarSpawnDuration;
+   public  float pilarSpawnTimer; 
+
+  // public float spawnDivergent; 
+
+   public List<SoulPilar> pilarsInScene1; 
+
+
+
+    void Start()
+    {
+        pilarSpawnDuration = Random.Range(minSpawnWaitDuration, maxSpawnWaitDuration);
+        pilarSpawnTimer = 0f; 
+        pilarText.alpha = 0; 
+    }
+
+    void Update()
+    {
+        if(currentPilarsInScene < maxPilarsInScene)
+        {
+            CheckForPillarSpawn(); 
+        }
+
+        if(textOnScreen)
+        {
+            TextTimer(); 
+        }
+    }
+
+    void CheckForPillarSpawn()
+    {
+        pilarSpawnTimer += Time.deltaTime; 
+        if(pilarSpawnTimer >= pilarSpawnDuration)
+        {
+            //canSpawnPilar = true;
+            SpawnPilar(); 
+        }
+    }
+
+    void SpawnPilar()
+    {
+        int randomPilar = Random.Range(0, pilarsInScene1.Count);
+        pilarsInScene1[randomPilar].hasSpawned = true;  
+        pilarsInScene1[randomPilar].gameObject.SetActive(true); 
+        currentPilarsInScene++;       
+        pilarSpawnTimer = 0f; 
+        pilarSpawnDuration = Random.Range(minSpawnWaitDuration, maxSpawnWaitDuration); 
+        SetText("A PILAR HAS APEARED"); 
+    }
+
+    void TextTimer()
+    {
+        textDespawnTimer += Time.deltaTime; 
+        if(textDespawnTimer > textDespawnDuration)
+        {
+            pilarText.alpha -= Time.deltaTime * .65f;
+            if(pilarText.alpha <= 0)
+            { 
+                textOnScreen = false;
+                textDespawnTimer = 0; 
+            }
+        }
+    }
+
+    public void SetText(string text)
+    {
+        textDespawnTimer = 0; 
+        textOnScreen = true;
+        pilarText.alpha = 1; 
+        pilarText.text = text; 
+    }
+
+    
+
+    
 
  
 
-    public bool activePilarInScene;
-
-    public RewardPilar activePilar;
-    public Transform orbPoint;
-    public int soulsNeeded;
-    public int currentSoulsFed;
-    public bool isFullyFed;
-
-    public float stayTimer;
-    public float stayDuration;
-    public EnemyManager enemyManager;
-    public PlayerState playerState;
-    public ThirdPerson_PlayerControler playerController;
-    public GameManager gameManager;
-    public TextMeshPro pilarText;
-    public string currentPilarType;
-    [HideInInspector] public List<SoulObject> suckedSouls = new List<SoulObject>();
-    [HideInInspector] public List<RewardPilar> pilarLocations = new List<RewardPilar>();
-
-    public enum pilarType
-    {
-        healthPilar,
-        trapPilar,
-    }
-
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        activePilarInScene = true;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        CheckForTime();
-        if (activePilarInScene) CheckForSouls();
-    }
-
-    void CheckForNewSpawn()
-    {
-
-    }
-
-    void CheckForSouls()
-    {
-        //  foreach(GameObject enemy in enemyManager)
-        if (currentSoulsFed >= soulsNeeded)
-        {
-            isFullyFed = true;
-            DoPilarReward();
-            RemovePilar();
-        }
-    }
-
-    void DoPilarReward()
-    {
-        print("Very nice here is your rewawarddd");
-
-        if (currentPilarType == pilarType.healthPilar.ToString())
-        {
-            pilarText.text = "MAX HEALTH INCREASED";
-        }
-
-        if (currentPilarType == pilarType.trapPilar.ToString())
-        {
-            pilarText.text = "TRAP ACTIVATED";
-        }
-
-
-    }
-
-    void CheckForTime()
-    {
-        stayTimer += Time.deltaTime;
-        if (stayTimer >= stayDuration)
-        {
-            RemovePilar();
-        }
-    }
-
-    void RemovePilar()
-    {
-        activePilarInScene = false;
-        foreach (SoulObject souls in suckedSouls)
-        {
-            souls.RemoveObject();
-        }
-
-        Destroy(gameObject);
-
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.gameObject.CompareTag("SoulObject") && !isFullyFed)
-        {
-            SoulObject soulObjectScript = other.gameObject.GetComponent<SoulObject>();
-            soulObjectScript.isBeingSucked = true;
-            soulObjectScript.suckPoint = orbPoint;
-            suckedSouls.Add(soulObjectScript);
-        }
-    }
 }
