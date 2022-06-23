@@ -14,7 +14,7 @@ public class EnemySpawnManager : MonoBehaviour
     public List<GameObject> allEnemyTypes = new List<GameObject>();
     public List<GameObject> enemySpawnList = new List<GameObject>(); 
     public List<WaveSpawnData> allWaves = new List<WaveSpawnData>();
-    public List<BasicEnemyScript> spawnedAliveEnemies = new List<BasicEnemyScript>();
+    public List<GameObject> spawnedAliveEnemies = new List<GameObject>();
     public List<BasicEnemyScript> spawnedDeadEnemies = new List<BasicEnemyScript>();
     public List<GameObject> objectSpawnList = new List<GameObject>(); 
       public List<GameObject> objectsInScene = new List<GameObject>(); 
@@ -345,9 +345,13 @@ public class EnemySpawnManager : MonoBehaviour
 
         if(canTriggerEvent)
         {
+            if(eventToTrigger == 7) groupSpawnCooldownTimer = groupSpawnCooldownDuration; 
+
             print(" trigger event"); 
             eventScript.EndEvent(); 
             eventScript.SetNewEvent(eventToTrigger); 
+
+        
         }
 
         /*

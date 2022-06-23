@@ -10,7 +10,6 @@ public class BasicEnemyScript : MonoBehaviour
 
     public OffMeshLink offLink;
     public NavMeshLink navLink;
-
     public Vector3 targetPos;
 
     [Header("BASICS")]
@@ -155,6 +154,8 @@ public class BasicEnemyScript : MonoBehaviour
     public Rigidbody connectedJointRb; //Should be the pelvis
     public NavMeshAgent enemyAgent;
     public SkinnedMeshRenderer enemyMeshr;
+
+    public GameObject lookAt; 
     #endregion
 
 
@@ -262,7 +263,7 @@ public class BasicEnemyScript : MonoBehaviour
         }
 
         enemyRb.detectCollisions = true;
-        enemySpawnManagerScript.spawnedAliveEnemies.Add(thisScript);
+        enemySpawnManagerScript.spawnedAliveEnemies.Add(thisScript.gameObject);
         transform.parent = enemySpawnManagerScript.aliveEnemyParent.transform;
         //   enemyBehaviourManagerScript.currentenemiesInScene.Add(thisScript);
         // transform.parent = enemyBehaviourManagerScript.aliveEnemyParent.transform;         
@@ -865,7 +866,7 @@ public class BasicEnemyScript : MonoBehaviour
         }
 
         //Tell the enemymanager that the enemy is dead 
-        if (enemySpawnManagerScript.spawnedAliveEnemies.Contains(thisScript)) enemySpawnManagerScript.spawnedAliveEnemies.Remove(thisScript);
+        if (enemySpawnManagerScript.spawnedAliveEnemies.Contains(thisScript.gameObject)) enemySpawnManagerScript.spawnedAliveEnemies.Remove(thisScript.gameObject);
         enemySpawnManagerScript.spawnedDeadEnemies.Add(thisScript);
         enemySpawnManagerScript.enemiesLeft--;
         if (DamageType != LayerMask.NameToLayer("Environment").ToString()) transform.parent = enemySpawnManagerScript.deadEnemyParent.transform;

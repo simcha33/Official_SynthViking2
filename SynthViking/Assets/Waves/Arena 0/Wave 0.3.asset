@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6b6834424db3a3419981a417c135707, type: 3}
   m_Name: Wave 0.3
   m_EditorClassIdentifier: 
-  maxEnemiesInScene: 25
+  maxEnemiesInScene: 15
   minGroupSpawnSize: 10
   maxGroupSpawnSize: 15
   WaveTitle: LETS GET THAT REWARD
-  maxGruntsToSpawn: 50
-  maxBigGuyToSpawn: 10
+  maxGruntsToSpawn: 30
+  maxBigGuyToSpawn: 1
   maxTortiToSpawn: 0
   canTriggerEvent: 0
   eventToTrigger: 0
+  canSpawnPilars: 0

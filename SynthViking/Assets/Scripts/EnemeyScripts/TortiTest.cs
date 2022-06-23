@@ -12,9 +12,18 @@ public class TortiTest : MonoBehaviour
     private Rigidbody tortiRb;
     public ThirdPerson_PlayerControler playerController;
 
+    public List <Rigidbody> tortiRbs = new List<Rigidbody>(); 
+
     //Animations 
     public float currentAnimationTimer;
     public float currentAnimationDuration; 
+
+    [Header("Explosion")]
+    public float explosionRadius; 
+    public float explosionDamage;    
+    public GameObject explosionEffect;
+    public GameObject stunnedEffect;
+    public GameObject hatFire;
 
     [Header("Movement")]
     #region
@@ -37,7 +46,7 @@ public class TortiTest : MonoBehaviour
     public float nextAttackTimer;
     public bool attackIsChoosen;
     #endregion
-
+/*
     [Header ("AirAttack")]
     #region
     public float airAttackMinDistance;
@@ -56,6 +65,7 @@ public class TortiTest : MonoBehaviour
     public bool isInAir;
     public bool hasLanded;
     #endregion
+    */
 
     [Header("Stunned")]
     #region
@@ -100,12 +110,6 @@ public class TortiTest : MonoBehaviour
     public Material backOrbDefaultMat; 
     public Material backOrbStunnedMat;
     public Material backOrbDeadMat;
-
-    public GameObject explosionEffect;
-    public GameObject explosionRadius;
-    public GameObject stunnedEffect;
-
-    public GameObject hatFire;
     #endregion
 
     
@@ -147,14 +151,14 @@ public class TortiTest : MonoBehaviour
 
         //Set defeault states 
         //tortiState = (int)currentState.Follow;
-        tortiState = (int)currentState.Follow;
+       // tortiState = (int)currentState.Follow;
         currentMoveSpeed = walkMoveSpeed; 
         ResetState(); 
-        ResetAttack();
+     //   ResetAttack();
       //  isCharging = true;
-        StartChargeAttack();
+       // StartChargeAttack();
         tortiState = (int)currentState.Charge;
-        ResetAttack(); 
+      //  ResetAttack(); 
 
     }
 
@@ -167,11 +171,13 @@ public class TortiTest : MonoBehaviour
               //  WaitForNextAttack();
                // CheckForTarget();
                // FollowTarget();
+                 print(" this one1");
                 break;
 
             case (int)currentState.Charge:
 
             //    StartChargeAttack();
+            print(" this one");
                 DoChargeForward(); 
                 CheckForTarget(); 
                 FollowTarget();
@@ -201,16 +207,39 @@ public class TortiTest : MonoBehaviour
         CheckForAnimation();
     }
 
-    void SetTarget()
-    {
-
-    }
-
     void DoExplode()
     {
         hasExploded = true; 
         GameObject explodeEffect = Instantiate(explosionEffect, transform.position, transform.rotation);
         explodeEffect.AddComponent<CleanUpScript>();
+
+        foreach(Rigidbody rb in tortiRbs)
+        {
+            rb.transform.parent = null; 
+            rb.AddExplosionForce(20f, rb.transform.position, 4f, 64f, ForceMode.Impulse);
+        }
+
+  
+
+        Collider[] colls = Physics.OverlapSphere(transform.position, explosionRadius);
+                    
+        foreach (Collider obj in colls)
+        {
+            if(obj.gameObject.CompareTag("Player"))
+            {
+                playerController.playerState.TakeDamage(explosionDamage, "explosion");
+            }
+        }
+                    
+
+        Destroy(this.gameObject);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, explosionRadius);
+        
     }
 
     void CheckForAnimation()
@@ -233,15 +262,18 @@ public class TortiTest : MonoBehaviour
         targetDistance = Vector3.Distance(transform.position, target.position);
     }
 
+
     void WaitForNextAttack()
     {
         nextAttackTimer += Time.deltaTime;
         if(nextAttackTimer >= maxNextAttackDuration)
         {
-            ChooseNewAttackType(); 
+           // ChooseNewAttackType(); 
         }
     }
 
+
+/*
     void ChooseNewAttackType()
     {
         attackIsChoosen = true;
@@ -269,32 +301,30 @@ public class TortiTest : MonoBehaviour
 
         
     }
+    */
 
+/*
     void ResetAttack()
     {
         attackIsChoosen = false;
         nextAttackTimer = 0f;
         nextAttackDuration = Random.Range(minNextAttackDuration, maxNextAttackDuration); 
     }
+    */
       
-
-    void SetAttackType()
-    {
-    //    choosenAttack = (int)Random.Range(0, 2); 
-
-    }
 
 
     //CHARGING
-
     void StartChargeAttack()
     {
         tortiAnim.SetTrigger("StartChargeTrigger");
         chargeStartDelayTimer = 0f;
         currentMoveSpeed = 0f;
         canMove = false;
-        isCharging = true; 
+       // isCharging = true; 
         chargeStartFeedback?.PlayFeedbacks();
+        print("Start charge trigger"); 
+        chargeDuration = Random.Range(minChargeDuration, maxChargeDuration);
     }
 
 
@@ -305,11 +335,13 @@ public class TortiTest : MonoBehaviour
         //Charge start
         if (!isCharging && chargeStartDelayTimer >= chargeStartDelayDuration)
         {
+            print("Charge start"); 
             isCharging = true;
             chargeStartDelayTimer = 0f;
-            chargeDuration = Random.Range(minChargeDuration, maxChargeDuration);
+          //  chargeDuration = Random.Range(minChargeDuration, maxChargeDuration);
             currentMoveSpeed = chargeMoveSpeed;
             chargeLoopFeedback.PlayFeedbacks();
+            
 
             tortiAnim.SetTrigger("ChargeLoopTrigger");
             tortiState = (int)currentState.Charge;
@@ -318,6 +350,7 @@ public class TortiTest : MonoBehaviour
         //Charge loop
         if (isCharging && chargeTimer < chargeDuration)
         {
+            print("Charge loop"); 
             chargeTimer += Time.deltaTime; 
         }
         else if(isCharging)
@@ -336,6 +369,7 @@ public class TortiTest : MonoBehaviour
         {
            // stunDuration = chargeEndStunDuration; 
             tortiState = (int)currentState.Follow; 
+              print(" this one2");
 
         }   
         else //Charge has hit target

@@ -2314,9 +2314,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6226531632559110669}
-  m_LocalRotation: {x: -0, y: -0.9569309, z: -0, w: -0.2903158}
+  m_LocalRotation: {x: -0, y: -0.9569302, z: 0, w: -0.290318}
   m_LocalPosition: {x: -365.56085, y: -0.12, z: 85.04}
-  m_LocalScale: {x: 1.6, y: 1.6, z: 1.6}
+  m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
   m_Children:
   - {fileID: 2025903543566045357}
   - {fileID: 6532607969227651707}
@@ -2359,6 +2359,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerController: {fileID: 0}
+  tortiRbs: []
   currentAnimationTimer: 0
   currentAnimationDuration: 0
   currentMoveSpeed: 0
@@ -2384,6 +2385,7 @@ MonoBehaviour:
   stunTimer: 0
   stunDuration: 3
   isStunned: 0
+  hasExploded: 0
   chargeMoveSpeed: 25
   chargeAttackDamage: 20
   maxChargeDuration: 10
@@ -2406,6 +2408,8 @@ MonoBehaviour:
   backOrbDefaultMat: {fileID: 2100000, guid: a638f44438f568e4faaa50d6ca63d515, type: 2}
   backOrbStunnedMat: {fileID: 2100000, guid: 205e21ffe9a51cd43bc72650a10ace98, type: 2}
   backOrbDeadMat: {fileID: 0}
+  explosionEffect: {fileID: 7478056912908855167, guid: 6f9cf50cee25a1b439287df807466e4d, type: 3}
+  explosionRadius: {fileID: 0}
   stunnedEffect: {fileID: 6534427561714183797}
   hatFire: {fileID: 6532607968951633354}
 --- !u!195 &6226531632559110667

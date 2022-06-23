@@ -15,9 +15,10 @@ MonoBehaviour:
   maxEnemiesInScene: 10
   minGroupSpawnSize: 3
   maxGroupSpawnSize: 5
-  WaveTitle: DO NOT FORGET TO STRETCH
-  maxGruntsToSpawn: 10
-  maxBigGuyToSpawn: 2
+  WaveTitle: A QUICK WARM UP
+  maxGruntsToSpawn: 1
+  maxBigGuyToSpawn: 0
   maxTortiToSpawn: 0
   canTriggerEvent: 0
   eventToTrigger: 7
+  canSpawnPilars: 0

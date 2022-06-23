@@ -67,12 +67,16 @@ public class eventManagerScript : MonoBehaviour
     public MMFeedbacks event5Feedback;
     public GameObject basicCombatTutoiral; 
     public TextMeshPro bossTitleCard;
+    public GameObject throneAreaLaser; 
   
     [Header("Event 6: First combat encounter")]
     public SpawnAreaTrigger combatArena1Trigger;  
 
     [Header("Event 7: First combat encounter")]
-    public List <GameObject> arenaObjects1; 
+  //  public TextMeshPro basicCombatTutorialText;
+    public MMFeedbacks event7Feedback;
+    public TextMeshPro bigGuyTitleCard;
+    public GameObject bigGuy; 
 
 
 
@@ -88,6 +92,8 @@ public class eventManagerScript : MonoBehaviour
     [Header("Checks")]  
     public bool pauseGame;
   //  public bool doCountdown; 
+
+
     public float eventDuration;
     public float eventTimer;
    
@@ -98,6 +104,7 @@ public class eventManagerScript : MonoBehaviour
     public CinemachineVirtualCamera eventCam0;
     public CinemachineVirtualCamera eventCam1;
      public CinemachineVirtualCamera event5Cam;
+    public CinemachineVirtualCamera event7Cam;
  
     public List<CinemachineVirtualCamera> eventCameras = new List<CinemachineVirtualCamera>(); 
 
@@ -205,12 +212,12 @@ public class eventManagerScript : MonoBehaviour
         if(currentEvent == 5)
         {
             waitForEvent = true; 
-            waitForEventDuration = 3f; 
-            eventTimer = eventDuration = 8f; 
+            waitForEventDuration = 1.4f; 
+            eventTimer = eventDuration = 5f; 
             currentEventFeedback = event5Feedback; 
             currentEventCam = event5Cam; 
-           // currentEventText = bossTitleCard; 
-          //  delayedObjects.Add(currentEventText.gameObject); 
+
+        
             
         }
 
@@ -223,10 +230,11 @@ public class eventManagerScript : MonoBehaviour
 
         if(currentEvent == 7)
         {
-            currentObjectsToSpawn = arenaObjects1; 
-            SpawnObjects(); 
-
+            waitForEvent = true; 
+            waitForEventDuration = 1.4f;      
         }
+
+       
 
         if (currentEventText != null && !delayedObjects.Contains(currentEventText.gameObject)) currentEventText.gameObject.SetActive(true); 
         if(currentEventFeedback != null && !delayedObjects.Contains(currentEventFeedback.gameObject)) currentEventFeedback?.PlayFeedbacks(); 
@@ -260,7 +268,7 @@ public class eventManagerScript : MonoBehaviour
         waitForEventTimer += Time.deltaTime;
         if(waitForEventTimer >= waitForEventDuration)
         { 
-            waitForEvent = false; 
+            if(currentEvent != 7) waitForEvent = false; 
             waitForEventTimer = 0; 
 
             if(delayedObjects.Count > 0)
@@ -271,6 +279,18 @@ public class eventManagerScript : MonoBehaviour
                 }
 
                 delayedObjects.Clear(); 
+            }
+
+            if(currentEvent == 7 && spawnManager.spawnedAliveEnemies.Count > 0)
+            {
+                eventTimer = eventDuration = 4.5f; 
+                currentEventFeedback = event7Feedback; 
+                currentEventFeedback?.PlayFeedbacks();             
+                bigGuy = spawnManager.spawnedAliveEnemies[0].gameObject.GetComponent<BasicEnemyScript>().lookAt; 
+                event7Cam.Follow = bigGuy.transform;
+                event7Cam.LookAt = bigGuy.transform;
+                currentEventCam = event7Cam;
+                waitForEvent = false;  
             }
         }
     }
@@ -309,6 +329,8 @@ public class eventManagerScript : MonoBehaviour
         else if (currentEvent == 5)
         {
             SetNewEvent(6); 
+            throneAreaLaser.SetActive(true);
+
         }
 
     }

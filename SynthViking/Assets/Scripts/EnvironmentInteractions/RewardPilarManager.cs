@@ -5,17 +5,30 @@ using MoreMountains.Feedbacks;
 using TMPro;
 using UnityEngine.UI; 
 
+  public enum pilarTypes
+   {
+        HealthPilar,
+        TrapPilar,
+   }
+
 public class RewardPilarManager : MonoBehaviour
 {
    
    public int maxPilarsInScene; 
     public int currentPilarsInScene;
 
+
    //public bool canSpawnPilar; 
    //public bool hasSpawnedPilar; 
 
+    [Header ("Components")]
+    public TextMeshProUGUI pilarStateText;   
+    public TextMeshProUGUI pilarRewardText; 
+    public EnemySpawnManager spawnManager; 
+    public ObjectSpotManager spotManager; 
 
-   public TextMeshProUGUI pilarText; 
+    public ThirdPerson_PlayerControler player;
+
    public bool textOnScreen;
    public float textDespawnTimer;
    public float textDespawnDuration; 
@@ -29,18 +42,24 @@ public class RewardPilarManager : MonoBehaviour
 
    public List<SoulPilar> pilarsInScene1; 
 
+   public string choosenPilarType;
+
+
+   
+
 
 
     void Start()
     {
         pilarSpawnDuration = Random.Range(minSpawnWaitDuration, maxSpawnWaitDuration);
         pilarSpawnTimer = 0f; 
-        pilarText.alpha = 0; 
+        pilarStateText.alpha = pilarRewardText.alpha = 0; 
+        player = GameObject.Find("Player").GetComponent<ThirdPerson_PlayerControler>(); 
     }
 
     void Update()
     {
-        if(currentPilarsInScene < maxPilarsInScene)
+        if(currentPilarsInScene < maxPilarsInScene && spawnManager.waveHasStarted)
         {
             CheckForPillarSpawn(); 
         }
@@ -54,7 +73,7 @@ public class RewardPilarManager : MonoBehaviour
     void CheckForPillarSpawn()
     {
         pilarSpawnTimer += Time.deltaTime; 
-        if(pilarSpawnTimer >= pilarSpawnDuration)
+        if(pilarSpawnTimer >= pilarSpawnDuration && spotManager.freeSpotList.Count > 0)
         {
             //canSpawnPilar = true;
             SpawnPilar(); 
@@ -62,14 +81,32 @@ public class RewardPilarManager : MonoBehaviour
     }
 
     void SpawnPilar()
-    {
-        int randomPilar = Random.Range(0, pilarsInScene1.Count);
-        pilarsInScene1[randomPilar].hasSpawned = true;  
-        pilarsInScene1[randomPilar].gameObject.SetActive(true); 
+    {    
+        //Select spot
+        int randomSpot = Random.Range(0, spotManager.freeSpotList.Count); 
+        SpotScript choosenSpotScript = spotManager.freeSpotList[randomSpot].GetComponent<SpotScript>();
+        choosenSpotScript.rewardPilar.gameObject.SetActive(true); 
+        choosenSpotScript.inUse = true;
+        choosenSpotScript.spotManager.freeSpotList.Remove(choosenSpotScript); 
+
+        //Set pilar type
+        SoulPilar choosenPilar = choosenSpotScript.rewardPilar.GetComponent<SoulPilar>(); 
+        int randomPilarType = Random.Range(0, 1); 
+        if(player.playerState.currentHealth < player.playerState.maxHealth / 4f) randomPilarType = 0;
+        else
+        {
+            if(randomPilarType == 0) choosenPilar.pilarType = pilarTypes.HealthPilar.ToString(); 
+            else if(randomPilarType == 1) choosenPilar.pilarType = pilarTypes.TrapPilar.ToString(); 
+        }
+
+
+        //Activate pilar   
+        choosenPilar.hasSpawned = true; 
+
         currentPilarsInScene++;       
         pilarSpawnTimer = 0f; 
         pilarSpawnDuration = Random.Range(minSpawnWaitDuration, maxSpawnWaitDuration); 
-        SetText("A PILAR HAS APEARED"); 
+        SetText("A SHRINE HAS APEARED", null); 
     }
 
     void TextTimer()
@@ -77,8 +114,9 @@ public class RewardPilarManager : MonoBehaviour
         textDespawnTimer += Time.deltaTime; 
         if(textDespawnTimer > textDespawnDuration)
         {
-            pilarText.alpha -= Time.deltaTime * .65f;
-            if(pilarText.alpha <= 0)
+            pilarStateText.alpha -= Time.deltaTime * .65f;
+            pilarRewardText.alpha -= Time.deltaTime * .65f; 
+            if(pilarStateText.alpha  <= 0 && pilarRewardText.alpha <= 0)
             { 
                 textOnScreen = false;
                 textDespawnTimer = 0; 
@@ -86,12 +124,26 @@ public class RewardPilarManager : MonoBehaviour
         }
     }
 
-    public void SetText(string text)
+    public void SetText(string stateText, string rewardText)
     {
         textDespawnTimer = 0; 
         textOnScreen = true;
-        pilarText.alpha = 1; 
-        pilarText.text = text; 
+
+        //State text 
+        if(pilarStateText != null)
+        { 
+            pilarStateText.alpha = 1; 
+            pilarStateText.text = stateText; 
+        }
+
+        //Reward text
+        if(pilarRewardText != null)
+        {
+            pilarRewardText.text = rewardText;
+            pilarRewardText.alpha = 1f; 
+        }
+      
+   
     }
 
     

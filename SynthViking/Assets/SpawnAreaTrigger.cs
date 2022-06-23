@@ -47,9 +47,10 @@ public class SpawnAreaTrigger : MonoBehaviour
 
         if (spawnManager.spawnedAliveEnemies.Count > 0)
         {
-            foreach (BasicEnemyScript enemy in spawnManager.spawnedAliveEnemies)
+            foreach (GameObject enemy in spawnManager.spawnedAliveEnemies)
             {           
-                enemy.DestroySelf();
+                if(enemy.CompareTag("BasicEnemy")) enemy.GetComponent<BasicEnemyScript>().DestroySelf();
+               //  if(enemy.CompareTag("Torti")) 
             }
         }
 

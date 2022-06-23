@@ -17,6 +17,8 @@ TagManager:
   - Invisible
   - BigEnemy
   - SoulPilar
+  - BladePilar
+  - Torti
   layers:
   - Default
   - TransparentFX

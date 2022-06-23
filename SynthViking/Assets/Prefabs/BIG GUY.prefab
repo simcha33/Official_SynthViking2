@@ -48976,6 +48976,7 @@ Transform:
   - {fileID: 7037563062141378325}
   - {fileID: 6641184495845880204}
   - {fileID: 3269526228157574961}
+  - {fileID: 5294759621699609670}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -49120,6 +49121,7 @@ MonoBehaviour:
   connectedJointRb: {fileID: 5876273838497880615}
   enemyAgent: {fileID: 2682767894290875970}
   enemyMeshr: {fileID: 5876273839055430131}
+  lookAt: {fileID: 7990136170214282508}
   isStunned: 0
   isDead: 0
   isLaunched: 0
@@ -64594,6 +64596,36 @@ Transform:
   m_Father: {fileID: 5876273838244575379}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7990136170214282508
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5294759621699609670}
+  m_Layer: 0
+  m_Name: Lookat
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5294759621699609670
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7990136170214282508}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalPosition: {x: 0.0831604, y: 1.921, z: -0.03338623}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_Children: []
+  m_Father: {fileID: 5876273838244575379}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!1 &8115765153014216532
 GameObject:
   m_ObjectHideFlags: 0

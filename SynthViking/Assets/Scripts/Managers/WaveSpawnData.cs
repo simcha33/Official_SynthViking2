@@ -16,4 +16,5 @@ public class WaveSpawnData : ScriptableObject
     public int maxTortiToSpawn; 
     public bool canTriggerEvent;
     public int eventToTrigger; 
+    public bool canSpawnPilars;
 }
