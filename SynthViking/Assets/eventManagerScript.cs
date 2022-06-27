@@ -12,7 +12,7 @@ public class eventManagerScript : MonoBehaviour
     public bool startWithEvent;
     public int eventToStartAt; 
     //public int totalEvents;
-    private int currentEvent;
+    public int currentEvent;
     private Vector3 currentPlayerPosition;
     private List<GameObject> delayedObjects = new List<GameObject>(); 
     public List<GameObject> currentObjectsToSpawn = new List<GameObject>(); 
@@ -21,23 +21,34 @@ public class eventManagerScript : MonoBehaviour
     //Waiting for events
     public float waitForEventTimer;
     public float waitForEventDuration;
+    public bool freezeTheGame;
+    public bool gameIsFroozen;
+    public bool checkForCondition;
+    public bool eventWasSkipped;
+    private float buttonHoldDuration = 1.1f;
+    private float buttonHoldTimer;
+    public Image buttonHoldImage;
     [HideInInspector] public bool waitForEvent;  
 
 
     [Header("Components")]
     public CinemachineVirtualCamera mainCam;
+    public CinemachineVirtualCamera blackCam; 
     public Light directionalLight;
     public GameObject playerUI;
     public MusicManager musicManagerScript;
-    [HideInInspector] public MMFeedbacks currentEventFeedback;
+    public MMFeedbacks currentEventFeedback;
     [HideInInspector] public GameObject currentEnvorinment;
-    [HideInInspector] public AudioClip currentMusicclip;
+     public AudioClip currentMusicclip;
     public TextMeshPro currentEventText;
     public TextMeshPro currentTutorialText;
 
     public SpawnAreaTrigger currentArenaTrigger;  
     public Transform hidePosition;
     public EnemySpawnManager spawnManager;
+    public GameManager _gameManager;
+    public Transform respawnPoint;
+    public TutorialManager _tutorialManager;
 
 
 
@@ -61,13 +72,15 @@ public class eventManagerScript : MonoBehaviour
     [Header("Event 4: The title card")]
     public MMFeedbacks event4Feedback;
     public TextMeshPro titelCardText;
+    public GameObject event4Trigger;
 
     [Header("Event 5: Boss intro")]
   //  public TextMeshPro basicCombatTutorialText;
     public MMFeedbacks event5Feedback;
     public GameObject basicCombatTutoiral; 
     public TextMeshPro bossTitleCard;
-    public GameObject throneAreaLaser; 
+    public GameObject throneAreaLaser;
+    public GameObject event5Trigger; 
   
     [Header("Event 6: First combat encounter")]
     public SpawnAreaTrigger combatArena1Trigger;  
@@ -115,21 +128,25 @@ public class eventManagerScript : MonoBehaviour
        //currentEvent = 1;       
        eventTimer = 0f;
 
-
         if (startWithEvent)
         {
             currentEvent = eventToStartAt;
             SetNewEvent(eventToStartAt);
-        }
-        
-        
+        }            
     }
 
     // Update is called once per frame
     void Update()
     {
         if (eventTimer > 0) DoEventTimer(eventDuration);
-        if(waitForEvent) WaitForEventTrigger(); 
+        if(waitForEvent) WaitForEventTrigger();
+        if (freezeTheGame) FreezeGame(); 
+        if(!freezeTheGame && gameIsFroozen)
+        {
+            UnfreezeGame(); 
+        }
+        if (checkForCondition) CheckForEventCondition(); 
+
     }
 
     public void SetNewEvent(int eventInt)
@@ -159,7 +176,7 @@ public class eventManagerScript : MonoBehaviour
         //Starting dialog 
         if (currentEvent == 1)
         {
-            
+            checkForCondition = true; 
             currentEventFeedback = event1Feedback;
             currentSong = musicFeedback1;
             currentEventCam = eventCam1;
@@ -173,7 +190,7 @@ public class eventManagerScript : MonoBehaviour
   
             ChangeMusic(); 
             turnOffCamera();
-            TurnOffUI();       
+            //TurnOffUI();       
          
         }
 
@@ -211,25 +228,33 @@ public class eventManagerScript : MonoBehaviour
         //Boss intro title card
         if(currentEvent == 5)
         {
+            freezeTheGame = true; 
             waitForEvent = true; 
-            waitForEventDuration = 1.4f; 
+            waitForEventDuration = .5f; 
             eventTimer = eventDuration = 5f; 
             currentEventFeedback = event5Feedback; 
-            currentEventCam = event5Cam; 
-
-        
-            
+            currentEventCam = event5Cam;            
         }
 
-        //First comba arena triggered 
+        //First comba arena triggered / Also respawn point
         if(currentEvent == 6)
         {
-            currentArenaTrigger = combatArena1Trigger;  
-           
+            TurnOnUI(); 
+            throneAreaLaser.SetActive(true);
+            event1Feedback?.StopFeedbacks();
+            event4Trigger.SetActive(false);
+            event5Trigger.SetActive(false);
+            _gameManager.eventToStartAt = currentEvent;
+            _gameManager.respawnPoint = respawnPoint;
+            currentArenaTrigger = combatArena1Trigger;
+            _tutorialManager.StartTutorial(); 
+
         }
 
+        //Big guy intro
         if(currentEvent == 7)
         {
+        
             waitForEvent = true; 
             waitForEventDuration = 1.4f;      
         }
@@ -250,6 +275,46 @@ public class eventManagerScript : MonoBehaviour
         if(eventTimer < 0)
         {
             EndEvent(); 
+        }
+    }
+
+    void CheckForEventCondition()
+    {
+        if(currentEvent == 1)
+        {
+            if (input.airSmashButtonPressed)
+            {
+                buttonHoldTimer += Time.deltaTime;
+                buttonHoldImage.fillAmount = buttonHoldTimer / buttonHoldDuration;
+            }
+            else buttonHoldTimer = buttonHoldImage.fillAmount = 0f;
+        
+
+        
+
+            if (buttonHoldTimer >= buttonHoldDuration && !_gameManager.gameIsPaused)
+            {
+                
+                eventWasSkipped = true;     
+                
+                EndEvent();
+                currentEvent = 6;
+
+
+                event1Feedback?.StopFeedbacks(); 
+                barrackEnvironment.SetActive(true);
+                SetNewEvent(currentEvent);
+
+                //TurnOffUI();
+                playerController.isFreeFalling = true;
+                playerController.inAirTime = playerController.freefallWaitTime; 
+                playerController.transform.position = respawnPoint.position; 
+                eventWasSkipped = false;
+                currentSong = musicFeedback1;
+                ChangeMusic();
+                buttonHoldTimer = 0f; 
+              
+            }
         }
     }
 
@@ -290,15 +355,20 @@ public class eventManagerScript : MonoBehaviour
                 event7Cam.Follow = bigGuy.transform;
                 event7Cam.LookAt = bigGuy.transform;
                 currentEventCam = event7Cam;
-                waitForEvent = false;  
+                freezeTheGame = true;
+                waitForEvent = false;
+               
             }
         }
     }
 
     public void EndEvent()
-    {    
-        currentEventFeedback?.StopFeedbacks();
+    {
+
+ 
+        currentEventFeedback?.StopFeedbacks();    
         TurnOnUI();
+
 
         TurnOnCamera();
         delayedObjects.Clear(); 
@@ -311,7 +381,9 @@ public class eventManagerScript : MonoBehaviour
        
         blackCamera = false; 
       //  doCountdown = false;
-        waitForEvent = false; 
+        waitForEvent = false;
+        freezeTheGame = false;
+        checkForCondition = false;
         waitForEventTimer = 0;
         eventTimer = 0;
 
@@ -319,7 +391,7 @@ public class eventManagerScript : MonoBehaviour
         //Transiion from intro dialog and free fall
         if (currentEvent == 1)
         {
-            SetNewEvent(2);
+            if(!eventWasSkipped) SetNewEvent(2);
 
         }
         else if(currentEvent == 2)
@@ -328,7 +400,7 @@ public class eventManagerScript : MonoBehaviour
         }
         else if (currentEvent == 5)
         {
-            SetNewEvent(6); 
+            if(!eventWasSkipped) SetNewEvent(6); 
             throneAreaLaser.SetActive(true);
 
         }
@@ -337,13 +409,15 @@ public class eventManagerScript : MonoBehaviour
 
     void turnOffCamera()
     {
+        blackCam.gameObject.SetActive(true);
+        mainCam.gameObject.SetActive(false); 
         blackCamera = true;
-        print("Backcam"); 
     }
 
     void TurnOnCamera()
     {
-    
+        blackCam.gameObject.SetActive(false);
+        mainCam.gameObject.SetActive(true);
         blackCamera = false; 
     }
 
@@ -352,6 +426,7 @@ public class eventManagerScript : MonoBehaviour
     void TurnOffUI()
     {
         playerUI.SetActive(false); 
+
     }
 
     void TurnOnUI()
@@ -365,13 +440,56 @@ public class eventManagerScript : MonoBehaviour
  
     }
 
+    void FreezeGame()
+    {
+        gameIsFroozen = true;
+        playerController.playerRb.velocity = new Vector3(0, 0, 0);
+        playerController.eventPausing = true;
+
+        foreach (GameObject enemy in spawnManager.spawnedAliveEnemies)
+        {
+            if (enemy.GetComponent<BasicEnemyScript>() != null)
+            {
+                BasicEnemyScript enemyScript = enemy.GetComponent<BasicEnemyScript>();
+                enemyScript.enemyAgent.speed = .5f;
+                enemyScript.canAttack = false; 
+            }
+        }
 
 
-   
+        // playerController.playerRb.
 
-    
+    }
 
-  
+    public void UnfreezeGame()
+    {
+        gameIsFroozen = false;
+        freezeTheGame = false; 
 
-  
+        playerController.playerState.canBeHit = true;
+        playerController.eventPausing = false;
+
+        foreach (GameObject enemy in spawnManager.spawnedAliveEnemies)
+        {
+            if (enemy.GetComponent<BasicEnemyScript>() != null)
+            {
+                BasicEnemyScript enemyScript = enemy.GetComponent<BasicEnemyScript>();
+                enemyScript.enemyAgent.speed = enemyScript.enemyAgent.speed = enemyScript.runSpeed; 
+                //   enemyScript.canAttack = true; 
+            }
+        }
+
+     
+
+
+    }
+
+
+
+
+
+
+
+
+
 }

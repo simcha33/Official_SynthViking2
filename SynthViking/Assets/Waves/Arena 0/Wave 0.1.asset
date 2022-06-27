@@ -15,10 +15,14 @@ MonoBehaviour:
   maxEnemiesInScene: 10
   minGroupSpawnSize: 3
   maxGroupSpawnSize: 5
-  WaveTitle: A QUICK WARM UP
-  maxGruntsToSpawn: 1
+  WaveTitle: A TRAP
+  maxGruntsToSpawn: 15
   maxBigGuyToSpawn: 0
   maxTortiToSpawn: 0
-  canTriggerEvent: 0
+  groupSpawnCooldownDuration: 4
+  waveCountdownDuration: 0
   eventToTrigger: 7
   canSpawnPilars: 0
+  canTriggerEvent: 0
+  canSpawnEyeballs: 1
+  canSpawnLasers: 0

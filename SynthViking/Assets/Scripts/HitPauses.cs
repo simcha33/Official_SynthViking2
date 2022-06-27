@@ -60,28 +60,31 @@ public class HitPauses : MonoBehaviour
                 }
                 else if(anim != playerAnim)
                 {
-                 
-                    BasicEnemyScript enemyScript = anim.transform.GetComponent<BasicEnemyScript>();
-                    if (playerController.attackState == playerAttackType.HeavyAxeHit.ToString())
+
+                    if (anim.transform.GetComponent<BasicEnemyScript>() != null)
                     {
-                        GameObject blood = Instantiate(attackTargetScript.axeHitBloodVFX, enemyScript.bloodSpawnPoint.position, enemyScript.bloodSpawnPoint.rotation);
-                        GameObject blood2 = Instantiate(attackTargetScript.axeHitBloodVFX2, enemyScript.bloodSpawnPoint.position, enemyScript.bloodSpawnPoint.rotation);
-                        blood.AddComponent<CleanUpScript>();                 
-                        attackTargetScript.weaponHitFeedback?.PlayFeedbacks();
-                      
-                    }
-                    else if (playerController.attackState == playerAttackType.LightPunchHit.ToString())
-                    {
-                        GameObject dust = Instantiate(attackTargetScript.punchDustVFX, enemyScript.bloodSpawnPoint.position, enemyScript.bloodSpawnPoint.rotation);
-                        GameObject sparks = Instantiate(attackTargetScript.punchSparksVFX, enemyScript.bloodSpawnPoint.position, enemyScript.bloodSpawnPoint.rotation);
-                        dust.transform.parent = enemyScript.transform;
-                        sparks.transform.parent = enemyScript.transform; 
-                        dust.AddComponent<CleanUpScript>();
-                        attackTargetScript.punchHitFeedback?.PlayFeedbacks();
-                    }
+                        BasicEnemyScript enemyScript = anim.transform.GetComponent<BasicEnemyScript>();
+                        if (playerController.attackState == playerAttackType.HeavyAxeHit.ToString())
+                        {
+                            GameObject blood = Instantiate(attackTargetScript.axeHitBloodVFX, enemyScript.bloodSpawnPoint.position, enemyScript.bloodSpawnPoint.rotation);
+                            GameObject blood2 = Instantiate(attackTargetScript.axeHitBloodVFX2, enemyScript.bloodSpawnPoint.position, enemyScript.bloodSpawnPoint.rotation);
+                            blood.AddComponent<CleanUpScript>();
+                            attackTargetScript.weaponHitFeedback?.PlayFeedbacks();
+
+                        }
+                        else if (playerController.attackState == playerAttackType.LightPunchHit.ToString())
+                        {
+                            GameObject dust = Instantiate(attackTargetScript.punchDustVFX, enemyScript.bloodSpawnPoint.position, enemyScript.bloodSpawnPoint.rotation);
+                            GameObject sparks = Instantiate(attackTargetScript.punchSparksVFX, enemyScript.bloodSpawnPoint.position, enemyScript.bloodSpawnPoint.rotation);
+                            dust.transform.parent = enemyScript.transform;
+                            sparks.transform.parent = enemyScript.transform;
+                            dust.AddComponent<CleanUpScript>();
+                            attackTargetScript.punchHitFeedback?.PlayFeedbacks();
+                        }
 
                         anim.speed = 1f;
-                    // objectsToPause.Remove(anim); 
+                        // objectsToPause.Remove(anim); 
+                    }
                 }          
             }
             objectsToPause.Clear();

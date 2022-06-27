@@ -19,6 +19,10 @@ MonoBehaviour:
   maxGruntsToSpawn: 30
   maxBigGuyToSpawn: 1
   maxTortiToSpawn: 0
-  canTriggerEvent: 0
+  groupSpawnCooldownDuration: 6
+  waveCountdownDuration: 5
   eventToTrigger: 0
-  canSpawnPilars: 0
+  canSpawnPilars: 1
+  canTriggerEvent: 0
+  canSpawnEyeballs: 0
+  canSpawnLasers: 0

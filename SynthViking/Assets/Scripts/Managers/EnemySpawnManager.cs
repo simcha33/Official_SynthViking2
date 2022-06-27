@@ -45,7 +45,10 @@ public class EnemySpawnManager : MonoBehaviour
     //Spawn cooldowns and timers
     public float groupSpawnCooldownDuration;
     public float groupSpawnCooldownTimer;
-        #endregion 
+    public bool canSpawnEyeballs;
+    public bool canSpawnLasers;
+    public bool canSpawnPilars;
+    #endregion
 
 
     [Header("WAVE AREA")]
@@ -284,7 +287,9 @@ public class EnemySpawnManager : MonoBehaviour
 
         //Set spawn data 
         maxEnemiesAllowedInScene = choosenSpawnData.maxEnemiesInScene; //Max enemies allowed in the scene at the same time 
-        enemiesLeft = maxEnemiesToSpawnThisWave = maxGruntsToSpawn + maxBigGuyToSpawn + maxTortiToSpawn; 
+        enemiesLeft = maxEnemiesToSpawnThisWave = maxGruntsToSpawn + maxBigGuyToSpawn + maxTortiToSpawn;
+        groupSpawnCooldownDuration = choosenSpawnData.groupSpawnCooldownDuration;
+        waveCountdownDuration = choosenSpawnData.waveCountdownDuration;
         //maxEnemiesToSpawnThisWave = choosenSpawnData.maxEnemiesInWave; //Max enemies to spawn in a wave 
          //maxEnemiesToSpawnThisWave = choosenSpawnData.maxEnemiesInWave; //Max enemies to spawn in a wave 
         minGroupSize = choosenSpawnData.minGroupSpawnSize;  //max enimes to spawn in a group 
@@ -293,8 +298,13 @@ public class EnemySpawnManager : MonoBehaviour
         canTriggerEvent = choosenSpawnData.canTriggerEvent; 
         eventToTrigger = choosenSpawnData.eventToTrigger; 
         enemiesSpawnedThisWave = 0;
-        
-    }
+
+        //Check what we can spawn
+        canSpawnEyeballs = choosenSpawnData.canSpawnEyeballs;
+        canSpawnLasers = choosenSpawnData.canSpawnLasers;
+        canSpawnPilars = choosenSpawnData.canSpawnPilars; 
+
+}
 
     void SetEnemySpawnlist()
     {
@@ -340,14 +350,12 @@ public class EnemySpawnManager : MonoBehaviour
         waveHasStarted = true;
         groupSpawnCooldownTimer = groupSpawnCooldownDuration;
         waveText.text = "ACT " + currentWave + " " + currentWaveTitle;
-        playerState.AddHealth(25f);
+        playerState.AddHealth(100f);
         enemiesLeft = maxEnemiesToSpawnThisWave; 
 
         if(canTriggerEvent)
         {
             if(eventToTrigger == 7) groupSpawnCooldownTimer = groupSpawnCooldownDuration; 
-
-            print(" trigger event"); 
             eventScript.EndEvent(); 
             eventScript.SetNewEvent(eventToTrigger); 
 

@@ -101,7 +101,8 @@ MonoBehaviour:
   healthPilarRingMat: {fileID: 2100000, guid: be754888f468a0243aef77bd28cee5ab, type: 2}
   healthPilarMat: {fileID: 2100000, guid: 69cfb34945eca3941b11237302934165, type: 2}
   isTrapPilar: 0
-  trapsToActivate: []
+  trapsToActivate:
+  - {fileID: 0}
   trappilarMat: {fileID: 2100000, guid: a710fbb106a274645ac6d76ced5307be, type: 2}
   trapPilarRingMat: {fileID: 2100000, guid: bb1d9feae4b49fe4385ed40d5020a1a0, type: 2}
 --- !u!135 &5333717948925851335

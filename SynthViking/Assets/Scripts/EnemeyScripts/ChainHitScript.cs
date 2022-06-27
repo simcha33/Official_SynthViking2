@@ -87,65 +87,68 @@ public class ChainHitScript : MonoBehaviour
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("Enemy") && mainScript.targetDistance < chainHitMaxDistance && !mainScript.isBlockStunned && (mainScript.isStunned || mainScript.isDead) && canCheck)
         {
-//            Debug.Log("DetectTheEnemy"); 
-            BasicEnemyScript otherScript = other.gameObject.GetComponent<BasicEnemyScript>();
+            //            Debug.Log("DetectTheEnemy"); 
+            if (other.gameObject.GetComponent<BasicEnemyScript>() != null)
+            {
+                BasicEnemyScript otherScript = other.gameObject.GetComponent<BasicEnemyScript>();
 
-            if (otherScript.canBeChainHit && !otherScript.isDead) 
-            {              
-                otherScript.enemyRb.velocity = new Vector3(0f, 0f, 0f);
-                otherScript.enemyAnim.speed = Random.Range(1, .8f);
-                otherScript.enemyAnim.SetFloat("DamageReaction", Random.Range(1f, 3f));
-                otherScript.enemyAnim.SetTrigger("DamageTrigger");
-
-
-                //Set type values equel to orgins type
-                if (isOrigin)
+                if (otherScript.canBeChainHit && !otherScript.isDead)
                 {
-                    otherScript.chainHitScript.currentChainHitActiveDuration = currentChainHitActiveDuration;
-                    otherScript.chainHitScript.currentDamage = currentDamage;
-                    otherScript.chainHitScript.currentChainHitBackForce = currentChainHitBackForce;
-
-
-                }
-                else
-                {
-                    otherScript.chainHitScript.SetChainHitType(chainType);
-                }
-
-                
-
-                otherScript.TakeDamage(currentDamage, chainType);
-                if (chainType == playerAttackType.PowerPunch.ToString()) //Power punch 
-                {
-                    otherScript.enemyRb.mass = otherScript.originalRbMass;
-                    otherScript.LaunchEnemy(launchDirection, currentChainHitBackForce, 10f);
-                    
-        
-                }
-                else
-                {
-                    otherScript.enemyRb.freezeRotation = true;
-
-                    //Set launch direction 
                     otherScript.enemyRb.velocity = new Vector3(0f, 0f, 0f);
-                    otherScript.launchDirection = mainScript.launchDirection; //Base launch direction of attackers forward 
-                    print(currentChainHitBackForce); 
-                    otherScript.enemyRb.AddForce(mainScript.launchDirection * currentChainHitBackForce, ForceMode.Impulse);
+                    otherScript.enemyAnim.speed = Random.Range(1, .8f);
+                    otherScript.enemyAnim.SetFloat("DamageReaction", Random.Range(1f, 3f));
+                    otherScript.enemyAnim.SetTrigger("DamageTrigger");
 
-                    //Spawn punch force effect 2
-                    GameObject dashAttackEffect = Instantiate(playerController.airPunchEffect, otherScript.transform.position + new Vector3(0, 1.5f, 0), transform.rotation);
-                    dashAttackEffect.transform.LookAt(otherScript.transform.forward + new Vector3(0, .5f, 0));
-                    dashAttackEffect.transform.eulerAngles = new Vector3(dashAttackEffect.transform.eulerAngles.x - 180, dashAttackEffect.transform.eulerAngles.y, dashAttackEffect.transform.eulerAngles.z);
-                    dashAttackEffect.transform.localScale *= .45f;
 
+                    //Set type values equel to orgins type
+                    if (isOrigin)
+                    {
+                        otherScript.chainHitScript.currentChainHitActiveDuration = currentChainHitActiveDuration;
+                        otherScript.chainHitScript.currentDamage = currentDamage;
+                        otherScript.chainHitScript.currentChainHitBackForce = currentChainHitBackForce;
+
+
+                    }
+                    else
+                    {
+                        otherScript.chainHitScript.SetChainHitType(chainType);
+                    }
+
+
+
+                    otherScript.TakeDamage(currentDamage, chainType);
+                    if (chainType == playerAttackType.PowerPunch.ToString()) //Power punch 
+                    {
+                        otherScript.enemyRb.mass = otherScript.originalRbMass;
+                        otherScript.LaunchEnemy(launchDirection, currentChainHitBackForce, 10f);
+
+
+                    }
+                    else
+                    {
+                        otherScript.enemyRb.freezeRotation = true;
+
+                        //Set launch direction 
+                        otherScript.enemyRb.velocity = new Vector3(0f, 0f, 0f);
+                        otherScript.launchDirection = mainScript.launchDirection; //Base launch direction of attackers forward 
+                        otherScript.enemyRb.AddForce(mainScript.launchDirection * currentChainHitBackForce, ForceMode.Impulse);
+
+                        //Spawn punch force effect 2
+                        GameObject dashAttackEffect = Instantiate(playerController.airPunchEffect, otherScript.transform.position + new Vector3(0, 1.5f, 0), transform.rotation);
+                        dashAttackEffect.transform.LookAt(otherScript.transform.forward + new Vector3(0, .5f, 0));
+                        dashAttackEffect.transform.eulerAngles = new Vector3(dashAttackEffect.transform.eulerAngles.x - 180, dashAttackEffect.transform.eulerAngles.y, dashAttackEffect.transform.eulerAngles.z);
+                        dashAttackEffect.transform.localScale *= .45f;
+                        dashAttackEffect.AddComponent<CleanUpScript>(); 
+
+                    }
+
+
+                    //   otherScript.enemyRb.AddForce(launchDirection * currentChainHitBackForce, ForceMode.Impulse);
+                    otherScript.enemyMeshr.materials = otherScript.stunnedSkinMat;
+                    otherScript.stunDuration = currentStunDuration;
+                    otherScript.mainCollider.isTrigger = true;
+                    if(otherScript.stunnedEffect != null) otherScript.stunnedEffect.SetActive(true); 
                 }
-
-              
-             //   otherScript.enemyRb.AddForce(launchDirection * currentChainHitBackForce, ForceMode.Impulse);
-                otherScript.enemyMeshr.materials = otherScript.stunnedSkinMat;
-                otherScript.stunDuration = currentStunDuration; 
-                otherScript.mainCollider.isTrigger = true; 
-                otherScript.stunnedEffect.SetActive(true); 
             }
         }
     }

@@ -1,88 +1,173 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using MoreMountains.Feedbacks; 
 
 public class EyeBall : MonoBehaviour
 {
 
+    [Header("EYEBALLTYPE")]
+    public bool isLaserEye;
+    public bool isProjectileEye;
+
+
+    [Header("SHOOTING")]
+    public bool isFiring;
+    public int projectilesFiredCount;
+    public int maxProjectiles;
+    public float fireDelay;
+    public float cooldownDuration;
+    private float cooldownTimer;
+    public AudioClip shootSound;
+    public AudioClip shotIndicationSound;
+    public AudioClip destroyedSound;
+
+
+
+
+    [Header("COMPONENTS")]
     public Transform target;
     public Transform eyeBall;
     public Transform barrel;
     private Transform hiddenPos;
-    private Transform outPos; 
+    private Transform outPos;
     public GameObject projectileObject;
+    public MeshRenderer pupilMeshr;
+    [HideInInspector] public EyeballManager eyeBallManager;
+    private EyeBall thisScript;
+    private SpotScript attachedSpot;
+    public List<HomingProjectile> projectilesFired = new List<HomingProjectile>();
+    public ThirdPerson_PlayerControler playerController;
+    private AudioSource source;
+    public MMFeedbacks shootFeedback; 
+
+    [Header ("STATE")]
+    public float maxHealth = 300f;
+    public float currentHealth;
+    public bool hasAppeared;
+    public bool canFire;
     public bool canFollow;
+    public bool hasSpawned;
+    public bool isStunned;
+    public float stunDuration;
+    public float stunTimer;
+
+    [Header("VISUALS")]
     private Material defaultMat;
     public Material greenMat;
     public Material redMat;
-    public MeshRenderer pupilMeshr; 
+    public GameObject explodeEffect1;
+    public GameObject explodeEffect2;
+    public GameObject explodeEffect3;
+    public GameObject shotIndicationEffect; 
 
-    public bool isLaserEye;
-    public bool isProjectileEye;
-    public bool canFire; 
-    public bool isFiring;
-    public bool hasAppeared; 
-
-    public int projectilesFired;
-    public int maxProjectiles;
-
-
-    public float activeDuration;
-    public float fireDelay; 
-
-    public float cooldownDuration;
-    private float cooldownTimer;
 
 
     private void Start()
     {
         defaultMat = pupilMeshr.material;
-        ResetEyeball(); 
+        currentHealth = maxHealth;
+        target = GameObject.Find("Player").transform;
+        playerController = target.gameObject.GetComponent<ThirdPerson_PlayerControler>(); 
+        attachedSpot = GetComponentInParent<SpotScript>();
+        thisScript = gameObject.GetComponent<EyeBall>();
+        eyeBallManager = GameObject.Find("EyeBallManager").GetComponent<EyeballManager>();
+       source = GetComponent<AudioSource>(); 
+        ResetEyeball();
+        
+    
     }
 
     void Update()
     {
-        if(canFollow) eyeBall.LookAt(target.position);
-        if(isProjectileEye) CheckForProjectile(); 
+        if (isProjectileEye) CheckForProjectile();
+        if (isStunned) CheckForStun();
+        if(!isStunned) CheckForPlayer(); 
+     
     }
 
-    private void FixedUpdate()
+    public void TakeDamage(float damageAmount, string DamageType)
     {
+        currentHealth -= damageAmount;
+        isStunned = true; 
+
+        if(currentHealth <= 0)
+        {
+            KillEye(); 
+        }
+    }
+
+    public void CheckForStun()
+    {
+        stunTimer += Time.deltaTime; 
+        if(stunTimer >= stunDuration)
+        {
+            stunTimer = 0f; 
+            isStunned = false; 
+        }
+    }
+
+    void KillEye()
+    {
+        GameObject explosion1 = Instantiate(explodeEffect1, eyeBall.position, eyeBall.rotation);
+        GameObject explosion2 = Instantiate(explodeEffect2, eyeBall.position, eyeBall.rotation);
+
+        explosion1.AddComponent<CleanUpScript>();
+        explosion2.AddComponent<CleanUpScript>();
+        source.PlayOneShot(destroyedSound);
+
+        if (attachedSpot != null)
+        {
+            attachedSpot.inUse = false;
+            attachedSpot.spotManager.freeSpotList.Add(attachedSpot);
+            if(eyeBallManager.eyeballsInScene1.Contains(thisScript)) eyeBallManager.eyeballsInScene1.Remove(thisScript);
+            eyeBallManager.currentEyesInScene--;
+        }
         
-    }
+        gameObject.SetActive(false);
+        hasSpawned = false; 
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.gameObject.CompareTag("Player"))
+        foreach(HomingProjectile projectile in projectilesFired)
         {
-            canFollow = true;
+            projectile.DestroyProjectile(); 
+        }
+
+        projectilesFired.Clear();
+
+        if (playerController.attackTargetScript.targetsInRange.Contains(this.gameObject))
+        {
+            playerController.attackTargetScript.targetsInRange.Remove(this.gameObject); 
         }
     }
 
-    private void OnTriggerExit(Collider other)
+
+    void CheckForPlayer()
     {
-        if (other.gameObject.CompareTag("Player"))
-        {
-            canFollow = false; 
-        }
+        if(Vector3.Distance(transform.position, target.position) < 500f) canFollow = true; 
+        else canFollow = false;
+        if(canFollow) eyeBall.LookAt(target.position);
+
     }
+
 
     void CheckForProjectile()
     {
         cooldownTimer += Time.deltaTime; 
 
-        if(cooldownTimer >= cooldownDuration - 2)
+        if(cooldownTimer >= cooldownDuration - 1)
         {
-            pupilMeshr.material = greenMat; 
+            shotIndicationEffect.SetActive(true);
+            if (pupilMeshr.material == defaultMat) source.PlayOneShot(shotIndicationSound); 
+            pupilMeshr.material = redMat; 
         }
 
-        if(cooldownTimer >= cooldownDuration && projectilesFired < maxProjectiles)
+        if(cooldownTimer >= cooldownDuration && projectilesFiredCount < maxProjectiles && !isStunned)
         {
             FireProjectile();
-            projectilesFired++;
+            projectilesFiredCount++;
             cooldownTimer -= fireDelay; 
         }
-        else if(projectilesFired >= maxProjectiles)
+        else if(projectilesFiredCount >= maxProjectiles)
         {
             ResetEyeball(); 
         }
@@ -91,13 +176,21 @@ public class EyeBall : MonoBehaviour
     void ResetEyeball()
     {
         cooldownTimer = 0f;
-        projectilesFired = 0;
-        pupilMeshr.material = defaultMat; 
+        projectilesFiredCount = 0;
+        pupilMeshr.material = defaultMat;
+        shotIndicationEffect.SetActive(false);
     }
 
     void FireProjectile()
     {
-        Instantiate(projectileObject, barrel.transform.position, barrel.transform.rotation);
+       GameObject projectile = Instantiate(projectileObject, barrel.transform.position, barrel.transform.rotation);
+       HomingProjectile projectileScript =  projectile.GetComponent<HomingProjectile>();
+       projectileScript.origin = this.transform;
+       projectilesFired.Add(projectileScript);
+        //   shootFeedback?.PlayFeedbacks();
+        source.PlayOneShot(shootSound); 
+     
+
     }
 
     void Appear()

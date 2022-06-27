@@ -7,7 +7,7 @@ public class WorldTextScript : MonoBehaviour
     public Camera cam; 
     void Start()
     {
-           cam = GameObject.Find("Camera").GetComponent<Camera>();
+          // cam = GameObject.Find("Camera").GetComponent<Camera>();
     }
 
     // Update is called once per frame

@@ -75,7 +75,7 @@ public class CameraHandeler : MonoBehaviour
                 if (mainCam.enabled == false) mainCam.enabled = true; 
                 c = eventScript.currentEventCam.name;
             }
-            else mainCam.enabled = false;
+           // else mainCam.enabled = false;
             
           //  else mainCam.
         //    else mainCam.

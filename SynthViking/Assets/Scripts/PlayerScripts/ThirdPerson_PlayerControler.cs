@@ -444,7 +444,8 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     public bool isGroundSmash;
     public bool isGrounded = true;
     public bool isStunned;
-    public bool isFreeFalling; 
+    public bool isFreeFalling;
+    public bool eventPausing; 
 
     public bool alllowForwardForce; 
 
@@ -490,7 +491,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     private void Update()
     {
-        if (!mainGameManager.gameIsPaused)
+        if (!mainGameManager.gameIsPaused && !eventPausing)
         {
             switch (controllerState)
             {
@@ -574,7 +575,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!mainGameManager.gameIsPaused)
+        if (!mainGameManager.gameIsPaused && !eventPausing)
         {
             switch (fixedControllerState)
             {
@@ -738,7 +739,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     {
       
         //Check for sprinting 
-        if (input.sprintButtonPressed && canSprint && (isMoving || isWallRunning))
+        if (input.sprintButtonPressed && canSprint && (isMoving || isWallRunning) && !isUpperCutting)
         {
             isSprinting = true;       
             if (!isWallRunning) canStartWallrun = true;
@@ -1498,10 +1499,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //Give the player a small boost after wallrunning 
   
         playerAnim.SetTrigger("WallRunEndTrigger");
-        groundCheckTimer = .45f;
-     
-        print("check 0"); 
-            
+        groundCheckTimer = .45f;        
 
         if(wallRunExitWithJump)
         {
@@ -1628,11 +1626,19 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 {
                     if (slamTarget.gameObject.layer == enemyLayer)
                     {
-                        BasicEnemyScript enemyScript = slamTarget.GetComponent<BasicEnemyScript>();
-                        if (enemyScript.canBeStunned)
+                        if (slamTarget.GetComponent<BasicEnemyScript>() != null)
                         {
-                            enemyScript.TakeDamage(currentGroundSlamDamage, playerAttackType.GroundSlam.ToString());
-                            enemyScript.LaunchEnemy((slamTarget.transform.position - transform.position), slamImpactForwardForce, Random.Range(slamImpactUpForce / 1.1f, slamImpactUpForce * 1.1f));
+                            BasicEnemyScript enemyScript = slamTarget.GetComponent<BasicEnemyScript>();
+                            if (enemyScript.canBeStunned)
+                            {
+                                enemyScript.TakeDamage(currentGroundSlamDamage, playerAttackType.GroundSlam.ToString());
+                                enemyScript.LaunchEnemy((slamTarget.transform.position - transform.position), slamImpactForwardForce, Random.Range(slamImpactUpForce / 1.1f, slamImpactUpForce * 1.1f));
+                            }
+                        }
+                        else if(slamTarget.GetComponent<EyeBall>() != null)
+                        {
+                            EyeBall eyeBallScript = slamTarget.GetComponent<EyeBall>();
+                            eyeBallScript.TakeDamage(500, "AirSlam"); 
                         }
                     }
                 }
@@ -1696,7 +1702,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             isAttacking = false;
             canStartNewAttack = true;
             nextAttackTimer = 10f; 
-            playerAnim.SetTrigger("BlockTrigger"); 
+            playerAnim.SetTrigger("BlockTrigger");        
             controllerState = (int)currentState.BLOCKING; 
         }
 
@@ -1904,7 +1910,6 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         //Check if we can continue to the next attack
         if (nextAttackTimer >= nextAttackDuration - attackTransitionOffset && (!input.heavyAttackButtonPressed && wantsToHeayAttack || !input.lightAttackButtonPressed && wantsToLightAttack || attackState == playerAttackType.LightPunchHit.ToString() && wantsToHeayAttack) || attackState == playerAttackType.HeavyAxeHit.ToString() && wantsToLightAttack)
         {
-            print("DOAttack"); 
             if(attackState == playerAttackType.SprintAttack.ToString())
             {
                 
@@ -1979,7 +1984,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             nextAttackTimer = 10f; 
                 //CheckForAttack();            
         }
-        else if (nextAttackTimer < nextAttackDuration  - attackTransitionOffset)
+        else if (nextAttackTimer < nextAttackDuration  - attackTransitionOffset /2)
         {
             if (attackState != playerAttackType.SprintAttack.ToString() && attackState != playerAttackType.AirLaunchAttack.ToString() && !input.jumpButtonPressed) playerRb.isKinematic = true; //Freeze enemy mid air if attacking
             else if (alllowForwardForce && attackState == playerAttackType.SprintAttack.ToString()) AllowAttackDamage();
@@ -2092,7 +2097,10 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             print("uppercut");
             AllowAttackDamage(); 
             moveSequence.Append(transform.DOMove(airLaunchPoint, .3f).SetUpdate(UpdateType.Fixed));
-          
+            GameObject jumpEffect = Instantiate(jumpVFX, transform.position + new Vector3(0f, .3f, 0f), transform.rotation);
+            jumpEffect.transform.eulerAngles = new Vector3(-90, jumpEffect.transform.eulerAngles.y, jumpEffect.transform.eulerAngles.z);
+            jumpEffect.AddComponent<CleanUpScript>().SetCleanUp(3f);
+
         }
         else if (attackState == playerAttackType.HeavyAxeHit.ToString())
         {
@@ -2110,7 +2118,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             attackDirection = transform.position + inputDir;
             mainGameManager.DoHaptics(.1f, .05f, .05f); 
             attackTargetScript.BackCheck(); 
-            moveSequence.Append(transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .35f).SetUpdate(UpdateType.Fixed));
+            moveSequence.Append(transform.DOMove(transform.position + transform.forward * currentAttackForwardForce, .2f).SetUpdate(UpdateType.Fixed));
         }
         else if (attackState == playerAttackType.SprintAttack.ToString())
         {
@@ -2144,7 +2152,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
     {
         float disableTrailDuration = .75f;
 
-        if (isSprinting || jumpCount >= 1 || isDashing || isAirSmashing || isFreeFalling) enableTrail = true; 
+        if (isSprinting || jumpCount >= 1 || isDashing || isAirSmashing || isFreeFalling || attackState == playerAttackType.AirLaunchAttack.ToString()) enableTrail = true; 
         else enableTrail = false;
 
       ///  Debug.Log(attackTrailTimer); 
@@ -2231,17 +2239,13 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
                 
                 foreach (BasicEnemyScript enemy in attackTargetScript.airLaunchTargets)
                 {
-                    if (!enemy.isDead) enemy.transform.parent = null;  //transform.parent = enemy.transform.parent = enemy.enemySpawnManagerScript.aliveEnemyParent.transform;
-                  //  enemy.isLaunched = true; 
+                   
                     enemy.isUpperCutted = false;
                     DOTween.Kill(enemy.transform);
+                    enemy.enemyRb.velocity = new Vector3(0, 0, 0);
 
-                    // enemy.transform.position = transform.position + transform.forward * .5f;
-                    //  enemy.transform.LookAt(transform);
-                    // enemy.transform.position = transform.position - enemy.transform.forward * .5f;
-                    //    enemy.transform.DOMove(transform.position + transform.forward * .5f, .1f).SetUpdate(UpdateType.Fixed);
-
-
+                    if (!enemy.isDead) enemy.transform.parent = null;  //transform.parent = enemy.transform.parent = enemy.enemySpawnManagerScript.aliveEnemyParent.transform;                                                                      //  enemy.isLaunched = true; 
+                    enemy.transform.parent = enemy.enemySpawnManagerScript.aliveEnemyParent;
                 }
                 
                 attackTargetScript.airLaunchTargets.Clear();
@@ -2256,7 +2260,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             }
         }
 
-        //Thanks voor het helpen opbouwen van dit conecpt corn� hope you like it 
+        //Thanks voor het helpen opbouwen van dit conecpt corne hope you like it 
     }
     
 }

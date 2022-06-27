@@ -85,12 +85,15 @@ public class DamageObject : MonoBehaviour
 
             if(other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
             {
-                BasicEnemyScript enemyScript = other.gameObject.GetComponent<BasicEnemyScript>(); 
-                if(canHurtEnemies) enemyScript.TakeDamage(enemyScript.maxHealth, "EnvironmentDamage");
-                // DoType(other.transform); 
-                OnEnter = true; 
-                DoType(enemyScript); 
-                OnEnter = false; 
+                if (other.gameObject.GetComponent<BasicEnemyScript>() != null)
+                {
+                    BasicEnemyScript enemyScript = other.gameObject.GetComponent<BasicEnemyScript>();
+                    if (canHurtEnemies) enemyScript.TakeDamage(enemyScript.maxHealth, "EnvironmentDamage");
+                    // DoType(other.transform); 
+                    OnEnter = true;
+                    DoType(enemyScript);
+                    OnEnter = false;
+                }
             }
         }
     }
@@ -99,11 +102,13 @@ public class DamageObject : MonoBehaviour
     {
         if(other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
-            BasicEnemyScript enemyScript = other.gameObject.GetComponent<BasicEnemyScript>(); 
-            onExit = true; 
-            DoType(enemyScript); 
-            onExit = false;
-        
+            if (other.gameObject.GetComponent<BasicEnemyScript>() != null)
+            {
+                BasicEnemyScript enemyScript = other.gameObject.GetComponent<BasicEnemyScript>();
+                onExit = true;
+                DoType(enemyScript);
+                onExit = false;
+            }        
         }
     }
 
@@ -112,8 +117,11 @@ public class DamageObject : MonoBehaviour
 
         if (isLaser && other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
-            BasicEnemyScript enemyScript = other.gameObject.GetComponent<BasicEnemyScript>();
-            enemyScript.inLaser = true; 
+            if (other.gameObject.GetComponent<BasicEnemyScript>() != null)
+            {
+                BasicEnemyScript enemyScript = other.gameObject.GetComponent<BasicEnemyScript>();
+                enemyScript.inLaser = true;
+            }
         }
     }
 

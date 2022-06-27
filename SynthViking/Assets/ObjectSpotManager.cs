@@ -5,17 +5,7 @@ using UnityEngine;
 public class ObjectSpotManager : MonoBehaviour
 {
 
-    public List<SpotScript> freeSpotList = new List<SpotScript>(); 
-  //  public List<SpotScript> usedSpotList = new List<SpotScript>(); 
+    public List<SpotScript> freeSpotList = new List<SpotScript>();
+    public SpotScript middleSpot; 
 
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

@@ -3436,8 +3436,8 @@ MonoBehaviour:
   PlayMethod: 0
   PoolSize: 10
   MinVolume: 0.1
-  MaxVolume: 0.09
-  MinPitch: 1.6
+  MaxVolume: 0.1
+  MinPitch: 1.5
   MaxPitch: 1.5
   SfxAudioMixerGroup: {fileID: 0}
 --- !u!1 &5262075284730341038
@@ -4254,11 +4254,11 @@ MonoBehaviour:
   target: {fileID: 0}
   originalRbMass: 0
   stunnedMass: 400
-  attackDistance: 4
+  attackDistance: 3
   attackMoveSpeed: 1
   currentRequiredDistance: 0
   circleDistance: 10
-  basicMeleeAttackDamage: 12
+  basicMeleeAttackDamage: 10
   currentAttackDamage: 0
   clipsToPause: []
   enemyAttackType: 
@@ -4346,6 +4346,7 @@ MonoBehaviour:
   connectedJointRb: {fileID: 8410380784877409721}
   enemyAgent: {fileID: 82971100}
   enemyMeshr: {fileID: 8410380785426902637}
+  lookAt: {fileID: 0}
   isStunned: 0
   isDead: 0
   isLaunched: 0
@@ -4420,7 +4421,7 @@ NavMeshAgent:
   m_Acceleration: 30
   avoidancePriority: 5
   m_AngularSpeed: 200
-  m_StoppingDistance: 1
+  m_StoppingDistance: 1.25
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1

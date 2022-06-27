@@ -19,6 +19,7 @@ TagManager:
   - SoulPilar
   - BladePilar
   - Torti
+  - Eye
   layers:
   - Default
   - TransparentFX
@@ -41,7 +42,7 @@ TagManager:
   - ProjectileAvoid
   - DashPoint
   - InvisibleWall
-  - 
+  - PlayerProjectile
   - 
   - 
   - 

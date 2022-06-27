@@ -26,6 +26,9 @@ public class PlayerInputCheck : MonoBehaviour
     [HideInInspector] public bool airSmashButtonPressed; 
     [HideInInspector] public bool restartSceneButtonPressed;
     [HideInInspector] public bool slowMoButtonPressed;
+    [HideInInspector] public bool dPadLeftPressed;
+    [HideInInspector] public bool dPadRightPressed;
+
 
     [HideInInspector] public bool pauseButtonPressed; 
 
@@ -33,12 +36,22 @@ public class PlayerInputCheck : MonoBehaviour
     [HideInInspector] public Vector3 moveInput;
     [HideInInspector] public Vector3 aimInput;
     [HideInInspector] public Vector3 rotateInput;
+    public Gamepad gamepad; 
 
     void Start()
     {
-   
+        gamepad = Gamepad.current; 
     }
 
+    /*
+    private void Update()
+    {
+        if(gamepad == null)
+        {
+            print("Not in input check"); 
+        }
+    }
+    */
     private void Awake()
     {
        controls = new PlayerControls();
@@ -102,6 +115,16 @@ public class PlayerInputCheck : MonoBehaviour
      private void OnPauseGame(InputValue value)
     {
         pauseButtonPressed = value.isPressed; 
+    }
+
+    private void OnDpadLeft(InputValue value)
+    {
+        dPadLeftPressed = value.isPressed;
+    }
+    
+    private void OnDpadRight(InputValue value)
+    {
+        dPadRightPressed = value.isPressed;
     }
 
 

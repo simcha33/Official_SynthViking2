@@ -15,10 +15,14 @@ MonoBehaviour:
   maxEnemiesInScene: 25
   minGroupSpawnSize: 10
   maxGroupSpawnSize: 15
-  WaveTitle: LETS GET THAT REWARD
+  WaveTitle: 
   maxGruntsToSpawn: 60
   maxBigGuyToSpawn: 3
   maxTortiToSpawn: 0
-  canTriggerEvent: 0
+  groupSpawnCooldownDuration: 6
+  waveCountdownDuration: 5
   eventToTrigger: 0
-  canSpawnPilars: 0
+  canSpawnPilars: 1
+  canTriggerEvent: 0
+  canSpawnEyeballs: 1
+  canSpawnLasers: 0

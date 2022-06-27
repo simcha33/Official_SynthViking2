@@ -15,10 +15,14 @@ MonoBehaviour:
   maxEnemiesInScene: 1
   minGroupSpawnSize: 1
   maxGroupSpawnSize: 1
-  WaveTitle: LETS 2 IT
+  WaveTitle: 
   maxGruntsToSpawn: 0
   maxBigGuyToSpawn: 1
   maxTortiToSpawn: 0
-  canTriggerEvent: 1
+  groupSpawnCooldownDuration: 4
+  waveCountdownDuration: 0
   eventToTrigger: 7
   canSpawnPilars: 0
+  canTriggerEvent: 1
+  canSpawnEyeballs: 0
+  canSpawnLasers: 0

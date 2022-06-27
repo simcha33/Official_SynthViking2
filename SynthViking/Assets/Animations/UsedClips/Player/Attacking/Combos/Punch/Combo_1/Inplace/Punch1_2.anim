@@ -58559,7 +58559,7 @@ AnimationClip:
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
-  - time: 0.8
+  - time: 0.73333335
     functionName: AllowNextAttack
     data: 
     objectReferenceParameter: {fileID: 0}

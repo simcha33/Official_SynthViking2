@@ -36,63 +36,23 @@ public class CheckForLimbs : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-       // DoBloodDrip(); 
-        if(!playerController.isAttacking){
-           // hitLimbs.Clear(); 
-            
-        }
-
         DoBloodDrip();
-
-
-        
-        
-
     }
 
-
-
-
-        void OnTriggerEnter(Collider other)
-        {
-        
-            if (!hitLimbs.Contains(other.attachedRigidbody) && other.gameObject.CompareTag("Limb"))
-            {
-                hitLimbs.Add(other.attachedRigidbody);
-            }
-
-            if (!hitInsides.Contains(other.gameObject) && other.gameObject.CompareTag("EnemyInside"))
-            {
-                hitInsides.Add(other.gameObject);
-            }
-        
-        }
-
-    /*
-
-    public void LimbCheck()
+    void OnTriggerEnter(Collider other)
     {
-        // Collider[] colls = Physics.OverlapSphere(playerController.transform.position, playerController.blockStunRadius);     
-
-        Collider[] limbColls = Physics.OverlapBox(transform.position, limbCheckRadius, transform.rotation); 
-
-        foreach (Collider limb in limbColls)
+        
+        if (!hitLimbs.Contains(other.attachedRigidbody) && other.gameObject.CompareTag("Limb"))
         {
-            if (!hitLimbs.Contains(limb.attachedRigidbody) && limb.gameObject.CompareTag("Limb"))
-            {
-                hitLimbs.Add(limb.attachedRigidbody);
-                print("addlimb"); 
-            }
-
-            if (!hitInsides.Contains(limb.gameObject) && limb.gameObject.CompareTag("EnemyInside"))
-            {
-                hitInsides.Add(limb.gameObject);
-            }
+            hitLimbs.Add(other.attachedRigidbody);
         }
+
+        if (!hitInsides.Contains(other.gameObject) && other.gameObject.CompareTag("EnemyInside"))
+        {
+            hitInsides.Add(other.gameObject);
+        }
+        
     }
-    */
-
-
 
     public void CheckForBloodDrip()
     {

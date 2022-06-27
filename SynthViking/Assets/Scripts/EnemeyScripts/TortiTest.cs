@@ -171,13 +171,13 @@ public class TortiTest : MonoBehaviour
               //  WaitForNextAttack();
                // CheckForTarget();
                // FollowTarget();
-                 print(" this one1");
+        //         print(" this one1");
                 break;
 
             case (int)currentState.Charge:
 
             //    StartChargeAttack();
-            print(" this one");
+      //      print(" this one");
                 DoChargeForward(); 
                 CheckForTarget(); 
                 FollowTarget();
@@ -335,7 +335,7 @@ public class TortiTest : MonoBehaviour
         //Charge start
         if (!isCharging && chargeStartDelayTimer >= chargeStartDelayDuration)
         {
-            print("Charge start"); 
+       //     print("Charge start"); 
             isCharging = true;
             chargeStartDelayTimer = 0f;
           //  chargeDuration = Random.Range(minChargeDuration, maxChargeDuration);
@@ -350,7 +350,7 @@ public class TortiTest : MonoBehaviour
         //Charge loop
         if (isCharging && chargeTimer < chargeDuration)
         {
-            print("Charge loop"); 
+       //     print("Charge loop"); 
             chargeTimer += Time.deltaTime; 
         }
         else if(isCharging)
@@ -369,7 +369,7 @@ public class TortiTest : MonoBehaviour
         {
            // stunDuration = chargeEndStunDuration; 
             tortiState = (int)currentState.Follow; 
-              print(" this one2");
+          //   print(" this one2");
 
         }   
         else //Charge has hit target

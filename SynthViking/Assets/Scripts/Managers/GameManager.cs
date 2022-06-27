@@ -9,43 +9,76 @@ using UnityEngine.InputSystem;
 public class GameManager : MonoBehaviour
 {
 
-    public ThirdPerson_PlayerControler playerController;
-    public PlayerState playerState;
+     public ThirdPerson_PlayerControler playerController;
+    public eventManagerScript eventManager;
+ public PlayerState playerState;
+  public PlayerInputCheck _playerInputCheck; 
     public bool gameIsPaused;
     public float hapticDuration = 0f; 
     public float curLowFreq, cureHighFreq; 
-    private Gamepad gamepad; 
+    private Gamepad gamepad;
+    private static GameManager instance;
+    public Transform respawnPoint;
+    public  int eventToStartAt;
+    public bool hasRespawned; 
+
+
 
     // Start is called before the first frame update
     void Awake()
     {
-          gamepad = Gamepad.current;
-        // gamepad.ResetHaptics(); 
-        gamepad.SetMotorSpeeds(0, 0); 
-         // hapticDuration = 2f; 
-          //DoHaptics(2f, .1f ,.3f); 
+
+        /*
+
+        if (instance == null)
+        {
+            print("instance");
+            instance = this;
+
+        }
+        else
+        {
+            Destroy(gameObject);
+            print("nono instance");
+            SetRespawn(); 
+
+
+        }
+
+        DontDestroyOnLoad(instance);
+        */
+
+        gamepad = Gamepad.current;
+        gamepad.SetMotorSpeeds(0, 0);
+
+    }
+
+    private void Start()
+    {
+
+    }
+
+    void SetRespawn()
+    {
+
+      
+        eventManager.eventToStartAt = eventToStartAt;
+        playerController.transform.position = respawnPoint.position;
+      
+
+  
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (gamepad != null)
-        {
-            if (hapticDuration > 0) DoHaptics(hapticDuration, curLowFreq, cureHighFreq);
-        }
+        if (gamepad != null) if (hapticDuration > 0) DoHaptics(hapticDuration, curLowFreq, cureHighFreq);
 
-        /*
-        else
-        {
-            gamepad = Gamepad.current;
-        }
-
-        if (gamepad == null) gamepad = Gamepad.current; 
-        */
     }
-
     public void ResetScene()
-    {      
+    {
+
+        hasRespawned = true; 
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); 
     }
 

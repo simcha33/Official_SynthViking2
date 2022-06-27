@@ -26,12 +26,14 @@ public class SoulPilar : MonoBehaviour
     [Header("Visuals")]
     public GameObject fullPilarEffect; 
     private Material choosenCrystalMat;
-    private Material choosenRingMat; 
+    private Material choosenRingMat;
+    private Material choosenIndicationLightMat; 
     
 
     [Header("Components")]
     public MeshRenderer crystelMeshR; 
     public MeshRenderer PilarRingMeshR;
+    public MeshRenderer indicationLight; 
     public SphereCollider checkCol;
     public GameObject soulRadiusObject; 
     private SoulPilar thisScript;
@@ -40,7 +42,11 @@ public class SoulPilar : MonoBehaviour
     public Animator pilarAnim;
     [HideInInspector]public RewardPilarManager pilarManager; 
     public SpotScript attachedSpot; 
-    public TextMeshPro pilarSoulsLeftText; 
+    public TextMeshPro pilarSoulsLeftText;
+    public MMFeedback fullPilarFeedback;
+    public MMFeedback pillarSpawnFeedback;
+    public MMFeedback pilarDespawnFeedback;
+    
   
 
 
@@ -49,6 +55,7 @@ public class SoulPilar : MonoBehaviour
     public float healthAddAmount; 
     public Material healthPilarRingMat; 
     public Material healthPilarMat;
+    public Material HealthindicationLightMat;
 
 
     [Header("Trap pilar")]
@@ -56,6 +63,7 @@ public class SoulPilar : MonoBehaviour
     public List<GameObject> trapsToActivate = new List<GameObject>(); 
     public Material trappilarMat; 
     public Material trapPilarRingMat;
+    public Material TrapindicationLightMat;
 
     void Start()
     {
@@ -97,22 +105,25 @@ public class SoulPilar : MonoBehaviour
                 isHealthPilar = true;
                 isTrapPilar = false; 
                 choosenRingMat = healthPilarRingMat; ; 
-                choosenCrystalMat = healthPilarMat; 
-
+                choosenCrystalMat = healthPilarMat;
+                choosenIndicationLightMat = HealthindicationLightMat; 
             }
             else if(pilarType == pilarTypes.TrapPilar.ToString())
             {
                 isTrapPilar = true; 
                 isHealthPilar = false;
                 choosenRingMat = trapPilarRingMat; 
-                choosenCrystalMat = trappilarMat; 
+                choosenCrystalMat = trappilarMat;
+                choosenIndicationLightMat = TrapindicationLightMat; 
             }
 
+            indicationLight.gameObject.SetActive(true); 
             crystelMeshR.material = choosenCrystalMat;
-            PilarRingMeshR.material = choosenRingMat; 
+            PilarRingMeshR.material = choosenRingMat;
+            indicationLight.material = choosenIndicationLightMat; 
         }
 
-        stayTimer += Time.deltaTime;
+        if(pilarManager.spawnManager.waveHasStarted) stayTimer += Time.deltaTime; //Only remove a reward pilar when a wave is ongoing
         if(stayTimer >= stayDuration)
         {
             RemovePilar(); 
@@ -126,6 +137,7 @@ public class SoulPilar : MonoBehaviour
             pilarAnim.SetTrigger("Despawn"); 
             deSpawn = true; 
             stayTimer = stayDuration - 3f;
+            indicationLight.gameObject.SetActive(false);
         }
 
         if(stayTimer >= stayDuration)
@@ -148,6 +160,7 @@ public class SoulPilar : MonoBehaviour
         hasSpawned = false;
         stayTimer = 0f; 
         pilarManager.currentPilarsInScene--;
+        
     }
 
   
@@ -210,7 +223,13 @@ public class SoulPilar : MonoBehaviour
 
         else if(isTrapPilar)
         {
-            pilarManager.SetText("THE GODS REWARD YOU", "Heyoo TRAPOIIIOOO"); 
+            GameObject choosenTrap = attachedSpot.trapList[0];
+            choosenTrap.SetActive(true);
+            TrapObject trapScript = choosenTrap.GetComponent<TrapObject>();
+            trapScript.hasBeenActivated = true;
+
+            pilarManager.SetText("THE GODS REWARD YOU", "A blade trap spawns");
+
         }
 
         GameObject pilarEffect1 = Instantiate(fullPilarEffect, transform.position, transform.rotation);

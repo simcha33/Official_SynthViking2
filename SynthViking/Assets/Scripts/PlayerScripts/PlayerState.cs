@@ -182,15 +182,25 @@ public class PlayerState : MonoBehaviour
                     stunDuration = 10f;
                 }
 
-              
-                playerController.ResetStates();
-                playerController.ResetAnimator();
-                playerController.isStunned = isStunned = true;
-                playerController.playerAnim.SetTrigger(DamageType + "StunTrigger");
+                if(DamageType == "Projectile")
+                {
+                    DamageType = "EnvironmentDamage";
+                    stunString = "AttackHit";
+                    stunDuration = 10f;
+                }
 
-                playerState = (int)currentState.STUNNED;
-                playerController.controllerState = (int)currentState.STUNNED;
-                playerController.fixedControllerState = (int)currentState.STUNNED;                                          
+
+                if (DamageType != "Projectile") 
+                {
+                    playerController.ResetStates();
+                    playerController.ResetAnimator();
+                    playerController.isStunned = isStunned = true;
+                    playerController.playerAnim.SetTrigger(DamageType + "StunTrigger");
+
+                    playerState = (int)currentState.STUNNED;
+                    playerController.controllerState = (int)currentState.STUNNED;
+                    playerController.fixedControllerState = (int)currentState.STUNNED;
+                }
                                                         
             }
         

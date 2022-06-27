@@ -49,8 +49,8 @@ MonoBehaviour:
   - m_From: Player_FreeFallCamera
     m_To: Player_DefaultCam
     m_Blend:
-      m_Style: 4
-      m_Time: 0.3
+      m_Style: 2
+      m_Time: 0.35
       m_CustomCurve:
         serializedVersion: 2
         m_Curve: []
@@ -61,7 +61,7 @@ MonoBehaviour:
     m_To: Player_FreeFallCamera
     m_Blend:
       m_Style: 2
-      m_Time: 3
+      m_Time: 0.35
       m_CustomCurve:
         serializedVersion: 2
         m_Curve: []

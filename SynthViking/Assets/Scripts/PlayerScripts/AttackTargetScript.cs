@@ -194,28 +194,32 @@ public class AttackTargetScript : MonoBehaviour
                         if (enemy.gameObject.layer == LayerMask.NameToLayer("Enemy"))
                         {
                             //Debug.Log(enemy.name);
-                            BasicEnemyScript enemyScript = enemy.GetComponent<BasicEnemyScript>(); 
-                            if(!enemyScript.isDead)
+                            if (enemy.gameObject.GetComponent<BasicEnemyScript>() != null)
                             {
-                                playerController.canBlockStun = false;
-                     
-                                enemyScript.TakeDamage(enemyController.chainHitScript.blockChainDamage, playerAttackType.BlockStun.ToString());
-                                enemyScript.isLaunched = true;
-                                enemyScript.isBlockStunned = true;
-                                
-                                //Feedback
-                                GameObject lightningVFX =  Instantiate(parryLightningVFX, enemy.transform.position - new Vector3(0,0,0), transform.rotation);
-                              //  lightningVFX.transform.eulerAngles = new Vector3(-90, lightningVFX.transform.eulerAngles.y, lightningVFX.transform.eulerAngles.z);  
-                                lightningVFX.AddComponent<CleanUpScript>();
-                                parriedFeedback?.PlayFeedbacks();
-                                playerController.mainGameManager.DoHaptics(.2f, .4f, .7f);
-                                enemy.transform.LookAt(playerController.transform);
+                                BasicEnemyScript enemyScript = enemy.GetComponent<BasicEnemyScript>();
+                                if (!enemyScript.isDead)
+                                {
+                                    playerController.canBlockStun = false;
+
+                                    enemyScript.TakeDamage(enemyController.chainHitScript.blockChainDamage, playerAttackType.BlockStun.ToString());
+                                    enemyScript.isLaunched = true;
+                                    enemyScript.isBlockStunned = true;
+
+                                    //Feedback
+                                    GameObject lightningVFX = Instantiate(parryLightningVFX, enemy.transform.position - new Vector3(0, 0, 0), transform.rotation);
+                                    //  lightningVFX.transform.eulerAngles = new Vector3(-90, lightningVFX.transform.eulerAngles.y, lightningVFX.transform.eulerAngles.z);  
+                                    lightningVFX.AddComponent<CleanUpScript>();
+                                    parriedFeedback?.PlayFeedbacks();
+                                    playerController.mainGameManager.DoHaptics(.2f, .4f, .7f);
+                                    enemy.transform.LookAt(playerController.transform);
+                                }
 
                             }
                         }
 
                     }
-                    playerController.playerAnim.SetTrigger("HasParriedTrigger"); 
+                    playerController.playerAnim.SetTrigger("HasParriedTrigger");
+                    playerController.playerAnim.SetInteger("BlockType", 1); 
                     playerController.attackTargetScript.playerBlockFeedback?.PlayFeedbacks();
                     playerController.hasParriedAttack = true; 
               
@@ -229,10 +233,12 @@ public class AttackTargetScript : MonoBehaviour
     {
         foreach (GameObject enemy in targetsInRange)
         {
-            
-            BasicEnemyScript enemyScript = enemy.GetComponent<BasicEnemyScript>();
-            Vector3 backDirection = playerController.transform.position + transform.forward * playerController.currentAttackForwardForce * attackBackForce;
-            enemyScript.transform.DOMove(backDirection, .3f).SetUpdate(UpdateType.Fixed);  //Move enemy backwards enemyScript.enemyRb.AddForce(playerController.transform.position + transform.forward * playerController.currentAttackForwardForce, ForceMode.VelocityChange);  
+            if (enemy.gameObject.GetComponent<BasicEnemyScript>() != null)
+            {
+                BasicEnemyScript enemyScript = enemy.GetComponent<BasicEnemyScript>();
+                Vector3 backDirection = playerController.transform.position + transform.forward * playerController.currentAttackForwardForce * attackBackForce;
+                enemyScript.transform.DOMove(backDirection, .3f).SetUpdate(UpdateType.Fixed);  //Move enemy backwards enemyScript.enemyRb.AddForce(playerController.transform.position + transform.forward * playerController.currentAttackForwardForce, ForceMode.VelocityChange);  
+            }
         }
     }
 
@@ -245,52 +251,73 @@ public class AttackTargetScript : MonoBehaviour
         {
             foreach (GameObject obj in targetsInRange)
             {
-                //Deal damage to hit target            
-                BasicEnemyScript enemyScript = obj.GetComponent<BasicEnemyScript>();
-                if (!enemyScript.isDead)
+                //Deal damage to hit target  
+                if (obj.GetComponent<BasicEnemyScript>() != null)
                 {
-                    if(playerController.attackState == playerAttackType.AirLaunchAttack.ToString())
+                    BasicEnemyScript enemyScript = obj.GetComponent<BasicEnemyScript>();
+                    if (!enemyScript.isDead)
                     {
-                        enemyScript.TakeDamage(0, playerController.attackState); 
-                        if(enemyScript.canBeStunned) hitpauseScript.objectsToPause.Add(obj.GetComponent<Animator>());
-                   
+                        if (playerController.attackState == playerAttackType.AirLaunchAttack.ToString())
+                        {
+                            enemyScript.TakeDamage(0, playerController.attackState);
+                            if (enemyScript.canBeStunned) hitpauseScript.objectsToPause.Add(obj.GetComponent<Animator>());
+
+                        }
+                        if (playerController.attackState == playerAttackType.HeavyAxeHit.ToString())
+                        {
+                            enemyScript.TakeDamage(playerController.currentAttackDamage, playerController.attackState);
+                            hitpauseScript.objectsToPause.Add(obj.GetComponent<Animator>());
+                        }
+                        else if (playerController.attackState == playerAttackType.LightPunchHit.ToString())
+                        {
+                            enemyScript.TakeDamage(playerController.currentAttackDamage, playerController.attackState);
+                            hitpauseScript.objectsToPause.Add(obj.GetComponent<Animator>());
+                        }
+                        else if (playerController.attackState == playerAttackType.SprintAttack.ToString() && !playerController.sprintHitList.Contains(enemyScript))
+                        {
+                            enemyScript.TakeDamage(playerController.currentAttackDamage, playerController.attackState);
+                            if (enemyScript.canBeStunned) sprintAttackTargets.Add(enemyScript);
+                        }
+
                     }
-                    if (playerController.attackState == playerAttackType.HeavyAxeHit.ToString())
+
+                    Vector3 backDirection = new Vector3(0, 0, 0);
+
+                    enemyScript.transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0);
+                    if (!playerController.isGrounded || playerController.attackState == playerAttackType.AirLaunchAttack.ToString()) backDirection = playerController.transform.position + transform.forward * playerController.currentAttackForwardForce * attackBackForce;
+                    else if (playerController.isGrounded) backDirection = enemyScript.transform.position + enemyScript.transform.forward * (playerController.currentAttackForwardForce * .8f) * attackBackForce;
+
+                    enemyScript.transform.LookAt(playerController.transform);
+
+                    if (enemyScript.isDead)
                     {
-                        enemyScript.TakeDamage(playerController.currentAttackDamage, playerController.attackState);
-                         hitpauseScript.objectsToPause.Add(obj.GetComponent<Animator>());
-                    }     
-                    else if (playerController.attackState == playerAttackType.LightPunchHit.ToString())
-                    {
-                        enemyScript.TakeDamage(playerController.currentAttackDamage, playerController.attackState);
-                         hitpauseScript.objectsToPause.Add(obj.GetComponent<Animator>());
+                        KillEnemy(enemyScript); //The enemy is dead
+                                                //   enemyScript.canBeTargeted = false;
                     }
-                    else if (playerController.attackState == playerAttackType.SprintAttack.ToString() && !playerController.sprintHitList.Contains(enemyScript))
-                    {
-                        enemyScript.TakeDamage(playerController.currentAttackDamage, playerController.attackState);
-                        if(enemyScript.canBeStunned) sprintAttackTargets.Add(enemyScript);
-                    }
-                  
+                    else AddhitFeedback(enemyScript, backDirection); //The enemy is not dead
+
+
+                    //   if (enemyScript.isRagdolling ||  enemyScript.isDead) enemyScript.enemyRb.AddForce(Vector3.up * 10f, ForceMode.VelocityChange);
+                    limbCheckerScript.hitInsides.Clear();
                 }
-
-                Vector3 backDirection = new Vector3(0, 0, 0);
-
-                enemyScript.transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, 0); 
-                if(!playerController.isGrounded || playerController.attackState == playerAttackType.AirLaunchAttack.ToString()) backDirection = playerController.transform.position + transform.forward * playerController.currentAttackForwardForce * attackBackForce;
-                else if (playerController.isGrounded) backDirection = enemyScript.transform.position + enemyScript.transform.forward * (playerController.currentAttackForwardForce * .8f) * attackBackForce;
-
-                enemyScript.transform.LookAt(playerController.transform);
-
-                if (enemyScript.isDead)
+                else if(obj.GetComponent<EyeBall>() != null)
                 {
-                    KillEnemy(enemyScript); //The enemy is dead
-                 //   enemyScript.canBeTargeted = false;
+                    print("Damage the eyeball");
+                    EyeBall eyeballScript = obj.GetComponent<EyeBall>();
+                    eyeballScript.TakeDamage(playerController.currentAttackDamage, playerController.attackState);
+
+                    hitpauseScript.hitPauseDuration = playerController.axeHitPauseLength;
+                    hitpauseScript.doHitPause = true;
+                    hitpauseScript.DoHitPause();
+                    // GameObject sparks = Instantiate(bloodSparksVFX, enemyScript.bloodSpawnPoint.position, enemyScript.bloodSpawnPoint.rotation);
+                    //  sparks.transform.parent = enemyScript.transform;
+                    playerController.mainGameManager.DoHaptics(.35f, 1f, 1f);
+                    weapinFirstImpactFeedback?.PlayFeedbacks();
+
+                    DOTween.Kill(playerController.transform);
+                    
+
                 }
-                else AddhitFeedback(enemyScript, backDirection); //The enemy is not dead
-               
-                              
-             //   if (enemyScript.isRagdolling ||  enemyScript.isDead) enemyScript.enemyRb.AddForce(Vector3.up * 10f, ForceMode.VelocityChange);
-                limbCheckerScript.hitInsides.Clear();              
             }
         }     
 
@@ -333,6 +360,7 @@ public class AttackTargetScript : MonoBehaviour
                         blood2.transform.parent = blood3.transform.parent = axeDust.transform.parent = limb.transform;
                         blood2.AddComponent<CleanUpScript>();
                         axeDust.AddComponent<CleanUpScript>();
+                        
 
                         //Detach and launch limb rb's 
                         Destroy(joint);
@@ -355,7 +383,7 @@ public class AttackTargetScript : MonoBehaviour
         else if (playerController.attackState == playerAttackType.LightPunchHit.ToString() && enemyScript.canBeTargeted) //Kill someone with punch
         {
             enemyScript.transform.LookAt(playerController.transform);
-            playerController.mainGameManager.DoHaptics(.2f, .7f, .8f);
+            playerController.mainGameManager.DoHaptics(.15f, 1f, 1f);
             punchKillList.Add(enemyScript);
             punchKillFeedback?.PlayFeedbacks();
 
@@ -397,7 +425,7 @@ public class AttackTargetScript : MonoBehaviour
 
             if (playerController.attackState == playerAttackType.HeavyAxeHit.ToString())
             {
-                playerController.mainGameManager.DoHaptics(.2f, .7f, .8f);
+                playerController.mainGameManager.DoHaptics(.35f, 1f, 1f);
                 weaponKillFeedback?.PlayFeedbacks();
             }
             else if (playerController.attackState == playerAttackType.LightPunchHit.ToString())
@@ -419,13 +447,14 @@ public class AttackTargetScript : MonoBehaviour
             sparks.transform.parent = enemyScript.transform;
             dust.AddComponent<CleanUpScript>();
             airLaunchHitFeedback?.PlayFeedbacks(); 
-            playerController.mainGameManager.DoHaptics(.2f, .25f, .35f);
+            playerController.mainGameManager.DoHaptics(.2f, .5f, .5f);
             airLaunchTargets.Add(enemyScript);
             enemyScript.canStopFall = true;
             enemyScript.isLaunched = true;
            
             // enemyScript.transform.DOMove(transform.position + transform.forward * .5f, .1f).SetUpdate(UpdateType.Fixed);
             Vector3 airLaunchPoint = enemyScript.transform.position + Vector3.up * (playerController.airLaunchHeight - 1f);
+            DOTween.Kill(enemyScript.transform);
             enemyScript.moveSequence.Append(enemyScript.transform.DOMove(airLaunchPoint, .3f).SetUpdate(UpdateType.Fixed));
             enemyScript.transform.LookAt(playerController.transform);
 
@@ -439,12 +468,12 @@ public class AttackTargetScript : MonoBehaviour
             hitpauseScript.DoHitPause();
            // GameObject sparks = Instantiate(bloodSparksVFX, enemyScript.bloodSpawnPoint.position, enemyScript.bloodSpawnPoint.rotation);
           //  sparks.transform.parent = enemyScript.transform;
-            playerController.mainGameManager.DoHaptics(.35f, .45f, .5f);
+            playerController.mainGameManager.DoHaptics(.35f, 1f, 1f);
             weapinFirstImpactFeedback?.PlayFeedbacks();        
             enemyScript.enemyRb.velocity = new Vector3(0, 0, 0);
 
             //Move enemy backwards
-            if (playerController.isGrounded && !enemyScript.CompareTag("BigEnemy")) enemyScript.transform.DOMove(backDirection, .3f).SetUpdate(UpdateType.Fixed);  //Move enemy backwards 
+            if (playerController.isGrounded && !enemyScript.CompareTag("BigEnemy")) enemyScript.moveSequence.Append(enemyScript.transform.DOMove(backDirection, .3f).SetUpdate(UpdateType.Fixed));  //Move enemy backwards 
             else if(!enemyScript.CompareTag("BigEnemy"))
             {
                 enemyScript.transform.DOMove(backDirection + new Vector3(0, 1f, 0), .3f).SetUpdate(UpdateType.Fixed);
@@ -461,11 +490,11 @@ public class AttackTargetScript : MonoBehaviour
             hitpauseScript.doHitPause = true;
             hitpauseScript.DoHitPause();
             punchFirstImpactFeedback?.PlayFeedbacks();
-            playerController.mainGameManager.DoHaptics(.2f, .25f, .35f);
+            playerController.mainGameManager.DoHaptics(.25f, .8f, .8f);
             enemyScript.enemyRb.velocity = new Vector3(0, 0, 0);
 
             //Move enemy backwards
-            if (playerController.isGrounded && !enemyScript.CompareTag("BigEnemy")) enemyScript.transform.DOMove(backDirection, .3f).SetUpdate(UpdateType.Fixed);  //Move enemy backwards 
+            if (playerController.isGrounded && !enemyScript.CompareTag("BigEnemy")) enemyScript.moveSequence.Append(enemyScript.transform.DOMove(backDirection, .3f).SetUpdate(UpdateType.Fixed));  //Move enemy backwards 
             else if(!enemyScript.CompareTag("BigEnemy"))
             {
                 enemyScript.transform.DOMove(backDirection + new Vector3(0, 1f, 0), .3f).SetUpdate(UpdateType.Fixed);
@@ -483,7 +512,7 @@ public class AttackTargetScript : MonoBehaviour
             sprintTargetCount++;
             playerController.meshR.materials = playerController.defaultSkinMat; 
             playerController.sprintHitList.Add(enemyScript);
-            playerController.mainGameManager.DoHaptics(.2f, .3f, .5f);
+            playerController.mainGameManager.DoHaptics(.2f, .7f, .7f);
             playerController.dashAttackTarget = enemyScript.transform.gameObject;
             enemyScript.enemyRb.velocity = new Vector3(0, 0, 0);
             enemyScript.transform.parent = playerController.transform;
@@ -493,7 +522,6 @@ public class AttackTargetScript : MonoBehaviour
 
             if (sprintTargetCount == 1)
             {
-                print("SPRINT TARGET FEEDBACK"); 
                 
                 sprintAttackHitFeedback?.PlayFeedbacks();
             }
@@ -522,17 +550,18 @@ public class AttackTargetScript : MonoBehaviour
 
         foreach (BasicEnemyScript enemy in sprintAttackTargets)
         {
-            print("THIS ONEE"); 
             enemy.transform.parent = null;
             enemy.transform.position = backPointCheck.transform.position;
             GameObject dashAttackEffect = Instantiate(playerController.airPunchEffect, enemy.transform.position, transform.rotation);
             dashAttackEffect.transform.LookAt(-playerController.aimPoint.forward + new Vector3(0, .5f, 0));
+            dashAttackEffect.AddComponent<CleanUpScript>(); 
             //dashAttackEffect.transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, transform.eulerAngles.z);
             
             //Punch explosion force effect
             GameObject punchForceEffect = Instantiate(punchForceVFX2, enemy.transform.position + new Vector3(0, 1.5f, 0), transform.rotation);
             punchForceEffect.transform.LookAt(playerController.transform.forward + new Vector3(0, .5f, 0));
             punchForceEffect.transform.localScale *= .55f;
+            punchForceEffect.AddComponent<CleanUpScript>(); 
 
             //Set effect postion and rotation 
             dashAttackEffect.transform.eulerAngles = punchForceEffect.transform.eulerAngles = new Vector3(0, transform.eulerAngles.y, transform.eulerAngles.z);

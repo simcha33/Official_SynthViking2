@@ -49,6 +49,8 @@ public class MusicManager : MonoBehaviour
 
     public void ChooseNextSong()
     {
+        currentSong?.StopFeedbacks(); 
+
         //Set next song
         if (randomSong)
         {

@@ -31,7 +31,8 @@ public class RewardPilarManager : MonoBehaviour
 
    public bool textOnScreen;
    public float textDespawnTimer;
-   public float textDespawnDuration; 
+   public float textDespawnDuration;
+    private bool firstPilar = true; 
 
     public float minSpawnWaitDuration;
     public float maxSpawnWaitDuration; 
@@ -51,15 +52,18 @@ public class RewardPilarManager : MonoBehaviour
 
     void Start()
     {
-        pilarSpawnDuration = Random.Range(minSpawnWaitDuration, maxSpawnWaitDuration);
-        pilarSpawnTimer = 0f; 
+        //pilarSpawnDuration = Random.Range(minSpawnWaitDuration, maxSpawnWaitDuration);
+        pilarSpawnTimer = 0f;
+        firstPilar = true; 
         pilarStateText.alpha = pilarRewardText.alpha = 0; 
-        player = GameObject.Find("Player").GetComponent<ThirdPerson_PlayerControler>(); 
+        player = GameObject.Find("Player").GetComponent<ThirdPerson_PlayerControler>();
+        if (firstPilar) pilarSpawnDuration = 6f; 
+
     }
 
     void Update()
     {
-        if(currentPilarsInScene < maxPilarsInScene && spawnManager.waveHasStarted)
+        if(currentPilarsInScene < maxPilarsInScene && spawnManager.waveHasStarted && spawnManager.canSpawnPilars)
         {
             CheckForPillarSpawn(); 
         }
@@ -81,17 +85,28 @@ public class RewardPilarManager : MonoBehaviour
     }
 
     void SpawnPilar()
-    {    
+    {
+        SpotScript choosenSpotScript = spotManager.middleSpot;
+
         //Select spot
-        int randomSpot = Random.Range(0, spotManager.freeSpotList.Count); 
-        SpotScript choosenSpotScript = spotManager.freeSpotList[randomSpot].GetComponent<SpotScript>();
-        choosenSpotScript.rewardPilar.gameObject.SetActive(true); 
+        if (!firstPilar)
+        {
+            int randomSpot = Random.Range(0, spotManager.freeSpotList.Count);
+            choosenSpotScript = spotManager.freeSpotList[randomSpot].GetComponent<SpotScript>();    
+        }
+        else
+        {
+            firstPilar = false;
+            choosenSpotScript = spotManager.middleSpot;          
+        }
+
+        choosenSpotScript.rewardPilar.gameObject.SetActive(true);
         choosenSpotScript.inUse = true;
-        choosenSpotScript.spotManager.freeSpotList.Remove(choosenSpotScript); 
+        choosenSpotScript.spotManager.freeSpotList.Remove(choosenSpotScript);
 
         //Set pilar type
         SoulPilar choosenPilar = choosenSpotScript.rewardPilar.GetComponent<SoulPilar>(); 
-        int randomPilarType = Random.Range(0, 1); 
+        int randomPilarType = Random.Range(0, 2); 
         if(player.playerState.currentHealth < player.playerState.maxHealth / 4f) randomPilarType = 0;
         else
         {

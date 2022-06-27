@@ -101,6 +101,7 @@ public class BasicEnemyScript : MonoBehaviour
     #endregion
 
 
+
     [Header("VISUALS")]
     #region 
     public Material[] stunnedSkinMat;
@@ -486,6 +487,8 @@ public class BasicEnemyScript : MonoBehaviour
             enemyRb.mass = stunnedMass;
             transform.LookAt(target, Vector3.up);
             nextAttackTimer = 0;
+            nextAttackDuration = 40f; 
+       
             //  nextAttackDuration = 10f; 
 
             SetAttackType();
@@ -539,7 +542,8 @@ public class BasicEnemyScript : MonoBehaviour
 
     public void DoAttack()
     {
-        if (isAttacking) nextAttackDuration = enemyAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / enemyAnim.GetCurrentAnimatorStateInfo(0).speed * animSpeed;
+
+        if (isAttacking && nextAttackTimer > .3f) nextAttackDuration = enemyAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / enemyAnim.GetCurrentAnimatorStateInfo(0).speed * animSpeed;
 
         if (canAttack)
         {
@@ -549,7 +553,8 @@ public class BasicEnemyScript : MonoBehaviour
             enemyRb.velocity = new Vector3(0, 0, 0);
             currentComboLength++;
 
-            if (currentComboLength > totalComboLength) currentComboLength = 0;
+            if (currentComboLength > totalComboLength) currentComboLength = 1;
+            if (gameObject.CompareTag("BasicEnemy") && currentComboLength > 3 || currentComboLength  <= 0) print("goodbye"); 
             enemyAnim.SetInteger("CurrentComboLength", currentComboLength);
             enemyAnim.SetTrigger("AttackTrigger");
 
@@ -567,7 +572,7 @@ public class BasicEnemyScript : MonoBehaviour
 
 
 
-        if (nextAttackTimer >= nextAttackDuration)
+        if (nextAttackTimer >= nextAttackDuration && !isInAttackRange)
         {
             isAttacking = false;
         }
@@ -579,10 +584,12 @@ public class BasicEnemyScript : MonoBehaviour
             transform.rotation = Quaternion.LookRotation(newDirection);
         }
 
-
-
         //If the attack is pause wait for the pause to end 
         nextAttackTimer += Time.deltaTime;
+
+    
+
+
     }
 
     public void AttackEventTrigger() /*[MOVE]*/
@@ -930,14 +937,9 @@ public class BasicEnemyScript : MonoBehaviour
 
         if (stunType == playerAttackType.HeavyAxeHit.ToString() && !isRagdolling && canBeStunned) //Enemy is hit with axe attack
         {
-            //  chainHitScript.enabled = true; //allow this enemy to cause chain hit impacts
             stunnedEffect.SetActive(false);
-            //  chainHitScript.isOrigin = true; 
-            // canBeChainHit = false;
-            // chainHitScript.SetChainHitType(stunType);
             stunDuration = 1f;
             mainCollider.isTrigger = false;
-            //enemyRb.mass = stunnedMass; 
             enemyMeshr.materials = hitSkinMat;
             if (!isUpperCutted) isLaunched = false;
         }
@@ -945,10 +947,7 @@ public class BasicEnemyScript : MonoBehaviour
         if (stunType == playerAttackType.LightPunchHit.ToString() && !isRagdolling && canBeStunned) //Enemy is hit with axe attack
         {
             chainHitScript.enabled = true; //allow this enemy to cause chain hit impacts
-                                           //chainHitScript.isOrigin = true; 
-                                           // canBeChainHit = false;
-                                           // chainHitScript.SetChainHitType(stunType);
-                                           //   transform.LookAt(playerController.transform);           
+                                               
             stunnedEffect.SetActive(false);
             chainHitScript.isOrigin = true;
             canBeChainHit = false;

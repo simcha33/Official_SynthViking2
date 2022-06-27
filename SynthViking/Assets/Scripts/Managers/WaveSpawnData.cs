@@ -13,8 +13,12 @@ public class WaveSpawnData : ScriptableObject
     public string WaveTitle; 
     public int maxGruntsToSpawn; 
     public int maxBigGuyToSpawn; 
-    public int maxTortiToSpawn; 
-    public bool canTriggerEvent;
+    public int maxTortiToSpawn;
+    public float groupSpawnCooldownDuration;
+    public float waveCountdownDuration; 
     public int eventToTrigger; 
     public bool canSpawnPilars;
+    public bool canTriggerEvent;
+    public bool canSpawnEyeballs;
+    public bool canSpawnLasers; 
 }

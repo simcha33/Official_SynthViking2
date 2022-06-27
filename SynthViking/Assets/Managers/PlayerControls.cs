@@ -147,7 +147,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Dpad-Left"",
+                    ""name"": ""DpadLeft"",
                     ""type"": ""Value"",
                     ""id"": ""bf89defa-9f7c-4cb0-99ae-fa21378c48f4"",
                     ""expectedControlType"": """",
@@ -155,7 +155,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Dpad-Right"",
+                    ""name"": ""DpadRight"",
                     ""type"": ""Value"",
                     ""id"": ""c56c602b-f2f8-4c05-985b-6f51c292686a"",
                     ""expectedControlType"": """",
@@ -442,22 +442,22 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""cc66f281-483e-4264-bd1b-cfd11906a385"",
-                    ""path"": ""<Gamepad>/dpad"",
+                    ""path"": ""<Gamepad>/dpad/left"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Dpad-Left"",
+                    ""action"": ""DpadLeft"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
                 {
                     ""name"": """",
                     ""id"": ""6e7b6419-e4b1-4d7c-acad-e924053adbf8"",
-                    ""path"": ""<Gamepad>/dpad"",
+                    ""path"": ""<Gamepad>/dpad/right"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
-                    ""action"": ""Dpad-Right"",
+                    ""action"": ""DpadRight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -577,8 +577,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Gameplay_PauseGame = m_Gameplay.FindAction("PauseGame", throwIfNotFound: true);
         m_Gameplay_DpadUp = m_Gameplay.FindAction("Dpad-Up", throwIfNotFound: true);
         m_Gameplay_DpadDown = m_Gameplay.FindAction("Dpad-Down", throwIfNotFound: true);
-        m_Gameplay_DpadLeft = m_Gameplay.FindAction("Dpad-Left", throwIfNotFound: true);
-        m_Gameplay_DpadRight = m_Gameplay.FindAction("Dpad-Right", throwIfNotFound: true);
+        m_Gameplay_DpadLeft = m_Gameplay.FindAction("DpadLeft", throwIfNotFound: true);
+        m_Gameplay_DpadRight = m_Gameplay.FindAction("DpadRight", throwIfNotFound: true);
         // Test controller
         m_Testcontroller = asset.FindActionMap("Test controller", throwIfNotFound: true);
         m_Testcontroller_Move = m_Testcontroller.FindAction("Move", throwIfNotFound: true);
