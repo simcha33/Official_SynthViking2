@@ -80,7 +80,7 @@ public class MusicManager2 : MonoBehaviour
             unplayedSongs.Add(song); 
         }
 
-        playedSongs.Clear();
+        playedSongs .Clear();
         ChooseNewSong(true); 
     }
 }
