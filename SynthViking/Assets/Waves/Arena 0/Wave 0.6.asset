@@ -15,9 +15,9 @@ MonoBehaviour:
   maxEnemiesInScene: 25
   minGroupSpawnSize: 10
   maxGroupSpawnSize: 15
-  WaveTitle: 
-  maxGruntsToSpawn: 150
-  maxBigGuyToSpawn: 8
+  WaveTitle: THE FINAL COUNTDOWN
+  maxGruntsToSpawn: 80
+  maxBigGuyToSpawn: 6
   maxTortiToSpawn: 0
   groupSpawnCooldownDuration: 6
   waveCountdownDuration: 5

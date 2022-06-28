@@ -233,6 +233,7 @@ public class BasicEnemyScript : MonoBehaviour
         runSpeed = Random.Range(runSpeed - 1f, runSpeed + 1f);
         enemyAgent.speed = walkSpeed;
         enemyState = (int)currentState.IDLE;
+        enemyState = (int)currentState.IDLE;
 
         defaultSkinMat = enemyMeshr.materials;
         originalRbMass = enemyRb.mass;

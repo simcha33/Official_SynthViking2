@@ -8,6 +8,9 @@ using TMPro;
 
 public class EnemySpawnManager : MonoBehaviour
 {
+    public float waveSkipHoldTimer;
+    public float waveSkipHoldDuration = 2.5f;
+
     [Header ("Lists")]
     #region 
     public List<EnemySpawner> enemySpawners = new List<EnemySpawner>();
@@ -27,6 +30,7 @@ public class EnemySpawnManager : MonoBehaviour
     public eventManagerScript eventScript; 
     public PlayerState playerState;
     public ThirdPerson_PlayerControler playerController;
+    public PlayerInputCheck input; 
         #endregion 
 
 
@@ -140,6 +144,7 @@ public class EnemySpawnManager : MonoBehaviour
             CheckForWave();
             CheckForCleanUp();
             HandleUI();
+            SkipWave(); 
 
             if (waveHasStarted)
             {
@@ -269,6 +274,48 @@ public class EnemySpawnManager : MonoBehaviour
                 if (currentWave < maxWaves) DoNextWaveTranstition();           
                 else EndWaves(); 
             }
+        }
+    }
+
+    void SkipWave()
+    {
+        if (input.restartSceneButtonPressed)
+        {
+            waveSkipHoldTimer += Time.deltaTime;
+            
+            if(waveSkipHoldTimer >= waveSkipHoldDuration)
+            {
+                /*
+               
+                foreach (GameObject enemy in enemySpawnList)
+                {
+                    enemySpawnList.Remove(enemy);
+                    Destroy(enemy); 
+                }
+                
+
+                foreach (GameObject enemy in spawnedAliveEnemies)
+                {
+                    spawnedAliveEnemies.Remove(enemy);
+                    Destroy(enemy);
+                }
+                */
+
+
+                enemiesSpawnedThisWave = maxEnemiesToSpawnThisWave;
+                enemiesLeft = 0;
+                waveSkipHoldTimer = 0f;
+                DoNextWaveTranstition();
+
+                //enemySpawnList.Clear();
+                //   waveText.text = "WAVE CLEARED";
+
+
+            }
+        }
+        else
+        {
+            waveSkipHoldTimer = 0f; 
         }
     }
 
@@ -416,7 +463,7 @@ public class EnemySpawnManager : MonoBehaviour
         enemiesSpawnedThisWave = 0;
 
         canStartNewWave = true;
-        enemyCountText.alpha = 0f;
+        enemyCountText.text = "WAVE: " + currentWave.ToString(); 
         skullImage.enabled = false;
     }
 

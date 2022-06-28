@@ -12,17 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6b6834424db3a3419981a417c135707, type: 3}
   m_Name: Wave 0.1
   m_EditorClassIdentifier: 
-  maxEnemiesInScene: 10
+  maxEnemiesInScene: 5
   minGroupSpawnSize: 3
   maxGroupSpawnSize: 5
-  WaveTitle: A TRAP
-  maxGruntsToSpawn: 15
+  WaveTitle: A QUICK WARM UP
+  maxGruntsToSpawn: 18
   maxBigGuyToSpawn: 0
   maxTortiToSpawn: 0
   groupSpawnCooldownDuration: 4
-  waveCountdownDuration: 0
+  waveCountdownDuration: 10
   eventToTrigger: 7
   canSpawnPilars: 0
   canTriggerEvent: 0
-  canSpawnEyeballs: 1
-  canSpawnLasers: 0
+  canSpawnEyeballs: 0
+  canSpawnLasers: 1

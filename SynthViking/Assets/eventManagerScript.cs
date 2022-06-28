@@ -49,6 +49,7 @@ public class eventManagerScript : MonoBehaviour
     public GameManager _gameManager;
     public Transform respawnPoint;
     public TutorialManager _tutorialManager;
+    public MusicManager2 _musicManager2; 
 
 
 
@@ -186,9 +187,9 @@ public class eventManagerScript : MonoBehaviour
             eventTimer = eventDuration - .2f; 
       
             //doCountdown = true;        
-            musicManagerScript.randomSong = false;
+           // musicManagerScript.randomSong = false;
   
-            ChangeMusic(); 
+          //  ChangeMusic(); 
             turnOffCamera();
             //TurnOffUI();       
          
@@ -197,14 +198,17 @@ public class eventManagerScript : MonoBehaviour
         //THe big freefall into the planet
         if(currentEvent == 2)
         {
+       
             currentEventFeedback = event2Feedback;
             playerController.transform.position = event2Position.position;
             playerController.inAirTime = playerController.freefallWaitTime;
-            currentEnvorinment = environment2;
-            barrackEnvironment.SetActive(false); 
-            currentEnvorinment.SetActive(true);
-           // outsidePlanet.SetActive(true);
-          //  insidePlanet.SetActive(false);
+            environment2.SetActive(true);
+            _musicManager2.ChooseNewSong(false);
+            // currentEnvorinment = environment2;
+            //  barrackEnvironment.SetActive(false); 
+            //   currentEnvorinment.SetActive(true);
+            // outsidePlanet.SetActive(true);
+            //  insidePlanet.SetActive(false);
 
         }
 
@@ -239,7 +243,8 @@ public class eventManagerScript : MonoBehaviour
         //First comba arena triggered / Also respawn point
         if(currentEvent == 6)
         {
-            TurnOnUI(); 
+            TurnOnUI();
+            environment2.SetActive(false);
             throneAreaLaser.SetActive(true);
             event1Feedback?.StopFeedbacks();
             event4Trigger.SetActive(false);
@@ -303,6 +308,7 @@ public class eventManagerScript : MonoBehaviour
 
                 event1Feedback?.StopFeedbacks(); 
                 barrackEnvironment.SetActive(true);
+                combatArena1Trigger.waveCountdownDuration = 5f;
                 SetNewEvent(currentEvent);
 
                 //TurnOffUI();
@@ -311,7 +317,9 @@ public class eventManagerScript : MonoBehaviour
                 playerController.transform.position = respawnPoint.position; 
                 eventWasSkipped = false;
                 currentSong = musicFeedback1;
-                ChangeMusic();
+                // ChangeMusic();
+                _musicManager2.ChooseNewSong(true); 
+              
                 buttonHoldTimer = 0f; 
               
             }
@@ -396,7 +404,7 @@ public class eventManagerScript : MonoBehaviour
         }
         else if(currentEvent == 2)
         {
-            currentEnvorinment.SetActive(false); 
+            //currentEnvorinment.SetActive(false); 
         }
         else if (currentEvent == 5)
         {
@@ -436,7 +444,7 @@ public class eventManagerScript : MonoBehaviour
 
     void ChangeMusic()
     {
-        musicManagerScript.ChooseNextSong(); 
+     //   musicManagerScript.ChooseNextSong(); 
  
     }
 

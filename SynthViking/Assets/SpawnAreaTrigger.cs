@@ -61,6 +61,7 @@ public class SpawnAreaTrigger : MonoBehaviour
         spawnManager.allWaves = allWaves;
         spawnManager.waveCountdownDuration = waveCountdownDuration; 
         spawnManager.enemySpawners = enemySpawners;
+     
        // spawnManager.allEnemyTypes = allEnemyTypes; 
 
         spawnManager.TriggerNewSpawnArea(); 

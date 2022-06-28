@@ -39,6 +39,7 @@ public class EyeBall : MonoBehaviour
     public List<HomingProjectile> projectilesFired = new List<HomingProjectile>();
     public ThirdPerson_PlayerControler playerController;
     private AudioSource source;
+    private AudioSource spotSource; 
     public MMFeedbacks shootFeedback; 
 
     [Header ("STATE")]
@@ -72,7 +73,8 @@ public class EyeBall : MonoBehaviour
         attachedSpot = GetComponentInParent<SpotScript>();
         thisScript = gameObject.GetComponent<EyeBall>();
         eyeBallManager = GameObject.Find("EyeBallManager").GetComponent<EyeballManager>();
-       source = GetComponent<AudioSource>(); 
+       source = GetComponent<AudioSource>();
+        spotSource = attachedSpot.GetComponent<AudioSource>(); 
         ResetEyeball();
         
     
@@ -114,7 +116,7 @@ public class EyeBall : MonoBehaviour
 
         explosion1.AddComponent<CleanUpScript>();
         explosion2.AddComponent<CleanUpScript>();
-        source.PlayOneShot(destroyedSound);
+        spotSource.PlayOneShot(destroyedSound);
 
         if (attachedSpot != null)
         {

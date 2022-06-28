@@ -13,7 +13,8 @@ public class PauseMenu : MonoBehaviour
     public GameObject pauseMenuCanvas;
     public GameObject gameOverMenuCanvas; 
     public GameManager mainGameManager;
-    public TextMeshPro gameOverText; 
+    public TextMeshPro gameOverText;
+    public TutorialManager _tutorialManager;
     public string MainMenu; 
 
     public MMTimeManager timeMod;
@@ -86,6 +87,7 @@ public class PauseMenu : MonoBehaviour
         timeMod.SetTimescaleTo(0f);
         oldPos = mainGameManager.playerController.transform.position;
         pauseMenuCanvas.SetActive(true);
+        _tutorialManager.StartTutorial(); 
     }
 
     public void ResumeGame()
@@ -101,6 +103,7 @@ public class PauseMenu : MonoBehaviour
             mainGameManager.playerController.enabled = true;
             mainGameManager.playerController.playerRb.velocity = new Vector3(0,0,0);
             mainGameManager.playerController.transform.position = oldPos;
+            _tutorialManager.StopTutorial(); 
         }
 
     }

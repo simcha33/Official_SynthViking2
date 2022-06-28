@@ -34,7 +34,7 @@ public class SlowMoScript : MonoBehaviour
     {
         currentSlowmoTime  = maxSlowMoTime;
         slowmoRechargeCooldownTimer = slowmoRechargeCooldownDuration;
-        timeManager.SetTimescaleTo(1f);
+     //   timeManager.SetTimescaleTo(1f);
 
         defaultAimX = aimCam.m_XAxis.m_MaxSpeed;
         defaultAimY = aimCam.m_YAxis.m_MaxSpeed; 

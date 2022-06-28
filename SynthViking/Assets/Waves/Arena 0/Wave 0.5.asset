@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6b6834424db3a3419981a417c135707, type: 3}
   m_Name: Wave 0.5
   m_EditorClassIdentifier: 
-  maxEnemiesInScene: 25
+  maxEnemiesInScene: 20
   minGroupSpawnSize: 10
   maxGroupSpawnSize: 15
-  WaveTitle: THE FINAL COUNTDOWN
-  maxGruntsToSpawn: 100
-  maxBigGuyToSpawn: 6
+  WaveTitle: 
+  maxGruntsToSpawn: 65
+  maxBigGuyToSpawn: 4
   maxTortiToSpawn: 0
   groupSpawnCooldownDuration: 6
   waveCountdownDuration: 5

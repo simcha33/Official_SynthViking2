@@ -133,7 +133,7 @@ public class PlayerInputCheck : MonoBehaviour
 
     private void OnRestartScene(InputValue value)
     {
-      //  SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); 
+        restartSceneButtonPressed = value.isPressed; 
     }
 
 

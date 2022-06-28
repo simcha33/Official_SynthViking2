@@ -1274,7 +1274,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
         }
         else
         {
-            if (isFreeFalling) playerModel.localEulerAngles = new Vector3(0, 0, 0);
+            playerModel.localEulerAngles = new Vector3(0, 0, 0);
             isFreeFalling = false;
 
         }
@@ -1508,14 +1508,28 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
             if (!input.jumpButtonPressed && wantsToJump) DoJump(currentJumpForce); //Jump off by pressing A
             else transform.DORotate(new Vector3(transform.eulerAngles.x, transform.eulerAngles.y + 180, transform.eulerAngles.z), .5f); //Stop sprinting mid object
             jumpCount = 1;
+          //  print("This one"); 
 
 
         }
-        else if (!input.jumpButtonPressed && !!wantsToJump && !wallRunCooldown) //Reach top of object
+
+        else if (!input.jumpButtonPressed && !!wantsToJump) //Reach top of object
         {
-          //  DoJump(minJumpForce * .05f);           
+            //  DoJump(minJumpForce * .05f); 
+            //  playerRb.velocity = new Vector3(playerRb.velocity.x, playerRb.velocity.y / 5, playerRb.velocity.z); 
+        
+     
+               
+        }
+        else
+        {
+          //  print("FUCK OFF");
+            //    playerRb.velocity = new Vector3(0, 0, 0);
+            
+           // playerRb.velocity = new Vector3(0,0,0); 
         }
 
+        print("This one");
         wallRunExitWithJump = false; 
         isWallRunning = false;
         canStartWallrun = true;
@@ -1525,7 +1539,7 @@ public class ThirdPerson_PlayerControler : MonoBehaviour
 
     void HandleWallRunning()
     {
-        float forwardForce = 5f;
+        float forwardForce = 1f;
         playerRb.AddForce(transform.forward * forwardForce, ForceMode.VelocityChange); 
         playerRb.velocity = new Vector3(playerRb.velocity.x, wallRunUpSpeed, playerRb.velocity.z);
     }

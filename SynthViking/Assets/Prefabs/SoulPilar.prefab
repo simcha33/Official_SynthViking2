@@ -81,7 +81,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pilarType: 
   soulCheckRadius: 0
-  soulsNeeded: 6
+  soulsNeeded: 5
   currentSouls: 0
   soulSuckSpeed: 0.1
   stayDuration: 37
@@ -90,21 +90,27 @@ MonoBehaviour:
   fullPilarEffect: {fileID: 59050061558540325, guid: 4cce835a9a87f4e43b3f20235e2fa884, type: 3}
   crystelMeshR: {fileID: 5333717949695076436}
   PilarRingMeshR: {fileID: 8396691585844516860}
+  indicationLight: {fileID: 0}
   checkCol: {fileID: 5333717948925851335}
   soulRadiusObject: {fileID: 8396691585844516856}
   pilarAnim: {fileID: 5333717949695076435}
   pilarManager: {fileID: 0}
   attachedSpot: {fileID: 0}
   pilarSoulsLeftText: {fileID: 7479057619474843760}
+  fullPilarFeedback: {fileID: 0}
+  pillarSpawnFeedback: {fileID: 0}
+  pilarDespawnFeedback: {fileID: 0}
   isHealthPilar: 0
-  healthAddAmount: 35
+  healthAddAmount: 40
   healthPilarRingMat: {fileID: 2100000, guid: be754888f468a0243aef77bd28cee5ab, type: 2}
   healthPilarMat: {fileID: 2100000, guid: 69cfb34945eca3941b11237302934165, type: 2}
+  HealthindicationLightMat: {fileID: 0}
   isTrapPilar: 0
   trapsToActivate:
   - {fileID: 0}
   trappilarMat: {fileID: 2100000, guid: a710fbb106a274645ac6d76ced5307be, type: 2}
   trapPilarRingMat: {fileID: 2100000, guid: bb1d9feae4b49fe4385ed40d5020a1a0, type: 2}
+  TrapindicationLightMat: {fileID: 0}
 --- !u!135 &5333717948925851335
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -116,7 +122,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 14
+  m_Radius: 15
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &5333717949010416366
 GameObject:
