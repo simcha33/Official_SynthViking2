@@ -18,6 +18,7 @@ public class DamageObject : MonoBehaviour
     public bool isMine; 
     public bool canHurtEnemies;
     public bool isSawBalde;
+    public AudioSource source;
     public List<BasicEnemyScript> laserList = new List<BasicEnemyScript>(); 
 
     [Header ("Components")]
@@ -26,6 +27,7 @@ public class DamageObject : MonoBehaviour
 
     [Header("Components")]
     public MMFeedbacks explosionFeedback;
+    public MMFeedbacks goreFeedback;
 
     public List<GameObject> sawBlades = new List<GameObject>(); 
 
@@ -167,8 +169,6 @@ public class DamageObject : MonoBehaviour
         {
             foreach (Rigidbody limb in enemyScript.ragdollRbs)
             {
-
-
                 //Add blood 
                 if (limb.GetComponent<CharacterJoint>() != null)
                 {
@@ -191,8 +191,14 @@ public class DamageObject : MonoBehaviour
                     if (enemyScript.canBeTargeted) limb.mass *= 3f;
                 }
 
+                goreFeedback.PlayFeedbacks(); 
+
 
             }
+
+            player.mainGameManager.DoHaptics(.3f, .4f, .4f);
+
+         //   player.attackTargetScript.weaponKillFeedback?.PlayFeedbacks();
         }
     }
 

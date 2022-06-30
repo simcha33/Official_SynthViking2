@@ -177,7 +177,6 @@ public class TortiTest : MonoBehaviour
             case (int)currentState.Charge:
 
             //    StartChargeAttack();
-      //      print(" this one");
                 DoChargeForward(); 
                 CheckForTarget(); 
                 FollowTarget();
@@ -206,6 +205,56 @@ public class TortiTest : MonoBehaviour
         tortiAgent.speed = currentMoveSpeed; 
         CheckForAnimation();
     }
+
+
+    void CheckForTarget()
+    {
+        targetDistance = Vector3.Distance(transform.position, target.position);
+    }
+
+    void FollowTarget()
+    {
+        tortiAgent.destination = target.position - transform.forward;
+        transform.LookAt(target);
+    }
+
+    
+
+    void DoChargeForward()
+    {
+        chargeStartDelayTimer += Time.deltaTime;
+
+        //Charge start
+        if (!isCharging && chargeStartDelayTimer >= chargeStartDelayDuration)
+        {
+            //     print("Charge start"); 
+            isCharging = true;
+            chargeStartDelayTimer = 0f;
+            //  chargeDuration = Random.Range(minChargeDuration, maxChargeDuration);
+            currentMoveSpeed = chargeMoveSpeed;
+            chargeLoopFeedback.PlayFeedbacks();
+
+
+            tortiAnim.SetTrigger("ChargeLoopTrigger");
+            tortiState = (int)currentState.Charge;
+        }
+
+        //Charge loop
+        if (isCharging && chargeTimer < chargeDuration)
+        {
+            //     print("Charge loop"); 
+            chargeTimer += Time.deltaTime;
+        }
+        else if (isCharging)
+        {
+            EndChargeForward();
+        }
+    }
+
+
+
+
+
 
     void DoExplode()
     {
@@ -248,20 +297,6 @@ public class TortiTest : MonoBehaviour
         tortiAnim.SetBool("IsStunned", isStunned); 
         tortiAnim.SetBool("IsChargeAttacking", isChargeAttacking); 
     }
-
-    void FollowTarget()
-    {
-        tortiAgent.destination = target.position - transform.forward;
-        transform.LookAt(target);
-    }
-
-
-
-    void CheckForTarget()
-    {
-        targetDistance = Vector3.Distance(transform.position, target.position);
-    }
-
 
     void WaitForNextAttack()
     {
@@ -325,38 +360,6 @@ public class TortiTest : MonoBehaviour
         chargeStartFeedback?.PlayFeedbacks();
         print("Start charge trigger"); 
         chargeDuration = Random.Range(minChargeDuration, maxChargeDuration);
-    }
-
-
-    void DoChargeForward()
-    {
-       chargeStartDelayTimer += Time.deltaTime;
-
-        //Charge start
-        if (!isCharging && chargeStartDelayTimer >= chargeStartDelayDuration)
-        {
-       //     print("Charge start"); 
-            isCharging = true;
-            chargeStartDelayTimer = 0f;
-          //  chargeDuration = Random.Range(minChargeDuration, maxChargeDuration);
-            currentMoveSpeed = chargeMoveSpeed;
-            chargeLoopFeedback.PlayFeedbacks();
-            
-
-            tortiAnim.SetTrigger("ChargeLoopTrigger");
-            tortiState = (int)currentState.Charge;
-        }
-
-        //Charge loop
-        if (isCharging && chargeTimer < chargeDuration)
-        {
-       //     print("Charge loop"); 
-            chargeTimer += Time.deltaTime; 
-        }
-        else if(isCharging)
-        {     
-            EndChargeForward(); 
-        }
     }
 
     void EndChargeForward()
@@ -443,9 +446,6 @@ public class TortiTest : MonoBehaviour
         
     }
 
-
-
-
     void StunCoolDown()
     {
         
@@ -497,9 +497,7 @@ public class TortiTest : MonoBehaviour
         isChargeAttacking = false;
         canEndGrabAttack = false;  
         foreach(SkinnedMeshRenderer meshR in litMeshes) meshR.material = backOrbDefaultMat; 
-    }
-
-   
+    }  
 
     void DoAirSlamAttack()
     {
@@ -510,6 +508,8 @@ public class TortiTest : MonoBehaviour
     {
 
     }
+
+
 
 
 }

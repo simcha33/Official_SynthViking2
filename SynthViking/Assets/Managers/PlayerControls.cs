@@ -59,6 +59,14 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""RightStickPress"",
+                    ""type"": ""Value"",
+                    ""id"": ""cf39741c-aaf6-458b-9c06-be9b2bd0eeaa"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""SlowMo"",
                     ""type"": ""Value"",
                     ""id"": ""f1360145-004f-49c9-89c9-f528194b951c"",
@@ -471,6 +479,28 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""LightAttack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""547e389b-42cf-42d0-8b15-a5a198ae7f10"",
+                    ""path"": ""<Gamepad>/rightStickPress"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""RightStickPress"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""68ba6c18-15e5-4983-b778-2cb4064cea07"",
+                    ""path"": ""<Keyboard>/leftShift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""RightStickPress"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -566,6 +596,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Gameplay_LightAttack = m_Gameplay.FindAction("LightAttack", throwIfNotFound: true);
         m_Gameplay_Jump = m_Gameplay.FindAction("Jump", throwIfNotFound: true);
         m_Gameplay_Sprint = m_Gameplay.FindAction("Sprint", throwIfNotFound: true);
+        m_Gameplay_RightStickPress = m_Gameplay.FindAction("RightStickPress", throwIfNotFound: true);
         m_Gameplay_SlowMo = m_Gameplay.FindAction("SlowMo", throwIfNotFound: true);
         m_Gameplay_Look = m_Gameplay.FindAction("Look", throwIfNotFound: true);
         m_Gameplay_Block = m_Gameplay.FindAction("Block", throwIfNotFound: true);
@@ -638,6 +669,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private readonly InputAction m_Gameplay_LightAttack;
     private readonly InputAction m_Gameplay_Jump;
     private readonly InputAction m_Gameplay_Sprint;
+    private readonly InputAction m_Gameplay_RightStickPress;
     private readonly InputAction m_Gameplay_SlowMo;
     private readonly InputAction m_Gameplay_Look;
     private readonly InputAction m_Gameplay_Block;
@@ -660,6 +692,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         public InputAction @LightAttack => m_Wrapper.m_Gameplay_LightAttack;
         public InputAction @Jump => m_Wrapper.m_Gameplay_Jump;
         public InputAction @Sprint => m_Wrapper.m_Gameplay_Sprint;
+        public InputAction @RightStickPress => m_Wrapper.m_Gameplay_RightStickPress;
         public InputAction @SlowMo => m_Wrapper.m_Gameplay_SlowMo;
         public InputAction @Look => m_Wrapper.m_Gameplay_Look;
         public InputAction @Block => m_Wrapper.m_Gameplay_Block;
@@ -697,6 +730,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Sprint.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSprint;
                 @Sprint.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSprint;
                 @Sprint.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSprint;
+                @RightStickPress.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRightStickPress;
+                @RightStickPress.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRightStickPress;
+                @RightStickPress.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnRightStickPress;
                 @SlowMo.started -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSlowMo;
                 @SlowMo.performed -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSlowMo;
                 @SlowMo.canceled -= m_Wrapper.m_GameplayActionsCallbackInterface.OnSlowMo;
@@ -755,6 +791,9 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Sprint.started += instance.OnSprint;
                 @Sprint.performed += instance.OnSprint;
                 @Sprint.canceled += instance.OnSprint;
+                @RightStickPress.started += instance.OnRightStickPress;
+                @RightStickPress.performed += instance.OnRightStickPress;
+                @RightStickPress.canceled += instance.OnRightStickPress;
                 @SlowMo.started += instance.OnSlowMo;
                 @SlowMo.performed += instance.OnSlowMo;
                 @SlowMo.canceled += instance.OnSlowMo;
@@ -872,6 +911,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         void OnLightAttack(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
+        void OnRightStickPress(InputAction.CallbackContext context);
         void OnSlowMo(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnBlock(InputAction.CallbackContext context);

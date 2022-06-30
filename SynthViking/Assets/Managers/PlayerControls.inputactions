@@ -46,6 +46,14 @@
                     "interactions": ""
                 },
                 {
+                    "name": "RightStickPress",
+                    "type": "Value",
+                    "id": "cf39741c-aaf6-458b-9c06-be9b2bd0eeaa",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "SlowMo",
                     "type": "Value",
                     "id": "f1360145-004f-49c9-89c9-f528194b951c",
@@ -456,6 +464,28 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "LightAttack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "547e389b-42cf-42d0-8b15-a5a198ae7f10",
+                    "path": "<Gamepad>/rightStickPress",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "RightStickPress",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "68ba6c18-15e5-4983-b778-2cb4064cea07",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "RightStickPress",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

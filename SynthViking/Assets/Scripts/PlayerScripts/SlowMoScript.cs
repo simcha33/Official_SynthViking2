@@ -3,51 +3,114 @@ using System.Collections.Generic;
 using UnityEngine;
 using MoreMountains.Feedbacks;
 using UnityEngine.UI;
-using Cinemachine; 
+using Cinemachine;
 
 public class SlowMoScript : MonoBehaviour
 {
 
+
+
+
+
+
+    //   public Slider slowMoSlider;
+    //  public Image slowMoBar;
+
+    //  public float maxSlowMoTime;
+
+    //  public float slowmoRechargeCooldownDuration;
+    //  private float slowmoRechargeCooldownTimer; 
+    //   public float rechargeSpeed;
+
+    //   public bool isInSlowmo; 
+    //    public bool isRecharging; 
+
+
+
+
+
+
+    [Header("New Values")]
+    public MMTimeManager timeManager;
+    public CinemachineFreeLook aimCam;
+    public CinemachineFreeLook defaultCam;
     public ThirdPerson_PlayerControler playerController;
     public PlayerInputCheck input;
-    public Slider slowMoSlider;
-    public Image slowMoBar;
-    public CinemachineFreeLook aimCam;
-    public float defaultAimY;
-    public float defaultAimX; 
 
-    public float maxSlowMoTime;
+    public float currentTimeScale;
     public float currentSlowmoTime;
 
-    public float slowmoRechargeCooldownDuration;
-    private float slowmoRechargeCooldownTimer; 
-    public float rechargeSpeed;
-    public bool canSlowmo;
-    public bool isInSlowmo; 
-    public bool isRecharging; 
-    public float currentTimeScale;
-    public float dashChargeTimeScale = .45f; 
+    public float defaultAimCamY;
+    public float defaultAimCamX;
+    public float dashChargeTimeScale = .45f;
 
-    public MMTimeManager timeManager; 
+    public bool canSlowmo;
+    public bool isInSlowmo;
+
+
 
     void Start()
     {
-        currentSlowmoTime  = maxSlowMoTime;
-        slowmoRechargeCooldownTimer = slowmoRechargeCooldownDuration;
-     //   timeManager.SetTimescaleTo(1f);
+        //   currentSlowmoTime  = maxSlowMoTime;
+        //    slowmoRechargeCooldownTimer = slowmoRechargeCooldownDuration;
+        //   timeManager.SetTimescaleTo(1f);
 
-        defaultAimX = aimCam.m_XAxis.m_MaxSpeed;
-        defaultAimY = aimCam.m_YAxis.m_MaxSpeed; 
+        defaultAimCamX = aimCam.m_XAxis.m_MaxSpeed;
+        defaultAimCamY = aimCam.m_YAxis.m_MaxSpeed;
+        // EndSlowmo();
     }
 
     // Update is called once per frame
     void Update()
     {
+        // if (!playerController.mainGameManager.gameIsPaused) CheckForSlowmo();
         if (!playerController.mainGameManager.gameIsPaused) CheckForSlowmo();
-     
+        if (canSlowmo) DoSlowmo();
+
     }
 
-    
+    void CheckForSlowmo()
+    {
+        if (input.dashButtonPressed) //Charging our dash
+        {
+            if (!canSlowmo)
+            {
+                aimCam.m_XAxis.m_MaxSpeed = defaultAimCamX / (dashChargeTimeScale * 1.3f);
+                aimCam.m_YAxis.m_MaxSpeed = defaultAimCamY / (dashChargeTimeScale * 1.3f);
+            }
+
+            currentTimeScale = dashChargeTimeScale;
+            canSlowmo = true;
+            DoSlowmo();
+        }
+        else if (isInSlowmo)
+        {
+            aimCam.m_XAxis.m_MaxSpeed = defaultAimCamX;
+            aimCam.m_YAxis.m_MaxSpeed = defaultAimCamY;
+            EndSlowmo();
+        }
+    }
+
+    void DoSlowmo()
+    {
+        isInSlowmo = true;
+        currentSlowmoTime += Time.deltaTime;
+        timeManager.SetTimescaleTo(currentTimeScale);
+
+    }
+
+    void EndSlowmo()
+    {
+        currentTimeScale = 1f;
+        canSlowmo = false;
+        isInSlowmo = false;
+        currentSlowmoTime = 0f;
+        timeManager.SetTimescaleTo(1f);
+    }
+
+
+
+    /*
 
     public void CheckForSlowmo()
     {
@@ -98,7 +161,7 @@ public class SlowMoScript : MonoBehaviour
                 slowmoRechargeCooldownTimer = slowmoRechargeCooldownDuration;             
             }      
 
-            DoSlowmoRecharge();           
+            //DoSlowmoRecharge();           
         }   
     }
 
@@ -108,11 +171,13 @@ public class SlowMoScript : MonoBehaviour
         timeManager.SetTimescaleTo(timeScaleModifier);
     }
 
+    /*
     void DoSlowmoRecharge()
     {
         slowmoRechargeCooldownTimer -= Time.deltaTime; //Wait for recharge to begin 
         if (slowmoRechargeCooldownTimer <= 0) currentSlowmoTime += Time.deltaTime * rechargeSpeed;
         isInSlowmo = false; 
     }
+    */
 
 }

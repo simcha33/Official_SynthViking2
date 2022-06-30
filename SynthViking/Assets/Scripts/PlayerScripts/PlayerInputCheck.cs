@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement; 
+using UnityEngine.SceneManagement;
 
 public class PlayerInputCheck : MonoBehaviour
 {
@@ -15,7 +15,7 @@ public class PlayerInputCheck : MonoBehaviour
 
     //checks
     [HideInInspector] public bool dashButtonPressed;
-    [HideInInspector] public bool sprintButtonPressed; 
+    [HideInInspector] public bool sprintButtonPressed;
     [HideInInspector] public bool beamButtonPressed;
     [HideInInspector] public bool projectileButtonPressed;
     [HideInInspector] public bool heavyAttackButtonPressed;
@@ -23,24 +23,25 @@ public class PlayerInputCheck : MonoBehaviour
     [HideInInspector] public bool blockButtonPressed;
     [HideInInspector] public bool ultimateButtonPressed;
     [HideInInspector] public bool jumpButtonPressed;
-    [HideInInspector] public bool airSmashButtonPressed; 
+    [HideInInspector] public bool airSmashButtonPressed;
     [HideInInspector] public bool restartSceneButtonPressed;
     [HideInInspector] public bool slowMoButtonPressed;
     [HideInInspector] public bool dPadLeftPressed;
     [HideInInspector] public bool dPadRightPressed;
+    [HideInInspector] public bool rightStickPressed;
 
 
-    [HideInInspector] public bool pauseButtonPressed; 
+    [HideInInspector] public bool pauseButtonPressed;
 
 
     [HideInInspector] public Vector3 moveInput;
     [HideInInspector] public Vector3 aimInput;
     [HideInInspector] public Vector3 rotateInput;
-    public Gamepad gamepad; 
+    public Gamepad gamepad;
 
     void Start()
     {
-        gamepad = Gamepad.current; 
+        gamepad = Gamepad.current;
     }
 
     /*
@@ -54,7 +55,7 @@ public class PlayerInputCheck : MonoBehaviour
     */
     private void Awake()
     {
-       controls = new PlayerControls();
+        controls = new PlayerControls();
     }
 
     private void OnMove(InputValue value)
@@ -77,13 +78,18 @@ public class PlayerInputCheck : MonoBehaviour
 
     private void OnBlock(InputValue value)
     {
-        blockButtonPressed = value.isPressed; 
+        blockButtonPressed = value.isPressed;
     }
 
 
     private void OnDash(InputValue value)
     {
         dashButtonPressed = value.isPressed;
+    }
+
+    private void OnRightStickPress(InputValue value)
+    {
+        rightStickPressed = value.isPressed;
     }
 
     private void OnSprint(InputValue value)
@@ -103,25 +109,25 @@ public class PlayerInputCheck : MonoBehaviour
 
     private void OnLightAttack(InputValue value)
     {
-        lightAttackButtonPressed = value.isPressed; 
+        lightAttackButtonPressed = value.isPressed;
     }
 
 
     private void OnAirSmash(InputValue value)
     {
-        airSmashButtonPressed = value.isPressed; 
+        airSmashButtonPressed = value.isPressed;
     }
 
-     private void OnPauseGame(InputValue value)
+    private void OnPauseGame(InputValue value)
     {
-        pauseButtonPressed = value.isPressed; 
+        pauseButtonPressed = value.isPressed;
     }
 
     private void OnDpadLeft(InputValue value)
     {
         dPadLeftPressed = value.isPressed;
     }
-    
+
     private void OnDpadRight(InputValue value)
     {
         dPadRightPressed = value.isPressed;
@@ -133,7 +139,7 @@ public class PlayerInputCheck : MonoBehaviour
 
     private void OnRestartScene(InputValue value)
     {
-        restartSceneButtonPressed = value.isPressed; 
+        restartSceneButtonPressed = value.isPressed;
     }
 
 
@@ -144,7 +150,7 @@ public class PlayerInputCheck : MonoBehaviour
 
     void OnDisable()
     {
-     //   controls.Gameplay.Disable();
+        //   controls.Gameplay.Disable();
     }
 
 }

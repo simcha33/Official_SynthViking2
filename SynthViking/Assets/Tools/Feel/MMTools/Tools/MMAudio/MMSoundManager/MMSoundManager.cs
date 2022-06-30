@@ -40,8 +40,8 @@ namespace MoreMountains.Tools
                                     MMEventListener<MMSoundManagerTrackFadeEvent>
     {
         /// the possible ways to manage a track
-        public enum MMSoundManagerTracks { Sfx, Music, UI, Master, Other}
-        
+        public enum MMSoundManagerTracks { Sfx, Music, UI, Master, Other }
+
         [Header("Settings")]
         /// the current sound settings 
         [Tooltip("the current sound settings ")]

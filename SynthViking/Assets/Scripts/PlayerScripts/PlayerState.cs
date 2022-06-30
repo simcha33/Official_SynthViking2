@@ -1,12 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI; 
-using TMPro; 
+using UnityEngine.UI;
+using TMPro;
 
 public class PlayerState : MonoBehaviour
 {
-   
+
     [Header("Health VALUES")]
     #region
     public float currentHealth;
@@ -15,43 +15,43 @@ public class PlayerState : MonoBehaviour
     public Image healthBackground;
     #endregion
 
-    [Header("STUNNED STATE")]  
+    [Header("STUNNED STATE")]
     #region
     public float stunDuration;
     public float stunTimer;
     public bool isStunned;
 
-    public string stunString; 
+    public string stunString;
     public bool canBeHit;
     public bool wasHitByAttack;
     private float recoveryTimer;
-    public float recoveryDuration; 
+    public float recoveryDuration;
     #endregion
 
-    [Header("UI")]  
+    [Header("UI")]
     #region
     public Image dashChargeIndicator;
     private Vector3 originalDashIndicatorSize;
     public Color dashChargeColor;
     public Image dashChargeBackground;
-    public TextMeshProUGUI healthText; 
+    public TextMeshProUGUI healthText;
     #endregion
 
-    [Header("SCRIPTS")]  
+    [Header("SCRIPTS")]
     #region
 
-    public GameManager gameManager; 
+    public GameManager gameManager;
     public ThirdPerson_PlayerControler playerController;
-    public ComboManager comboManagerScript; 
+    public ComboManager comboManagerScript;
     #endregion
 
-    [Header("COMPONENTS")]  
+    [Header("COMPONENTS")]
     #region
     public Animator playerAnim;
     public GameObject attacker;
     #endregion
 
-    [Header("STATES")] 
+    [Header("STATES")]
     #region
     private int playerState;
     public enum currentState
@@ -66,20 +66,20 @@ public class PlayerState : MonoBehaviour
     }
     #endregion
 
-    public bool playerIsDead; 
+    public bool playerIsDead;
 
 
 
     private void Start()
     {
         currentHealth = maxHealth;
-        canBeHit = true; 
+        canBeHit = true;
 
         originalDashIndicatorSize = dashChargeIndicator.transform.localScale;
         dashChargeColor = dashChargeIndicator.color;
 
-         helathSlider.value = currentHealth / maxHealth;
-        healthText.text = currentHealth.ToString(); 
+        helathSlider.value = currentHealth / maxHealth;
+        healthText.text = currentHealth.ToString("F0");
     }
 
     private void Update()
@@ -94,14 +94,14 @@ public class PlayerState : MonoBehaviour
                 PlayerRecovery();
                 break;
         }
-     
+
         HandleUI();
 
     }
 
     void CanBeHit()
     {
-      
+
     }
 
     void HandleUI()
@@ -121,7 +121,7 @@ public class PlayerState : MonoBehaviour
             dashChargeIndicator.transform.localScale = originalDashIndicatorSize;
             dashChargeBackground.transform.localScale = originalDashIndicatorSize;
         }
-        else if(playerController.isRechargingDash)
+        else if (playerController.isRechargingDash)
         {
             dashChargeBackground.color = Color.grey;
             dashChargeIndicator.color = Color.white;
@@ -133,56 +133,57 @@ public class PlayerState : MonoBehaviour
             dashChargeBackground.color = Color.white;
         }
     }
-            
+
 
     public void TakeDamage(float damageAmount, string DamageType)
     {
         if (canBeHit || DamageType == "LavaDamage")
         {
+            if (playerController.isRaging) damageAmount *= playerController.rageDamageTakenReduction;
             currentHealth -= damageAmount;
-            healthText.text = currentHealth.ToString(); 
+            healthText.text = currentHealth.ToString("F0");
             helathSlider.value = currentHealth / maxHealth;
-           
+
             comboManagerScript.ResetCombo();
-            playerController.PlayerDamagedFeedback?.PlayFeedbacks(); 
+            playerController.PlayerDamagedFeedback?.PlayFeedbacks();
 
             if (currentHealth > 0)
             {
-                
-                if(DamageType == "BasicMeleeAttackDamage")
+
+                if (DamageType == "BasicMeleeAttackDamage")
                 {
                     canBeHit = false;
-                    wasHitByAttack = true; 
-                    stunString = "AttackHit";    
-                    stunDuration = 10f;                    
+                    wasHitByAttack = true;
+                    stunString = "AttackHit";
+                    stunDuration = 10f;
 
                 }
 
-                if(DamageType == "ChargeAttack")
+                if (DamageType == "ChargeAttack")
                 {
                     canBeHit = false;
-                    wasHitByAttack = true; 
+                    wasHitByAttack = true;
                     stunString = "AttackHit";
-                   // stunString = "Grappled"; 
-                   // stunDuration = 100f; 
+                    // stunString = "Grappled"; 
+                    // stunDuration = 100f; 
                 }
 
-                if(DamageType == "LavaDamage")
+                if (DamageType == "LavaDamage")
                 {
-                    playerController.DoJump(550); 
+                    playerController.DoJump(550);
                     stunString = "AttackHit";
-                    DamageType = "EnvironmentDamage"; 
-                    stunDuration = 10f;      
+                    DamageType = "EnvironmentDamage";
+                    stunDuration = 10f;
                 }
 
-                if(DamageType == "LaserDamage")
+                if (DamageType == "LaserDamage")
                 {
                     DamageType = "EnvironmentDamage";
                     stunString = "AttackHit";
                     stunDuration = 10f;
                 }
 
-                if(DamageType == "Projectile")
+                if (DamageType == "Projectile")
                 {
                     DamageType = "EnvironmentDamage";
                     stunString = "AttackHit";
@@ -190,7 +191,7 @@ public class PlayerState : MonoBehaviour
                 }
 
 
-                if (DamageType != "Projectile") 
+                if (DamageType != "Projectile")
                 {
                     playerController.ResetStates();
                     playerController.ResetAnimator();
@@ -201,15 +202,15 @@ public class PlayerState : MonoBehaviour
                     playerController.controllerState = (int)currentState.STUNNED;
                     playerController.fixedControllerState = (int)currentState.STUNNED;
                 }
-                                                        
+
             }
-        
+
         }
 
-        if(currentHealth  <= 0)
+        if (currentHealth <= 0)
         {
             currentHealth = 0f;
-            KillPlayer(); 
+            KillPlayer();
         }
     }
 
@@ -217,13 +218,13 @@ public class PlayerState : MonoBehaviour
     {
         currentHealth += addAmount;
         if (currentHealth >= maxHealth) currentHealth = maxHealth;
-        healthText.text = currentHealth.ToString(); 
+        healthText.text = currentHealth.ToString("F0");
         helathSlider.value = currentHealth / maxHealth;
     }
 
     public void StunPlayer(float stunTime, string stunType)
     {
-  
+
         stunTimer += Time.deltaTime;
 
         if (stunTimer >= stunTime)
@@ -236,7 +237,7 @@ public class PlayerState : MonoBehaviour
             playerController.fixedControllerState = (int)currentState.MOVING;
         }
 
-        if(stunType == "AttackHit")
+        if (stunType == "AttackHit")
         {
             stunDuration = playerAnim.GetCurrentAnimatorClipInfo(0)[0].clip.length / playerAnim.GetCurrentAnimatorStateInfo(0).speed;
         }
@@ -252,18 +253,18 @@ public class PlayerState : MonoBehaviour
 
     void PlayerRecovery()
     {
-        if(wasHitByAttack && !canBeHit)
+        if (wasHitByAttack && !canBeHit)
         {
-            recoveryTimer += Time.deltaTime; 
+            recoveryTimer += Time.deltaTime;
 
-            if(recoveryTimer > stunDuration + recoveryDuration)
+            if (recoveryTimer > stunDuration + recoveryDuration)
             {
                 canBeHit = true;
                 wasHitByAttack = false;
-                recoveryTimer = 0f; 
+                recoveryTimer = 0f;
             }
         }
     }
- 
+
 
 }

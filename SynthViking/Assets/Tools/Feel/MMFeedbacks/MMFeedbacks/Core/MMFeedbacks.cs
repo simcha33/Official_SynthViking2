@@ -212,13 +212,14 @@ namespace MoreMountains.Feedbacks
         #endregion
 
         #region PLAY
-        
+
         /// <summary>
         /// Plays all feedbacks using the MMFeedbacks' position as reference, and no attenuation
         /// </summary>
         public virtual void PlayFeedbacks()
         {
-            PlayFeedbacksInternal(this.transform.position, FeedbacksIntensity);         }
+            PlayFeedbacksInternal(this.transform.position, FeedbacksIntensity);
+        }
         
         /// <summary>
         /// Plays all feedbacks, specifying a position and intensity. The position may be used by each Feedback and taken into account to spark a particle or play a sound for example.

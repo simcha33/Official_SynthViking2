@@ -95,9 +95,9 @@ public class BasicEnemyScript : MonoBehaviour
 
     [Header("SOUL")]
     #region
-    public SoulObject soulObject; 
+    public SoulObject soulObject;
     public bool hasSoul;
-    public float soulValue = 1f; 
+    public float soulValue = 1f;
     #endregion
 
 
@@ -156,7 +156,7 @@ public class BasicEnemyScript : MonoBehaviour
     public NavMeshAgent enemyAgent;
     public SkinnedMeshRenderer enemyMeshr;
 
-    public GameObject lookAt; 
+    public GameObject lookAt;
     #endregion
 
 
@@ -488,8 +488,8 @@ public class BasicEnemyScript : MonoBehaviour
             enemyRb.mass = stunnedMass;
             transform.LookAt(target, Vector3.up);
             nextAttackTimer = 0;
-            nextAttackDuration = 40f; 
-       
+            nextAttackDuration = 40f;
+
             //  nextAttackDuration = 10f; 
 
             SetAttackType();
@@ -555,7 +555,7 @@ public class BasicEnemyScript : MonoBehaviour
             currentComboLength++;
 
             if (currentComboLength > totalComboLength) currentComboLength = 1;
-            if (gameObject.CompareTag("BasicEnemy") && currentComboLength > 3 || currentComboLength  <= 0) print("goodbye"); 
+            if (gameObject.CompareTag("BasicEnemy") && currentComboLength > 3 || currentComboLength <= 0) print("goodbye");
             enemyAnim.SetInteger("CurrentComboLength", currentComboLength);
             enemyAnim.SetTrigger("AttackTrigger");
 
@@ -588,7 +588,7 @@ public class BasicEnemyScript : MonoBehaviour
         //If the attack is pause wait for the pause to end 
         nextAttackTimer += Time.deltaTime;
 
-    
+
 
 
     }
@@ -719,7 +719,7 @@ public class BasicEnemyScript : MonoBehaviour
             if (DamageType == playerAttackType.BlockStun.ToString()) //Enemy is hit by power punch
             {
                 ResetState();
-                comboManagerScript.AddStyle(DamageType, this.transform);
+                comboManagerScript.AddStyle(DamageType);
                 canBeChainHit = true;
                 enemyAnim.speed = Random.Range(.5f, 1f);
                 enemyAnim.SetFloat("DamageReaction", 6f);
@@ -881,10 +881,10 @@ public class BasicEnemyScript : MonoBehaviour
         //enemySpawnManagerScript.enemyCount--; 
 
         //Soul sucking   
-        soulObject.gameObject.SetActive(true); 
+        soulObject.gameObject.SetActive(true);
         soulObject.soulIsFree = true;
 
-        
+
         //Enter death state 
         dashPointCol.gameObject.layer = LayerMask.NameToLayer("DeadEnemy");
         enemyRb.mass = originalRbMass;
@@ -948,7 +948,7 @@ public class BasicEnemyScript : MonoBehaviour
         if (stunType == playerAttackType.LightPunchHit.ToString() && !isRagdolling && canBeStunned) //Enemy is hit with axe attack
         {
             chainHitScript.enabled = true; //allow this enemy to cause chain hit impacts
-                                               
+
             stunnedEffect.SetActive(false);
             chainHitScript.isOrigin = true;
             canBeChainHit = false;

@@ -10,77 +10,85 @@ public class MusicManager2 : MonoBehaviour
     public List<AudioClip> unplayedSongs = new List<AudioClip>();
 
     public AudioClip introSong;
-    public AudioClip choosenSong; 
+    public AudioClip choosenSong;
     public AudioSource source;
 
 
     //public float currentSongDuration;
-    public float currentSongTimer; 
+    public float currentSongTimer;
 
     public bool songIsDone;
-    public bool songIsPlaying; 
+    public bool songIsPlaying;
+    public bool playSongs = false;
 
-   
 
-    
+
+
 
     void Start()
     {
-       // ChooseNewSong(rand); 
+        // ChooseNewSong(rand); 
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(songIsPlaying) PlaySong(); 
+        if (songIsPlaying) PlaySong();
     }
 
     void PlaySong()
     {
-        currentSongTimer -= Time.deltaTime;
-        if(currentSongTimer <= 0)
+        currentSongTimer -= Time.unscaledDeltaTime;
+        if (currentSongTimer <= 0)
         {
             songIsPlaying = false;
-            ChooseNewSong(true); 
+            ChooseNewSong(true);
         }
     }
 
     public void ChooseNewSong(bool random)
     {
-        if (unplayedSongs.Count > 0)
+        if (playSongs)
         {
-            if (random)
+            source.Stop();
+
+            if (unplayedSongs.Count > 0)
             {
-                int randomSong = Random.Range(0, unplayedSongs.Count);
-                choosenSong = unplayedSongs[randomSong];
+                if (random)
+                {
+                    int randomSong = Random.Range(0, unplayedSongs.Count);
+                    choosenSong = unplayedSongs[randomSong];
+                }
+                else
+                {
+                    choosenSong = unplayedSongs[0];
+                }
+
+
+                print("this");
+                source.PlayOneShot(choosenSong);
+                currentSongTimer = choosenSong.length;
+                unplayedSongs.Remove(choosenSong);
+                playedSongs.Add(choosenSong);
+                songIsPlaying = true;
+                if (choosenSong != introSong) source.volume = .61f;
+                else source.volume = 1f;
             }
             else
             {
-                choosenSong = unplayedSongs[0]; 
+                ResetRadio();
             }
-
-
-            print("this"); 
-            source.PlayOneShot(choosenSong); 
-            currentSongTimer = choosenSong.length;
-            unplayedSongs.Remove(choosenSong);
-            playedSongs.Add(choosenSong); 
-            songIsPlaying = true;
-        }
-        else
-        {
-            ResetRadio(); 
         }
     }
 
     void ResetRadio()
     {
-        foreach(AudioClip song in playedSongs)
+        foreach (AudioClip song in playedSongs)
         {
-            unplayedSongs.Add(song); 
+            unplayedSongs.Add(song);
         }
 
-        playedSongs .Clear();
-        ChooseNewSong(true); 
+        playedSongs.Clear();
+        ChooseNewSong(true);
     }
 }

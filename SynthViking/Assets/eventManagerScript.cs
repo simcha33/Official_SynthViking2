@@ -10,12 +10,12 @@ using TMPro;
 public class eventManagerScript : MonoBehaviour
 {
     public bool startWithEvent;
-    public int eventToStartAt; 
+    public int eventToStartAt;
     //public int totalEvents;
     public int currentEvent;
     private Vector3 currentPlayerPosition;
-    private List<GameObject> delayedObjects = new List<GameObject>(); 
-    public List<GameObject> currentObjectsToSpawn = new List<GameObject>(); 
+    private List<GameObject> delayedObjects = new List<GameObject>();
+    public List<GameObject> currentObjectsToSpawn = new List<GameObject>();
 
 
     //Waiting for events
@@ -28,42 +28,49 @@ public class eventManagerScript : MonoBehaviour
     private float buttonHoldDuration = 1.1f;
     private float buttonHoldTimer;
     public Image buttonHoldImage;
-    [HideInInspector] public bool waitForEvent;  
+    [HideInInspector] public bool waitForEvent;
 
 
     [Header("Components")]
     public CinemachineVirtualCamera mainCam;
-    public CinemachineVirtualCamera blackCam; 
+    public CinemachineVirtualCamera blackCam;
     public Light directionalLight;
     public GameObject playerUI;
     public MusicManager musicManagerScript;
     public MMFeedbacks currentEventFeedback;
     [HideInInspector] public GameObject currentEnvorinment;
-     public AudioClip currentMusicclip;
+    public AudioClip currentMusicclip;
     public TextMeshPro currentEventText;
     public TextMeshPro currentTutorialText;
 
-    public SpawnAreaTrigger currentArenaTrigger;  
+    public SpawnAreaTrigger currentArenaTrigger;
     public Transform hidePosition;
     public EnemySpawnManager spawnManager;
     public GameManager _gameManager;
     public Transform respawnPoint;
     public TutorialManager _tutorialManager;
-    public MusicManager2 _musicManager2; 
+    public MusicManager2 _musicManager2;
+    public AudioSource cameraAudioSource;
+ 
 
 
 
     [Header("Event 1: �ntro")]
     public Transform event1Position;
     public GameObject environment1;
-  //  public float introDuration;
+    //  public float introDuration;
     public MMFeedbacks musicFeedback1;
     public MMFeedbacks event1Feedback;
+    public AudioClip introClip1;
   
+
     [Header("Event 2: The drop")]
+    public AudioClip introClip2;
+    public AudioClip introClip3;
     public Transform event2Position;
     public GameObject environment2;
     public MMFeedbacks event2Feedback;
+    public GameObject airSlamTutorialText;
 
     [Header("Event 3: PlanetSwap")]
     public GameObject outsidePlanet;
@@ -76,21 +83,22 @@ public class eventManagerScript : MonoBehaviour
     public GameObject event4Trigger;
 
     [Header("Event 5: Boss intro")]
-  //  public TextMeshPro basicCombatTutorialText;
+    //  public TextMeshPro basicCombatTutorialText;
     public MMFeedbacks event5Feedback;
-    public GameObject basicCombatTutoiral; 
+    public GameObject basicCombatTutoiral;
     public TextMeshPro bossTitleCard;
     public GameObject throneAreaLaser;
-    public GameObject event5Trigger; 
-  
+    public GameObject event5Trigger;
+
     [Header("Event 6: First combat encounter")]
-    public SpawnAreaTrigger combatArena1Trigger;  
+    public SpawnAreaTrigger combatArena1Trigger;
+    public GameObject bigEye; 
 
     [Header("Event 7: First combat encounter")]
-  //  public TextMeshPro basicCombatTutorialText;
+    //  public TextMeshPro basicCombatTutorialText;
     public MMFeedbacks event7Feedback;
     public TextMeshPro bigGuyTitleCard;
-    public GameObject bigGuy; 
+    public GameObject bigGuy;
 
 
 
@@ -101,52 +109,52 @@ public class eventManagerScript : MonoBehaviour
     [Header("Script")]
     public ThirdPerson_PlayerControler playerController;
     public PlayerInputCheck input;
-    public CameraHandeler cameraHandelerScript; 
+    public CameraHandeler cameraHandelerScript;
 
-    [Header("Checks")]  
+    [Header("Checks")]
     public bool pauseGame;
-  //  public bool doCountdown; 
+    //  public bool doCountdown; 
 
 
     public float eventDuration;
     public float eventTimer;
-   
+
 
     [Header("Event Camera")]
     public bool blackCamera;
     public CinemachineVirtualCamera currentEventCam;
     public CinemachineVirtualCamera eventCam0;
     public CinemachineVirtualCamera eventCam1;
-     public CinemachineVirtualCamera event5Cam;
+    public CinemachineVirtualCamera event5Cam;
     public CinemachineVirtualCamera event7Cam;
- 
-    public List<CinemachineVirtualCamera> eventCameras = new List<CinemachineVirtualCamera>(); 
+
+    public List<CinemachineVirtualCamera> eventCameras = new List<CinemachineVirtualCamera>();
 
 
     void Start()
     {
 
-       //currentEvent = 1;       
-       eventTimer = 0f;
+        //currentEvent = 1;       
+        eventTimer = 0f;
 
         if (startWithEvent)
         {
             currentEvent = eventToStartAt;
             SetNewEvent(eventToStartAt);
-        }            
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
         if (eventTimer > 0) DoEventTimer(eventDuration);
-        if(waitForEvent) WaitForEventTrigger();
-        if (freezeTheGame) FreezeGame(); 
-        if(!freezeTheGame && gameIsFroozen)
+        if (waitForEvent) WaitForEventTrigger();
+        if (freezeTheGame) FreezeGame();
+        if (!freezeTheGame && gameIsFroozen)
         {
-            UnfreezeGame(); 
+            UnfreezeGame();
         }
-        if (checkForCondition) CheckForEventCondition(); 
+        if (checkForCondition) CheckForEventCondition();
 
     }
 
@@ -177,29 +185,37 @@ public class eventManagerScript : MonoBehaviour
         //Starting dialog 
         if (currentEvent == 1)
         {
-            checkForCondition = true; 
-            currentEventFeedback = event1Feedback;
-            currentSong = musicFeedback1;
-            currentEventCam = eventCam1;
-            playerController.transform.position = hidePosition.position; 
+            checkForCondition = true;
+            //  currentEventFeedback = event1Feedback;
 
-            eventDuration = currentEventFeedback.GetComponent<MMFeedbackSound>().FeedbackDuration; //Event will end after a timer 
-            eventTimer = eventDuration - .2f; 
-      
+            //  currentSong = musicFeedback1;
+            cameraAudioSource.PlayOneShot(introClip1); 
+            currentEventCam = eventCam1;
+            playerController.transform.position = hidePosition.position;
+
+            // eventDuration = currentEventFeedback.GetComponent<MMFeedbackSound>().FeedbackDuration; //Event will end after a timer 
+            eventDuration = introClip1.length - .3f;
+            eventTimer = eventDuration - .2f;
+
             //doCountdown = true;        
-           // musicManagerScript.randomSong = false;
-  
-          //  ChangeMusic(); 
+            // musicManagerScript.randomSong = false;
+
+            //  ChangeMusic(); 
             turnOffCamera();
             //TurnOffUI();       
-         
+
         }
 
         //THe big freefall into the planet
-        if(currentEvent == 2)
+        if (currentEvent == 2)
         {
-       
-            currentEventFeedback = event2Feedback;
+            //cameraAudioSource.Stop();
+            waitForEventDuration = introClip2.length + 2f;
+            waitForEvent = true;
+            delayedObjects.Add(airSlamTutorialText);
+            cameraAudioSource.PlayOneShot(introClip2);
+            cameraAudioSource.PlayOneShot(introClip3); 
+       //     currentEventFeedback = event2Feedback;
             playerController.transform.position = event2Position.position;
             playerController.inAirTime = playerController.freefallWaitTime;
             environment2.SetActive(true);
@@ -216,34 +232,39 @@ public class eventManagerScript : MonoBehaviour
         if (currentEvent == 3)
         {
             //outsidePlanet.SetActive(false);
-          //insidePlanet.SetActive(true);
+            //insidePlanet.SetActive(true);
             currentEnvorinment = barrackEnvironment;
-            barrackEnvironment.SetActive(true); 
+            barrackEnvironment.SetActive(true);
         }
 
         //Title Card
         if (currentEvent == 4)
         {
             currentEventFeedback = event4Feedback;
-        //    currentEventText = titelCardText; 
-         //   eventTimer = currentEventFeedback.GetComponent<MMFeedbackTimescaleModifier>().FeedbackDuration; 
+         
+            //    currentEventText = titelCardText; 
+            //   eventTimer = currentEventFeedback.GetComponent<MMFeedbackTimescaleModifier>().FeedbackDuration; 
         }
-    
+
         //Boss intro title card
-        if(currentEvent == 5)
+        if (currentEvent == 5)
         {
-            freezeTheGame = true; 
-            waitForEvent = true; 
-            waitForEventDuration = .5f; 
-            eventTimer = eventDuration = 5f; 
-            currentEventFeedback = event5Feedback; 
-            currentEventCam = event5Cam;            
+               cameraAudioSource.Stop();
+            freezeTheGame = true;
+            waitForEvent = true;
+            waitForEventDuration = .5f;
+            eventTimer = eventDuration = 5f;
+            currentEventFeedback = event5Feedback;
+            environment2.SetActive(false);
+            currentEventCam = event5Cam;
         }
 
         //First comba arena triggered / Also respawn point
-        if(currentEvent == 6)
+        if (currentEvent == 6)
         {
+            cameraAudioSource.Stop();
             TurnOnUI();
+            bigEye.SetActive(false); 
             environment2.SetActive(false);
             throneAreaLaser.SetActive(true);
             event1Feedback?.StopFeedbacks();
@@ -252,40 +273,42 @@ public class eventManagerScript : MonoBehaviour
             _gameManager.eventToStartAt = currentEvent;
             _gameManager.respawnPoint = respawnPoint;
             currentArenaTrigger = combatArena1Trigger;
-            _tutorialManager.StartTutorial(); 
+            _tutorialManager.StartTutorial();
 
         }
 
         //Big guy intro
-        if(currentEvent == 7)
+        if (currentEvent == 7)
         {
-        
-            waitForEvent = true; 
-            waitForEventDuration = 1.4f;      
+
+            waitForEvent = true;
+            waitForEventDuration = 1.4f;
         }
 
-       
 
-        if (currentEventText != null && !delayedObjects.Contains(currentEventText.gameObject)) currentEventText.gameObject.SetActive(true); 
-        if(currentEventFeedback != null && !delayedObjects.Contains(currentEventFeedback.gameObject)) currentEventFeedback?.PlayFeedbacks(); 
-        if(currentArenaTrigger != null){ currentArenaTrigger.SetNewSpawnArea();  
-       
+
+        if (currentEventText != null && !delayedObjects.Contains(currentEventText.gameObject)) currentEventText.gameObject.SetActive(true);
+        if (currentEventFeedback != null && !delayedObjects.Contains(currentEventFeedback.gameObject)) currentEventFeedback?.PlayFeedbacks();
+        if (currentArenaTrigger != null)
+        {
+            currentArenaTrigger.SetNewSpawnArea();
+
         }
     }
 
     void DoEventTimer(float duration)
     {
-        eventTimer -= Time.deltaTime; 
+        eventTimer -= Time.deltaTime;
 
-        if(eventTimer < 0)
+        if (eventTimer < 0)
         {
-            EndEvent(); 
+            EndEvent();
         }
     }
 
     void CheckForEventCondition()
     {
-        if(currentEvent == 1)
+        if (currentEvent == 1)
         {
             if (input.airSmashButtonPressed)
             {
@@ -293,79 +316,80 @@ public class eventManagerScript : MonoBehaviour
                 buttonHoldImage.fillAmount = buttonHoldTimer / buttonHoldDuration;
             }
             else buttonHoldTimer = buttonHoldImage.fillAmount = 0f;
-        
 
-        
+
+
 
             if (buttonHoldTimer >= buttonHoldDuration && !_gameManager.gameIsPaused)
             {
-                
-                eventWasSkipped = true;     
-                
+
+                eventWasSkipped = true;
+
                 EndEvent();
                 currentEvent = 6;
 
 
-                event1Feedback?.StopFeedbacks(); 
+                event1Feedback?.StopFeedbacks();
                 barrackEnvironment.SetActive(true);
                 combatArena1Trigger.waveCountdownDuration = 5f;
                 SetNewEvent(currentEvent);
 
                 //TurnOffUI();
                 playerController.isFreeFalling = true;
-                playerController.inAirTime = playerController.freefallWaitTime; 
-                playerController.transform.position = respawnPoint.position; 
+                playerController.inAirTime = playerController.freefallWaitTime;
+                playerController.transform.position = respawnPoint.position;
                 eventWasSkipped = false;
                 currentSong = musicFeedback1;
                 // ChangeMusic();
-                _musicManager2.ChooseNewSong(true); 
-              
-                buttonHoldTimer = 0f; 
-              
+                _musicManager2.ChooseNewSong(true);
+
+                buttonHoldTimer = 0f;
+
             }
         }
     }
 
     public void SpawnObjects()
     {
-        foreach(GameObject obj in currentObjectsToSpawn)
+        foreach (GameObject obj in currentObjectsToSpawn)
         {
-            obj.SetActive(true); 
+            obj.SetActive(true);
         }
 
-    
+
     }
 
     void WaitForEventTrigger()
     {
         waitForEventTimer += Time.deltaTime;
-        if(waitForEventTimer >= waitForEventDuration)
-        { 
-            if(currentEvent != 7) waitForEvent = false; 
-            waitForEventTimer = 0; 
+        if (waitForEventTimer >= waitForEventDuration)
+        {
+            if (currentEvent != 7) waitForEvent = false;
+            waitForEventTimer = 0;
 
-            if(delayedObjects.Count > 0)
+            if (delayedObjects.Count > 0)
             {
-                foreach(GameObject obj in delayedObjects)
-                { 
-                    obj.SetActive(true); 
+                foreach (GameObject obj in delayedObjects)
+                {
+                    obj.SetActive(true);
                 }
 
-                delayedObjects.Clear(); 
+                delayedObjects.Clear();
             }
 
-            if(currentEvent == 7 && spawnManager.spawnedAliveEnemies.Count > 0)
+
+            if (currentEvent == 7 && spawnManager.spawnedAliveEnemies.Count > 0)
             {
-                eventTimer = eventDuration = 4.5f; 
-                currentEventFeedback = event7Feedback; 
-                currentEventFeedback?.PlayFeedbacks();             
-                bigGuy = spawnManager.spawnedAliveEnemies[0].gameObject.GetComponent<BasicEnemyScript>().lookAt; 
+                eventTimer = eventDuration = 4.5f;
+                currentEventFeedback = event7Feedback;
+                currentEventFeedback?.PlayFeedbacks();
+                bigGuy = spawnManager.spawnedAliveEnemies[0].gameObject.GetComponent<BasicEnemyScript>().lookAt;
                 event7Cam.Follow = bigGuy.transform;
                 event7Cam.LookAt = bigGuy.transform;
                 currentEventCam = event7Cam;
                 freezeTheGame = true;
                 waitForEvent = false;
-               
+
             }
         }
     }
@@ -373,22 +397,22 @@ public class eventManagerScript : MonoBehaviour
     public void EndEvent()
     {
 
- 
-        currentEventFeedback?.StopFeedbacks();    
+
+        currentEventFeedback?.StopFeedbacks();
         TurnOnUI();
 
 
         TurnOnCamera();
-        delayedObjects.Clear(); 
-      
-        currentObjectsToSpawn.Clear(); 
-        if(currentEventFeedback != null) currentEventFeedback = null;
+        delayedObjects.Clear();
+
+        currentObjectsToSpawn.Clear();
+        if (currentEventFeedback != null) currentEventFeedback = null;
         if (currentEventCam != null) currentEventCam = null;
         if (currentEventText != null) currentEventText.gameObject.SetActive(false);
-        if(currentArenaTrigger != null) currentArenaTrigger = null; 
-       
-        blackCamera = false; 
-      //  doCountdown = false;
+        if (currentArenaTrigger != null) currentArenaTrigger = null;
+
+        blackCamera = false;
+        //  doCountdown = false;
         waitForEvent = false;
         freezeTheGame = false;
         checkForCondition = false;
@@ -399,16 +423,17 @@ public class eventManagerScript : MonoBehaviour
         //Transiion from intro dialog and free fall
         if (currentEvent == 1)
         {
-            if(!eventWasSkipped) SetNewEvent(2);
+            if (!eventWasSkipped) SetNewEvent(2);
 
         }
-        else if(currentEvent == 2)
+        else if (currentEvent == 2)
         {
             //currentEnvorinment.SetActive(false); 
+            airSlamTutorialText.SetActive(false);
         }
         else if (currentEvent == 5)
         {
-            if(!eventWasSkipped) SetNewEvent(6); 
+            if (!eventWasSkipped) SetNewEvent(6);
             throneAreaLaser.SetActive(true);
 
         }
@@ -418,7 +443,7 @@ public class eventManagerScript : MonoBehaviour
     void turnOffCamera()
     {
         blackCam.gameObject.SetActive(true);
-        mainCam.gameObject.SetActive(false); 
+        mainCam.gameObject.SetActive(false);
         blackCamera = true;
     }
 
@@ -426,26 +451,26 @@ public class eventManagerScript : MonoBehaviour
     {
         blackCam.gameObject.SetActive(false);
         mainCam.gameObject.SetActive(true);
-        blackCamera = false; 
+        blackCamera = false;
     }
 
 
 
     void TurnOffUI()
     {
-        playerUI.SetActive(false); 
+        playerUI.SetActive(false);
 
     }
 
     void TurnOnUI()
     {
-        playerUI.SetActive(true); 
+        playerUI.SetActive(true);
     }
 
     void ChangeMusic()
     {
-     //   musicManagerScript.ChooseNextSong(); 
- 
+        //   musicManagerScript.ChooseNextSong(); 
+
     }
 
     void FreezeGame()
@@ -459,8 +484,8 @@ public class eventManagerScript : MonoBehaviour
             if (enemy.GetComponent<BasicEnemyScript>() != null)
             {
                 BasicEnemyScript enemyScript = enemy.GetComponent<BasicEnemyScript>();
-                enemyScript.enemyAgent.speed = .5f;
-                enemyScript.canAttack = false; 
+                enemyScript.enemyAgent.speed = 5f;
+                enemyScript.canAttack = false;
             }
         }
 
@@ -472,7 +497,7 @@ public class eventManagerScript : MonoBehaviour
     public void UnfreezeGame()
     {
         gameIsFroozen = false;
-        freezeTheGame = false; 
+        freezeTheGame = false;
 
         playerController.playerState.canBeHit = true;
         playerController.eventPausing = false;
@@ -482,12 +507,12 @@ public class eventManagerScript : MonoBehaviour
             if (enemy.GetComponent<BasicEnemyScript>() != null)
             {
                 BasicEnemyScript enemyScript = enemy.GetComponent<BasicEnemyScript>();
-                enemyScript.enemyAgent.speed = enemyScript.enemyAgent.speed = enemyScript.runSpeed; 
+                enemyScript.enemyAgent.speed = enemyScript.enemyAgent.speed = enemyScript.runSpeed;
                 //   enemyScript.canAttack = true; 
             }
         }
 
-     
+
 
 
     }

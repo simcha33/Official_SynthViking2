@@ -15,11 +15,14 @@ public class TrapObject : MonoBehaviour
 
     public MMFeedbacks killFeedback;
     public TextMeshPro timeLeftText;
+    public AudioSource source;
+    public AudioClip bladeTrapSound;
 
     private void Start()
     {
         attachedSpot = gameObject.GetComponentInParent<SpotScript>();
-        pilarManager = GameObject.Find("PilarManager").GetComponent<RewardPilarManager>(); 
+        pilarManager = GameObject.Find("PilarManager").GetComponent<RewardPilarManager>();
+        
     }
 
     private void Update()
@@ -40,10 +43,18 @@ public class TrapObject : MonoBehaviour
         attachedSpot.inUse = false;
         attachedSpot.spotManager.freeSpotList.Add(attachedSpot);
         pilarManager.currentPilarsInScene--;
+       // source.loop = false;
+     //   attachedSpotSource.Stop(); 
     }
 
     void DoTrap()
     {
+        if (!isActive)
+        {
+        //    attachedSpotSource.PlayOneShot(bladeTrapSound);
+          //  attachedSpotSource.loop = true;
+        }
+
         isActive = true;
         timeLeftText.text = (activeDuration - activeTimer).ToString("F0"); 
         if(pilarManager.spawnManager.waveHasStarted) activeTimer += Time.deltaTime;

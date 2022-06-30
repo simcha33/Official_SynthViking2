@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6b6834424db3a3419981a417c135707, type: 3}
   m_Name: Wave 0.1
   m_EditorClassIdentifier: 
-  maxEnemiesInScene: 5
+  maxEnemiesInScene: 6
   minGroupSpawnSize: 3
   maxGroupSpawnSize: 5
   WaveTitle: A QUICK WARM UP

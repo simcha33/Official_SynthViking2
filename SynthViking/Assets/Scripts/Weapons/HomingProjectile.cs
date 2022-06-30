@@ -34,7 +34,8 @@ public class HomingProjectile : MonoBehaviour
     public MMFeedbacks parryHitFeedback; 
     public Collider projectileAvoid;
     public GameObject parryEffect;
-    private HomingProjectile thisScript; 
+    private HomingProjectile thisScript;
+    public ComboManager _styleManager; 
 
     void Start()
     {
@@ -43,6 +44,7 @@ public class HomingProjectile : MonoBehaviour
         rb = GetComponent<Rigidbody>();
         playerController = GameObject.Find("Player").GetComponent<ThirdPerson_PlayerControler>();
         thisScript = gameObject.GetComponent<HomingProjectile>();
+        _styleManager = playerController._styleManager; 
         projectMeshr.material = enemyProjectileMat; 
     }
 
@@ -129,7 +131,8 @@ public class HomingProjectile : MonoBehaviour
 
             if(other.gameObject.layer == LayerMask.NameToLayer("Projectile"))
             {
-                other.gameObject.GetComponent<HomingProjectile>().DestroyProjectile(); 
+                other.gameObject.GetComponent<HomingProjectile>().DestroyProjectile();
+                _styleManager.AddStyle("ProjectileParry"); 
             }
 
             if(other.gameObject.layer == LayerMask.NameToLayer("Enemy"))
@@ -203,7 +206,10 @@ public class HomingProjectile : MonoBehaviour
 
                         }
 
-          
+                        playerController.hasParriedAttack = true;
+                        playerController.canBlockStun = true; 
+
+
                     }
                 }
 

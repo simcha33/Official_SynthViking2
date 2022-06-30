@@ -165,10 +165,10 @@ Material:
     - _FBPARTICLEFRAMECONTROLENABLED: 1
     - _FBRandomFrame: 1
     - _FBRows: 2
-    - _FinalOpacityExp: 1
+    - _FinalOpacityExp: 5
     - _FinalOpacityExp1: 1.125
-    - _FinalOpacityPower: 1
-    - _FinalPower: 5
+    - _FinalOpacityPower: 6
+    - _FinalPower: 43
     - _MDFOU: 1
     - _MDFOV: 1
     - _MVAnimationSpeed: 15
@@ -224,5 +224,5 @@ Material:
     - _MVMainMaskChannelsMultiply: {r: 1, g: 0, b: 0, a: 0}
     - _MainMaskChannelsMultiply: {r: 1, g: 1, b: 1, a: 0}
     - _Noise01ScrollSpeedUV: {r: 1, g: 1, b: 0, a: 0}
-    - _RampColorTint: {r: 0.41037738, g: 0.8197727, b: 1, a: 1}
+    - _RampColorTint: {r: 0.9811321, g: 0.14346743, b: 0.8154403, a: 1}
   m_BuildTextureStacks: []

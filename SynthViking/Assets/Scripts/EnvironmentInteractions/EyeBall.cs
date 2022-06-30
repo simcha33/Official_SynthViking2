@@ -35,11 +35,12 @@ public class EyeBall : MonoBehaviour
     public MeshRenderer pupilMeshr;
     [HideInInspector] public EyeballManager eyeBallManager;
     private EyeBall thisScript;
-    private SpotScript attachedSpot;
+    public SpotScript attachedSpot;
     public List<HomingProjectile> projectilesFired = new List<HomingProjectile>();
     public ThirdPerson_PlayerControler playerController;
+    public ComboManager _styleManager; 
     private AudioSource source;
-    private AudioSource spotSource; 
+    public AudioSource spotSource; 
     public MMFeedbacks shootFeedback; 
 
     [Header ("STATE")]
@@ -70,11 +71,16 @@ public class EyeBall : MonoBehaviour
         currentHealth = maxHealth;
         target = GameObject.Find("Player").transform;
         playerController = target.gameObject.GetComponent<ThirdPerson_PlayerControler>(); 
-        attachedSpot = GetComponentInParent<SpotScript>();
+       
         thisScript = gameObject.GetComponent<EyeBall>();
         eyeBallManager = GameObject.Find("EyeBallManager").GetComponent<EyeballManager>();
        source = GetComponent<AudioSource>();
-        spotSource = attachedSpot.GetComponent<AudioSource>(); 
+
+        if (GetComponentInParent <SpotScript>() != null ) 
+        {
+            attachedSpot = GetComponentInParent<SpotScript>();
+            spotSource = attachedSpot.GetComponent<AudioSource>();
+        }
         ResetEyeball();
         
     

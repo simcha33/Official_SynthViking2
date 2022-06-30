@@ -432,7 +432,7 @@ public class EnemySpawnManager : MonoBehaviour
         waveTurnOffTimer += Time.deltaTime;
         if (waveTurnOffTimer >= waveTurnOffDuration) TurnOffWave(); 
         canStartNewWave = false;
-        waveText.text = "ENEMIES DESTROYED"; 
+        waveText.text = "ENEMIES DESTROYED THANKS FOR PLAYING!"; 
         
     }
 
